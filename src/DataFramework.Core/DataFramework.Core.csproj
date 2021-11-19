@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <PackageId>pauldeen79.DataFramework.Core</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/DataFramework</RepositoryUrl>
+    <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_dataframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\.sonarlint\pauldeen79_dataframework\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataFramework.Abstractions\DataFramework.Abstractions.csproj" />
