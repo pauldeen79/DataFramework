@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <PackageId>pauldeen79.DataFramework.Abstractions</PackageId>
+    <PackageId>pauldeen79.DataFramework.ModelFramework</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/DataFramework</RepositoryUrl>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_dataframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -14,7 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Common" Version="2.2.5" />
+    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.2.4" />
+    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataFramework.Abstractions\DataFramework.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

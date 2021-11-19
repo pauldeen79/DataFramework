@@ -15,6 +15,9 @@
     <PackageReference Include="FluentAssertions" Version="6.2.0" />
     <PackageReference Include="FluentAssertions.Analyzers" Version="0.11.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.4.4" />
+    <PackageReference Include="pauldeen79.System.Data.Stub" Version="2.2.5" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
@@ -31,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataFramework.Core\DataFramework.Core.csproj" />
+    <ProjectReference Include="..\DataFramework.ModelFramework.Poc\DataFramework.ModelFramework.Poc.csproj" />
   </ItemGroup>
 
 </Project>
