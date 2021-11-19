@@ -56,6 +56,7 @@ namespace DataFramework.Core
             get;
         }
 
+#pragma warning disable S107 // Methods should not have too many parameters
         public DataObjectInfo(string name, 
                               string? typeName,
                               string? assemblyName,
@@ -66,6 +67,7 @@ namespace DataFramework.Core
                               bool isQueryable,
                               ValueCollection<IFieldInfo> fields,
                               ValueCollection<IMetadata> metadata)
+#pragma warning restore S107 // Methods should not have too many parameters
         {
             if (string.IsNullOrEmpty(name))
             {

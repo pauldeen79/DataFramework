@@ -81,6 +81,7 @@ namespace DataFramework.Core
             get;
         }
 
+#pragma warning disable S107 // Methods should not have too many parameters
         public FieldInfo(string name,
                          string? typeName,
                          string? description,
@@ -96,6 +97,7 @@ namespace DataFramework.Core
                          bool useForCheckOnOriginalValues,
                          object? defaultValue,
                          ValueCollection<IMetadata> metadata)
+#pragma warning restore S107 // Methods should not have too many parameters
         {
             if (string.IsNullOrEmpty(name))
             {
