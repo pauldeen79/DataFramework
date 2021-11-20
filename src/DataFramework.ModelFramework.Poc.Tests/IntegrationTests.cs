@@ -7,9 +7,13 @@ using CrossCutting.Data.Core.Builders;
 using CrossCutting.Data.Sql;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
+using Moq;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using PDC.Net.Core.QueryBuilders;
+using PDC.Net.Core.QueryViewModels;
+using QueryFramework.Abstractions;
+using QueryFramework.Core.Builders;
 using QueryFramework.Core.Extensions;
 using QueryFramework.Core.Queries.Builders.Extensions;
 using QueryFramework.SqlServer;
@@ -59,6 +63,40 @@ namespace DataFramework.ModelFramework.Poc.Tests
 
             // Act
             var actual = _sut.FindMany(new SelectCommandBuilder().Select("*").From("Catalog").Where("LEFT(Name, 11) = @p0").AppendParameter("p0", "Diversen cd").Build());
+
+            // Assert
+            actual.Should().ContainSingle();
+            actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        }
+
+        [Fact]
+        public void Can_Query_Database_Using_ExtraFieldNames()
+        {
+            // Arrange
+            _connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" WHERE ExtraField1 = @p0 "), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+            // Note that for now, we're using a mocked extra field repository. I haven't translated the original ExtraFieldRepository to the new version of QueryFramework and CommandFramework.Data...
+            var extraFieldRepositoryMock = new Mock<IExtraFieldRepository>();
+            extraFieldRepositoryMock.Setup(x => x.FindExtraFieldsByEntityName("Catalog"))
+                                    .Returns(new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
+            var queryViewModel = new CatalogQueryViewModel(extraFieldRepositoryMock.Object, _sut);
+            queryViewModel.Conditions.Add(new QueryConditionBuilder("MyField", QueryOperator.Equal, "Value"));
+
+            // Act
+            var actual = _sut.FindMany(queryViewModel.CreateQuery());
+
+            // Assert
+            actual.Should().ContainSingle();
+            actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        }
+
+        [Fact]
+        public void Can_Query_Database_Using_CustomQueryExpression()
+        {
+            // Arrange
+            _connection.AddResultForDataReader(cmd => cmd.CommandText.Contains("WHERE CHARINDEX(@p0, [Name] + ' ' + [StartDirectory] + ' ' + COALESCE([ExtraField1], '') + ' ' + COALESCE([ExtraField2], '') + ' ' + COALESCE([ExtraField3], '') + ' ' + COALESCE([ExtraField4], '') + ' ' + COALESCE([ExtraField5], '') + ' ' + COALESCE([ExtraField6], '') + ' ' + COALESCE([ExtraField7], '') + ' ' + COALESCE([ExtraField8], '') + ' ' + COALESCE([ExtraField9], '') + ' ' + COALESCE([ExtraField10], '') + ' ' + COALESCE([ExtraField11], '') + ' ' + COALESCE([ExtraField12], '') + ' ' + COALESCE([ExtraField13], '') + ' ' + COALESCE([ExtraField14], '') + ' ' + COALESCE([ExtraField15], '') + ' ' + COALESCE([ExtraField16], '')) > 0"), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+
+            // Act
+            var actual = _sut.FindMany(new CatalogQueryBuilder().Where("AllFields".DoesContain("Diversen")).Build());
 
             // Assert
             actual.Should().ContainSingle();

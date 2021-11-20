@@ -3,7 +3,7 @@ using QueryFramework.Abstractions.Builders;
 
 namespace PDC.Net.Core.QueryExpressions
 {
-    internal sealed class PdcCustomQueryExpression : IQueryExpression, IExpressionContainer, ICustomQueryExpression
+    internal sealed class PdcCustomQueryExpression : IExpressionContainer, ICustomQueryExpression
     {
         private readonly string? _expression;
 
