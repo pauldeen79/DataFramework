@@ -2,13 +2,11 @@
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PDC.Net.Core.Entities
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.EntityGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial record Catalog
     {
         [ReadOnly(true)]

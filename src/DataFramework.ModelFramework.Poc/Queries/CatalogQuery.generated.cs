@@ -2,7 +2,6 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using PDC.Net.Core.QueryBuilders;
 using PDC.Net.Core.QueryExpressionBuilders;
@@ -15,7 +14,6 @@ using QueryFramework.Core.Queries;
 namespace PDC.Net.Core.Queries
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial record CatalogQuery : SingleEntityQuery, IValidatableObject, IDynamicQuery<CatalogQuery>
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

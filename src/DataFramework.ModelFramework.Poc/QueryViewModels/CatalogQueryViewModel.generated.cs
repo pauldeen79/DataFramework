@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CrossCutting.Data.Abstractions;
 using DataFramework.ModelFramework.Poc.Repositories;
@@ -14,7 +13,6 @@ using QueryFramework.Core.Builders;
 namespace PDC.Net.Core.QueryViewModels
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryViewModelGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial class CatalogQueryViewModel : ICatalogQueryViewModel
     {
         public System.Nullable<int> Limit

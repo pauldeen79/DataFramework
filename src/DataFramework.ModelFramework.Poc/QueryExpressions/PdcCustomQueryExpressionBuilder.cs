@@ -1,10 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using QueryFramework.Abstractions;
+﻿using QueryFramework.Abstractions;
 using QueryFramework.Abstractions.Builders;
 
 namespace PDC.Net.Core.QueryExpressions
 {
-    [ExcludeFromCodeCoverage]
     internal sealed class PdcCustomQueryExpressionBuilder : IQueryExpressionBuilder
     {
         public PdcCustomQueryExpressionBuilder()

@@ -1,13 +1,11 @@
 ﻿using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PDC.Net.Core.Entities
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial class FileBuilder
     {
         public int Id

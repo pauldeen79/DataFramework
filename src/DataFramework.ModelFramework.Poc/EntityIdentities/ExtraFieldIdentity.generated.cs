@@ -1,11 +1,9 @@
 ﻿using System.CodeDom.Compiler;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PDC.Net.Core.Entities
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.EntityIdentityGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial record ExtraFieldIdentity
     {
         [StringLength(64)]

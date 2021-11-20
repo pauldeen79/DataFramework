@@ -1,6 +1,5 @@
 ﻿using System;
 using System.CodeDom.Compiler;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using DataFramework.ModelFramework.Poc.Repositories;
 using QueryFramework.Abstractions;
@@ -10,8 +9,6 @@ using QueryFramework.Core;
 namespace PDC.Net.Core.QueryBuilders
 {
 #nullable enable
-    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public class ExtraFieldQueryExpressionBuilder : IQueryExpressionBuilder
     {
         public string FieldName

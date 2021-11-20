@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using PDC.Net.Core.QueryExpressions;
 using QueryFramework.Abstractions;
 using QueryFramework.Abstractions.Builders;
@@ -8,7 +7,6 @@ using QueryFramework.Core;
 
 namespace PDC.Net.Core.QueryExpressionBuilders
 {
-    [ExcludeFromCodeCoverage]
     public class CatalogQueryExpressionBuilder : IQueryExpressionBuilder
     {
         private static readonly IDictionary<string, string> _customFields = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)

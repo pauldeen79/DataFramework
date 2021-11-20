@@ -1,6 +1,5 @@
 ﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions.Builders;
@@ -9,7 +8,6 @@ using QueryFramework.Abstractions.Queries.Builders;
 namespace PDC.Net.Core.QueryBuilders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
-    [ExcludeFromCodeCoverage]
     public partial class CatalogQueryBuilder : ISingleEntityQueryBuilder
     {
         public System.Nullable<int> Limit
