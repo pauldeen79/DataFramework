@@ -11,6 +11,7 @@ using QueryFramework.Core.Queries.Builders.Extensions;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
 {
+#nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogRepository : ICatalogRepository
     {
@@ -29,7 +30,7 @@ namespace DataFramework.ModelFramework.Poc.Repositories
             return _databaseCommandProcessor.InvokeCommand(instance, DatabaseOperation.Delete).HandleResult("TestEntity has not been deleted");
         }
 
-        public Catalog FindOne(IDatabaseCommand command)
+        public Catalog? FindOne(IDatabaseCommand command)
         {
             return _databaseEntityRetriever.FindOne(command);
         }
@@ -44,14 +45,14 @@ namespace DataFramework.ModelFramework.Poc.Repositories
             return _databaseEntityRetriever.FindPaged(command);
         }
 
-        public Catalog Find(CatalogIdentity identity)
+        public Catalog? Find(CatalogIdentity identity)
         {
 
             /// old code: return FindOne(new SqlTextCommand(string.Format(@"SELECT TOP 1 {0} FROM {1} WHERE [Id] = @Id", SelectFields, TableAlias), identity));
             return FindOne(new CatalogQueryBuilder().Take(1).Where("Id".IsEqualTo(identity.Id)).Build());
         }
 
-        public Catalog FindOne(CatalogQuery query)
+        public Catalog? FindOne(CatalogQuery query)
         {
             return _queryProcessor.FindOne(query);
         }
@@ -79,5 +80,6 @@ namespace DataFramework.ModelFramework.Poc.Repositories
         private readonly IDatabaseEntityRetriever<Catalog> _databaseEntityRetriever;
         private readonly IDatabaseCommandProcessor<Catalog> _databaseCommandProcessor;
     }
+#nullable restore
 }
 
