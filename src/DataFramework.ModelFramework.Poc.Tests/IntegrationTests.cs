@@ -13,6 +13,7 @@ using PDC.Net.Core.Queries;
 using PDC.Net.Core.QueryBuilders;
 using PDC.Net.Core.QueryViewModels;
 using QueryFramework.Abstractions;
+using QueryFramework.Abstractions.Extensions.Builders;
 using QueryFramework.Core.Builders;
 using QueryFramework.Core.Extensions;
 using QueryFramework.Core.Queries.Builders.Extensions;
@@ -79,7 +80,10 @@ namespace DataFramework.ModelFramework.Poc.Tests
             extraFieldRepositoryMock.Setup(x => x.FindExtraFieldsByEntityName("Catalog"))
                                     .Returns(new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
             var queryViewModel = new CatalogQueryViewModel(extraFieldRepositoryMock.Object, _sut);
-            queryViewModel.Conditions.Add(new QueryConditionBuilder("MyField", QueryOperator.Equal, "Value"));
+            queryViewModel.Conditions.Add(new QueryConditionBuilder()
+                .WithField("MyField")
+                .WithOperator(QueryOperator.Equal)
+                .WithValue("Value"));
 
             // Act
             var actual = _sut.FindMany(queryViewModel.CreateQuery());

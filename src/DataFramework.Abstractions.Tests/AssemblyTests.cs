@@ -24,11 +24,11 @@ namespace DataFramework.Abstractions.Tests
                 typeof(IDataObjectInfo),
                 typeof(IFieldInfo),
                 typeof(IMetadata)
-            }.Select(x => x.ToClass(new ClassSettings())
+            }.Select(x => x.ToClassBuilder(new ClassSettings())
                            .ClearAttributes()
                            .WithName(x.Name.Substring(1))
                            .Build()
-                           .ToImmutableClass(settings)
+                           .ToImmutableClassBuilder(settings)
                            .WithRecord()
                            .Build()
                     ).Cast<ITypeBase>().ToArray();
@@ -60,12 +60,11 @@ namespace DataFramework.Abstractions.Tests
                 typeof(IDataObjectInfo),
                 typeof(IFieldInfo),
                 typeof(IMetadata)
-            }.Select(x => x.ToClass(new ClassSettings())
+            }.Select(x => x.ToClassBuilder(new ClassSettings())
                            .ClearAttributes()
                            .WithName(x.Name.Substring(1))
                            .Build()
                            .ToImmutableBuilderClass(settings)
-                           .Build()
                     ).Cast<ITypeBase>().ToArray();
 
             var generator = new CSharpClassGenerator();
