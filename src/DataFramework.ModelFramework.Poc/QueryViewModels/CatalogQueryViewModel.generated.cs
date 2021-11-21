@@ -6,7 +6,9 @@ using System.Linq;
 using CrossCutting.Data.Abstractions;
 using DataFramework.ModelFramework.Poc.Repositories;
 using PDC.Net.Core.Entities;
+using PDC.Net.Core.Queries;
 using PDC.Net.Core.QueryBuilders;
+using QueryFramework.Abstractions;
 using QueryFramework.Abstractions.Builders;
 using QueryFramework.Core.Builders;
 
@@ -78,10 +80,10 @@ namespace PDC.Net.Core.QueryViewModels
 
         public IPagedResult<Catalog> ExecuteQuery()
         {
-            return _repository.FindPaged(CreateQuery());
+            return _queryProcessor.FindPaged(CreateQuery());
         }
 
-        public PDC.Net.Core.Queries.CatalogQuery CreateQuery()
+        public CatalogQuery CreateQuery()
         {
             var queryBuilder = new CatalogQueryBuilder
             {
@@ -126,12 +128,12 @@ namespace PDC.Net.Core.QueryViewModels
             return fieldName;
         }
 
-        public CatalogQueryViewModel(IExtraFieldRepository extraFieldRepository, ICatalogRepository repository)
+        public CatalogQueryViewModel(IExtraFieldRepository extraFieldRepository, IQueryProcessor<CatalogQuery, Catalog> queryProcessor)
         {
             _extraFieldRepository = extraFieldRepository;
             _conditions = new ObservableCollection<IQueryConditionBuilder>();
             _orderByFields = new ObservableCollection<IQuerySortOrderBuilder>();
-            _repository = repository;
+            _queryProcessor = queryProcessor;
         }
 
         private static readonly string[] ValidFieldNames = new[] { "Id", "Name", "DateCreated", "DateLastModified", "DateSynchronized", "DriveSerialNumber", "DriveTypeCodeType", "DriveTypeCode", "DriveTypeDescription", "DriveTotalSize", "DriveFreeSpace", "Recursive", "Sorted", "StartDirectory", "ExtraField1", "ExtraField2", "ExtraField3", "ExtraField4", "ExtraField5", "ExtraField6", "ExtraField7", "ExtraField8", "ExtraField9", "ExtraField10", "ExtraField11", "ExtraField12", "ExtraField13", "ExtraField14", "ExtraField15", "ExtraField16", "IsExistingEntity", "AllFields" };
@@ -148,7 +150,7 @@ namespace PDC.Net.Core.QueryViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly ICatalogRepository _repository;
+        private readonly IQueryProcessor<CatalogQuery, Catalog> _queryProcessor;
 
         private readonly IExtraFieldRepository _extraFieldRepository;
     }

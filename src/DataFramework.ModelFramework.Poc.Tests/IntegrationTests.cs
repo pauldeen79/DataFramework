@@ -25,7 +25,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
     [ExcludeFromCodeCoverage]
     public sealed class IntegrationTests : IDisposable
     {
-        private readonly CatalogRepository _sut;
+        private readonly Repository<Catalog, CatalogQuery, CatalogIdentity> _sut;
         private readonly DbConnection _connection;
 
         public IntegrationTests()
@@ -37,9 +37,10 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var mapper = new CatalogEntityMapper();
             var retriever = new DatabaseEntityRetriever<Catalog>(_connection, mapper);
             var queryProcessor = new QueryProcessor<CatalogQuery, Catalog>(retriever, settings, databaseCommandGenerator);
+            var queryProvider = new CatalogQueryProvider();
             var provider = new CatalogDatabaseCommandEntityProvider();
             var databaseCommandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(_connection, provider);
-            _sut = new CatalogRepository(queryProcessor, retriever, databaseCommandProcessor);
+            _sut = new Repository<Catalog, CatalogQuery, CatalogIdentity>(queryProcessor, queryProvider, retriever, databaseCommandProcessor);
         }
 
         [Fact]
@@ -108,7 +109,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
         }
 
         [Fact]
-        public void Can_Find_Entity_By_PrimaryKey_Value()
+        public void Can_Find_Entity_By_Identity()
         {
             // Arrange
             _connection.AddResultForDataReader(new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
