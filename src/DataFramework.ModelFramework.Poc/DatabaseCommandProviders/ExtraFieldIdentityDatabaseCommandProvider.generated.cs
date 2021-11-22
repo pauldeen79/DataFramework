@@ -1,10 +1,13 @@
-﻿using CrossCutting.Data.Abstractions;
+﻿using System.CodeDom.Compiler;
+using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core;
+using DataFramework.ModelFramework.Poc.Repositories;
 using PDC.Net.Core.Entities;
 
-namespace DataFramework.ModelFramework.Poc.Repositories
+namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
-    public class ExtraFieldIdentityDatabaseCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
+    public partial class ExtraFieldIdentityDatabaseCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
     {
         public IDatabaseCommand Create(ExtraFieldIdentity source, DatabaseOperation operation)
         {

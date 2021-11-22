@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using CrossCutting.Data.Abstractions;
@@ -6,9 +7,11 @@ using CrossCutting.Data.Core;
 using CrossCutting.Data.Sql.Extensions;
 using PDC.Net.Core.Entities;
 
-namespace DataFramework.ModelFramework.Poc.Repositories
+namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
 {
-    public class ExtraFieldDatabaseCommandEntityProvider : IDatabaseCommandEntityProvider<ExtraField, ExtraFieldBuilder>
+#nullable enable
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
+    public partial class ExtraFieldDatabaseCommandEntityProvider : IDatabaseCommandEntityProvider<ExtraField, ExtraFieldBuilder>
     {
         public Func<ExtraFieldBuilder, DatabaseOperation, IDatabaseCommand> CommandDelegate
             => (entity, operation) =>
@@ -155,4 +158,5 @@ namespace DataFramework.ModelFramework.Poc.Repositories
             };
         }
     }
+#nullable restore
 }

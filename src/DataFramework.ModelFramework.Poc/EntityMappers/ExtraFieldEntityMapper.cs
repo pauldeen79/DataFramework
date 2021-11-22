@@ -4,7 +4,7 @@ using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Sql.Extensions;
 using PDC.Net.Core.Entities;
 
-namespace DataFramework.ModelFramework.Poc.Repositories
+namespace DataFramework.ModelFramework.Poc.EntityMappers
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldEntityMapper : IDataReaderMapper<ExtraField>

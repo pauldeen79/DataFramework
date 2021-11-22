@@ -1,5 +1,6 @@
 ﻿using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Abstractions.Extensions;
+using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
 {

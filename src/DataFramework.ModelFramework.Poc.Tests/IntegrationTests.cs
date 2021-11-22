@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CrossCutting.Data.Core.Builders;
 using CrossCutting.Data.Sql;
+using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
+using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
+using DataFramework.ModelFramework.Poc.EntityMappers;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
 using Moq;
@@ -42,7 +45,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var commandEntityProvider = new CatalogDatabaseCommandEntityProvider();
             var databaseCommandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(_connection, commandEntityProvider);
             var databaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
-            _repository = new Repository<Catalog, CatalogIdentity>(databaseCommandProcessor, _retriever, databaseCommandProvider);
+            _repository = new CatalogRepository(databaseCommandProcessor, _retriever, databaseCommandProvider);
         }
 
         [Fact]

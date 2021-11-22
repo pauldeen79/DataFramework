@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core;
+using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.Repositories

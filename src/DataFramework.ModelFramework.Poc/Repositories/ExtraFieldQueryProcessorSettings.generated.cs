@@ -1,8 +1,10 @@
-﻿using QueryFramework.SqlServer.Abstractions;
+﻿using System.CodeDom.Compiler;
+using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
 {
-    public class ExtraFieldQueryProcessorSettings : IQueryProcessorSettings
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
+    public partial class ExtraFieldQueryProcessorSettings : IQueryProcessorSettings
     {
         public string TableName => @"[ExtraField]";
 
