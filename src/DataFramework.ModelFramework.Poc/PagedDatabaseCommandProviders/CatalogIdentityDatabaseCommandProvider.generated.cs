@@ -5,7 +5,7 @@ using CrossCutting.Data.Core.Builders;
 using CrossCutting.Data.Core.Commands;
 using CrossCutting.Data.Sql.Builders;
 using CrossCutting.Data.Sql.CommandProviders;
-using DataFramework.ModelFramework.Poc.Repositories;
+using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders

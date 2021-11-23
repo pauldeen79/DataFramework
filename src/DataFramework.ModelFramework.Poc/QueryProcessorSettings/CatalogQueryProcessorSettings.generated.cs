@@ -2,9 +2,8 @@
 using System.Text;
 using QueryFramework.SqlServer.Abstractions;
 
-namespace DataFramework.ModelFramework.Poc.Repositories
+namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
 {
-    //TODO: Move IQueryProcessorSettings to CrossCutting.Data.Abstractions, and rename it to IEntityRetrieverSetings
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogQueryProcessorSettings : IQueryProcessorSettings
     {

@@ -10,6 +10,7 @@ using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
 using DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders;
+using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
 using PDC.Net.Core.Entities;

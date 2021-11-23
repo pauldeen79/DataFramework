@@ -12,13 +12,13 @@ namespace PDC.Net.Core.QueryViewModels
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryViewModelGenerator", @"1.0.0.0")]
     public partial interface ICatalogQueryViewModel : INotifyPropertyChanged
     {
-        System.Nullable<int> Limit
+        int? Limit
         {
             get;
             set;
         }
 
-        System.Nullable<int> Offset
+        int? Offset
         {
             get;
             set;

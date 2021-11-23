@@ -17,7 +17,7 @@ namespace PDC.Net.Core.QueryViewModels
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryViewModelGenerator", @"1.0.0.0")]
     public partial class CatalogQueryViewModel : ICatalogQueryViewModel
     {
-        public System.Nullable<int> Limit
+        public int? Limit
         {
             get
             {
@@ -33,7 +33,7 @@ namespace PDC.Net.Core.QueryViewModels
             }
         }
 
-        public System.Nullable<int> Offset
+        public int? Offset
         {
             get
             {
@@ -140,9 +140,9 @@ namespace PDC.Net.Core.QueryViewModels
 
         private const int MaxLimit = int.MaxValue;
 
-        private System.Nullable<int> _limit;
+        private int? _limit;
 
-        private System.Nullable<int> _offset;
+        private int? _offset;
 
         private ObservableCollection<IQueryConditionBuilder> _conditions;
 

@@ -46,15 +46,14 @@ namespace PDC.Net.Core.Queries
                     yield return new ValidationResult("Invalid expression in order by fields: " + querySortOrder.Field, new[] { nameof(OrderByFields), nameof(OrderByFields) });
                 }
             }
-
         }
 
-        public bool IsValidExpression(IQueryExpression expression)
+        private bool IsValidExpression(IQueryExpression expression)
         {
             return true;
         }
 
-        public bool IsValidFieldName(IQueryExpression expression)
+        private bool IsValidFieldName(IQueryExpression expression)
         {
             if (expression is PdcCustomQueryExpression) return true;
             return ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
@@ -100,8 +99,8 @@ namespace PDC.Net.Core.Queries
         {
         }
 
-        public CatalogQuery(System.Nullable<int> limit,
-                            System.Nullable<int> offset,
+        public CatalogQuery(int? limit,
+                            int? offset,
                             IEnumerable<IQueryCondition> conditions,
                             IEnumerable<IQuerySortOrder> orderByFields)
             : base(limit, offset, conditions, orderByFields)

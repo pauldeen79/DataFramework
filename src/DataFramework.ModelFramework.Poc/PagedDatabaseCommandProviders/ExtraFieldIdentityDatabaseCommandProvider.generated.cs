@@ -5,7 +5,7 @@ using CrossCutting.Data.Core.Builders;
 using CrossCutting.Data.Core.Commands;
 using CrossCutting.Data.Sql.Builders;
 using CrossCutting.Data.Sql.CommandProviders;
-using DataFramework.ModelFramework.Poc.Repositories;
+using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders
@@ -24,7 +24,8 @@ namespace DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders
                 throw new ArgumentOutOfRangeException(nameof(operation), "Only Select operation is supported");
             }
 
-            return new SelectCommandBuilder().Select(Settings.Fields)
+            return new SelectCommandBuilder()
+                .Select(Settings.Fields)
                 .From(Settings.TableName)
                 .Where("[EntityName] = @EntityName AND [Name] = @Name")
                 .AppendParameters(source)
@@ -48,7 +49,8 @@ namespace DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders
 
         private IDatabaseCommand GenerateCommand(ExtraFieldIdentity source, int offset, int pageSize, bool countOnly)
         {
-            return new PagedSelectCommandBuilder().Select(Settings.Fields)
+            return new PagedSelectCommandBuilder()
+                .Select(Settings.Fields)
                 .From(Settings.TableName)
                 .Where("[EntityName] = @EntityName AND [Name] = @Name")
                 .Offset(offset)

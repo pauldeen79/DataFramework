@@ -9,6 +9,8 @@ using QueryFramework.Core;
 namespace PDC.Net.Core.QueryBuilders
 {
 #nullable enable
+    // Note that this is a special class, that needs to be generated as part of 'ExtraField transformation'
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
     public class ExtraFieldQueryExpressionBuilder : IQueryExpressionBuilder
     {
         public string FieldName

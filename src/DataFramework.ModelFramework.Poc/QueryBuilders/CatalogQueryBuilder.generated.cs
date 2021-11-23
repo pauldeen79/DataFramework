@@ -10,13 +10,13 @@ namespace PDC.Net.Core.QueryBuilders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
     public partial class CatalogQueryBuilder : ISingleEntityQueryBuilder
     {
-        public System.Nullable<int> Limit
+        public int? Limit
         {
             get;
             set;
         }
 
-        public System.Nullable<int> Offset
+        public int? Offset
         {
             get;
             set;
@@ -34,7 +34,7 @@ namespace PDC.Net.Core.QueryBuilders
             set;
         }
 
-        public PDC.Net.Core.Queries.CatalogQuery Build()
+        public CatalogQuery Build()
         {
             return new CatalogQuery(Limit, Offset, Conditions.Select(x => x.Build()), OrderByFields.Select(x => x.Build()));
         }

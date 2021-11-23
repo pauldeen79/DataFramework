@@ -1,7 +1,7 @@
 ﻿using System.CodeDom.Compiler;
 using QueryFramework.SqlServer.Abstractions;
 
-namespace DataFramework.ModelFramework.Poc.Repositories
+namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldQueryProcessorSettings : IQueryProcessorSettings
