@@ -1,4 +1,5 @@
-﻿using CrossCutting.Data.Abstractions;
+﻿using System.Collections.Generic;
+using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Abstractions.Extensions;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 
@@ -19,6 +20,9 @@ namespace DataFramework.ModelFramework.Poc.Repositories
 
         public TEntity? Find(TIdentity identity)
             => _entityRetriever.FindOne(_databaseCommandProvider.Create(identity, DatabaseOperation.Select));
+
+        public IReadOnlyCollection<TEntity> FindAll()
+            => _entityRetriever.FindMany(_databaseCommandProvider.Create(DatabaseOperation.Select));
 
         public Repository(IDatabaseCommandProcessor<TEntity> databaseCommandProcessor,
                           IDatabaseEntityRetriever<TEntity> entityRetriever,

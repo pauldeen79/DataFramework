@@ -1,4 +1,6 @@
-﻿namespace DataFramework.ModelFramework.Poc.Repositories
+﻿using System.Collections.Generic;
+
+namespace DataFramework.ModelFramework.Poc.Repositories
 {
     //TODO: Move to CrossCutting.Data.Abstractions
     public interface IRepository<TEntity, in TIdentity>
@@ -8,5 +10,6 @@
         TEntity Update(TEntity instance);
         TEntity Delete(TEntity instance);
         TEntity? Find(TIdentity identity);
+        IReadOnlyCollection<TEntity> FindAll();
     }
 }
