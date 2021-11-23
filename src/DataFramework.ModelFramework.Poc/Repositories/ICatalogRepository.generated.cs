@@ -1,4 +1,5 @@
 ﻿using System.CodeDom.Compiler;
+using CrossCutting.Data.Abstractions;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.Repositories

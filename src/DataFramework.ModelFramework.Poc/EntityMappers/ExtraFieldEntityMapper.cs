@@ -7,7 +7,7 @@ using PDC.Net.Core.Entities;
 namespace DataFramework.ModelFramework.Poc.EntityMappers
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldEntityMapper : IDataReaderMapper<ExtraField>
+    public partial class ExtraFieldEntityMapper : IDatabaseEntityMapper<ExtraField>
     {
         public ExtraField Map(IDataReader reader)
         {

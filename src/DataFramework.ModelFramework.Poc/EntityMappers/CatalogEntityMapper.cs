@@ -7,7 +7,7 @@ using PDC.Net.Core.Entities;
 namespace DataFramework.ModelFramework.Poc.EntityMappers
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogEntityMapper : IDataReaderMapper<Catalog>
+    public partial class CatalogEntityMapper : IDatabaseEntityMapper<Catalog>
     {
         public Catalog Map(IDataReader reader)
         {

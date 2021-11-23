@@ -96,12 +96,23 @@ namespace PDC.Net.Core.Queries
             return queryBuilder.Build();
         }
 
-        public CatalogQuery(IEnumerable<IQueryCondition> conditions = null, IEnumerable<IQuerySortOrder> orderByFields = null, System.Nullable<int> limit = null, System.Nullable<int> offset = null): base(conditions, orderByFields, limit, offset)
+        public CatalogQuery() : this(null, null, Enumerable.Empty<IQueryCondition>(), Enumerable.Empty<IQuerySortOrder>())
+        {
+        }
+
+        public CatalogQuery(System.Nullable<int> limit,
+                            System.Nullable<int> offset,
+                            IEnumerable<IQueryCondition> conditions,
+                            IEnumerable<IQuerySortOrder> orderByFields)
+            : base(limit, offset, conditions, orderByFields)
         {
             Validator.ValidateObject(this, new ValidationContext(this, null, null), true);
         }
 
-        public CatalogQuery(ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Conditions, simpleEntityQuery.OrderByFields, simpleEntityQuery.Limit, simpleEntityQuery.Offset)
+        public CatalogQuery(ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Limit,
+                                                                        simpleEntityQuery.Offset,
+                                                                        simpleEntityQuery.Conditions,
+                                                                        simpleEntityQuery.OrderByFields)
         {
         }
 

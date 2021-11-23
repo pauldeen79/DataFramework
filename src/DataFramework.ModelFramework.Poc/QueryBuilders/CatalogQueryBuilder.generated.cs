@@ -36,7 +36,7 @@ namespace PDC.Net.Core.QueryBuilders
 
         public PDC.Net.Core.Queries.CatalogQuery Build()
         {
-            return new CatalogQuery(Conditions.Select(x => x.Build()), OrderByFields.Select(x => x.Build()), Limit, Offset);
+            return new CatalogQuery(Limit, Offset, Conditions.Select(x => x.Build()), OrderByFields.Select(x => x.Build()));
         }
 
         public CatalogQueryBuilder()

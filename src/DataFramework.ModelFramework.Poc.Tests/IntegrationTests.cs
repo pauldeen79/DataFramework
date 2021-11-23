@@ -3,14 +3,15 @@ using System.Data.Stub;
 using System.Data.Stub.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using CrossCutting.Data.Core;
 using CrossCutting.Data.Core.Builders;
 using CrossCutting.Data.Sql;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
+using DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
-using Moq;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using PDC.Net.Core.QueryBuilders;
@@ -44,8 +45,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
             _queryProcessor = new QueryProcessor<CatalogQuery, Catalog>(_retriever, settings, databaseCommandGenerator);
             var commandEntityProvider = new CatalogDatabaseCommandEntityProvider();
             var databaseCommandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(_connection, commandEntityProvider);
-            var databaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
-            _repository = new CatalogRepository(databaseCommandProcessor, _retriever, databaseCommandProvider);
+            var catalogIdentityDatabaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
+            var catalogDatabaseCommandProvider = new CatalogDatabaseCommandProvider();
+            _repository = new CatalogRepository(databaseCommandProcessor,
+                                                _retriever,
+                                                catalogIdentityDatabaseCommandProvider,
+                                                catalogDatabaseCommandProvider);
         }
 
         [Fact]
@@ -86,8 +91,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var databaseCommandProcessor = new DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>(_connection, commandEntityProvider);
             var mapper = new ExtraFieldEntityMapper();
             var retriever = new DatabaseEntityRetriever<ExtraField>(_connection, mapper);
-            var databaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
-            var extraFieldRepository = new ExtraFieldRepository(databaseCommandProcessor, retriever, databaseCommandProvider);
+            var extraFieldIdentityDatabaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
+            var extraFieldEntityDatabaseCommandProvider = new ExtraFieldDatabaseCommandProvider();
+            var extraFieldRepository = new ExtraFieldRepository(databaseCommandProcessor,
+                                                                retriever,
+                                                                extraFieldIdentityDatabaseCommandProvider,
+                                                                extraFieldEntityDatabaseCommandProvider);
             var queryViewModel = new CatalogQueryViewModel(extraFieldRepository, _queryProcessor);
             queryViewModel.Conditions.Add(new QueryConditionBuilder()
                 .WithField("MyField")
@@ -149,7 +158,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
         public void Can_Update_Entity_From_Database()
         {
             // Arrange
-            const string FindSql = "SELECT TOP 1 [Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], [DriveTypeCodeType], [DriveTypeCode], [DriveTypeDescription], [DriveTotalSize], [DriveFreeSpace], [Recursive], [Sorted], [StartDirectory], [ExtraField1], [ExtraField2], [ExtraField3], [ExtraField4], [ExtraField5], [ExtraField6], [ExtraField7], [ExtraField8], [ExtraField9], [ExtraField10], [ExtraField11], [ExtraField12], [ExtraField13], [ExtraField14], [ExtraField15], [ExtraField16] FROM (SELECT c.[Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], c.[DriveTypeCodeType], c.[DriveTypeCode], c.[DriveTotalSize], c.[DriveFreeSpace], c.[Recursive], c.[Sorted], c.[StartDirectory], c.[ExtraField1], c.[ExtraField2], c.[ExtraField3], c.[ExtraField4], c.[ExtraField5], c.[ExtraField6], c.[ExtraField7], c.[ExtraField8], c.[ExtraField9], c.[ExtraField10], c.[ExtraField11], c.[ExtraField12], c.[ExtraField13], c.[ExtraField14], c.[ExtraField15], c.[ExtraField16], cd.[Description] AS [DriveTypeDescription] FROM [Catalog] c INNER JOIN [Code] cd ON c.[DriveTypeCode] = cd.[Code] AND cd.[CodeType] = 'CDT') AS [CatalogView] WHERE [Id] = @Id";
+            const string FindSql = "SELECT [Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], [DriveTypeCodeType], [DriveTypeCode], [DriveTypeDescription], [DriveTotalSize], [DriveFreeSpace], [Recursive], [Sorted], [StartDirectory], [ExtraField1], [ExtraField2], [ExtraField3], [ExtraField4], [ExtraField5], [ExtraField6], [ExtraField7], [ExtraField8], [ExtraField9], [ExtraField10], [ExtraField11], [ExtraField12], [ExtraField13], [ExtraField14], [ExtraField15], [ExtraField16] FROM (SELECT c.[Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], c.[DriveTypeCodeType], c.[DriveTypeCode], c.[DriveTotalSize], c.[DriveFreeSpace], c.[Recursive], c.[Sorted], c.[StartDirectory], c.[ExtraField1], c.[ExtraField2], c.[ExtraField3], c.[ExtraField4], c.[ExtraField5], c.[ExtraField6], c.[ExtraField7], c.[ExtraField8], c.[ExtraField9], c.[ExtraField10], c.[ExtraField11], c.[ExtraField12], c.[ExtraField13], c.[ExtraField14], c.[ExtraField15], c.[ExtraField16], cd.[Description] AS [DriveTypeDescription] FROM [Catalog] c INNER JOIN [Code] cd ON c.[DriveTypeCode] = cd.[Code] AND cd.[CodeType] = 'CDT') AS [CatalogView] WHERE [Id] = @Id";
             _connection.AddResultForDataReader(cmd => cmd.CommandText == FindSql && ((int)cmd.Parameters.Cast<DbDataParameter>().First().Value) == 1, new[] { new Catalog(1, "Diversen cd 1", DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             _connection.AddResultForDataReader(cmd => cmd.CommandText == "[UpdateCatalog]", new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Today, DateTime.Today, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             var input = new CatalogBuilder(_repository.Find(new CatalogIdentity(1))).SetExtraField1("value").Build();
@@ -168,7 +177,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
         public void Can_Delete_Entity_From_Database()
         {
             // Arrange
-            const string FindSql = "SELECT TOP 1 [Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], [DriveTypeCodeType], [DriveTypeCode], [DriveTypeDescription], [DriveTotalSize], [DriveFreeSpace], [Recursive], [Sorted], [StartDirectory], [ExtraField1], [ExtraField2], [ExtraField3], [ExtraField4], [ExtraField5], [ExtraField6], [ExtraField7], [ExtraField8], [ExtraField9], [ExtraField10], [ExtraField11], [ExtraField12], [ExtraField13], [ExtraField14], [ExtraField15], [ExtraField16] FROM (SELECT c.[Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], c.[DriveTypeCodeType], c.[DriveTypeCode], c.[DriveTotalSize], c.[DriveFreeSpace], c.[Recursive], c.[Sorted], c.[StartDirectory], c.[ExtraField1], c.[ExtraField2], c.[ExtraField3], c.[ExtraField4], c.[ExtraField5], c.[ExtraField6], c.[ExtraField7], c.[ExtraField8], c.[ExtraField9], c.[ExtraField10], c.[ExtraField11], c.[ExtraField12], c.[ExtraField13], c.[ExtraField14], c.[ExtraField15], c.[ExtraField16], cd.[Description] AS [DriveTypeDescription] FROM [Catalog] c INNER JOIN [Code] cd ON c.[DriveTypeCode] = cd.[Code] AND cd.[CodeType] = 'CDT') AS [CatalogView] WHERE [Id] = @Id";
+            const string FindSql = "SELECT [Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], [DriveTypeCodeType], [DriveTypeCode], [DriveTypeDescription], [DriveTotalSize], [DriveFreeSpace], [Recursive], [Sorted], [StartDirectory], [ExtraField1], [ExtraField2], [ExtraField3], [ExtraField4], [ExtraField5], [ExtraField6], [ExtraField7], [ExtraField8], [ExtraField9], [ExtraField10], [ExtraField11], [ExtraField12], [ExtraField13], [ExtraField14], [ExtraField15], [ExtraField16] FROM (SELECT c.[Id], [Name], [DateCreated], [DateLastModified], [DateSynchronized], [DriveSerialNumber], c.[DriveTypeCodeType], c.[DriveTypeCode], c.[DriveTotalSize], c.[DriveFreeSpace], c.[Recursive], c.[Sorted], c.[StartDirectory], c.[ExtraField1], c.[ExtraField2], c.[ExtraField3], c.[ExtraField4], c.[ExtraField5], c.[ExtraField6], c.[ExtraField7], c.[ExtraField8], c.[ExtraField9], c.[ExtraField10], c.[ExtraField11], c.[ExtraField12], c.[ExtraField13], c.[ExtraField14], c.[ExtraField15], c.[ExtraField16], cd.[Description] AS [DriveTypeDescription] FROM [Catalog] c INNER JOIN [Code] cd ON c.[DriveTypeCode] = cd.[Code] AND cd.[CodeType] = 'CDT') AS [CatalogView] WHERE [Id] = @Id";
             _connection.AddResultForDataReader(cmd => cmd.CommandText == FindSql && ((int)cmd.Parameters.Cast<DbDataParameter>().First().Value) == 1, new[] { new Catalog(1, "Diversen cd 1", DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             _connection.AddResultForDataReader(cmd => cmd.CommandText == "[DeleteCatalog]", new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Today, DateTime.Today, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             var input = new CatalogBuilder(_repository.Find(new CatalogIdentity(1))).SetExtraField1("value").Build();
