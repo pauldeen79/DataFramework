@@ -39,7 +39,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
         {
             var settings = new CatalogQueryProcessorSettings();
             var fieldProvider = new DefaultQueryFieldProvider();
-            var databaseCommandGenerator = new DatabaseCommandGenerator(fieldProvider);
+            var databaseCommandGenerator = new QueryPagedDatabaseCommandProvider<CatalogQuery>(fieldProvider, settings);
             Connection = new DbConnection();
             var mapper = new CatalogEntityMapper();
             Retriever = new DatabaseEntityRetriever<Catalog>(Connection, mapper);
@@ -49,9 +49,9 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var catalogIdentityDatabaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
             var catalogDatabaseCommandProvider = new CatalogDatabaseCommandProvider();
             Repository = new CatalogRepository(databaseCommandProcessor,
-                                                Retriever,
-                                                catalogIdentityDatabaseCommandProvider,
-                                                catalogDatabaseCommandProvider);
+                                               Retriever,
+                                               catalogIdentityDatabaseCommandProvider,
+                                               catalogDatabaseCommandProvider);
         }
 
         #region QueryProcessor
