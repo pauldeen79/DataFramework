@@ -11,8 +11,9 @@ namespace DataFramework.ModelFramework.Poc.Repositories
         public CatalogRepository(IDatabaseCommandProcessor<Catalog> databaseCommandProcessor,
                                  IDatabaseEntityRetriever<Catalog> entityRetriever,
                                  IPagedDatabaseCommandProvider<CatalogIdentity> identityDatabaseCommandProvider,
+                                 IPagedDatabaseCommandProvider genericDatabaseCommandProvider,
                                  IDatabaseCommandProvider<Catalog> entityDatabaseCommandProvider)
-            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, entityDatabaseCommandProvider)
+            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, genericDatabaseCommandProvider, entityDatabaseCommandProvider)
         {
         }
     }

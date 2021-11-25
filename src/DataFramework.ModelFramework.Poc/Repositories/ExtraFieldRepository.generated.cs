@@ -14,8 +14,9 @@ namespace DataFramework.ModelFramework.Poc.Repositories
         public ExtraFieldRepository(IDatabaseCommandProcessor<ExtraField> databaseCommandProcessor,
                                     IDatabaseEntityRetriever<ExtraField> entityRetriever,
                                     IPagedDatabaseCommandProvider<ExtraFieldIdentity> identityDatabaseCommandProvider,
+                                    IPagedDatabaseCommandProvider genericDatabaseCommandProvider,
                                     IDatabaseCommandProvider<ExtraField> entityDatabaseCommandProvider)
-            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, entityDatabaseCommandProvider)
+            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, genericDatabaseCommandProvider, entityDatabaseCommandProvider)
         {
         }
 

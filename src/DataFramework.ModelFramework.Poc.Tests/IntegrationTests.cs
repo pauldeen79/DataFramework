@@ -47,10 +47,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var commandEntityProvider = new CatalogDatabaseCommandEntityProvider();
             var databaseCommandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(Connection, commandEntityProvider);
             var catalogIdentityDatabaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
+            var genericDatabaseCommandProvider = new CatalogEntityDatabaseCommandProvider();
             var catalogDatabaseCommandProvider = new CatalogDatabaseCommandProvider();
             Repository = new CatalogRepository(databaseCommandProcessor,
                                                Retriever,
                                                catalogIdentityDatabaseCommandProvider,
+                                               genericDatabaseCommandProvider,
                                                catalogDatabaseCommandProvider);
         }
 
@@ -80,10 +82,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
             var mapper = new ExtraFieldEntityMapper();
             var retriever = new DatabaseEntityRetriever<ExtraField>(Connection, mapper);
             var extraFieldIdentityDatabaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
+            var extraFieldGenericDatabaseCommandProvider = new ExtraFieldEntityDatabaseCommandProvider();
             var extraFieldEntityDatabaseCommandProvider = new ExtraFieldDatabaseCommandProvider();
             var extraFieldRepository = new ExtraFieldRepository(databaseCommandProcessor,
                                                                 retriever,
                                                                 extraFieldIdentityDatabaseCommandProvider,
+                                                                extraFieldGenericDatabaseCommandProvider,
                                                                 extraFieldEntityDatabaseCommandProvider);
             var queryViewModel = new CatalogQueryViewModel(extraFieldRepository, QueryProcessor);
             queryViewModel.Conditions.Add(new QueryConditionBuilder()
