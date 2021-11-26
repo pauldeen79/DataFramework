@@ -9,17 +9,14 @@ using CrossCutting.Data.Sql;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
+using DataFramework.ModelFramework.Poc.QueryFieldProviders;
 using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
-using PDC.Net.Core.QueryBuilders;
-using PDC.Net.Core.QueryViewModels;
-using QueryFramework.Abstractions;
-using QueryFramework.Abstractions.Extensions.Builders;
-using QueryFramework.Core.Builders;
 using QueryFramework.Core.Extensions;
+using QueryFramework.Core.Queries.Builders;
 using QueryFramework.Core.Queries.Builders.Extensions;
 using QueryFramework.SqlServer;
 using Xunit;
@@ -37,7 +34,10 @@ namespace DataFramework.ModelFramework.Poc.Tests
         public IntegrationTests()
         {
             var settings = new CatalogQueryProcessorSettings();
-            var fieldProvider = new DefaultQueryFieldProvider();
+            var fieldProvider = new CatalogQueryFieldProvider(new[]
+            {
+                new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true)
+            });
             var databaseCommandGenerator = new QueryPagedDatabaseCommandProvider<CatalogQuery>(fieldProvider, settings);
             Connection = new DbConnection();
             var mapper = new CatalogEntityMapper();
@@ -59,13 +59,16 @@ namespace DataFramework.ModelFramework.Poc.Tests
 
         #region QueryProcessor
         [Fact]
-        public void Can_Query_Database_Using_Query()
+        public void Can_Query_Database_Using_Basic_Query()
         {
             // Arrange
             Connection.AddResultForDataReader(new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+            var query = new CatalogQuery(new SingleEntityQueryBuilder()
+                .Where(nameof(Catalog.Name).DoesStartWith("Diversen cd"))
+                .Build());
 
             // Act
-            var actual = QueryProcessor.FindMany(new CatalogQueryBuilder().Where(nameof(Catalog.Name).DoesStartWith("Diversen cd")).Build());
+            var actual = QueryProcessor.FindMany(query);
 
             // Assert
             actual.Should().ContainSingle();
@@ -77,29 +80,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
         {
             // Arrange
             Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" WHERE ExtraField1 = @p0 "), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
-            Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" FROM [ExtraField]"), new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
-            var commandEntityProvider = new ExtraFieldDatabaseCommandEntityProvider();
-            var commandProcessor = new DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>(Connection, commandEntityProvider);
-            var mapper = new ExtraFieldEntityMapper();
-            var retriever = new DatabaseEntityRetriever<ExtraField>(Connection, mapper);
-            var identityDatabaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
-            var pagedEntitySelectCommandProvider = new ExtraFieldPagedEntitySelectDatabaseCommandProvider();
-            var entitySelectCommandProvider = new ExtraFieldEntityDatabaseCommandProvider();
-            var entityCommandProvider = new ExtraFieldDatabaseCommandProvider();
-            var extraFieldRepository = new ExtraFieldRepository(commandProcessor,
-                                                                retriever,
-                                                                identityDatabaseCommandProvider,
-                                                                pagedEntitySelectCommandProvider,
-                                                                entitySelectCommandProvider,
-                                                                entityCommandProvider);
-            var queryViewModel = new CatalogQueryViewModel(extraFieldRepository, QueryProcessor);
-            queryViewModel.Conditions.Add(new QueryConditionBuilder()
-                .WithField("MyField")
-                .WithOperator(QueryOperator.Equal)
-                .WithValue("Value"));
+            var query = new CatalogQuery(new SingleEntityQueryBuilder()
+                .Where("MyField".IsEqualTo("Value"))
+                .Build());
 
             // Act
-            var actual = QueryProcessor.FindMany(queryViewModel.CreateQuery());
+            var actual = QueryProcessor.FindMany(query);
 
             // Assert
             actual.Should().ContainSingle();
@@ -111,9 +97,12 @@ namespace DataFramework.ModelFramework.Poc.Tests
         {
             // Arrange
             Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains("WHERE CHARINDEX(@p0, [Name] + ' ' + [StartDirectory] + ' ' + COALESCE([ExtraField1], '') + ' ' + COALESCE([ExtraField2], '') + ' ' + COALESCE([ExtraField3], '') + ' ' + COALESCE([ExtraField4], '') + ' ' + COALESCE([ExtraField5], '') + ' ' + COALESCE([ExtraField6], '') + ' ' + COALESCE([ExtraField7], '') + ' ' + COALESCE([ExtraField8], '') + ' ' + COALESCE([ExtraField9], '') + ' ' + COALESCE([ExtraField10], '') + ' ' + COALESCE([ExtraField11], '') + ' ' + COALESCE([ExtraField12], '') + ' ' + COALESCE([ExtraField13], '') + ' ' + COALESCE([ExtraField14], '') + ' ' + COALESCE([ExtraField15], '') + ' ' + COALESCE([ExtraField16], '')) > 0"), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+            var query = new CatalogQuery(new SingleEntityQueryBuilder()
+                .Where("AllFields".DoesContain("Diversen"))
+                .Build());
 
             // Act
-            var actual = QueryProcessor.FindMany(new CatalogQueryBuilder().Where("AllFields".DoesContain("Diversen")).Build());
+            var actual = QueryProcessor.FindMany(query);
 
             // Assert
             actual.Should().ContainSingle();

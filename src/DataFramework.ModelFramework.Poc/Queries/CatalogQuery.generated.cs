@@ -3,18 +3,14 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using PDC.Net.Core.QueryBuilders;
-using PDC.Net.Core.QueryExpressionBuilders;
-using PDC.Net.Core.QueryExpressions;
 using QueryFramework.Abstractions;
 using QueryFramework.Abstractions.Queries;
-using QueryFramework.Core.Builders;
 using QueryFramework.Core.Queries;
 
 namespace PDC.Net.Core.Queries
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryGenerator", @"1.0.0.0")]
-    public partial record CatalogQuery : SingleEntityQuery, IValidatableObject, IDynamicQuery<CatalogQuery>
+    public partial record CatalogQuery : SingleEntityQuery, IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -55,44 +51,14 @@ namespace PDC.Net.Core.Queries
 
         private bool IsValidFieldName(IQueryExpression expression)
         {
-            if (expression is PdcCustomQueryExpression) return true;
-            return ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
-        }
+            // default: var result = false;
+            // Override because of extrafields transformation
+            var result = true;
 
-        public CatalogQuery Process()
-        {
-            var queryBuilder = new CatalogQueryBuilder
-            {
-                Limit = Limit,
-                Offset = Offset
-            };
-            foreach (var condition in Conditions)
-            {
-                queryBuilder.Conditions.Add
-                (
-                    new QueryConditionBuilder
-                    (
-                        new CatalogQueryExpressionBuilder(condition.Field).Build(),
-                        condition.Operator,
-                        condition.Value,
-                        condition.OpenBracket,
-                        condition.CloseBracket,
-                        condition.Combination
-                    )
-                );
-            }
-            foreach (var orderByField in OrderByFields)
-            {
-                queryBuilder.OrderByFields.Add
-                (
-                    new QuerySortOrderBuilder
-                    (
-                        new CatalogQueryExpressionBuilder(orderByField.Field).Build(),
-                        orderByField.Order
-                    )
-                );
-            }
-            return queryBuilder.Build();
+            // Expression can't be validated here because of support of dynamic extrafields
+            //if (expression is PdcCustomQueryExpression) return true;
+
+            return result || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public CatalogQuery() : this(null, null, Enumerable.Empty<IQueryCondition>(), Enumerable.Empty<IQuerySortOrder>())

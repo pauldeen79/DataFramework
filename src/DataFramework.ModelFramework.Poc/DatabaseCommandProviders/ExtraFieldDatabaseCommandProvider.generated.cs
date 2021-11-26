@@ -22,7 +22,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
                 case DatabaseOperation.Delete:
                     return new StoredProcedureCommand<ExtraField>(@"[DeleteExtraField]", source, DatabaseOperation.Delete, DeleteParameters);
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported operation: {operation}");
+                    throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
             }
         }
 

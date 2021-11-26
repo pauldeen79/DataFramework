@@ -23,7 +23,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
                     case DatabaseOperation.Delete:
                         return DeleteResultEntity(entity);
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported operation: {operation}");
+                        throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
                 }
             };
 
@@ -39,7 +39,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
                     case DatabaseOperation.Delete:
                         return entity;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported operation: {operation}");
+                        throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
                 }
             };
 
