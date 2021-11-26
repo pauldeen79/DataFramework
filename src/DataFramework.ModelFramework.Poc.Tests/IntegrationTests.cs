@@ -9,7 +9,6 @@ using CrossCutting.Data.Sql;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
-using DataFramework.ModelFramework.Poc.PagedDatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using DataFramework.ModelFramework.Poc.Repositories;
 using FluentAssertions;
@@ -45,15 +44,17 @@ namespace DataFramework.ModelFramework.Poc.Tests
             Retriever = new DatabaseEntityRetriever<Catalog>(Connection, mapper);
             QueryProcessor = new QueryProcessor<CatalogQuery, Catalog>(Retriever, settings, databaseCommandGenerator);
             var commandEntityProvider = new CatalogDatabaseCommandEntityProvider();
-            var databaseCommandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(Connection, commandEntityProvider);
-            var catalogIdentityDatabaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
-            var genericDatabaseCommandProvider = new CatalogEntityDatabaseCommandProvider();
-            var catalogDatabaseCommandProvider = new CatalogDatabaseCommandProvider();
-            Repository = new CatalogRepository(databaseCommandProcessor,
+            var commandProcessor = new DatabaseCommandProcessor<Catalog, CatalogBuilder>(Connection, commandEntityProvider);
+            var identityDatabaseCommandProvider = new CatalogIdentityDatabaseCommandProvider();
+            var pagedEntitySelectCommandProvider = new CatalogPagedEntitySelectDatabaseCommandProvider();
+            var entitySelectCommandProvider = new CatalogEntitySelectDatabaseCommandProvider();
+            var entityCommandProvider = new CatalogDatabaseCommandProvider();
+            Repository = new CatalogRepository(commandProcessor,
                                                Retriever,
-                                               catalogIdentityDatabaseCommandProvider,
-                                               genericDatabaseCommandProvider,
-                                               catalogDatabaseCommandProvider);
+                                               identityDatabaseCommandProvider,
+                                               pagedEntitySelectCommandProvider,
+                                               entitySelectCommandProvider,
+                                               entityCommandProvider);
         }
 
         #region QueryProcessor
@@ -78,17 +79,19 @@ namespace DataFramework.ModelFramework.Poc.Tests
             Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" WHERE ExtraField1 = @p0 "), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" FROM [ExtraField]"), new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
             var commandEntityProvider = new ExtraFieldDatabaseCommandEntityProvider();
-            var databaseCommandProcessor = new DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>(Connection, commandEntityProvider);
+            var commandProcessor = new DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>(Connection, commandEntityProvider);
             var mapper = new ExtraFieldEntityMapper();
             var retriever = new DatabaseEntityRetriever<ExtraField>(Connection, mapper);
-            var extraFieldIdentityDatabaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
-            var extraFieldGenericDatabaseCommandProvider = new ExtraFieldEntityDatabaseCommandProvider();
-            var extraFieldEntityDatabaseCommandProvider = new ExtraFieldDatabaseCommandProvider();
-            var extraFieldRepository = new ExtraFieldRepository(databaseCommandProcessor,
+            var identityDatabaseCommandProvider = new ExtraFieldIdentityDatabaseCommandProvider();
+            var pagedEntitySelectCommandProvider = new ExtraFieldPagedEntitySelectDatabaseCommandProvider();
+            var entitySelectCommandProvider = new ExtraFieldEntityDatabaseCommandProvider();
+            var entityCommandProvider = new ExtraFieldDatabaseCommandProvider();
+            var extraFieldRepository = new ExtraFieldRepository(commandProcessor,
                                                                 retriever,
-                                                                extraFieldIdentityDatabaseCommandProvider,
-                                                                extraFieldGenericDatabaseCommandProvider,
-                                                                extraFieldEntityDatabaseCommandProvider);
+                                                                identityDatabaseCommandProvider,
+                                                                pagedEntitySelectCommandProvider,
+                                                                entitySelectCommandProvider,
+                                                                entityCommandProvider);
             var queryViewModel = new CatalogQueryViewModel(extraFieldRepository, QueryProcessor);
             queryViewModel.Conditions.Add(new QueryConditionBuilder()
                 .WithField("MyField")

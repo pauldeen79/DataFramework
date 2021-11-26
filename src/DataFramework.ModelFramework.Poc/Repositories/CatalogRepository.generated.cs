@@ -8,12 +8,13 @@ namespace DataFramework.ModelFramework.Poc.Repositories
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogRepository : Repository<Catalog, CatalogIdentity>, ICatalogRepository
     {
-        public CatalogRepository(IDatabaseCommandProcessor<Catalog> databaseCommandProcessor,
+        public CatalogRepository(IDatabaseCommandProcessor<Catalog> commandProcessor,
                                  IDatabaseEntityRetriever<Catalog> entityRetriever,
-                                 IPagedDatabaseCommandProvider<CatalogIdentity> identityDatabaseCommandProvider,
-                                 IPagedDatabaseCommandProvider genericDatabaseCommandProvider,
-                                 IDatabaseCommandProvider<Catalog> entityDatabaseCommandProvider)
-            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, genericDatabaseCommandProvider, entityDatabaseCommandProvider)
+                                 IDatabaseCommandProvider<CatalogIdentity> identitySelectCommandProvider,
+                                 IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider,
+                                 IDatabaseCommandProvider entitySelectCommandProvider,
+                                 IDatabaseCommandProvider<Catalog> entityCommandProvider)
+            : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
         }
     }

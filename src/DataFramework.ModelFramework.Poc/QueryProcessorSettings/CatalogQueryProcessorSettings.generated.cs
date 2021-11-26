@@ -31,9 +31,7 @@ namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
             }
         }
 
-        public int? OverrideLimit => null;
-
-        public int? OverrideOffset => null;
+        public int? OverridePageSize => null;
 
         public bool ValidateFieldNames => true;
 

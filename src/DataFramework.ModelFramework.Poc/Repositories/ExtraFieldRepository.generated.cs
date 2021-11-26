@@ -11,12 +11,13 @@ namespace DataFramework.ModelFramework.Poc.Repositories
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldRepository : Repository<ExtraField, ExtraFieldIdentity>, IExtraFieldRepository
     {
-        public ExtraFieldRepository(IDatabaseCommandProcessor<ExtraField> databaseCommandProcessor,
+        public ExtraFieldRepository(IDatabaseCommandProcessor<ExtraField> commandProcessor,
                                     IDatabaseEntityRetriever<ExtraField> entityRetriever,
-                                    IPagedDatabaseCommandProvider<ExtraFieldIdentity> identityDatabaseCommandProvider,
-                                    IPagedDatabaseCommandProvider genericDatabaseCommandProvider,
-                                    IDatabaseCommandProvider<ExtraField> entityDatabaseCommandProvider)
-            : base(databaseCommandProcessor, entityRetriever, identityDatabaseCommandProvider, genericDatabaseCommandProvider, entityDatabaseCommandProvider)
+                                    IDatabaseCommandProvider<ExtraFieldIdentity> identitySelectCommandProvider,
+                                    IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider,
+                                    IDatabaseCommandProvider entitySelectCommandProvider,
+                                    IDatabaseCommandProvider<ExtraField> entityCommandProvider)
+            : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
         }
 

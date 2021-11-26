@@ -14,9 +14,7 @@ namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
 
         public string DefaultWhere => string.Empty;
 
-        public int? OverrideLimit => null;
-
-        public int? OverrideOffset => null;
+        public int? OverridePageSize => null;
 
         public bool ValidateFieldNames => true;
 
