@@ -3,7 +3,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using PDC.Net.Core.Entities;
-using PDC.Net.Core.QueryExpressions;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
@@ -86,8 +85,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public bool ValidateExpression(IQueryExpression expression)
         {
-            // default: return true
-            return expression is PdcCustomQueryExpression || GetAllFields().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
+            return GetAllFields().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
