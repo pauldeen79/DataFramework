@@ -6,9 +6,9 @@ using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldEntityDatabaseCommandProvider : SelectDatabaseCommandProviderBase<ExtraFieldQueryProcessorSettings>, IDatabaseCommandProvider
+    public partial class ExtraFieldEntitySelectDatabaseCommandProvider : SelectDatabaseCommandProviderBase<ExtraFieldQueryProcessorSettings>, IDatabaseCommandProvider
     {
-        public ExtraFieldEntityDatabaseCommandProvider() : base(new ExtraFieldQueryProcessorSettings())
+        public ExtraFieldEntitySelectDatabaseCommandProvider() : base(new ExtraFieldQueryProcessorSettings())
         {
         }
     }
