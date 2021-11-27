@@ -8,16 +8,16 @@ using PDC.Net.Core.Entities;
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogIdentityDatabaseCommandProvider : IDatabaseCommandProvider<CatalogIdentity>
+    public partial class ExtraFieldIdentityCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
     {
-        private CatalogQueryProcessorSettings Settings { get; }
+        private ExtraFieldQueryProcessorSettings Settings { get; }
 
-        public CatalogIdentityDatabaseCommandProvider()
+        public ExtraFieldIdentityCommandProvider()
         {
-            Settings = new CatalogQueryProcessorSettings();
+            Settings = new ExtraFieldQueryProcessorSettings();
         }
 
-        public IDatabaseCommand Create(CatalogIdentity source, DatabaseOperation operation)
+        public IDatabaseCommand Create(ExtraFieldIdentity source, DatabaseOperation operation)
         {
             if (operation != DatabaseOperation.Select)
             {
@@ -27,7 +27,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
             return new SelectCommandBuilder()
                 .Select(Settings.Fields)
                 .From(Settings.TableName)
-                .Where("[Id] = @Id")
+                .Where("[EntityName] = @EntityName AND [Name] = @Name")
                 .AppendParameters(source)
                 .Build();
         }

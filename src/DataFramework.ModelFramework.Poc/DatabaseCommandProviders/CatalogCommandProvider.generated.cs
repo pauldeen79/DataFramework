@@ -9,7 +9,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogDatabaseCommandProvider : IDatabaseCommandProvider<Catalog>
+    public partial class CatalogCommandProvider : IDatabaseCommandProvider<Catalog>
     {
         public IDatabaseCommand Create(Catalog source, DatabaseOperation operation)
         {

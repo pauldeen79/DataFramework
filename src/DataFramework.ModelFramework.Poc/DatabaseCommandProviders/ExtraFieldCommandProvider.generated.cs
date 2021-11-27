@@ -9,7 +9,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldDatabaseCommandProvider : IDatabaseCommandProvider<ExtraField>
+    public partial class ExtraFieldCommandProvider : IDatabaseCommandProvider<ExtraField>
     {
         public IDatabaseCommand Create(ExtraField source, DatabaseOperation operation)
         {
