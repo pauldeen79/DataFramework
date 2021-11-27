@@ -2,17 +2,19 @@
 using System.CodeDom.Compiler;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Builders;
-using CrossCutting.Data.Core.CommandProviders;
 using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldIdentityDatabaseCommandProvider : SelectDatabaseCommandProviderBase<ExtraFieldQueryProcessorSettings>, IDatabaseCommandProvider<ExtraFieldIdentity>
+    public partial class ExtraFieldIdentityDatabaseCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
     {
-        public ExtraFieldIdentityDatabaseCommandProvider() : base(new ExtraFieldQueryProcessorSettings())
+        private ExtraFieldQueryProcessorSettings Settings { get; }
+
+        public ExtraFieldIdentityDatabaseCommandProvider()
         {
+            Settings = new ExtraFieldQueryProcessorSettings();
         }
 
         public IDatabaseCommand Create(ExtraFieldIdentity source, DatabaseOperation operation)

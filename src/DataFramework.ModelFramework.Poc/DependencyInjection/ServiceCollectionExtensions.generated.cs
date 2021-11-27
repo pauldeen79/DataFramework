@@ -1,6 +1,8 @@
 ﻿using System.CodeDom.Compiler;
 using CrossCutting.Data.Abstractions;
+using CrossCutting.Data.Core.CommandProviders;
 using CrossCutting.Data.Sql;
+using CrossCutting.Data.Sql.CommandProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
@@ -31,8 +33,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 => new CatalogRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<Catalog>>(),
                                          serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<CatalogIdentity>>(),
-                                         new CatalogPagedEntitySelectDatabaseCommandProvider(),
-                                         new CatalogEntitySelectDatabaseCommandProvider(),
+                                         new PagedSelectDatabaseCommandProvider(new CatalogQueryProcessorSettings()),
+                                         new SelectDatabaseCommandProvider(new CatalogQueryProcessorSettings()),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<Catalog>>()));
             instance.AddSingleton<IPagedDatabaseCommandProvider<CatalogQuery>>(serviceProvider =>
                 new QueryPagedDatabaseCommandProvider<CatalogQuery>(new CatalogQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("Catalog")),
@@ -54,8 +56,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 new ExtraFieldRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<ExtraField>>(),
                                          serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraFieldIdentity>>(),
-                                         new ExtraFieldPagedEntitySelectDatabaseCommandProvider(),
-                                         new ExtraFieldEntitySelectDatabaseCommandProvider(),
+                                         new PagedSelectDatabaseCommandProvider(new ExtraFieldQueryProcessorSettings()),
+                                         new SelectDatabaseCommandProvider(new ExtraFieldQueryProcessorSettings()),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraField>>()));
 
             // only add if the entity is queryable

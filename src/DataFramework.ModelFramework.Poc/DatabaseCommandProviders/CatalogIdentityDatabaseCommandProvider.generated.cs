@@ -2,17 +2,19 @@
 using System.CodeDom.Compiler;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Builders;
-using CrossCutting.Data.Core.CommandProviders;
 using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogIdentityDatabaseCommandProvider : SelectDatabaseCommandProviderBase<CatalogQueryProcessorSettings>, IDatabaseCommandProvider<CatalogIdentity>
+    public partial class CatalogIdentityDatabaseCommandProvider : IDatabaseCommandProvider<CatalogIdentity>
     {
-        public CatalogIdentityDatabaseCommandProvider() : base(new CatalogQueryProcessorSettings())
+        private CatalogQueryProcessorSettings Settings { get; }
+
+        public CatalogIdentityDatabaseCommandProvider()
         {
+            Settings = new CatalogQueryProcessorSettings();
         }
 
         public IDatabaseCommand Create(CatalogIdentity source, DatabaseOperation operation)
