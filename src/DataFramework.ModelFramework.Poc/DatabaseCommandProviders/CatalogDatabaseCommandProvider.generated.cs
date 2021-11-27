@@ -26,11 +26,6 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
             }
         }
 
-        public IDatabaseCommand Create(DatabaseOperation operation)
-        {
-            throw new NotSupportedException("Can only generate a command with a Catalog entity");
-        }
-
         private object AddParameters(Catalog resultEntity)
         {
             return new[]
