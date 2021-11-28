@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Poc.EntityMappers
     {
         public Catalog Map(IDataReader reader)
         {
-            var instance = new Catalog
+            return new Catalog
             (
                 id: reader.GetInt32("Id"),
                 name: reader.GetString("Name"),
@@ -74,8 +74,6 @@ namespace DataFramework.ModelFramework.Poc.EntityMappers
                 extraField15Original: reader.GetNullableString("ExtraField15"),
                 extraField16Original: reader.GetNullableString("ExtraField16")
             );
-
-            return instance;
         }
     }
 }

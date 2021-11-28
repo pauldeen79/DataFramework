@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Poc.EntityMappers
     {
         public ExtraField Map(IDataReader reader)
         {
-            var instance = new ExtraField
+            return new ExtraField
             (
                 entityName: reader.GetString("EntityName"),
                 name: reader.GetString("Name"),
@@ -25,8 +25,6 @@ namespace DataFramework.ModelFramework.Poc.EntityMappers
                 fieldNumberOriginal: reader.GetByte("FieldNumber"),
                 fieldTypeOriginal: reader.GetString("FieldType")
             );
-
-            return instance;
         }
     }
 }
