@@ -61,11 +61,6 @@ namespace DataFramework.Core
             get;
         }
 
-        public bool CanInitialize
-        {
-            get;
-        }
-
         public bool UseForCheckOnOriginalValues
         {
             get;
@@ -93,7 +88,6 @@ namespace DataFramework.Core
                          bool isPersistable,
                          bool canGet,
                          bool canSet,
-                         bool canInitialize,
                          bool useForCheckOnOriginalValues,
                          object? defaultValue,
                          ValueCollection<IMetadata> metadata)
@@ -115,7 +109,6 @@ namespace DataFramework.Core
             IsPersistable = isPersistable;
             CanGet = canGet;
             CanSet = canSet;
-            CanInitialize = canInitialize;
             UseForCheckOnOriginalValues = useForCheckOnOriginalValues;
             DefaultValue = defaultValue;
             Metadata = metadata;

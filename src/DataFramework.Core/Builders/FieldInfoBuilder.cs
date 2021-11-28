@@ -18,7 +18,6 @@ namespace DataFramework.Core.Builders
         public bool IsPersistable { get; set; }
         public bool CanGet { get; set; }
         public bool CanSet { get; set; }
-        public bool CanInitialize { get; set; }
         public bool UseForCheckOnOriginalValues { get; set; }
         public object? DefaultValue { get; set; }
         public List<MetadataBuilder> Metadata { get; set; }
@@ -36,7 +35,6 @@ namespace DataFramework.Core.Builders
                                  IsPersistable,
                                  CanGet,
                                  CanSet,
-                                 CanInitialize,
                                  UseForCheckOnOriginalValues,
                                  DefaultValue,
                                  new ValueCollection<IMetadata>(Metadata.Select(x => x.Build())));
@@ -55,7 +53,6 @@ namespace DataFramework.Core.Builders
             IsPersistable = default;
             CanGet = default;
             CanSet = default;
-            CanInitialize = default;
             UseForCheckOnOriginalValues = default;
             DefaultValue = default;
             Metadata.Clear();
@@ -125,12 +122,6 @@ namespace DataFramework.Core.Builders
         public FieldInfoBuilder WithCanSet(bool canSet = true)
         {
             CanSet = canSet;
-            return this;
-        }
-
-        public FieldInfoBuilder WithCanInitialize(bool canInitialize = true)
-        {
-            CanInitialize = canInitialize;
             return this;
         }
 
@@ -206,7 +197,6 @@ namespace DataFramework.Core.Builders
             IsPersistable = source.IsPersistable;
             CanGet = source.CanGet;
             CanSet = source.CanSet;
-            CanInitialize = source.CanInitialize;
             UseForCheckOnOriginalValues = source.UseForCheckOnOriginalValues;
             DefaultValue = source.DefaultValue;
             foreach (var x in source.Metadata) Metadata.Add(new MetadataBuilder(x));

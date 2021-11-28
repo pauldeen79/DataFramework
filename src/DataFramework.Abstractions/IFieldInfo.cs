@@ -15,7 +15,6 @@ namespace DataFramework.Abstractions
         bool IsPersistable { get; }
         bool CanGet { get; }
         bool CanSet { get; }
-        bool CanInitialize { get; }
         bool UseForCheckOnOriginalValues { get; }
         object? DefaultValue { get; }
         ValueCollection<IMetadata> Metadata { get; }
