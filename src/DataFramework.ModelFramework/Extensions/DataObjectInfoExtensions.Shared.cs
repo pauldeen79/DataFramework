@@ -20,7 +20,7 @@ namespace DataFramework.ModelFramework.Extensions
         public static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
         {
             yield return instance;
-            foreach (var item in GetCustomMembersFromMetadata<IDataObjectInfo>(instance, Shared.CustomDataObjectInfoName))
+            foreach (var item in GetCustomMembersFromMetadata<IDataObjectInfo>(instance, Shared.CustomDataObjectInfo))
             {
                 yield return item;
             }

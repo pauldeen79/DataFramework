@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataFramework.Abstractions\DataFramework.Abstractions.csproj" />
+    <ProjectReference Include="..\DataFramework.Core\DataFramework.Core.csproj" />
   </ItemGroup>
 
 </Project>

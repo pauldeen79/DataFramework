@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataFramework.ModelFramework.MetadataNames
+﻿namespace DataFramework.ModelFramework.MetadataNames
 {
-    public static class Shared
+    internal static class Shared
     {
         /// <summary>
         /// The root name of all metadata names of DataFramework.ModelFramework.Shared.
         /// </summary>
-        public const string SharedRootName = Base.RootName + ".Shared";
+        internal const string SharedRootName = Base.RootName + ".Shared";
 
-        public const string DataObjectInfoInstanceName = SharedRootName + ".DataObjectInfoInstance";
-        public const string FieldInfoInstanceName = SharedRootName + ".FieldInfoInstance";
-        public const string PropertyNameDeconflictionFormatStringName = SharedRootName + ".PropertyNameDeconflictionFormatString";
-        public const string OriginalFieldNameName = SharedRootName + ".OriginalField";
+        internal const string DataObjectInfoInstanceName = SharedRootName + ".DataObjectInfoInstance";
+        internal const string FieldInfoInstanceName = SharedRootName + ".FieldInfoInstance";
+        internal const string PropertyNameDeconflictionFormatStringName = SharedRootName + ".PropertyNameDeconflictionFormatString";
+        internal const string OriginalFieldNameName = SharedRootName + ".OriginalField";
 
         /// <summary>
         /// Custom data object info's (IDataObjectInfo)
         /// </summary>
-        public const string CustomDataObjectInfoName = SharedRootName + ".CustomDataObjectInfo";
+        internal const string CustomDataObjectInfo = SharedRootName + ".CustomDataObjectInfo";
 
         /// <summary>
         /// Custom interface or class (ITypeBase)
         /// </summary>
-        public const string CustomClass = SharedRootName + ".CustomClass";
+        internal const string CustomClass = SharedRootName + ".CustomClass";
     }
 }

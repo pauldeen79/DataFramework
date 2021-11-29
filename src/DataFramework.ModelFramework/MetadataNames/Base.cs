@@ -5,6 +5,6 @@
         /// <summary>
         /// The root name of all metadata names of DataFramework.ModelFramework.
         /// </summary>
-        public const string RootName = "DataFramework.ModelFramework";
+        internal const string RootName = "DataFramework.ModelFramework";
     }
 }
