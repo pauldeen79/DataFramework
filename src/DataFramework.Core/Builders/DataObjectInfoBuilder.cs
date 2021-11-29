@@ -40,9 +40,9 @@ namespace DataFramework.Core.Builders
             Name = string.Empty;
             Description = default;
             DisplayName = default;
-            IsVisible = default;
-            IsReadOnly = default;
-            IsQueryable = default;
+            IsQueryable = true;
+            IsVisible = true;
+            IsReadOnly = false;
             Metadata.Clear();
             return this;
         }
@@ -175,11 +175,20 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
+        public DataObjectInfoBuilder AddMetadata(string name, object? value)
+        {
+            Metadata.Add(new MetadataBuilder { Name = name, Value = value });
+            return this;
+        }
+
         public DataObjectInfoBuilder()
         {
             Fields = new List<FieldInfoBuilder>();
             Metadata = new List<MetadataBuilder>();
             Name = string.Empty;
+            IsQueryable = true;
+            IsVisible = true;
+            IsReadOnly = false;
         }
 
         public DataObjectInfoBuilder(IDataObjectInfo source)

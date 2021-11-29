@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CrossCutting.Common;
 using DataFramework.Abstractions;
@@ -46,13 +47,13 @@ namespace DataFramework.Core.Builders
             Description = default;
             DisplayName = default;
             TypeName = default;
-            IsVisible = default;
+            IsVisible = true;
             IsReadOnly = default;
             IsIdentityField = default;
             IsComputed = default;
-            IsPersistable = default;
-            CanGet = default;
-            CanSet = default;
+            IsPersistable = true;
+            CanGet = true;
+            CanSet = true;
             UseForCheckOnOriginalValues = default;
             DefaultValue = default;
             Metadata.Clear();
@@ -80,6 +81,12 @@ namespace DataFramework.Core.Builders
         public FieldInfoBuilder WithTypeName(string? typeName)
         {
             TypeName = typeName;
+            return this;
+        }
+
+        public FieldInfoBuilder WithType(Type? type)
+        {
+            TypeName = type?.FullName;
             return this;
         }
 
@@ -177,10 +184,20 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
+        public FieldInfoBuilder AddMetadata(string name, object? value)
+        {
+            Metadata.Add(new MetadataBuilder { Name = name, Value = value });
+            return this;
+        }
+
         public FieldInfoBuilder()
         {
             Metadata = new List<MetadataBuilder>();
             Name = string.Empty;
+            IsVisible = true;
+            IsPersistable = true;
+            CanGet = true;
+            CanSet = true;
         }
 
         public FieldInfoBuilder(IFieldInfo source)
