@@ -13,7 +13,7 @@ namespace DataFramework.Core.Tests.Builders
         public void Can_Build_Minimal_Entity()
         {
             // Arrange
-            var sut = new DataObjectInfoBuilder().WithName("Test");
+            var sut = new FieldInfoBuilder().WithName("Test");
 
             // Act
             var actual = sut.Build();
@@ -64,7 +64,7 @@ namespace DataFramework.Core.Tests.Builders
         }
 
         [Fact]
-        public void Can_Create_DataObjectInfoBuilder_From_Existing_Entity()
+        public void Can_Create_FieldInfoBuilder_From_Existing_Entity()
         {
             // Arrange
             var input = CreateFilledFieldInfoBuilder().Build();
@@ -74,6 +74,34 @@ namespace DataFramework.Core.Tests.Builders
 
             // Assert
             actual.Build().Should().BeEquivalentTo(input);
+        }
+
+        [Fact]
+        public void Can_Add_MetadataBuilder()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddMetadata(new MetadataBuilder());
+
+            // Assert
+            sut.Metadata.Should().HaveCount(1);
+            sut.Metadata.First().Name.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Can_Add_MetadataBuilder_Using_Enumerable()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddMetadata(new[] { new MetadataBuilder() }.AsEnumerable());
+
+            // Assert
+            sut.Metadata.Should().HaveCount(1);
+            sut.Metadata.First().Name.Should().BeEmpty();
         }
 
         private static FieldInfoBuilder CreateFilledFieldInfoBuilder()

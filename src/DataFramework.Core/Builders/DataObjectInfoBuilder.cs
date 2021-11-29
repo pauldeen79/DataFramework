@@ -60,12 +60,9 @@ namespace DataFramework.Core.Builders
 
         public DataObjectInfoBuilder AddFields(params IFieldInfo[] fields)
         {
-            if (fields != null)
+            foreach (var itemToAdd in fields)
             {
-                foreach (var itemToAdd in fields)
-                {
-                    Fields.Add(new FieldInfoBuilder(itemToAdd));
-                }
+                Fields.Add(new FieldInfoBuilder(itemToAdd));
             }
             return this;
         }
@@ -77,12 +74,9 @@ namespace DataFramework.Core.Builders
 
         public DataObjectInfoBuilder AddFields(params FieldInfoBuilder[] fields)
         {
-            if (fields != null)
+            foreach (var itemToAdd in fields)
             {
-                foreach (var itemToAdd in fields)
-                {
-                    Fields.Add(itemToAdd);
-                }
+                Fields.Add(itemToAdd);
             }
             return this;
         }
@@ -148,12 +142,9 @@ namespace DataFramework.Core.Builders
 
         public DataObjectInfoBuilder AddMetadata(params IMetadata[] metadata)
         {
-            if (metadata != null)
+            foreach (var itemToAdd in metadata)
             {
-                foreach (var itemToAdd in metadata)
-                {
-                    Metadata.Add(new MetadataBuilder(itemToAdd));
-                }
+                Metadata.Add(new MetadataBuilder(itemToAdd));
             }
             return this;
         }
@@ -165,12 +156,9 @@ namespace DataFramework.Core.Builders
 
         public DataObjectInfoBuilder AddMetadata(params MetadataBuilder[] metadata)
         {
-            if (metadata != null)
+            foreach (var itemToAdd in metadata)
             {
-                foreach (var itemToAdd in metadata)
-                {
-                    Metadata.Add(itemToAdd);
-                }
+                Metadata.Add(itemToAdd);
             }
             return this;
         }

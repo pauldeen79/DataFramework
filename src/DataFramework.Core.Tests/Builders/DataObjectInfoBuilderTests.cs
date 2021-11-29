@@ -88,6 +88,62 @@ namespace DataFramework.Core.Tests.Builders
             actual.Build().Should().BeEquivalentTo(input);
         }
 
+        [Fact]
+        public void Can_Add_FieldInfoBuilder()
+        {
+            // Arrange
+            var sut = new DataObjectInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddFields(new FieldInfoBuilder());
+
+            // Assert
+            sut.Fields.Should().HaveCount(1);
+            sut.Fields.First().Name.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Can_Add_FieldInfoBuilder_Using_Enumerable()
+        {
+            // Arrange
+            var sut = new DataObjectInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddFields(new[] { new FieldInfoBuilder() }.AsEnumerable());
+
+            // Assert
+            sut.Fields.Should().HaveCount(1);
+            sut.Fields.First().Name.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Can_Add_MetadataBuilder()
+        {
+            // Arrange
+            var sut = new DataObjectInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddMetadata(new MetadataBuilder());
+
+            // Assert
+            sut.Metadata.Should().HaveCount(1);
+            sut.Metadata.First().Name.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Can_Add_MetadataBuilder_Using_Enumerable()
+        {
+            // Arrange
+            var sut = new DataObjectInfoBuilder().WithName("Test");
+
+            // Act
+            sut.AddMetadata(new[] { new MetadataBuilder() }.AsEnumerable());
+
+            // Assert
+            sut.Metadata.Should().HaveCount(1);
+            sut.Metadata.First().Name.Should().BeEmpty();
+        }
+
         private static DataObjectInfoBuilder CreateFilledDataObjectInfoBuilder()
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")

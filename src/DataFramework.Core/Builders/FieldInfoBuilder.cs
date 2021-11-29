@@ -157,12 +157,9 @@ namespace DataFramework.Core.Builders
 
         public FieldInfoBuilder AddMetadata(params IMetadata[] metadata)
         {
-            if (metadata != null)
+            foreach (var itemToAdd in metadata)
             {
-                foreach (var itemToAdd in metadata)
-                {
-                    Metadata.Add(new MetadataBuilder(itemToAdd));
-                }
+                Metadata.Add(new MetadataBuilder(itemToAdd));
             }
             return this;
         }
@@ -174,12 +171,9 @@ namespace DataFramework.Core.Builders
 
         public FieldInfoBuilder AddMetadata(params MetadataBuilder[] metadata)
         {
-            if (metadata != null)
+            foreach (var itemToAdd in metadata)
             {
-                foreach (var itemToAdd in metadata)
-                {
-                    Metadata.Add(itemToAdd);
-                }
+                Metadata.Add(itemToAdd);
             }
             return this;
         }
