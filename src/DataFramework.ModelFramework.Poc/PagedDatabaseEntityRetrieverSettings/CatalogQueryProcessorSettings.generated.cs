@@ -2,7 +2,7 @@
 using System.Text;
 using CrossCutting.Data.Abstractions;
 
-namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
+namespace DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogQueryProcessorSettings : IPagedDatabaseEntityRetrieverSettings

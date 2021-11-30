@@ -2,7 +2,7 @@
 using System.CodeDom.Compiler;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Builders;
-using DataFramework.ModelFramework.Poc.QueryProcessorSettings;
+using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
