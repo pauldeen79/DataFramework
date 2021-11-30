@@ -17,7 +17,5 @@ namespace DataFramework.ModelFramework.Poc.QueryProcessorSettings
         public int? OverridePageSize => null;
 
         public bool ValidateFieldNames => true;
-
-        public int InitialParameterNumber => 1;
     }
 }
