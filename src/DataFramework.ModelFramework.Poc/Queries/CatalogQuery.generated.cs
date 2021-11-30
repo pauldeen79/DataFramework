@@ -19,8 +19,26 @@ namespace PDC.Net.Core.Queries
                 yield return new ValidationResult("Limit exceeds the maximum of " + MaxLimit, new[] { nameof(Limit), nameof(Limit) });
             }
 
+            var bracketCount = 0;
+            var bracketErrorShown = false;
             foreach (var condition in Conditions)
             {
+                if (!bracketErrorShown)
+                {
+                    if (condition.OpenBracket)
+                    {
+                        bracketCount++;
+                    }
+                    if (condition.CloseBracket)
+                    {
+                        bracketCount--;
+                    }
+                    if (bracketCount < 0)
+                    {
+                        yield return new ValidationResult("Too many brackets closed at condition: " + condition.Field.FieldName, new[] { nameof(Conditions), nameof(Conditions) });
+                        bracketErrorShown = true;
+                    }
+                }
                 if (!IsValidFieldName(condition.Field))
                 {
                     yield return new ValidationResult("Invalid field name in conditions: " + condition.Field.FieldName, new[] { nameof(Conditions), nameof(Conditions) });
@@ -30,7 +48,10 @@ namespace PDC.Net.Core.Queries
                     yield return new ValidationResult("Invalid expression in conditions: " + condition.Field, new[] { nameof(Conditions), nameof(Conditions) });
                 }
             }
-
+            if (bracketCount > 0)
+            {
+                yield return new ValidationResult("Missing close brackets, braket count should be 0 but remaining " + bracketCount, new[] { nameof(Conditions), nameof(Conditions) });
+            }
             foreach (var querySortOrder in OrderByFields)
             {
                 if (!IsValidFieldName(querySortOrder.Field))
