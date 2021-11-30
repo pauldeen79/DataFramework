@@ -39,7 +39,6 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                                                                     new CatalogQueryProcessorSettings()));
             instance.AddSingleton<IQueryProcessor<CatalogQuery, Catalog>>(serviceProvider =>
                 new QueryProcessor<CatalogQuery, Catalog>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
-                                                          new CatalogQueryProcessorSettings(),
                                                           serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<CatalogQuery>>()));
 
             //find/query:
@@ -83,7 +82,6 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             //                                                           new ExtraFieldQueryProcessorSettings()));
             //instance.AddSingleton<IQueryProcessor<ExtraFieldQuery, ExtraField>>(serviceProvider =>
             //    new QueryProcessor<ExtraFieldQuery, ExtraField>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
-            //                                                    new ExtraFieldQueryProcessorSettings(),
             //                                                    serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<ExtraFieldQuery>>()));
 
 
