@@ -152,6 +152,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var dataObjectInfo = new DataObjectInfoBuilder()
                 .WithName("Test")
                 .AddFields(new FieldInfoBuilder().WithName("Id").WithIsIdentityField(), new FieldInfoBuilder().WithName("Description"))
+                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.MarkedFields)
                 .Build();
 
             // Act

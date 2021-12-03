@@ -24,8 +24,9 @@ namespace DataFramework.ModelFramework.Tests
                 .WithTypeName("MyNamespace.TestEntity")
                 .WithDescription("Description goes here")
                 .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(long)).WithIsIdentityField())
-                .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired())
+                .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired().WithRegularExpression("blah"))
                 .WithEntityClassType(entityClassType)
+                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.NoFields)
                 .Build()
                 .ToEntityClassBuilder()
                 .Build();

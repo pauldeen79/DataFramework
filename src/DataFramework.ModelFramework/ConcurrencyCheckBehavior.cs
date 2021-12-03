@@ -1,18 +1,18 @@
 ﻿namespace DataFramework.ModelFramework
 {
     /// <summary>
-    /// Behavior of update and delete concurrency check on UPDATE and DELETE statements. Default is MarkedFields.
+    /// Behavior of update and delete concurrency check on UPDATE and DELETE statements. Default is NoFields.
     /// </summary>
     public enum ConcurrencyCheckBehavior
     {
         /// <summary>
-        /// Only use fields that are marked for consistency check. (default)
+        /// Don't use any fields for consistency check. (default)
         /// </summary>
-        MarkedFields = 0,
+        NoFields = 0,
         /// <summary>
-        /// Don't use any fields for consistency check.
+        /// Only use fields that are marked for consistency check.
         /// </summary>
-        NoFields = 1,
+        MarkedFields = 1,
         /// <summary>
         /// Use all fields for consistency check.
         /// </summary>

@@ -42,7 +42,7 @@ namespace DataFramework.ModelFramework.Extensions
         public static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo dataObjectInfo)
             => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey)
                 ? dataObjectInfo.Metadata.First(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey).Value.ToStringWithNullCheck()
-                : ConcurrencyCheckBehavior.MarkedFields.ToString());
+                : ConcurrencyCheckBehavior.NoFields.ToString());
 
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,
                                                                       string metadataName)
