@@ -145,10 +145,10 @@ namespace DataFramework.ModelFramework.Extensions
                 {
                     prop.AddGetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(getterBody));
                 }
-                var setterBody = NewMethod(entityClassType, field);
+                var setterBody = GetSetterBody(entityClassType, field);
                 if (!string.IsNullOrEmpty(setterBody))
                 {
-                    prop.AddGetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(setterBody));
+                    prop.AddSetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(setterBody));
                 }
 
                 result.Add(prop);
@@ -207,7 +207,7 @@ namespace DataFramework.ModelFramework.Extensions
                         : string.Empty
                 );
 
-        private static string NewMethod(EntityClassType entityClassType, IFieldInfo field)
+        private static string GetSetterBody(EntityClassType entityClassType, IFieldInfo field)
             => field.Metadata.GetMetadataStringValue(Entities.PropertySetterBody)
                     .ToStringWithNullCheck()
                     .WhenNullOrEmpty
