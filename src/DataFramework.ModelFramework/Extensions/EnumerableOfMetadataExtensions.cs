@@ -24,13 +24,10 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         public static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
-        {
-            return metadata
+            => metadata
                 .Where(md => md.Name == metadataName)
-                //.Select(md => CreateMetadata(md, default(T)));
                 .Select(md => md.Value)
                 .OfType<T>();
-        }
 
         private static T CreateMetadata<T>(IMetadata metadataItem, T defaultValue)
         {

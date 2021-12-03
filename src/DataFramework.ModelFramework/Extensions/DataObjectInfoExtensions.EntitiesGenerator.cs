@@ -23,10 +23,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// </summary>
         private static readonly string[] DefaultPocoEntityUsings =
         {
-            "System",
-            //"System.CodeDom.Compiler",
-            //"System.ComponentModel",
-            //"System.ComponentModel.DataAnnotations"
+            "System"
         };
 
         public static ClassBuilder ToEntityClassBuilder
@@ -289,7 +286,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassConstructor
                 (
                     codeStatements: GetPocoEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true),
-                    parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue /*f.GetDefaultFieldValue()*/))
+                    parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue))
                 );
             }
         }

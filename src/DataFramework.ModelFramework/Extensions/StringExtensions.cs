@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DataFramework.Abstractions;
 using ModelFramework.Common.Extensions;
 
 namespace DataFramework.ModelFramework.Extensions
@@ -75,10 +74,5 @@ namespace DataFramework.ModelFramework.Extensions
 
             return name;
         }
-
-        //public static string CreatePropertyName(this string instance, IDataObjectInfo dataObjectInfo)
-        //    => instance == dataObjectInfo.Name
-        //        ? string.Format("{0}Property", instance)
-        //        : instance;
     }
 }

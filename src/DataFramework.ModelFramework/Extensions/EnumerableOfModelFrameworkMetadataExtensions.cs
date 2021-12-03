@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataFramework.Abstractions;
-//using DataFramework.ModelFramework.Abstractions;
 using ModelFramework.Common.Default;
 using ModelFramework.Common.Extensions;
 
@@ -20,9 +19,6 @@ namespace DataFramework.ModelFramework.Extensions
             this IEnumerable<IMetadata> metadata,
             string[]? defaultUsings = null
         ) => metadata
-                //.Select(md => md is INotRenderableAsAttribute
-                //    ? (global::ModelFramework.Common.Contracts.IMetadata)new ModelMetadataNotRenderableAsAttribute(md.Name, md.Value)
-                //    : new Metadata(md.Name, md.Value))
                 .Select(md => new Metadata(md.Name, md.Value))
                 .Concat(defaultUsings.DefaultWhenNull().Select(s => new Metadata(global::ModelFramework.Objects.MetadataNames.CustomUsing, s)));
 
