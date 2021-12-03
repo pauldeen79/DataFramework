@@ -6,8 +6,11 @@ using DataFramework.Abstractions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class CollectionOfMetadataExtensions
+    public static class EnumerableOfMetadataExtensions
     {
+        public static string GetMetadataStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
+            => metadata.GetMetadataValue<object?>(metadataName, defaultValue).ToStringWithDefault(defaultValue);
+
         public static T GetMetadataValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, T defaultValue)
         {
             var metadataItem = metadata.FirstOrDefault(md => md.Name == metadataName);
@@ -17,6 +20,20 @@ namespace DataFramework.ModelFramework.Extensions
                 return defaultValue;
             }
 
+            return CreateMetadata(metadataItem, defaultValue);
+        }
+
+        public static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
+        {
+            return metadata
+                .Where(md => md.Name == metadataName)
+                //.Select(md => CreateMetadata(md, default(T)));
+                .Select(md => md.Value)
+                .OfType<T>();
+        }
+
+        private static T CreateMetadata<T>(IMetadata metadataItem, T defaultValue)
+        {
             if (metadataItem.Value is T t)
             {
                 return t;

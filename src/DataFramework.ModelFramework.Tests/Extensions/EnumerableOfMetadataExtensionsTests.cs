@@ -8,7 +8,7 @@ using Xunit;
 namespace DataFramework.ModelFramework.Tests.Extensions
 {
     [ExcludeFromCodeCoverage]
-    public class CollectionOfMetadataExtensionsTests
+    public class EnumerableOfMetadataExtensionsTests
     {
         [Fact]
         public void GetMetadataValue_With_Enum_Returns_DefaultValue_When_Not_Specified()

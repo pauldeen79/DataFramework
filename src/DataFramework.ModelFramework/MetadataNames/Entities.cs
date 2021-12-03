@@ -92,5 +92,9 @@
         /// Allows to specify render metadata as attributes type (None, Standard or All)
         /// </summary>
         internal const string RenderMetadataAsAttributesType = EntitiesRootName + ".RenderMetadataAsAttributesType";
+
+        internal const string PropertyGetterBody = EntitiesRootName + ".PropertyGetterBody";
+        internal const string PropertySetterBody = EntitiesRootName + ".PropertySetterBody";
+
     }
 }
