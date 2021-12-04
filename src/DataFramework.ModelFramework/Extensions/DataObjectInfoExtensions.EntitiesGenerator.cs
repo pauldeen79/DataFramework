@@ -81,6 +81,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassFieldBuilder()
                     .WithName($"_{field.Name.ToPascalCase()}")
                     .WithTypeName(field.TypeName)
+                    .WithIsNullable(field.IsNullable())
                     .WithVisibility(Visibility.Private);
             }
 
@@ -89,6 +90,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassFieldBuilder()
                     .WithName($"_{field.Name.ToPascalCase()}Original")
                     .WithTypeName(field.TypeName)
+                    .WithIsNullable(field.IsNullable())
                     .WithVisibility(Visibility.Private);
             }
 
