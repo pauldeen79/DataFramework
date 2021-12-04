@@ -34,7 +34,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty))
                 .WithVisibility(instance.Metadata.GetMetadataValue(Entities.Visibility, instance.IsVisible.ToVisibility()))
                 .WithBaseClass(instance.Metadata.GetMetadataStringValue(Entities.BaseClass))
-                .WithPartial(true)
+                .WithPartial()
                 .WithRecord(entityClassType == EntityClassType.Record)
                 .AddInterfaces(instance.Metadata
                     .Where(md => md.Name == Entities.Interfaces)
@@ -55,7 +55,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return typeof(INotifyPropertyChanged).FullName;
             }
 
-            if (entityClassType == EntityClassType.ImmutablePoco)
+            if (entityClassType == EntityClassType.ImmutableClass)
             {
                 yield return $"IEquatable<{instance.Name}>";
             }
@@ -113,8 +113,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
                     .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
                     .WithIsNullable(field.IsNullable)
-                    .WithHasGetter(true)
-                    .WithHasSetter(hasSetter) //note that automatic properties need both a getter and setter. if we don't do this, the class won't compile :(
+                    .WithHasSetter(hasSetter)
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
                     .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
                     .WithSetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, field.IsVisible.ToVisibility()))
@@ -146,7 +145,6 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
                     .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
                     .WithIsNullable(true)
-                    .WithHasGetter(true)
                     .WithHasSetter(hasSetter)
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
                     .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
@@ -161,13 +159,13 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<ICodeStatement> GetSetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
-            => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, $"_{field.Name.ToPascalCase()}Original = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
+            => GetCodeStatements(field, entityClassType, Entities.OriginalPropertySetterCodeStatement, $"_{field.Name.ToPascalCase()}Original = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
 
         private static IEnumerable<ICodeStatement> GetGetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
-            => GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, $"return _{field.Name.ToPascalCase()}Original;");
+            => GetCodeStatements(field, entityClassType, Entities.OriginalPropertyGetterCodeStatement, $"return _{field.Name.ToPascalCase()}Original;");
 
         private static IEnumerable<ICodeStatement> GetSetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
-            => GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, $"_{field.Name.ToPascalCase()} = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
+            => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, $"_{field.Name.ToPascalCase()} = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
 
         private static IEnumerable<ICodeStatement> GetGetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
         {
@@ -225,7 +223,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<IClassMethod> GetEntityClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
         {
-            if (entityClassType == EntityClassType.ImmutablePoco)
+            if (entityClassType == EntityClassType.ImmutableClass)
             {
                 yield return new ClassMethod("Equals", typeof(bool).FullName, @override: true, parameters: new[] { new Parameter("obj", typeof(object).FullName) }, codeStatements: new[] { new LiteralCodeStatement($"return Equals(obj as {instance.Name});") });
                 yield return new ClassMethod("Equals", typeof(bool).FullName, parameters: new[] { new Parameter("other", instance.Name) }, codeStatements: new[] { new LiteralCodeStatement($"return other != null &&{Environment.NewLine}       {GetEntityEqualsProperties(instance)};") });
@@ -249,7 +247,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                                                  EntityClassType entityClassType,
                                                                                  RenderMetadataAsAttributesType renderMetadataAsAttributes)
         {
-            if (entityClassType.In(EntityClassType.ImmutablePoco, EntityClassType.Record))
+            if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
             {
                 yield return new ClassConstructor
                 (
@@ -264,7 +262,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                                                            RenderMetadataAsAttributesType renderMetadataAsAttributes,
                                                                                            bool createPropertyName)
         {
-            if (entityClassType.In(EntityClassType.ImmutablePoco, EntityClassType.Record))
+            if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
             {
                 foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
                 {

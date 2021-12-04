@@ -38,5 +38,7 @@
         internal const string RenderMetadataAsAttributesType = EntitiesRootName + ".RenderMetadataAsAttributesType";
         internal const string PropertyGetterCodeStatement = EntitiesRootName + ".PropertyGetterBody";
         internal const string PropertySetterCodeStatement = EntitiesRootName + ".PropertySetterBody";
+        internal const string OriginalPropertyGetterCodeStatement = EntitiesRootName + ".OriginalPropertyGetterBody";
+        internal const string OriginalPropertySetterCodeStatement = EntitiesRootName + ".OriginalPropertySetterBody";
     }
 }

@@ -24,7 +24,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         }
 
         [Theory]
-        [InlineData(EntityClassType.ImmutablePoco)]
+        [InlineData(EntityClassType.ImmutableClass)]
         [InlineData(EntityClassType.ObservablePoco)]
         [InlineData(EntityClassType.Poco)]
         [InlineData(EntityClassType.Record)]

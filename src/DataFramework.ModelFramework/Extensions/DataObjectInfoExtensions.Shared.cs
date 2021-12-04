@@ -4,6 +4,8 @@ using System.Linq;
 using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.Contracts;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -52,5 +54,16 @@ namespace DataFramework.ModelFramework.Extensions
                 .Where(md => md.Name == metadataName)
                 .Select(md => md.Value)
                 .OfType<T>();
+
+        private static void AddClassAttributes(IDataObjectInfo instance,
+                                               RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                               string attributeName,
+                                               List<AttributeBuilder> result)
+        {
+            if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
+            {
+                result.AddRange(instance.Metadata.GetMetadataValues<IAttribute>(attributeName).Select(x => new AttributeBuilder(x)));
+            }
+        }
     }
 }
