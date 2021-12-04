@@ -71,7 +71,7 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<ClassFieldBuilder> GetEntityClassBackingFields(IDataObjectInfo instance,
                                                                                   EntityClassType entityClassType)
         {
-            if (entityClassType.In(EntityClassType.Poco, EntityClassType.ImmutablePoco, EntityClassType.Record))
+            if (entityClassType != EntityClassType.ObservablePoco)
             {
                 yield break;
             }
@@ -92,14 +92,11 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithVisibility(Visibility.Private);
             }
 
-            if (entityClassType == EntityClassType.ObservablePoco)
-            {
-                yield return new ClassFieldBuilder()
-                    .WithName(nameof(INotifyPropertyChanged.PropertyChanged))
-                    .WithTypeName(typeof(PropertyChangedEventHandler).FullName)
-                    .WithEvent()
-                    .WithVisibility(Visibility.Public);
-            }
+            yield return new ClassFieldBuilder()
+                .WithName(nameof(INotifyPropertyChanged.PropertyChanged))
+                .WithTypeName(typeof(PropertyChangedEventHandler).FullName)
+                .WithEvent()
+                .WithVisibility(Visibility.Public);
         }
 
         private static IEnumerable<ClassPropertyBuilder> GetEntityClassProperties(IDataObjectInfo instance,
