@@ -8,9 +8,9 @@ using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.CodeStatements;
-using ModelFramework.Objects.CodeStatements.Builders;
 using ModelFramework.Objects.Contracts;
 using ModelFramework.Objects.Default;
+using ModelFramework.Objects.Extensions;
 using MFAttribute = ModelFramework.Objects.Default.Attribute;
 using MFCommon = ModelFramework.Common.MetadataNames;
 
@@ -133,21 +133,9 @@ namespace DataFramework.ModelFramework.Extensions
                                         .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate"))
                                         .Build()
                                 }))
-                    .AddAttributes(GetEntityClassPropertyAttributes(field,
-                                                                    field.Name,
-                                                                    instance.Name,
-                                                                    renderMetadataAsAttributes,
-                                                                    false));
-                var getterBody = GetGetterBody(entityClassType, field);
-                if (!string.IsNullOrEmpty(getterBody))
-                {
-                    prop.AddGetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(getterBody));
-                }
-                var setterBody = GetSetterBody(entityClassType, field);
-                if (!string.IsNullOrEmpty(setterBody))
-                {
-                    prop.AddSetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(setterBody));
-                }
+                    .AddAttributes(GetEntityClassPropertyAttributes(field, field.Name, instance.Name, renderMetadataAsAttributes, false))
+                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
+                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType));
 
                 result.Add(prop);
             }
@@ -168,61 +156,48 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
                     .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
                     .WithSetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, field.IsVisible.ToVisibility()))
-                    .AddAttributes(new[] { new MFAttribute("System.ComponentModel.ReadOnly", new[] { new AttributeParameter(true) }) });
-                var getterBody = GetGetterBodyForOriginal(entityClassType, field);
-                if (!string.IsNullOrEmpty(getterBody))
-                {
-                    prop.AddGetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(getterBody));
-                }
-                var setterBody = GetSetterBodyForOriginal(entityClassType, field);
-                if (!string.IsNullOrEmpty(setterBody))
-                {
-                    prop.AddSetterCodeStatements(new LiteralCodeStatementBuilder().WithStatement(setterBody));
-                }
+                    .AddAttributes(new[] { new MFAttribute("System.ComponentModel.ReadOnly", new[] { new AttributeParameter(true) }) })
+                    .AddGetterCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType))
+                    .AddSetterCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType));
 
                 result.Add(prop);
             }
             return result;
         }
 
-        private static string GetSetterBodyForOriginal(EntityClassType entityClassType, IFieldInfo field)
-            => field.Metadata.GetMetadataStringValue(Entities.PropertySetterBody)
-                .ToStringWithNullCheck()
-                .WhenNullOrEmpty
-                (
-                    entityClassType == EntityClassType.ObservablePoco
-                        ? string.Format("_{0}Original = value;", field.Name.ToPascalCase()) + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name)
-                        : string.Empty
-                );
+        private static IEnumerable<ICodeStatement> GetSetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
+            => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, $"_{field.Name.ToPascalCase()}Original = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
 
-        private static string GetGetterBodyForOriginal(EntityClassType entityClassType, IFieldInfo field)
-            => field.Metadata.GetMetadataStringValue(Entities.PropertyGetterBody)
-                .ToStringWithNullCheck()
-                .WhenNullOrEmpty(field.Metadata.GetMetadataStringValue(Entities.ComputedTemplate).ToStringWithNullCheck())
-                .WhenNullOrEmpty
-                (
-                    entityClassType == EntityClassType.ObservablePoco
-                        ? string.Format("return _{0}Original;", field.Name.ToPascalCase())
-                        : string.Empty
-                );
+        private static IEnumerable<ICodeStatement> GetGetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
+            => GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, $"return _{field.Name.ToPascalCase()}Original;");
 
-        private static string GetSetterBody(EntityClassType entityClassType, IFieldInfo field)
-            => field.Metadata.GetMetadataStringValue(Entities.PropertySetterBody)
-                    .ToStringWithNullCheck()
-                    .WhenNullOrEmpty
-                    (
-                        entityClassType == EntityClassType.ObservablePoco
-                            ? string.Format("_{0} = value;", field.Name.ToPascalCase()) + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name)
-                            : string.Empty
-                    );
+        private static IEnumerable<ICodeStatement> GetSetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
+            => GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, $"_{field.Name.ToPascalCase()} = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
 
-        private static string GetGetterBody(EntityClassType entityClassType, IFieldInfo field)
-            => field.Metadata.GetMetadataStringValue(Entities.PropertyGetterBody)
-                .ToStringWithNullCheck()
-                .WhenNullOrEmpty(field.Metadata.GetMetadataStringValue(Entities.ComputedTemplate).ToStringWithNullCheck())
-                .WhenNullOrEmpty(entityClassType == EntityClassType.ObservablePoco
-                    ? string.Format("return _{0};", field.Name.ToPascalCase())
-                    : string.Empty);
+        private static IEnumerable<ICodeStatement> GetGetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
+        {
+            var statements = field.Metadata.GetMetadataStringValues(Entities.PropertyGetterCodeStatement).ToList();
+            if (!statements.Any())
+            {
+                statements.AddRange(field.Metadata.GetMetadataStringValues(Entities.ComputedTemplate));
+            }
+
+            if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco)
+            {
+                statements.Add($"return _{field.Name.ToPascalCase()};");
+            }
+            return statements.ToLiteralCodeStatements();
+        }
+
+        private static IEnumerable<ICodeStatement> GetCodeStatements(IFieldInfo field, EntityClassType entityClassType, string metadataName, string defaultForObservable)
+        {
+            var statements = field.Metadata.GetMetadataStringValues(metadataName).ToList();
+            if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco && defaultForObservable != string.Empty)
+            {
+                statements.Add(defaultForObservable);
+            }
+            return statements.ToLiteralCodeStatements();
+        }
 
         private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(IFieldInfo field,
                                                                                       string fieldName,

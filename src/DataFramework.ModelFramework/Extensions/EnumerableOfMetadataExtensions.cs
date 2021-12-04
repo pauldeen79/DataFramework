@@ -23,6 +23,9 @@ namespace DataFramework.ModelFramework.Extensions
             return CreateMetadata(metadataItem, defaultValue);
         }
 
+        public static IEnumerable<string> GetMetadataStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
+            => metadata.GetMetadataValues<object?>(metadataName).Select(x => x.ToStringWithDefault());
+
         public static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata
                 .Where(md => md.Name == metadataName)

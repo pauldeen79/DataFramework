@@ -36,7 +36,7 @@
         internal const string SelectField = EntitiesRootName + ".SelectField";
         internal const string EntityClassType = EntitiesRootName + ".EntityClassType";
         internal const string RenderMetadataAsAttributesType = EntitiesRootName + ".RenderMetadataAsAttributesType";
-        internal const string PropertyGetterBody = EntitiesRootName + ".PropertyGetterBody";
-        internal const string PropertySetterBody = EntitiesRootName + ".PropertySetterBody";
+        internal const string PropertyGetterCodeStatement = EntitiesRootName + ".PropertyGetterBody";
+        internal const string PropertySetterCodeStatement = EntitiesRootName + ".PropertySetterBody";
     }
 }
