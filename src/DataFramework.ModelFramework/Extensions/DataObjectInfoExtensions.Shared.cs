@@ -55,15 +55,17 @@ namespace DataFramework.ModelFramework.Extensions
                 .Select(md => md.Value)
                 .OfType<T>();
 
-        private static void AddClassAttributes(IDataObjectInfo instance,
-                                               RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                               string attributeName,
-                                               List<AttributeBuilder> result)
+        private static IEnumerable<AttributeBuilder> AddClassAttributes(this IDataObjectInfo instance,
+                                                                        RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                                                        string attributeName,
+                                                                        List<AttributeBuilder> result)
         {
             if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
             {
                 result.AddRange(instance.Metadata.GetMetadataValues<IAttribute>(attributeName).Select(x => new AttributeBuilder(x)));
             }
+
+            return result;
         }
     }
 }

@@ -50,9 +50,7 @@ namespace DataFramework.ModelFramework.Extensions
                 ))
             };
 
-            AddClassAttributes(instance, renderMetadataAsAttributes, Entities.EntityBuildersAttribute, result);
-
-            return result;
+            return instance.AddClassAttributes(renderMetadataAsAttributes, Entities.EntityBuildersAttribute, result);
         }
 
         private static IEnumerable<ClassMethodBuilder> GetEntityBuilderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
