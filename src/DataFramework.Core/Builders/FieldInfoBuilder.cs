@@ -12,6 +12,7 @@ namespace DataFramework.Core.Builders
         public string? Description { get; set; }
         public string? DisplayName { get; set; }
         public string? TypeName { get; set; }
+        public bool IsNullable { get; set; }
         public bool IsVisible { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsIdentityField { get; set; }
@@ -29,6 +30,7 @@ namespace DataFramework.Core.Builders
                                  TypeName,
                                  Description,
                                  DisplayName,
+                                 IsNullable,
                                  IsVisible,
                                  IsReadOnly,
                                  IsIdentityField,
@@ -47,6 +49,7 @@ namespace DataFramework.Core.Builders
             Description = default;
             DisplayName = default;
             TypeName = default;
+            IsNullable = default;
             IsVisible = true;
             IsReadOnly = default;
             IsIdentityField = default;
@@ -87,6 +90,12 @@ namespace DataFramework.Core.Builders
         public FieldInfoBuilder WithType(Type? type)
         {
             TypeName = type?.FullName;
+            return this;
+        }
+
+        public FieldInfoBuilder WithIsNullable(bool isNullable = true)
+        {
+            IsNullable = isNullable;
             return this;
         }
 
@@ -201,6 +210,7 @@ namespace DataFramework.Core.Builders
             Description = source.Description;
             DisplayName = source.DisplayName;
             TypeName = source.TypeName;
+            IsNullable = source.IsNullable;
             IsVisible = source.IsVisible;
             IsReadOnly = source.IsReadOnly;
             IsIdentityField = source.IsIdentityField;

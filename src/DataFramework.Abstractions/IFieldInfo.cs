@@ -8,6 +8,7 @@ namespace DataFramework.Abstractions
         string? Description { get; }
         string? DisplayName { get; }
         string? TypeName { get; }
+        bool IsNullable { get; }
         bool IsVisible { get; }
         bool IsReadOnly { get; }
         bool IsIdentityField { get; }

@@ -40,6 +40,7 @@ namespace DataFramework.Core.Tests.Builders
             actual.DisplayName.Should().Be(sut.DisplayName);
             actual.IsComputed.Should().Be(sut.IsComputed);
             actual.IsIdentityField.Should().Be(sut.IsIdentityField);
+            actual.IsNullable.Should().Be(sut.IsNullable);
             actual.IsPersistable.Should().Be(sut.IsPersistable);
             actual.IsReadOnly.Should().Be(sut.IsReadOnly);
             actual.IsVisible.Should().Be(sut.IsVisible);
@@ -114,6 +115,7 @@ namespace DataFramework.Core.Tests.Builders
                 .WithDisplayName("Display name")
                 .WithIsComputed(true)
                 .WithIsIdentityField(true)
+                .WithIsNullable(true)
                 .WithIsPersistable(false)
                 .WithIsReadOnly(true)
                 .WithIsVisible(false)

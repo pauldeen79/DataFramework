@@ -73,7 +73,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassFieldBuilder()
                     .WithName($"_{field.Name.ToPascalCase()}")
                     .WithTypeName(field.TypeName)
-                    .WithIsNullable(field.IsNullable())
+                    .WithIsNullable(field.IsNullable)
                     .WithVisibility(Visibility.Private);
             }
 
@@ -82,7 +82,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassFieldBuilder()
                     .WithName($"_{field.Name.ToPascalCase()}Original")
                     .WithTypeName(field.TypeName)
-                    .WithIsNullable(field.IsNullable())
+                    .WithIsNullable(field.IsNullable)
                     .WithVisibility(Visibility.Private);
             }
 
@@ -111,7 +111,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
                     .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
                     .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
-                    .WithIsNullable(field.IsNullable())
+                    .WithIsNullable(field.IsNullable)
                     .WithHasGetter(true)
                     .WithHasSetter(hasSetter) //note that automatic properties need both a getter and setter. if we don't do this, the class won't compile :(
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
@@ -144,7 +144,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
                     .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
                     .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
-                    .WithIsNullable(field.IsNullable())
+                    .WithIsNullable(field.IsNullable)
                     .WithHasGetter(true)
                     .WithHasSetter(hasSetter)
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
@@ -254,7 +254,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassConstructor
                 (
                     codeStatements: GetPocoEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true),
-                    parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue, f.IsNullable()))
+                    parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue, f.IsNullable))
                 );
             }
         }

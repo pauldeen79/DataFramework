@@ -14,8 +14,5 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static bool IsRequired(this IFieldInfo instance)
             => instance.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
-
-        public static bool IsNullable(this IFieldInfo instance)
-            => !instance.IsIdentityField && !instance.IsRequired();
     }
 }

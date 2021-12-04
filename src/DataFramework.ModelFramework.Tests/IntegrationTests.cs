@@ -25,7 +25,7 @@ namespace DataFramework.ModelFramework.Tests
                 .WithDescription("Description goes here")
                 .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(long)).WithIsIdentityField())
                 .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired())
-                .AddFields(new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255))
+                .AddFields(new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable())
                 .WithEntityClassType(entityClassType)
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.NoFields)
                 .Build()

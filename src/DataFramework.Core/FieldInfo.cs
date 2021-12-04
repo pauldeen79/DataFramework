@@ -26,6 +26,11 @@ namespace DataFramework.Core
             get;
         }
 
+        public bool IsNullable
+        {
+            get;
+        }
+
         public bool IsVisible
         {
             get;
@@ -81,6 +86,7 @@ namespace DataFramework.Core
                          string? typeName,
                          string? description,
                          string? displayName,
+                         bool isNullable,
                          bool isVisible,
                          bool isReadOnly,
                          bool isIdentityField,
@@ -102,6 +108,7 @@ namespace DataFramework.Core
             Description = description;
             DisplayName = displayName;
             TypeName = typeName;
+            IsNullable = isNullable;
             IsVisible = isVisible;
             IsReadOnly = isReadOnly;
             IsIdentityField = isIdentityField;
