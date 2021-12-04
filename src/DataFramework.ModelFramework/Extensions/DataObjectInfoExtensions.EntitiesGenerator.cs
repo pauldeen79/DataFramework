@@ -5,6 +5,7 @@ using System.Linq;
 using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.CodeStatements;
@@ -127,7 +128,7 @@ namespace DataFramework.ModelFramework.Extensions
                                         .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate"))
                                         .Build()
                                 }))
-                    .AddAttributes(GetEntityClassPropertyAttributes(field, field.Name, instance.Name, renderMetadataAsAttributes, false))
+                    .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, renderMetadataAsAttributes, false))
                     .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
                     .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType));
 
@@ -144,7 +145,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
                     .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
                     .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
-                    .WithIsNullable(field.IsNullable)
+                    .WithIsNullable(true)
                     .WithHasGetter(true)
                     .WithHasSetter(hasSetter)
                     .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
@@ -194,7 +195,6 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(IFieldInfo field,
-                                                                                      string fieldName,
                                                                                       string instanceName,
                                                                                       RenderMetadataAsAttributesType renderMetadataAsAttributes,
                                                                                       bool forBuilder,
@@ -211,11 +211,11 @@ namespace DataFramework.ModelFramework.Extensions
             result.AddModelClassAttribute("System.ComponentModel.Description", field.Description);
             result.AddModelClassAttribute("System.ComponentModel.DisplayName", field.DisplayName);
             result.AddConditionalModelClassAttribute("System.ComponentModel.ReadOnly", true, (field.IsReadOnly && !forBuilder) || addReadOnlyAttribute);
-            if (!string.IsNullOrEmpty(field.DisplayName) && fieldName == instanceName && !forBuilder)
+            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName && !forBuilder)
             {
                 //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
                 //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)
-                result.AddModelClassAttribute("System.ComponentModel.DataAnnotations.DisplayName", fieldName);
+                result.AddModelClassAttribute("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
             }
 
             result.AddRange(field.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute).Select(x => new AttributeBuilder(x)));
@@ -253,16 +253,16 @@ namespace DataFramework.ModelFramework.Extensions
             {
                 yield return new ClassConstructor
                 (
-                    codeStatements: GetPocoEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true),
+                    codeStatements: GetEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true),
                     parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue, f.IsNullable))
                 );
             }
         }
 
-        private static IEnumerable<ICodeStatement> GetPocoEntityClassConstructorCodeStatements(IDataObjectInfo instance,
-                                                                                               EntityClassType entityClassType,
-                                                                                               RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                                               bool createPropertyName)
+        private static IEnumerable<ICodeStatement> GetEntityClassConstructorCodeStatements(IDataObjectInfo instance,
+                                                                                           EntityClassType entityClassType,
+                                                                                           RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                                                                           bool createPropertyName)
         {
             if (entityClassType.In(EntityClassType.ImmutablePoco, EntityClassType.Record))
             {
@@ -299,7 +299,11 @@ namespace DataFramework.ModelFramework.Extensions
                     continue;
                 }
 
-                yield return new FieldInfoBuilder(field).WithName($"{field.Name}Original").Build();
+                yield return new FieldInfoBuilder(field)
+                    .WithName($"{field.Name}Original")
+                    .WithIsNullable()
+                    .WithDefaultValue(new Literal("default"))
+                    .Build();
             }
         }
 

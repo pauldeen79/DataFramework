@@ -27,7 +27,7 @@ namespace DataFramework.ModelFramework.Tests
                 .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired())
                 .AddFields(new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable())
                 .WithEntityClassType(entityClassType)
-                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.NoFields)
+                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
                 .Build()
                 .ToEntityClassBuilder()
                 .Build();
