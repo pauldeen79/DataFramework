@@ -24,13 +24,12 @@ namespace DataFramework.ModelFramework.Extensions
 
             return new ClassBuilder()
                 .WithName(instance.Name + "Builder")
-                .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace).WhenNullOrEmpty(() => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty)))
+                .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace).WhenNullOrEmpty(() => instance.GetEntitiesNamespace()))
+                .WithSharedDataObjectInfoData(instance)
                 .WithVisibility(instance.Metadata.GetMetadataValue(Entities.Visibility, instance.IsVisible.ToVisibility()))
-                .WithPartial()
                 .AddProperties(GetEntityBuilderClassProperties(instance, renderMetadataAsAttributes, entityClassType))
                 .AddMethods(GetEntityBuilderClassMethods(instance, entityClassType))
                 .AddConstructors(GetEntityBuilderClassConstructors(instance, entityClassType))
-                .AddMetadata(instance.Metadata.Convert())
                 .AddAttributes(GetEntityBuilderClassAttributes(instance, renderMetadataAsAttributes));
         }
 
@@ -55,7 +54,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<ClassMethodBuilder> GetEntityBuilderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
         {
-            var ns = instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace).WhenNullOrEmpty(() => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty));
+            var ns = instance.GetEntitiesNamespace();
             foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
             {
                 yield return new ClassMethodBuilder()
@@ -88,7 +87,7 @@ namespace DataFramework.ModelFramework.Extensions
         {
             if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
             {
-                var ns = instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace).WhenNullOrEmpty(() => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty));
+                var ns = instance.GetEntitiesNamespace();
                 yield return new ClassConstructorBuilder();
 
                 yield return new ClassConstructorBuilder()
@@ -113,18 +112,9 @@ namespace DataFramework.ModelFramework.Extensions
                 result.Add(new ClassPropertyBuilder()
                     .WithName(field.Name)
                     .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
-                    .WithIsNullable(field.IsNullable)
-                    .WithStatic(field.Metadata.GetMetadataStringValue(Entities.Static).IsTrue())
-                    .WithVirtual(field.Metadata.GetMetadataStringValue(Entities.Virtual).IsTrue())
-                    .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
-                    .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
-                    .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
-                    .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
-                    .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
-                    .WithSetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, field.IsVisible.ToVisibility()))
-                    .AddGetterCodeStatements(GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, string.Empty))
-                    .AddSetterCodeStatements(GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, string.Empty))
-                    .AddMetadata(field.Metadata.Convert())
+                    .WithSharedFieldInfoData(field)
+                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
+                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))                    
                     .AddAttributes(GetEntityClassPropertyAttributes(field,
                                                                     instance.Name,
                                                                     renderMetadataAsAttributes,
@@ -135,19 +125,9 @@ namespace DataFramework.ModelFramework.Extensions
             {
                 result.Add(new ClassPropertyBuilder()
                     .WithName($"{field.Name}Original")
-                    .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
-                    .WithIsNullable(field.IsNullable)
-                    .WithStatic(field.Metadata.GetMetadataStringValue(Entities.Static).IsTrue())
-                    .WithVirtual(field.Metadata.GetMetadataStringValue(Entities.Virtual).IsTrue())
-                    .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
-                    .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
-                    .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
-                    .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
-                    .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
-                    .WithSetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, field.IsVisible.ToVisibility()))
-                    .AddGetterCodeStatements(GetCodeStatements(field, entityClassType, Entities.PropertyGetterCodeStatement, string.Empty))
-                    .AddSetterCodeStatements(GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, string.Empty))
-                    .AddMetadata(field.Metadata.Convert())
+                    .WithSharedFieldInfoData(field)
+                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
+                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))
                     .AddAttributes(new MFAttribute("ReadOnly", new[] { new AttributeParameter(true) })));
             }
 

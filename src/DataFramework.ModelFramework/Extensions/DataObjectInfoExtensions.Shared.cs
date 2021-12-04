@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 
@@ -67,5 +67,8 @@ namespace DataFramework.ModelFramework.Extensions
 
             return result;
         }
+
+        public static string GetEntitiesNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
     }
 }
