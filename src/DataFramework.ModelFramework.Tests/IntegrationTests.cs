@@ -40,7 +40,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityBuilderClass()
+                .ToEntityBuilderClassBuilder()
                 .Build();
 
             // Act

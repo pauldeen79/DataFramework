@@ -8,11 +8,9 @@ using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.CodeStatements;
+using ModelFramework.Objects.CodeStatements.Builders;
 using ModelFramework.Objects.Contracts;
-using ModelFramework.Objects.Default;
 using ModelFramework.Objects.Extensions;
-using MFAttribute = ModelFramework.Objects.Default.Attribute;
 using MFCommon = ModelFramework.Common.MetadataNames;
 
 namespace DataFramework.ModelFramework.Extensions
@@ -41,13 +39,14 @@ namespace DataFramework.ModelFramework.Extensions
                     .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name))
                     .Union(GetEntityClassTypeInterfaces(instance, entityClassType)))
                 .AddFields(GetEntityClassBackingFields(instance, entityClassType))
-                .AddProperties(GetEntityClassProperties(instance, renderMetadataAsAttributes, entityClassType))
+                .AddProperties(GetEntityClassProperties(instance, entityClassType, renderMetadataAsAttributes))
                 .AddMethods(GetEntityClassMethods(instance, entityClassType))
                 .AddConstructors(GetEntityClassConstructors(instance, entityClassType, renderMetadataAsAttributes))
                 .AddAttributes(GetEntityClassAttributes(instance, renderMetadataAsAttributes));
         }
 
-        private static IEnumerable<string> GetEntityClassTypeInterfaces(IDataObjectInfo instance, EntityClassType entityClassType)
+        private static IEnumerable<string> GetEntityClassTypeInterfaces(IDataObjectInfo instance,
+                                                                        EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ObservablePoco)
             {
@@ -94,58 +93,61 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<ClassPropertyBuilder> GetEntityClassProperties(IDataObjectInfo instance,
-                                                                                  RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                                  EntityClassType entityClassType)
-        {
-            var result = new List<ClassPropertyBuilder>();
-            var hasSetter = entityClassType.In(EntityClassType.Poco, EntityClassType.ObservablePoco);
+                                                                                  EntityClassType entityClassType,
+                                                                                  RenderMetadataAsAttributesType renderMetadataAsAttributes)
+            => instance.Fields.Select(field =>
+                    new ClassPropertyBuilder()
+                        .WithName(field.CreatePropertyName(instance))
+                        .WithSharedFieldInfoData(field)
+                        .WithHasSetter(entityClassType.HasPropertySetter())
+                        .AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
+                            .WithName(MFCommon.CustomTemplateName)
+                            .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate"))
+                            .Build())
+                        .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false, false))
+                        .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, false))
+                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, false)))
+                .Concat(instance.GetUpdateConcurrencyCheckFields().Select(field =>
+                    new ClassPropertyBuilder()
+                        .WithName($"{field.Name}Original")
+                        .WithSharedFieldInfoData(field)
+                        .WithIsNullable(true)
+                        .WithHasSetter(entityClassType.HasPropertySetter())
+                        .AddAttributes(entityClassType.IsImmutable()
+                            ? Enumerable.Empty<AttributeBuilder>()
+                            : new[] { new AttributeBuilder().WithName("System.ComponentModel.ReadOnly")
+                                                            .AddParameters(new AttributeParameterBuilder().WithValue(true)) })
+                        .AddGetterCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType))
+                        .AddSetterCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType))));
 
-            //Add properties for all instance.Fields
-            foreach (var field in instance.Fields)
-            {
-                var prop = new ClassPropertyBuilder()
-                    .WithName(field.CreatePropertyName(instance))
-                    .WithSharedFieldInfoData(field)
-                    .WithHasSetter(hasSetter)
-                    .AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
-                        .WithName(MFCommon.CustomTemplateName)
-                        .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate"))
-                        .Build())
-                    .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, renderMetadataAsAttributes, false))
-                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, false))
-                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, false));
+        private static IEnumerable<ICodeStatementBuilder> GetSetterCodeStatementsForOriginal(IFieldInfo field,
+                                                                                             EntityClassType entityClassType)
+            => GetCodeStatements(field,
+                                 entityClassType,
+                                 Entities.OriginalPropertySetterCodeStatement,
+                                 $"_{field.Name.ToPascalCase()}Original = value;"
+                                    + Environment.NewLine
+                                    + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
 
-                result.Add(prop);
-            }
+        private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatementsForOriginal(IFieldInfo field,
+                                                                                             EntityClassType entityClassType)
+            => GetCodeStatements(field,
+                                 entityClassType,
+                                 Entities.OriginalPropertyGetterCodeStatement,
+                                 $"return _{field.Name.ToPascalCase()}Original;");
 
-            foreach (var field in instance.GetUpdateConcurrencyCheckFields())
-            {
-                var prop = new ClassPropertyBuilder()
-                    .WithName($"{field.Name}Original")
-                    .WithSharedFieldInfoData(field)
-                    .WithIsNullable(true)
-                    .WithHasSetter(hasSetter)
-                    .AddAttributes(new[] { new MFAttribute("System.ComponentModel.ReadOnly", new[] { new AttributeParameter(true) }) })
-                    .AddGetterCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType))
-                    .AddSetterCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType));
-
-                result.Add(prop);
-            }
-            return result;
-        }
-
-        private static IEnumerable<ICodeStatement> GetSetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
-            => GetCodeStatements(field, entityClassType, Entities.OriginalPropertySetterCodeStatement, $"_{field.Name.ToPascalCase()}Original = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name));
-
-        private static IEnumerable<ICodeStatement> GetGetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
-            => GetCodeStatements(field, entityClassType, Entities.OriginalPropertyGetterCodeStatement, $"return _{field.Name.ToPascalCase()}Original;");
-
-        private static IEnumerable<ICodeStatement> GetSetterCodeStatements(IFieldInfo field, EntityClassType entityClassType, bool forBuilder)
+        private static IEnumerable<ICodeStatementBuilder> GetSetterCodeStatements(IFieldInfo field,
+                                                                                  EntityClassType entityClassType,
+                                                                                  bool forBuilder)
             => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, forBuilder
-                    ? $"_{field.Name.ToPascalCase()} = value;" + Environment.NewLine + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name)
-                    : string.Empty);
+                ? $"_{field.Name.ToPascalCase()} = value;"
+                    + Environment.NewLine
+                    + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name)
+                : string.Empty);
 
-        private static IEnumerable<ICodeStatement> GetGetterCodeStatements(IFieldInfo field, EntityClassType entityClassType, bool forBuilder)
+        private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatements(IFieldInfo field,
+                                                                                  EntityClassType entityClassType,
+                                                                                  bool forBuilder)
         {
             var statements = field.Metadata.GetMetadataStringValues(Entities.PropertyGetterCodeStatement).ToList();
             if (!statements.Any())
@@ -157,104 +159,161 @@ namespace DataFramework.ModelFramework.Extensions
             {
                 statements.Add($"return _{field.Name.ToPascalCase()};");
             }
-            return statements.ToLiteralCodeStatements();
+            return statements.ToLiteralCodeStatementBuilders();
         }
 
-        private static IEnumerable<ICodeStatement> GetCodeStatements(IFieldInfo field, EntityClassType entityClassType, string metadataName, string defaultForObservable)
+        private static IEnumerable<ICodeStatementBuilder> GetCodeStatements(IFieldInfo field,
+                                                                            EntityClassType entityClassType,
+                                                                            string metadataName,
+                                                                            string defaultForObservable)
         {
             var statements = field.Metadata.GetMetadataStringValues(metadataName).ToList();
             if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco && defaultForObservable != string.Empty)
             {
                 statements.Add(defaultForObservable);
             }
-            return statements.ToLiteralCodeStatements();
+            return statements.ToLiteralCodeStatementBuilders();
         }
 
         private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(IFieldInfo field,
                                                                                       string instanceName,
+                                                                                      EntityClassType entityClassType,
                                                                                       RenderMetadataAsAttributesType renderMetadataAsAttributes,
                                                                                       bool forBuilder,
-                                                                                      bool addReadOnlyAttribute = false)
+                                                                                      bool addReadOnlyAttribute)
         {
-            var result = new List<AttributeBuilder>();
-
             if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.None)
             {
-                return result;
+                yield break;
             }
 
-            result.AddModelClassAttribute("System.ComponentModel.DefaultValue", field.DefaultValue);
-            result.AddModelClassAttribute("System.ComponentModel.Description", field.Description);
-            result.AddModelClassAttribute("System.ComponentModel.DisplayName", field.DisplayName);
-            result.AddConditionalModelClassAttribute("System.ComponentModel.ReadOnly", true, (field.IsReadOnly && !forBuilder) || addReadOnlyAttribute);
+            if (field.DefaultValue != null)
+            {
+                yield return new AttributeBuilder().WithName("System.ComponentModel.DefaultValue")
+                                                   .AddParameters(new AttributeParameterBuilder().WithValue(field.DefaultValue));
+            }
+
+            if (!string.IsNullOrEmpty(field.Description))
+            {
+                yield return new AttributeBuilder().WithName("System.ComponentModel.Description")
+                                                   .AddParameters(new AttributeParameterBuilder().WithValue(field.Description));
+            }
+
+            if (!string.IsNullOrEmpty(field.DisplayName))
+            {
+                yield return new AttributeBuilder().WithName("System.ComponentModel.DisplayName")
+                                                   .AddParameters(new AttributeParameterBuilder().WithValue(field.DisplayName));
+            }
+
+            if ((field.IsReadOnly
+                && !forBuilder
+                && entityClassType != EntityClassType.Record
+                && entityClassType != EntityClassType.ImmutableClass) || addReadOnlyAttribute)
+            {
+                yield return new AttributeBuilder().WithName("System.ComponentModel.ReadOnly")
+                                                   .AddParameters(new AttributeParameterBuilder().WithValue(true));
+            }
+
             if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName && !forBuilder)
             {
                 //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
                 //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)
-                result.AddModelClassAttribute("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
+                yield return new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.DisplayName")
+                                                   .AddParameters(new AttributeParameterBuilder().WithValue(field.Name));
             }
 
-            result.AddRange(field.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute).Select(x => new AttributeBuilder(x)));
-
-            return result;
+            foreach (var attribute in field.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute))
+            {
+                yield return new AttributeBuilder(attribute);
+            }
         }
 
-        private static IEnumerable<IClassMethod> GetEntityClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
+        private static IEnumerable<ClassMethodBuilder> GetEntityClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ImmutableClass)
             {
-                yield return new ClassMethod("Equals", typeof(bool).FullName, @override: true, parameters: new[] { new Parameter("obj", typeof(object).FullName) }, codeStatements: new[] { new LiteralCodeStatement($"return Equals(obj as {instance.Name});") });
-                yield return new ClassMethod("Equals", typeof(bool).FullName, parameters: new[] { new Parameter("other", instance.Name) }, codeStatements: new[] { new LiteralCodeStatement($"return other != null &&{Environment.NewLine}       {GetEntityEqualsProperties(instance)};") });
-                yield return new ClassMethod("GetHashCode", typeof(int).FullName, @override: true,
-                    codeStatements: new[] { "int hashCode = 235838129;" }
-                       .Concat(instance.Fields.Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
-                            ? $"hashCode = hashCode * -1521134295 + {f.CreatePropertyName(instance)}.GetHashCode();"
-                            : $"hashCode = hashCode * -1521134295 + EqualityComparer<{f.TypeName.FixTypeName()}>.Default.GetHashCode({f.CreatePropertyName(instance)});"))
-                        .Concat(new[] { "return hashCode;" })
-                        .Select(x => new LiteralCodeStatement(x))
-                );
-                yield return new ClassMethod("==", typeof(bool).FullName, @static: true, @operator: true, parameters: new[] { new Parameter("left", instance.Name), new Parameter("right", instance.Name) }, codeStatements: new[] { new LiteralCodeStatement($"return EqualityComparer<{instance.Name}>.Default.Equals(left, right);") });
-                yield return new ClassMethod("!=", typeof(bool).FullName, @static: true, @operator: true, parameters: new[] { new Parameter("left", instance.Name), new Parameter("right", instance.Name) }, codeStatements: new[] { new LiteralCodeStatement("return !(left == right);") });
+                yield return new ClassMethodBuilder().WithName("Equals")
+                                                     .WithType(typeof(bool))
+                                                     .WithOverride()
+                                                     .AddParameters(new ParameterBuilder().WithName("obj")
+                                                                                          .WithType(typeof(object)))
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement($"return Equals(obj as {instance.Name});"));
+
+                yield return new ClassMethodBuilder().WithName("Equals")
+                                                     .WithType(typeof(bool))
+                                                     .AddParameters(new ParameterBuilder().WithName("other")
+                                                                                          .WithTypeName(instance.Name))
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement($"return other != null &&{Environment.NewLine}       {GetEntityEqualsProperties(instance)};"));
+
+                yield return new ClassMethodBuilder().WithName("GetHashCode")
+                                                     .WithType(typeof(int))
+                                                     .WithOverride()
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement("int hashCode = 235838129;"))
+                                                     .AddCodeStatements(instance.Fields.Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
+                                                        ? new LiteralCodeStatementBuilder().WithStatement($"hashCode = hashCode * -1521134295 + {f.CreatePropertyName(instance)}.GetHashCode();")
+                                                        : new LiteralCodeStatementBuilder().WithStatement($"hashCode = hashCode * -1521134295 + EqualityComparer<{f.TypeName.FixTypeName()}>.Default.GetHashCode({f.CreatePropertyName(instance)});")))
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement("return hashCode;"));
+                        
+                yield return new ClassMethodBuilder().WithName("==")
+                                                     .WithType(typeof(bool))
+                                                     .WithStatic()
+                                                     .WithOperator()
+                                                     .AddParameters(new ParameterBuilder().WithName("left")
+                                                                                          .WithTypeName(instance.Name),
+                                                                    new ParameterBuilder().WithName("right")
+                                                                                          .WithTypeName(instance.Name))
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement($"return EqualityComparer<{instance.Name}>.Default.Equals(left, right);"));
+
+                yield return new ClassMethodBuilder().WithName("!=")
+                                                     .WithType(typeof(bool))
+                                                     .WithStatic()
+                                                     .WithOperator()
+                                                     .AddParameters(new ParameterBuilder().WithName("left")
+                                                                                          .WithTypeName(instance.Name),
+                                                                    new ParameterBuilder().WithName("right")
+                                                                                          .WithTypeName(instance.Name))
+                                                     .AddCodeStatements(new LiteralCodeStatementBuilder().WithStatement("return !(left == right);"));
             }
         }
 
         private static string GetEntityEqualsProperties(IDataObjectInfo instance)
             => string.Join(" &&" + Environment.NewLine + "       ", instance.Fields.Select(f => $"{f.CreatePropertyName(instance)} == other.{f.CreatePropertyName(instance)}"));
 
-        private static IEnumerable<IClassConstructor> GetEntityClassConstructors(IDataObjectInfo instance,
-                                                                                 EntityClassType entityClassType,
-                                                                                 RenderMetadataAsAttributesType renderMetadataAsAttributes)
+        private static IEnumerable<ClassConstructorBuilder> GetEntityClassConstructors(IDataObjectInfo instance,
+                                                                                       EntityClassType entityClassType,
+                                                                                       RenderMetadataAsAttributesType renderMetadataAsAttributes)
         {
-            if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
+            if (entityClassType.IsImmutable())
             {
-                yield return new ClassConstructor
-                (
-                    codeStatements: GetEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true),
-                    parameters: GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue, f.IsNullable))
-                );
+                yield return new ClassConstructorBuilder()
+                    .AddCodeStatements(GetEntityClassConstructorCodeStatements(instance, entityClassType, renderMetadataAsAttributes, true))
+                    .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.ToParameterBuilder()));
             }
         }
 
-        private static IEnumerable<ICodeStatement> GetEntityClassConstructorCodeStatements(IDataObjectInfo instance,
-                                                                                           EntityClassType entityClassType,
-                                                                                           RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                                           bool createPropertyName)
+        private static IEnumerable<ICodeStatementBuilder> GetEntityClassConstructorCodeStatements(IDataObjectInfo instance,
+                                                                                                  EntityClassType entityClassType,
+                                                                                                  RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                                                                                  bool createPropertyName)
         {
-            if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
+            if (!entityClassType.IsImmutable())
             {
-                foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
-                {
-                    var name = createPropertyName
-                        ? field.CreatePropertyName(instance)
-                        : field.Name;
-                    yield return new LiteralCodeStatement($"this.{name} = {field.Name.ToPascalCase()};");
-                }
+                yield break;
+            }
+            
+            foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
+            {
+                var name = createPropertyName
+                    ? field.CreatePropertyName(instance)
+                    : field.Name;
+                yield return new LiteralCodeStatementBuilder().WithStatement($"this.{name} = {field.Name.ToPascalCase()};");
+            }
 
-                if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
-                {
-                    // Add validation code
-                    yield return new LiteralCodeStatement("System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);");
-                }
+            if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
+            {
+                // Add validation code
+                yield return new LiteralCodeStatementBuilder()
+                    .WithStatement("System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);");
             }
         }
 
@@ -287,28 +346,34 @@ namespace DataFramework.ModelFramework.Extensions
                                                                               RenderMetadataAsAttributesType renderMetadataAsAttributes,
                                                                               string generatorName = "DataFramework.ModelFramework.Generators.Entities.EntityGenerator")
         {
-            var result = new List<AttributeBuilder>
-            {
-                new AttributeBuilder(new MFAttribute
-                (
-                    "System.CodeDom.Compiler.GeneratedCode",
-                    new[]
-                    {
-                        new AttributeParameter(generatorName),
-                        new AttributeParameter(typeof(DataObjectInfoExtensions).Assembly.GetName().Version.ToString())
-                    }
-                ))
-            };
+            yield return new AttributeBuilder().ForCodeGenerator(generatorName);
 
             if (renderMetadataAsAttributes != RenderMetadataAsAttributesType.None)
             {
-                result.AddConditionalModelClassAttribute("System.ComponentModel.ReadOnly", true, instance.IsReadOnly);
-                result.AddModelClassAttribute("System.ComponentModel.Description", instance.Description);
-                result.AddModelClassAttribute("System.ComponentModel.DisplayName", instance.DisplayName);
-                result.AddConditionalModelClassAttribute("System.ComponentModel.Browsable", false, !instance.IsVisible);
-            }
+                if (instance.IsReadOnly)
+                {
+                    yield return new AttributeBuilder().WithName("System.ComponentModel.ReadOnly")
+                                                       .AddParameters(new AttributeParameterBuilder().WithValue(true));
+                }
 
-            return result;
+                if (!string.IsNullOrEmpty(instance.Description))
+                {
+                    yield return new AttributeBuilder().WithName("System.ComponentModel.Description")
+                                                       .AddParameters(new AttributeParameterBuilder().WithValue(instance.Description));
+                }
+
+                if (!string.IsNullOrEmpty(instance.DisplayName))
+                {
+                    yield return new AttributeBuilder().WithName("System.ComponentModel.DisplayName")
+                                                       .AddParameters(new AttributeParameterBuilder().WithValue(instance.DisplayName));
+                }
+
+                if (!instance.IsVisible)
+                {
+                    yield return new AttributeBuilder().WithName("System.ComponentModel.Browsable")
+                                                       .AddParameters(new AttributeParameterBuilder().WithValue(false));
+                }
+            }
         }
     }
 }

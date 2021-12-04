@@ -4,15 +4,13 @@ using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.CodeStatements;
-using ModelFramework.Objects.Default;
-using MFAttribute = ModelFramework.Objects.Default.Attribute;
+using ModelFramework.Objects.CodeStatements.Builders;
 
 namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
-        public static ClassBuilder ToEntityBuilderClass
+        public static ClassBuilder ToEntityBuilderClassBuilder
         (
             this IDataObjectInfo instance,
             RenderMetadataAsAttributesType defaultRenderMetadataAsAttributes = RenderMetadataAsAttributesType.Validation,
@@ -23,8 +21,9 @@ namespace DataFramework.ModelFramework.Extensions
             var renderMetadataAsAttributes = instance.Metadata.GetMetadataValue<RenderMetadataAsAttributesType?>(Entities.RenderMetadataAsAttributesType, null) ?? defaultRenderMetadataAsAttributes;
 
             return new ClassBuilder()
-                .WithName(instance.Name + "Builder")
-                .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace).WhenNullOrEmpty(() => instance.GetEntitiesNamespace()))
+                .WithName($"{instance.Name}Builder")
+                .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace)
+                    .WhenNullOrEmpty(() => instance.GetEntitiesNamespace()))
                 .WithSharedDataObjectInfoData(instance)
                 .WithVisibility(instance.Metadata.GetMetadataValue(Entities.Visibility, instance.IsVisible.ToVisibility()))
                 .AddProperties(GetEntityBuilderClassProperties(instance, renderMetadataAsAttributes, entityClassType))
@@ -36,20 +35,12 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<AttributeBuilder> GetEntityBuilderClassAttributes(IDataObjectInfo instance,
                                                                                      RenderMetadataAsAttributesType renderMetadataAsAttributes)
         {
-            var result = new List<AttributeBuilder>
-            {
-                new AttributeBuilder(new MFAttribute
-                (
-                    "System.CodeDom.Compiler.GeneratedCode",
-                    new[]
-                    {
-                        new AttributeParameter("DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"),
-                        new AttributeParameter(typeof(DataObjectInfoExtensions).Assembly.GetName().Version.ToString())
-                    }
-                ))
-            };
+            yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator");
 
-            return instance.AddClassAttributes(renderMetadataAsAttributes, Entities.EntityBuildersAttribute, result);
+            foreach (var attributeBuilder in instance.GetClassAttributes(renderMetadataAsAttributes, Entities.EntityBuildersAttribute))
+            {
+                yield return attributeBuilder;
+            }
         }
 
         private static IEnumerable<ClassMethodBuilder> GetEntityBuilderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
@@ -62,76 +53,72 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithTypeName($"{ns}.{instance.Name}Builder")
                     .AddCodeStatements
                     (
-                        new LiteralCodeStatement($"this.{field.Name.Sanitize()} = value;"),
-                        new LiteralCodeStatement("return this;")
+                        new LiteralCodeStatementBuilder().WithStatement($"this.{field.Name.Sanitize()} = value;"),
+                        new LiteralCodeStatementBuilder().WithStatement("return this;")
                     )
-                    .AddParameters(new Parameter("value", field.TypeName, isNullable: field.IsNullable));
+                    .AddParameters(new ParameterBuilder().WithName("value")
+                                                         .WithTypeName(field.TypeName)
+                                                         .WithIsNullable(field.IsNullable));
             }
 
             yield return new ClassMethodBuilder()
                 .WithName("Build")
                 .WithTypeName($"{ns}.{instance.Name}")
-                .AddCodeStatements(entityClassType == EntityClassType.Poco || entityClassType == EntityClassType.ObservablePoco
-                    ? new LiteralCodeStatement($"return new {ns}.{instance.Name} {{ {string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => $"{f.Name.Sanitize()} = {f.Name.Sanitize()}"))} }};")
-                    : new LiteralCodeStatement($"return new {ns}.{instance.Name}({string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.Name.Sanitize()))});"));
+                .AddCodeStatements(entityClassType.HasPropertySetter()
+                    ? new LiteralCodeStatementBuilder()
+                        .WithStatement($"return new {ns}.{instance.Name} {{ {string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => $"{f.Name.Sanitize()} = {f.Name.Sanitize()}"))} }};")
+                    : new LiteralCodeStatementBuilder()
+                        .WithStatement($"return new {ns}.{instance.Name}({string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.Name.Sanitize()))});"));
 
             yield return new ClassMethodBuilder()
                 .WithName("Update")
                 .WithTypeName($"{ns}.{instance.Name}Builder")
-                .AddParameters(new Parameter("instance", $"{ns}.{instance.Name}"))
-                .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance).Select(field => new LiteralCodeStatement($"this.{field.Name} = instance.{field.CreatePropertyName(instance)};")).Concat(new[] { new LiteralCodeStatement("return this;") }));
+                .AddParameters(new ParameterBuilder().WithName("instance")
+                                                     .WithTypeName($"{ns}.{instance.Name}"))
+                .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
+                    .Select(field => new LiteralCodeStatementBuilder()
+                        .WithStatement($"this.{field.Name} = instance.{field.CreatePropertyName(instance)};")))
+                .AddCodeStatements(new LiteralCodeStatementBuilder()
+                    .WithStatement("return this;"));
         }
 
         private static IEnumerable<ClassConstructorBuilder> GetEntityBuilderClassConstructors(IDataObjectInfo instance,
                                                                                               EntityClassType entityClassType)
         {
-            if (entityClassType.In(EntityClassType.ImmutableClass, EntityClassType.Record))
+            if (entityClassType.IsImmutable())
             {
                 var ns = instance.GetEntitiesNamespace();
                 yield return new ClassConstructorBuilder();
 
                 yield return new ClassConstructorBuilder()
-                    .AddParameters(new Parameter("instance", $"{ns}.{instance.Name}"))
-                    .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance).Select(x => new LiteralCodeStatement($"{x.Name} = instance.{x.CreatePropertyName(instance)};")));
+                    .AddParameters(new ParameterBuilder().WithName("instance")
+                                                         .WithTypeName($"{ns}.{instance.Name}"))
+                    .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
+                        .Select(x => new LiteralCodeStatementBuilder()
+                            .WithStatement($"{x.Name} = instance.{x.CreatePropertyName(instance)};")));
 
                 yield return new ClassConstructorBuilder()
                     .AddCodeStatements(GetEntityClassConstructorCodeStatements(instance, entityClassType, RenderMetadataAsAttributesType.None, false)) //RenderMetaDataAsAttributesType.None skips validation call
-                    .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => new Parameter(f.Name.ToPascalCase(), f.TypeName, f.DefaultValue, f.IsNullable)));
+                    .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.ToParameterBuilder()));
             }
         }
 
         private static IEnumerable<ClassPropertyBuilder> GetEntityBuilderClassProperties(IDataObjectInfo instance,
                                                                                          RenderMetadataAsAttributesType renderMetadataAsAttributes,
                                                                                          EntityClassType entityClassType)
-        {
-            var result = new List<ClassPropertyBuilder>();
-
-            //Add properties for all instance.Fields
-            foreach (var field in instance.Fields)
-            {
-                result.Add(new ClassPropertyBuilder()
-                    .WithName(field.Name)
-                    .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
-                    .WithSharedFieldInfoData(field)
-                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
-                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))                    
-                    .AddAttributes(GetEntityClassPropertyAttributes(field,
-                                                                    instance.Name,
-                                                                    renderMetadataAsAttributes,
-                                                                    true)));
-            }
-
-            foreach (var field in instance.GetUpdateConcurrencyCheckFields())
-            {
-                result.Add(new ClassPropertyBuilder()
-                    .WithName($"{field.Name}Original")
-                    .WithSharedFieldInfoData(field)
-                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
-                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))
-                    .AddAttributes(new MFAttribute("ReadOnly", new[] { new AttributeParameter(true) })));
-            }
-
-            return result;
-        }
+            => instance.Fields.Select(field =>
+                    new ClassPropertyBuilder()
+                        .WithName(field.Name)
+                        .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
+                        .WithSharedFieldInfoData(field)
+                        .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
+                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))
+                        .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, true, false)))
+                .Concat(instance.GetUpdateConcurrencyCheckFields().Select(field =>
+                    new ClassPropertyBuilder()
+                        .WithName($"{field.Name}Original")
+                        .WithSharedFieldInfoData(field)
+                        .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
+                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))));
     }
 }
