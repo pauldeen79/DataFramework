@@ -315,7 +315,7 @@ namespace DataFramework.ModelFramework.Extensions
                     new[]
                     {
                         new AttributeParameter(generatorName),
-                        new AttributeParameter("1.0.0.0")
+                        new AttributeParameter(typeof(DataObjectInfoExtensions).Assembly.GetName().Version.ToString())
                     }
                 ))
             };
