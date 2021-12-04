@@ -18,14 +18,6 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
-        /// <summary>
-        /// The default usings for a Poco entity class.
-        /// </summary>
-        private static readonly string[] DefaultPocoEntityUsings =
-        {
-            "System"
-        };
-
         public static ClassBuilder ToEntityClassBuilder
         (
             this IDataObjectInfo instance,
@@ -51,7 +43,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddProperties(GetEntityClassProperties(instance, renderMetadataAsAttributes, entityClassType))
                 .AddMethods(GetEntityClassMethods(instance, entityClassType))
                 .AddConstructors(GetEntityClassConstructors(instance, entityClassType, renderMetadataAsAttributes))
-                .AddMetadata(instance.Metadata.Convert(DefaultPocoEntityUsings))
+                .AddMetadata(instance.Metadata.Convert())
                 .AddAttributes(GetEntityClassAttributes(instance, renderMetadataAsAttributes));
         }
 
