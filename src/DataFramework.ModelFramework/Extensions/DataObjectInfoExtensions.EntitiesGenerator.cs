@@ -16,15 +16,10 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
-        public static ClassBuilder ToEntityClassBuilder
-        (
-            this IDataObjectInfo instance,
-            RenderMetadataAsAttributesType defaultRenderMetadataAsAttributes = RenderMetadataAsAttributesType.Validation,
-            EntityClassType defaultEntityClassType = EntityClassType.Poco
-        )
+        public static ClassBuilder ToEntityClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         {
-            var entityClassType = instance.GetEntityClassType(defaultEntityClassType);
-            var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(defaultRenderMetadataAsAttributes);
+            var entityClassType = instance.GetEntityClassType(settings.DefaultEntityClassType);
+            var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(settings.DefaultRenderMetadataAsAttributes);
 
             return new ClassBuilder()
                 .WithName(instance.Name)

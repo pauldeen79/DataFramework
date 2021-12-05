@@ -21,7 +21,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityClassBuilder()
+                .ToEntityClassBuilder(GeneratorSettings.Default)
                 .Build();
 
             // Act
@@ -40,7 +40,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityBuilderClassBuilder()
+                .ToEntityBuilderClassBuilder(GeneratorSettings.Default)
                 .Build();
 
             // Act
@@ -59,7 +59,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityIdentityClassBuilder()
+                .ToEntityIdentityClassBuilder(GeneratorSettings.Default)
                 .Build();
 
             // Act
