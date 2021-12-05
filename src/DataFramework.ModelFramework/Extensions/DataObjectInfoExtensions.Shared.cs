@@ -11,12 +11,17 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
-        public static EntityClassType GetEntityClassType(this IDataObjectInfo instance)
+        internal static EntityClassType GetEntityClassType(this IDataObjectInfo instance, EntityClassType defaultValue)
             => instance
                 .Metadata
-                .GetMetadataValue(Entities.EntityClassType, EntityClassType.Poco);
+                .GetMetadataValue(Entities.EntityClassType, defaultValue);
 
-        public static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
+        internal static RenderMetadataAsAttributesType GetRenderMetadataAsAttributesType(this IDataObjectInfo instance, RenderMetadataAsAttributesType defaultValue)
+            => instance
+                .Metadata
+                .GetMetadataValue(Entities.RenderMetadataAsAttributesType, defaultValue);
+
+        internal static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
         {
             yield return instance;
             foreach (var item in GetCustomMembersFromMetadata<IDataObjectInfo>(instance, Shared.CustomDataObjectInfo))
@@ -25,7 +30,7 @@ namespace DataFramework.ModelFramework.Extensions
             }
         }
 
-        public static IEnumerable<IFieldInfo> GetUpdateConcurrencyCheckFields(this IDataObjectInfo dataObjectInfo)
+        internal static IEnumerable<IFieldInfo> GetUpdateConcurrencyCheckFields(this IDataObjectInfo dataObjectInfo)
         {
             var concurrencyCheckBehavior = dataObjectInfo.GetConcurrencyCheckBehavior();
             return dataObjectInfo
@@ -33,18 +38,21 @@ namespace DataFramework.ModelFramework.Extensions
                 .Where(fieldInfo => IsUpdateConcurrencyCheckField(dataObjectInfo, fieldInfo, concurrencyCheckBehavior));
         }
 
-        public static bool IsUpdateConcurrencyCheckField(this IDataObjectInfo dataObjectInfo,
-                                                         IFieldInfo fieldInfo,
-                                                         ConcurrencyCheckBehavior concurrencyCheckBehavior)
+        internal static bool IsUpdateConcurrencyCheckField(this IDataObjectInfo dataObjectInfo,
+                                                           IFieldInfo fieldInfo,
+                                                           ConcurrencyCheckBehavior concurrencyCheckBehavior)
             => !dataObjectInfo.IsReadOnly
                 && fieldInfo.IsPersistable
                 && (fieldInfo.IsIdentityField || fieldInfo.UseForCheckOnOriginalValues || concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields)
                 && concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields;
 
-        public static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo dataObjectInfo)
+        internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo dataObjectInfo)
             => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey)
                 ? dataObjectInfo.Metadata.First(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey).Value.ToStringWithNullCheck()
                 : ConcurrencyCheckBehavior.NoFields.ToString());
+
+        internal static string GetEntitiesNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,
                                                                       string metadataName)
@@ -66,8 +74,5 @@ namespace DataFramework.ModelFramework.Extensions
 
             return Enumerable.Empty<AttributeBuilder>();
         }
-
-        public static string GetEntitiesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
     }
 }

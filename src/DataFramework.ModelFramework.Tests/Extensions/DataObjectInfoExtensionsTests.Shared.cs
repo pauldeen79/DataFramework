@@ -11,16 +11,16 @@ namespace DataFramework.ModelFramework.Tests.Extensions
     public class DataObjectInfoExtensionsTests
     {
         [Fact]
-        public void GetEntityClassType_Returns_Poco_When_Not_Specified()
+        public void GetEntityClassType_Returns_DefaultValue_When_Not_Specified()
         {
             // Arrange
             var sut = new DataObjectInfoBuilder().WithName("TestEntity").Build();
 
             // Act
-            var actual = sut.GetEntityClassType();
+            var actual = sut.GetEntityClassType(EntityClassType.ImmutableClass);
 
             // Assert
-            actual.Should().Be(EntityClassType.Poco);
+            actual.Should().Be(EntityClassType.ImmutableClass);
         }
 
         [Theory]
@@ -37,7 +37,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.GetEntityClassType();
+            var actual = sut.GetEntityClassType(default);
 
             // Assert
             actual.Should().Be(value);

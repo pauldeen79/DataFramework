@@ -24,8 +24,8 @@ namespace DataFramework.ModelFramework.Extensions
             EntityClassType defaultEntityClassType = EntityClassType.Poco
         )
         {
-            var entityClassType = instance.Metadata.GetMetadataValue<EntityClassType?>(Entities.EntityClassType, null) ?? defaultEntityClassType;
-            var renderMetadataAsAttributes = instance.Metadata.GetMetadataValue<RenderMetadataAsAttributesType?>(Entities.RenderMetadataAsAttributesType, null) ?? defaultRenderMetadataAsAttributes;
+            var entityClassType = instance.GetEntityClassType(defaultEntityClassType);
+            var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(defaultRenderMetadataAsAttributes);
 
             return new ClassBuilder()
                 .WithName(instance.Name)

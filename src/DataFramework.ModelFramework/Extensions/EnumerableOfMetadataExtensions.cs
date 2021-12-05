@@ -6,12 +6,12 @@ using DataFramework.Abstractions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class EnumerableOfMetadataExtensions
+    internal static class EnumerableOfMetadataExtensions
     {
-        public static string GetMetadataStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
+        internal static string GetMetadataStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
             => metadata.GetMetadataValue<object?>(metadataName, defaultValue).ToStringWithDefault(defaultValue);
 
-        public static T GetMetadataValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, T defaultValue)
+        internal static T GetMetadataValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, T defaultValue)
         {
             var metadataItem = metadata.FirstOrDefault(md => md.Name == metadataName);
 
@@ -23,10 +23,10 @@ namespace DataFramework.ModelFramework.Extensions
             return CreateMetadata(metadataItem, defaultValue);
         }
 
-        public static IEnumerable<string> GetMetadataStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
+        internal static IEnumerable<string> GetMetadataStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata.GetMetadataValues<object?>(metadataName).Select(x => x.ToStringWithDefault());
 
-        public static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
+        internal static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata
                 .Where(md => md.Name == metadataName)
                 .Select(md => md.Value)

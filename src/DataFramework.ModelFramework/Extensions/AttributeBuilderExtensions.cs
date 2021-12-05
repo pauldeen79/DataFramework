@@ -2,9 +2,9 @@
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class AttributeBuilderExtensions
+    internal static class AttributeBuilderExtensions
     {
-        public static AttributeBuilder ForCodeGenerator(this AttributeBuilder instance, string codeGeneratorName)
+        internal static AttributeBuilder ForCodeGenerator(this AttributeBuilder instance, string codeGeneratorName)
             => instance.WithName("System.CodeDom.Compiler.GeneratedCode")
                        .AddParameters
                        (

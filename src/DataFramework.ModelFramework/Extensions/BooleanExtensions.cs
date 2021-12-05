@@ -2,9 +2,9 @@
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class BooleanExtensions
+    internal static class BooleanExtensions
     {
-        public static Visibility ToVisibility(this bool isVisible)
+        internal static Visibility ToVisibility(this bool isVisible)
             => isVisible
                 ? Visibility.Public
                 : Visibility.Internal;

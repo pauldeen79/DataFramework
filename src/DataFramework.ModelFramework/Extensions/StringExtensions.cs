@@ -4,12 +4,12 @@ using ModelFramework.Common.Extensions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
-        public static string FixGenericParameter(this string value, string typeName)
+        internal static string FixGenericParameter(this string value, string typeName)
             => value.Replace("<T>", string.Format("<{0}>", typeName));
 
-        public static bool IsSupportedByMap(this string instance)
+        internal static bool IsSupportedByMap(this string instance)
         {
             if (instance.IsRequiredEnum()) return true;
             if (instance.IsOptionalEnum()) return true;
@@ -43,7 +43,7 @@ namespace DataFramework.ModelFramework.Extensions
             { typeof(byte[]), "GetByteArray" },
         };
 
-        public static string GetSqlReaderMethodName(this string instance, bool isNullable)
+        internal static string GetSqlReaderMethodName(this string instance, bool isNullable)
         {
             if (instance.IsRequiredEnum() && !isNullable)
             {

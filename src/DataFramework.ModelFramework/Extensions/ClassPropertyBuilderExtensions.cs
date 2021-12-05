@@ -5,9 +5,9 @@ using ModelFramework.Objects.Builders;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    public static class ClassPropertyBuilderExtensions
+    internal static class ClassPropertyBuilderExtensions
     {
-        public static ClassPropertyBuilder WithSharedFieldInfoData(this ClassPropertyBuilder instance, IFieldInfo field)
+        internal static ClassPropertyBuilder WithSharedFieldInfoData(this ClassPropertyBuilder instance, IFieldInfo field)
             => instance
                 .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
                 .WithStatic(field.Metadata.GetMetadataStringValue(Entities.Static).IsTrue())
