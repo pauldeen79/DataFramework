@@ -12,14 +12,12 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static FieldInfoBuilder WithMinLength(this FieldInfoBuilder instance, int length)
             => instance.AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
-                .WithName("System.ComponentModel.DataAnnotations.MinLength")
-                .AddParameters(new AttributeParameterBuilder().WithValue(length))
+                .AddNameAndParameter("System.ComponentModel.DataAnnotations.MinLength", length)
                 .Build());
 
         public static FieldInfoBuilder WithMaxLength(this FieldInfoBuilder instance, int length)
             => instance.AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
-                .WithName("System.ComponentModel.DataAnnotations.MaxLength")
-                .AddParameters(new AttributeParameterBuilder().WithValue(length))
+                .AddNameAndParameter("System.ComponentModel.DataAnnotations.MaxLength", length)
                 .Build());
 
         public static FieldInfoBuilder WithRange(this FieldInfoBuilder instance, int minimumValue, int maximumValue)
@@ -35,16 +33,14 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static FieldInfoBuilder WithRegularExpression(this FieldInfoBuilder instance, string pattern)
             => instance.AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
-                .WithName("System.ComponentModel.DataAnnotations.RegularExpression")
-                .AddParameters(new AttributeParameterBuilder().WithValue(pattern)).Build());
+                .AddNameAndParameter("System.ComponentModel.DataAnnotations.RegularExpression", pattern).Build());
 
         private static IAttribute CreateStringLengthAttribute(int maxLength, int? minimumLength)
         {
-            var builder = new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.StringLength")
-                                                .AddParameters(new AttributeParameterBuilder().WithValue(maxLength));
+            var builder = new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DataAnnotations.StringLength", maxLength);
             if (minimumLength != null)
             {
-                builder.AddParameters(new AttributeParameterBuilder().WithName("MinimumLength").WithValue(minimumLength.Value));
+                builder.AddNameAndParameter("MinimumLength", minimumLength.Value);
             }
 
             return builder.Build();

@@ -4,7 +4,6 @@ using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.CodeStatements.Builders;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -22,9 +21,8 @@ namespace DataFramework.ModelFramework.Extensions
 
             return new ClassBuilder()
                 .WithName($"{instance.Name}Builder")
-                .WithNamespace(instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace)
-                    .WhenNullOrEmpty(() => instance.GetEntitiesNamespace()))
-                .WithSharedDataObjectInfoData(instance)
+                .WithNamespace(instance.GetEntityBuildersNamespace())
+                .FillFrom(instance)
                 .WithVisibility(instance.Metadata.GetMetadataValue(Entities.Visibility, instance.IsVisible.ToVisibility()))
                 .AddProperties(GetEntityBuilderClassProperties(instance, renderMetadataAsAttributes, entityClassType))
                 .AddMethods(GetEntityBuilderClassMethods(instance, entityClassType))
@@ -43,18 +41,18 @@ namespace DataFramework.ModelFramework.Extensions
             }
         }
 
-        private static IEnumerable<ClassMethodBuilder> GetEntityBuilderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
+        private static IEnumerable<ClassMethodBuilder> GetEntityBuilderClassMethods(IDataObjectInfo instance,
+                                                                                    EntityClassType entityClassType)
         {
-            var ns = instance.GetEntitiesNamespace();
             foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
             {
                 yield return new ClassMethodBuilder()
-                    .WithName($"Set{field.Name.Sanitize()}")
-                    .WithTypeName($"{ns}.{instance.Name}Builder")
-                    .AddCodeStatements
+                    .WithName($"Set{field.Name}")
+                    .WithTypeName($"{instance.Name}Builder")
+                    .AddLiteralCodeStatements
                     (
-                        new LiteralCodeStatementBuilder().WithStatement($"this.{field.Name.Sanitize()} = value;"),
-                        new LiteralCodeStatementBuilder().WithStatement("return this;")
+                        $"this.{field.Name.Sanitize()} = value;",
+                        "return this;"
                     )
                     .AddParameters(new ParameterBuilder().WithName("value")
                                                          .WithTypeName(field.TypeName)
@@ -63,44 +61,38 @@ namespace DataFramework.ModelFramework.Extensions
 
             yield return new ClassMethodBuilder()
                 .WithName("Build")
-                .WithTypeName($"{ns}.{instance.Name}")
-                .AddCodeStatements(entityClassType.HasPropertySetter()
-                    ? new LiteralCodeStatementBuilder()
-                        .WithStatement($"return new {ns}.{instance.Name} {{ {string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => $"{f.Name.Sanitize()} = {f.Name.Sanitize()}"))} }};")
-                    : new LiteralCodeStatementBuilder()
-                        .WithStatement($"return new {ns}.{instance.Name}({string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.Name.Sanitize()))});"));
+                .WithTypeName(instance.GetEntityFullName())
+                .AddLiteralCodeStatements(entityClassType.HasPropertySetter()
+                    ? $"return new {instance.GetEntityFullName()} {{ {string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => $"{f.Name.Sanitize()} = {f.Name.Sanitize()}"))} }};"
+                    : $"return new {instance.GetEntityFullName()}({string.Join(", ", GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.Name.Sanitize()))});");
 
             yield return new ClassMethodBuilder()
                 .WithName("Update")
-                .WithTypeName($"{ns}.{instance.Name}Builder")
-                .AddParameters(new ParameterBuilder().WithName("instance")
-                                                     .WithTypeName($"{ns}.{instance.Name}"))
-                .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
-                    .Select(field => new LiteralCodeStatementBuilder()
-                        .WithStatement($"this.{field.Name} = instance.{field.CreatePropertyName(instance)};")))
-                .AddCodeStatements(new LiteralCodeStatementBuilder()
-                    .WithStatement("return this;"));
+                .WithTypeName($"{instance.Name}Builder")
+                .AddParameter("instance", $"{instance.GetEntityFullName()}")
+                .AddLiteralCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
+                    .Select(field => $"this.{field.Name.Sanitize()} = instance.{field.CreatePropertyName(instance)};"))
+                .AddLiteralCodeStatements("return this;");
         }
 
         private static IEnumerable<ClassConstructorBuilder> GetEntityBuilderClassConstructors(IDataObjectInfo instance,
                                                                                               EntityClassType entityClassType)
         {
-            if (entityClassType.IsImmutable())
+            if (!entityClassType.IsImmutable())
             {
-                var ns = instance.GetEntitiesNamespace();
-                yield return new ClassConstructorBuilder();
-
-                yield return new ClassConstructorBuilder()
-                    .AddParameters(new ParameterBuilder().WithName("instance")
-                                                         .WithTypeName($"{ns}.{instance.Name}"))
-                    .AddCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
-                        .Select(x => new LiteralCodeStatementBuilder()
-                            .WithStatement($"{x.Name} = instance.{x.CreatePropertyName(instance)};")));
-
-                yield return new ClassConstructorBuilder()
-                    .AddCodeStatements(GetEntityClassConstructorCodeStatements(instance, entityClassType, RenderMetadataAsAttributesType.None, false)) //RenderMetaDataAsAttributesType.None skips validation call
-                    .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.ToParameterBuilder()));
+                yield break;
             }
+
+            yield return new ClassConstructorBuilder();
+
+            yield return new ClassConstructorBuilder()
+                .AddParameter("instance", instance.GetEntityFullName())
+                .AddLiteralCodeStatements(GetFieldsWithConcurrencyCheckFields(instance)
+                    .Select(x => $"{x.Name.Sanitize()} = instance.{x.CreatePropertyName(instance)};"));
+
+            yield return new ClassConstructorBuilder()
+                .AddLiteralCodeStatements(GetEntityClassConstructorCodeStatements(instance, RenderMetadataAsAttributesType.None, false)) //RenderMetaDataAsAttributesType.None skips validation call
+                .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.ToParameterBuilder()));
         }
 
         private static IEnumerable<ClassPropertyBuilder> GetEntityBuilderClassProperties(IDataObjectInfo instance,
@@ -110,14 +102,14 @@ namespace DataFramework.ModelFramework.Extensions
                     new ClassPropertyBuilder()
                         .WithName(field.Name)
                         .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
-                        .WithSharedFieldInfoData(field)
+                        .Fill(field)
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
                         .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))
                         .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, true, false)))
                 .Concat(instance.GetUpdateConcurrencyCheckFields().Select(field =>
                     new ClassPropertyBuilder()
                         .WithName($"{field.Name}Original")
-                        .WithSharedFieldInfoData(field)
+                        .Fill(field)
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
                         .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))));
     }

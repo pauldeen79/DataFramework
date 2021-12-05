@@ -16,7 +16,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .Metadata
                 .GetMetadataValue(Entities.EntityClassType, defaultValue);
 
-        internal static RenderMetadataAsAttributesType GetRenderMetadataAsAttributesType(this IDataObjectInfo instance, RenderMetadataAsAttributesType defaultValue)
+        internal static RenderMetadataAsAttributesType GetRenderMetadataAsAttributesType(this IDataObjectInfo instance,
+                                                                                         RenderMetadataAsAttributesType defaultValue)
             => instance
                 .Metadata
                 .GetMetadataValue(Entities.RenderMetadataAsAttributesType, defaultValue);
@@ -53,6 +54,18 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static string GetEntitiesNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+
+        internal static string GetEntityBuildersNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
+        internal static string GetEntityFullName(this IDataObjectInfo instance)
+        {
+            var ns = instance.GetEntitiesNamespace();
+            return string.IsNullOrEmpty(ns)
+                ? instance.Name
+                : $"{ns}.{instance.Name}";
+        }
 
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,
                                                                       string metadataName)
