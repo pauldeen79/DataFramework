@@ -10,11 +10,11 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogIdentityCommandProvider : IDatabaseCommandProvider<CatalogIdentity>
     {
-        private CatalogQueryProcessorSettings Settings { get; }
+        private CatalogPagedEntityRetrieverSettings Settings { get; }
 
         public CatalogIdentityCommandProvider()
         {
-            Settings = new CatalogQueryProcessorSettings();
+            Settings = new CatalogPagedEntityRetrieverSettings();
         }
 
         public IDatabaseCommand Create(CatalogIdentity source, DatabaseOperation operation)

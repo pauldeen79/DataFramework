@@ -10,11 +10,11 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldIdentityCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
     {
-        private ExtraFieldQueryProcessorSettings Settings { get; }
+        private ExtraFieldPagedEntityRetrieverSettings Settings { get; }
 
         public ExtraFieldIdentityCommandProvider()
         {
-            Settings = new ExtraFieldQueryProcessorSettings();
+            Settings = new ExtraFieldPagedEntityRetrieverSettings();
         }
 
         public IDatabaseCommand Create(ExtraFieldIdentity source, DatabaseOperation operation)

@@ -23,7 +23,7 @@ namespace DataFramework.ModelFramework.Poc.Repositories
 
         public IReadOnlyCollection<ExtraField> FindExtraFieldsByEntityName(string entityName)
         {
-            var settings = new ExtraFieldQueryProcessorSettings();
+            var settings = new ExtraFieldPagedEntityRetrieverSettings();
             return EntityRetriever.FindMany(new SelectCommandBuilder()
                 .Select(settings.Fields)
                 .From(settings.TableName)

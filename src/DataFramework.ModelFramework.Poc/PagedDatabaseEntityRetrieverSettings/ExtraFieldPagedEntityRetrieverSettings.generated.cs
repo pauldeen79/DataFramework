@@ -4,7 +4,7 @@ using CrossCutting.Data.Abstractions;
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldQueryProcessorSettings : IPagedDatabaseEntityRetrieverSettings
+    public partial class ExtraFieldPagedEntityRetrieverSettings : IPagedDatabaseEntityRetrieverSettings
     {
         public string TableName => @"[ExtraField]";
         public string Fields => @"[EntityName], [Name], [Description], [FieldNumber], [FieldType]";

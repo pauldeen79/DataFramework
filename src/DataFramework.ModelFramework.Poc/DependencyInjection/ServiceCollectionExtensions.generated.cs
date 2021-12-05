@@ -36,7 +36,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             //query:
             instance.AddSingleton<IPagedDatabaseCommandProvider<CatalogQuery>>(serviceProvider =>
                 new QueryPagedDatabaseCommandProvider<CatalogQuery>(new CatalogQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("Catalog")),
-                                                                    new CatalogQueryProcessorSettings()));
+                                                                    new CatalogPagedEntityRetrieverSettings()));
             instance.AddSingleton<IQueryProcessor<CatalogQuery, Catalog>>(serviceProvider =>
                 new QueryProcessor<CatalogQuery, Catalog>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
                                                           serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<CatalogQuery>>()));
@@ -49,8 +49,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 => new CatalogRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<Catalog>>(),
                                          serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<CatalogIdentity>>(),
-                                         new PagedSelectDatabaseCommandProvider(new CatalogQueryProcessorSettings()),
-                                         new SelectDatabaseCommandProvider(new CatalogQueryProcessorSettings()),
+                                         new PagedSelectDatabaseCommandProvider(new CatalogPagedEntityRetrieverSettings()),
+                                         new SelectDatabaseCommandProvider(new CatalogPagedEntityRetrieverSettings()),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<Catalog>>()));
 
             //findall/findallpaged:
@@ -72,8 +72,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 new ExtraFieldRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<ExtraField>>(),
                                          serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraFieldIdentity>>(),
-                                         new PagedSelectDatabaseCommandProvider(new ExtraFieldQueryProcessorSettings()),
-                                         new SelectDatabaseCommandProvider(new ExtraFieldQueryProcessorSettings()),
+                                         new PagedSelectDatabaseCommandProvider(new ExtraFieldPagedEntityRetrieverSettings()),
+                                         new SelectDatabaseCommandProvider(new ExtraFieldPagedEntityRetrieverSettings()),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraField>>()));
 
             //query:
