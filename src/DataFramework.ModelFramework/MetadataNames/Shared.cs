@@ -2,13 +2,8 @@
 {
     internal static class Shared
     {
-        internal const string SharedRootName = Base.RootName + ".Shared";
-
-        internal const string DataObjectInfoInstanceName = SharedRootName + ".DataObjectInfoInstance";
-        internal const string FieldInfoInstanceName = SharedRootName + ".FieldInfoInstance";
-        internal const string PropertyNameDeconflictionFormatStringName = SharedRootName + ".PropertyNameDeconflictionFormatString";
-        internal const string OriginalFieldNameName = SharedRootName + ".OriginalField";
-        internal const string CustomDataObjectInfo = SharedRootName + ".CustomDataObjectInfo";
-        internal const string CustomClass = SharedRootName + ".CustomClass";
+        internal const string SharedRoot = Base.Root + ".Shared";
+        internal const string PropertyNameDeconflictionFormatString = SharedRoot + ".PropertyNameDeconflictionFormatString";
+        internal const string CustomDataObjectInfo = SharedRoot + ".CustomDataObjectInfo";
     }
 }

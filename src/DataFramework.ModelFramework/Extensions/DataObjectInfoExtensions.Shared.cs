@@ -48,8 +48,8 @@ namespace DataFramework.ModelFramework.Extensions
                 && concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields;
 
         internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo dataObjectInfo)
-            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey)
-                ? dataObjectInfo.Metadata.First(md => md.Name == DbCommand.ConcurrencyCheckBehaviorKey).Value.ToStringWithNullCheck()
+            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == DbCommand.ConcurrencyCheckBehavior)
+                ? dataObjectInfo.Metadata.First(md => md.Name == DbCommand.ConcurrencyCheckBehavior).Value.ToStringWithNullCheck()
                 : ConcurrencyCheckBehavior.NoFields.ToString());
 
         internal static string GetEntitiesNamespace(this IDataObjectInfo instance)
@@ -57,6 +57,10 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static string GetEntityBuildersNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
+        internal static string GetEntityIdentitiesNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetMetadataStringValue(Entities.IdentitiesNamespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityFullName(this IDataObjectInfo instance)

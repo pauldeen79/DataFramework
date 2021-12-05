@@ -50,6 +50,25 @@ namespace DataFramework.ModelFramework.Tests
             actual.Should().NotBeEmpty();
         }
 
+        [Theory]
+        [InlineData(EntityClassType.ImmutableClass)]
+        [InlineData(EntityClassType.ObservablePoco)]
+        [InlineData(EntityClassType.Poco)]
+        [InlineData(EntityClassType.Record)]
+        public void Can_Create_EntityIdentities(EntityClassType entityClassType)
+        {
+            // Arrange
+            var input = CreateDataObjectInfoBuilder(entityClassType)
+                .ToEntityIdentityClassBuilder()
+                .Build();
+
+            // Act
+            var actual = TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(), new[] { input }, additionalParameters: new { EnableNullableContext = true });
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
         private static DataObjectInfo CreateDataObjectInfoBuilder(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")

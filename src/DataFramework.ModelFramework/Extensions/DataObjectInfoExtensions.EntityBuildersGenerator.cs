@@ -23,7 +23,6 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName($"{instance.Name}Builder")
                 .WithNamespace(instance.GetEntityBuildersNamespace())
                 .FillFrom(instance)
-                .WithVisibility(instance.Metadata.GetMetadataValue(Entities.Visibility, instance.IsVisible.ToVisibility()))
                 .AddProperties(GetEntityBuilderClassProperties(instance, renderMetadataAsAttributes, entityClassType))
                 .AddMethods(GetEntityBuilderClassMethods(instance, entityClassType))
                 .AddConstructors(GetEntityBuilderClassConstructors(instance, entityClassType))

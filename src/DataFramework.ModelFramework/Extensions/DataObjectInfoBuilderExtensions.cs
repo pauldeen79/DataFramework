@@ -14,7 +14,7 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.ReplaceMetadata(Entities.EntityClassType, entityClassType);
 
         public static DataObjectInfoBuilder WithConcurrencyCheckBehavior(this DataObjectInfoBuilder instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
-            => instance.ReplaceMetadata(DbCommand.ConcurrencyCheckBehaviorKey, concurrencyCheckBehavior);
+            => instance.ReplaceMetadata(DbCommand.ConcurrencyCheckBehavior, concurrencyCheckBehavior);
 
         public static DataObjectInfoBuilder AddAdditionalDataObjectInfos(this DataObjectInfoBuilder instance, params IDataObjectInfo[] dataObjectInfos)
             => instance.AddMetadata(dataObjectInfos.Select(dataObjectInfo => new Metadata(Shared.CustomDataObjectInfo, dataObjectInfo)));

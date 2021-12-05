@@ -29,7 +29,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         {
             // Arrange
             var fieldInfo = new FieldInfoBuilder().WithName("Name").Build();
-            var dataObjectInfo = new DataObjectInfoBuilder().WithName("Name").AddMetadata(Shared.PropertyNameDeconflictionFormatStringName, "{0}Custom").Build();
+            var dataObjectInfo = new DataObjectInfoBuilder().WithName("Name").AddMetadata(Shared.PropertyNameDeconflictionFormatString, "{0}Custom").Build();
 
             // Act
             var actual = fieldInfo.CreatePropertyName(dataObjectInfo);

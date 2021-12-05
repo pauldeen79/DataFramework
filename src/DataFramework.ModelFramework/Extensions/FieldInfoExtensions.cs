@@ -11,11 +11,14 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static string CreatePropertyName(this IFieldInfo instance, IDataObjectInfo dataObjectInfo)
             => instance.Name == dataObjectInfo.Name
-                ? string.Format(dataObjectInfo.Metadata.GetMetadataStringValue(Shared.PropertyNameDeconflictionFormatStringName, "{0}Property"), instance.Name).Sanitize()
+                ? string.Format(dataObjectInfo.Metadata.GetMetadataStringValue(Shared.PropertyNameDeconflictionFormatString, "{0}Property"), instance.Name).Sanitize()
                 : instance.Name.Sanitize();
 
         internal static bool IsRequired(this IFieldInfo instance)
             => instance.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
+
+        internal static bool SkipFieldOnFind(this IFieldInfo instance)
+            => instance.Metadata.Any(md => md.Name == DbCommand.SkipFieldOnFind);
 
         internal static ParameterBuilder ToParameterBuilder(this IFieldInfo instance)
             => new ParameterBuilder().WithName(instance.Name.Sanitize().ToPascalCase())
