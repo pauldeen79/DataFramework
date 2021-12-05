@@ -220,6 +220,17 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<ClassMethodBuilder> GetEntityClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
+            => ClassMethods(instance,
+                            instance.Name,
+                            GetEntityEqualsProperties(instance),
+                            instance.Fields,
+                            entityClassType);
+
+        private static IEnumerable<ClassMethodBuilder> ClassMethods(IDataObjectInfo instance,
+                                                                    string instanceName,
+                                                                    string equalsProperties,
+                                                                    IEnumerable<IFieldInfo> fields,
+                                                                    EntityClassType entityClassType)
         {
             if (entityClassType != EntityClassType.ImmutableClass)
             {
@@ -230,18 +241,18 @@ namespace DataFramework.ModelFramework.Extensions
                                                  .WithType(typeof(bool))
                                                  .WithOverride()
                                                  .AddParameter("obj", typeof(object))
-                                                 .AddLiteralCodeStatements($"return Equals(obj as {instance.Name});");
+                                                 .AddLiteralCodeStatements($"return Equals(obj as {instanceName});");
 
             yield return new ClassMethodBuilder().WithName("Equals")
                                                  .WithType(typeof(bool))
-                                                 .AddParameter("other", instance.Name)
-                                                 .AddLiteralCodeStatements($"return other != null &&{Environment.NewLine}       {GetEntityEqualsProperties(instance)};");
+                                                 .AddParameter("other", instanceName)
+                                                 .AddLiteralCodeStatements($"return other != null &&{Environment.NewLine}       {equalsProperties};");
 
             yield return new ClassMethodBuilder().WithName("GetHashCode")
                                                  .WithType(typeof(int))
                                                  .WithOverride()
                                                  .AddLiteralCodeStatements("int hashCode = 235838129;")
-                                                 .AddLiteralCodeStatements(instance.Fields.Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
+                                                 .AddLiteralCodeStatements(fields.Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
                                                     ? $"hashCode = hashCode * -1521134295 + {f.CreatePropertyName(instance)}.GetHashCode();"
                                                     : $"hashCode = hashCode * -1521134295 + EqualityComparer<{f.TypeName.FixTypeName()}>.Default.GetHashCode({f.CreatePropertyName(instance)});"))
                                                  .AddLiteralCodeStatements("return hashCode;");
@@ -250,16 +261,16 @@ namespace DataFramework.ModelFramework.Extensions
                                                  .WithType(typeof(bool))
                                                  .WithStatic()
                                                  .WithOperator()
-                                                 .AddParameter("left", instance.Name)
-                                                 .AddParameter("right", instance.Name)
-                                                 .AddLiteralCodeStatements($"return EqualityComparer<{instance.Name}>.Default.Equals(left, right);");
+                                                 .AddParameter("left", instanceName)
+                                                 .AddParameter("right", instanceName)
+                                                 .AddLiteralCodeStatements($"return EqualityComparer<{instanceName}>.Default.Equals(left, right);");
 
             yield return new ClassMethodBuilder().WithName("!=")
                                                  .WithType(typeof(bool))
                                                  .WithStatic()
                                                  .WithOperator()
-                                                 .AddParameter("left", instance.Name)
-                                                 .AddParameter("right", instance.Name)
+                                                 .AddParameter("left", instanceName)
+                                                 .AddParameter("right", instanceName)
                                                  .AddLiteralCodeStatements("return !(left == right);");
         }
 

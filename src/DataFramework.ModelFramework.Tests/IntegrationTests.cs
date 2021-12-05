@@ -55,7 +55,7 @@ namespace DataFramework.ModelFramework.Tests
         [InlineData(EntityClassType.ObservablePoco)]
         [InlineData(EntityClassType.Poco)]
         [InlineData(EntityClassType.Record)]
-        public void Can_Create_EntityIdentities(EntityClassType entityClassType)
+        public void Can_Generate_EntityIdentities(EntityClassType entityClassType)
         {
             // Arrange
             var input = CreateDataObjectInfoBuilder(entityClassType)

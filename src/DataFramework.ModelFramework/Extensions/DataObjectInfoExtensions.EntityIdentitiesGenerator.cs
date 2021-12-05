@@ -53,49 +53,12 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<ClassMethodBuilder> GetEntityIdentityClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
-        {
-            if (entityClassType != EntityClassType.ImmutableClass)
-            {
-                yield break;
-            }
-
-            yield return new ClassMethodBuilder().WithName("Equals")
-                                                 .WithType(typeof(bool))
-                                                 .WithOverride()
-                                                 .AddParameter("obj", typeof(object))
-                                                 .AddLiteralCodeStatements($"return Equals(obj as {instance.Name}Identity);");
-
-            yield return new ClassMethodBuilder().WithName("Equals")
-                                                 .WithType(typeof(bool))
-                                                 .AddParameter("other", instance.Name + "Identity")
-                                                 .AddLiteralCodeStatements($"return other != null &&{Environment.NewLine}       {GetIdentityEntityEqualsProperties(instance)};");
-
-            yield return new ClassMethodBuilder().WithName("GetHashCode")
-                                                 .WithType(typeof(int))
-                                                 .WithOverride()
-                                                 .AddLiteralCodeStatements("int hashCode = 235838129;")
-                                                 .AddLiteralCodeStatements(instance.Fields.Where(f => f.IsIdentityField && !f.SkipFieldOnFind()).Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
-                                                     ? $"hashCode = hashCode * -1521134295 + {f.Name.Sanitize()}.GetHashCode();"
-                                                     : $"hashCode = hashCode * -1521134295 + EqualityComparer<{f.TypeName.FixTypeName()}>.Default.GetHashCode({f.Name.Sanitize()});"))
-                                                 .AddLiteralCodeStatements("return hashCode;");
-
-            yield return new ClassMethodBuilder().WithName("==")
-                                                 .WithType(typeof(bool))
-                                                 .WithStatic()
-                                                 .WithOperator()
-                                                 .AddParameter("left", instance.Name + "Identity")
-                                                 .AddParameter("right", instance.Name + "Identity")
-                                                 .AddLiteralCodeStatements($"return EqualityComparer<{instance.Name}Identity>.Default.Equals(left, right);");
-
-            yield return new ClassMethodBuilder().WithName("!=")
-                                                 .WithType(typeof(bool))
-                                                 .WithStatic()
-                                                 .WithOperator()
-                                                 .AddParameter("left", instance.Name + "Identity")
-                                                 .AddParameter("right", instance.Name + "Identity")
-                                                 .AddLiteralCodeStatements("return !(left == right);");
-        }
-
+            => ClassMethods(instance,
+                            $"{instance.Name}Identity",
+                            GetIdentityEntityEqualsProperties(instance),
+                            instance.Fields.Where(f => f.IsIdentityField && !f.SkipFieldOnFind()),
+                            entityClassType);
+        
         private static IEnumerable<ClassConstructorBuilder> GetEntityIdentityClassConstructors(IDataObjectInfo instance)
         {
             yield return new ClassConstructorBuilder().AddParameter("instance", instance.GetEntityFullName())
