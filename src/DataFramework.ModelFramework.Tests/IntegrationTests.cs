@@ -4,6 +4,7 @@ using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
 using ModelFramework.Generators.Objects;
+using ModelFramework.Objects.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
@@ -25,7 +26,7 @@ namespace DataFramework.ModelFramework.Tests
                 .Build();
 
             // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(), new[] { input }, additionalParameters: new { EnableNullableContext = true });
+            var actual = GenerateCode(input);
 
             // Assert
             actual.Should().NotBeEmpty();
@@ -44,7 +45,7 @@ namespace DataFramework.ModelFramework.Tests
                 .Build();
 
             // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(), new[] { input }, additionalParameters: new { EnableNullableContext = true });
+            var actual = GenerateCode(input);
 
             // Assert
             actual.Should().NotBeEmpty();
@@ -63,11 +64,20 @@ namespace DataFramework.ModelFramework.Tests
                 .Build();
 
             // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(), new[] { input }, additionalParameters: new { EnableNullableContext = true });
+            var actual = GenerateCode(input);
 
             // Assert
             actual.Should().NotBeEmpty();
         }
+
+        private static string GenerateCode(IClass input)
+            => TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(),
+                                                      new[] { input },
+                                                      additionalParameters: new
+                                                      {
+                                                          EnableNullableContext = true,
+                                                          CreateCodeGenerationHeader = true
+                                                      });
 
         private static DataObjectInfo CreateDataObjectInfoBuilder(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
