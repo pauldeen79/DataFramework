@@ -23,7 +23,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddInterfaces(GetEntityIdentityClassTypeInterfaces(instance, entityClassType))
                 .AddProperties(GetEntityIdentityClassProperties(instance, renderMetadataAsAttributes, entityClassType))
                 .AddMethods(GetEntityIdentityClassMethods(instance, entityClassType))
-                .AddConstructors(GetEntityIdentityClassConstructors(instance))
+                .AddConstructors(GetEntityIdentityClassConstructors(instance, entityClassType))
                 .AddAttributes(GetEntityIdentityClassAttributes(instance, renderMetadataAsAttributes));
         }
 
@@ -54,11 +54,16 @@ namespace DataFramework.ModelFramework.Extensions
                             instance.Fields.Where(f => f.IsIdentityField && !f.SkipFieldOnFind()),
                             entityClassType);
         
-        private static IEnumerable<ClassConstructorBuilder> GetEntityIdentityClassConstructors(IDataObjectInfo instance)
+        private static IEnumerable<ClassConstructorBuilder> GetEntityIdentityClassConstructors(IDataObjectInfo instance, EntityClassType entityClassType)
         {
             yield return new ClassConstructorBuilder().AddParameter("instance", instance.GetEntityFullName())
                                                       .AddLiteralCodeStatements(instance.Fields.Where(f => f.IsIdentityField && !f.SkipFieldOnFind()).Select(x => $"{x.Name.Sanitize()} = instance.{x.CreatePropertyName(instance)};"))
                                                       .AddLiteralCodeStatements(GetValidationCodeStatements());
+
+            if (!entityClassType.IsImmutable())
+            {
+                yield break;
+            }
 
             yield return new ClassConstructorBuilder()
                 .AddParameters(instance.Fields.Where(f => f.IsIdentityField && !f.SkipFieldOnFind()).Select(f => f.ToParameterBuilder()))
