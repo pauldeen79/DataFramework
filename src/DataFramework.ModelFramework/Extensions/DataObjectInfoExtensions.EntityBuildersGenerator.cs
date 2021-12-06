@@ -104,6 +104,7 @@ namespace DataFramework.ModelFramework.Extensions
                     new ClassPropertyBuilder()
                         .WithName($"{field.Name}Original")
                         .Fill(field)
+                        .WithIsNullable()
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, true))
                         .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, true))));
     }

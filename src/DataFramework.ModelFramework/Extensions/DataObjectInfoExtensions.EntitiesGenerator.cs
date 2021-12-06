@@ -74,7 +74,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new ClassFieldBuilder()
                     .WithName($"_{field.Name.Sanitize().ToPascalCase()}Original")
                     .WithTypeName(field.TypeName)
-                    .WithIsNullable(field.IsNullable)
+                    .WithIsNullable(true)
                     .WithVisibility(Visibility.Private);
             }
 
@@ -104,7 +104,7 @@ namespace DataFramework.ModelFramework.Extensions
                     new ClassPropertyBuilder()
                         .WithName($"{field.Name}Original")
                         .Fill(field)
-                        .WithIsNullable(true)
+                        .WithIsNullable()
                         .WithHasSetter(entityClassType.HasPropertySetter())
                         .AddAttributes(entityClassType.IsImmutable()
                             ? Enumerable.Empty<AttributeBuilder>()
@@ -323,7 +323,7 @@ namespace DataFramework.ModelFramework.Extensions
                 }
 
                 yield return new FieldInfoBuilder(field)
-                    .WithName($"{field.Name.Sanitize()}Original")
+                    .WithName($"{field.Name}Original")
                     .WithIsNullable()
                     .WithDefaultValue(new Literal("default"))
                     .Build();
