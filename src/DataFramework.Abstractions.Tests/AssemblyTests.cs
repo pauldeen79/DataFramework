@@ -53,8 +53,7 @@ namespace DataFramework.Abstractions.Tests
         public void CanGenerateBuildersForContracts()
         {
             // Arrange
-            var settings = new ImmutableBuilderClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection",
-                                                             addProperties: true);
+            var settings = new ImmutableBuilderClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection");
             var model = new[]
             {
                 typeof(IDataObjectInfo),

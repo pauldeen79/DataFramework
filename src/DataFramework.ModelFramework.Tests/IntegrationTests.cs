@@ -5,6 +5,8 @@ using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
 using ModelFramework.Generators.Objects;
 using ModelFramework.Objects.Contracts;
+using ModelFramework.Objects.Extensions;
+using ModelFramework.Objects.Settings;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
@@ -21,12 +23,13 @@ namespace DataFramework.ModelFramework.Tests
         public void Can_Generate_Entities(EntityClassType entityClassType)
         {
             // Arrange
+            var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityClassBuilder(GeneratorSettings.Default)
+                .ToEntityClassBuilder(settings)
                 .Build();
 
             // Act
-            var actual = GenerateCode(input);
+            var actual = GenerateCode(input, settings);
 
             // Assert
             actual.Should().NotBeEmpty();
@@ -40,12 +43,36 @@ namespace DataFramework.ModelFramework.Tests
         public void Can_Generate_EntityBuilders(EntityClassType entityClassType)
         {
             // Arrange
+            var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityBuilderClassBuilder(GeneratorSettings.Default)
+                .ToEntityBuilderClassBuilder(settings)
                 .Build();
 
             // Act
-            var actual = GenerateCode(input);
+            var actual = GenerateCode(input, settings);
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        [Theory]
+        [InlineData(EntityClassType.ImmutableClass)]
+        [InlineData(EntityClassType.ObservablePoco)]
+        [InlineData(EntityClassType.Poco)]
+        [InlineData(EntityClassType.Record)]
+        public void Can_Generate_EntityBuilders_Using_ModelFramework(EntityClassType entityClassType)
+        {
+            // Arrange
+            var settings = GeneratorSettings.Default;
+            var input = CreateDataObjectInfoBuilder(entityClassType)
+                .ToEntityClassBuilder(settings)
+                .Build()
+                .ToImmutableBuilderClass(new ImmutableBuilderClassSettings(addCopyConstructor: true,
+                                                                           poco: entityClassType.HasPropertySetter(),
+                                                                           addNullChecks: settings.EnableNullableContext));
+
+            // Act
+            var actual = GenerateCode(input, settings);
 
             // Assert
             actual.Should().NotBeEmpty();
@@ -59,24 +86,25 @@ namespace DataFramework.ModelFramework.Tests
         public void Can_Generate_EntityIdentities(EntityClassType entityClassType)
         {
             // Arrange
+            var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityIdentityClassBuilder(GeneratorSettings.Default)
+                .ToEntityIdentityClassBuilder(settings)
                 .Build();
 
             // Act
-            var actual = GenerateCode(input);
+            var actual = GenerateCode(input, settings);
 
             // Assert
             actual.Should().NotBeEmpty();
         }
 
-        private static string GenerateCode(IClass input)
+        private static string GenerateCode(IClass input, GeneratorSettings settings)
             => TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(),
                                                       new[] { input },
                                                       additionalParameters: new
                                                       {
-                                                          EnableNullableContext = true,
-                                                          CreateCodeGenerationHeader = true
+                                                          EnableNullableContext = settings.EnableNullableContext,
+                                                          CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders
                                                       });
 
         private static DataObjectInfo CreateDataObjectInfoBuilder(EntityClassType entityClassType)

@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.2.19" />
-    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.2.19" />
+    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.2.21" />
+    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.2.21" />
   </ItemGroup>
 
   <ItemGroup>
