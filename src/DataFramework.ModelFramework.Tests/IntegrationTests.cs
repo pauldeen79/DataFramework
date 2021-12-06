@@ -25,8 +25,7 @@ namespace DataFramework.ModelFramework.Tests
             // Arrange
             var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityClassBuilder(settings)
-                .Build();
+                .ToEntityClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -45,8 +44,7 @@ namespace DataFramework.ModelFramework.Tests
             // Arrange
             var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityBuilderClassBuilder(settings)
-                .Build();
+                .ToEntityBuilderClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -65,11 +63,15 @@ namespace DataFramework.ModelFramework.Tests
             // Arrange
             var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityClassBuilder(settings)
-                .Build()
+                .ToEntityClass(settings)
                 .ToImmutableBuilderClass(new ImmutableBuilderClassSettings(addCopyConstructor: true,
                                                                            poco: entityClassType.HasPropertySetter(),
                                                                            addNullChecks: settings.EnableNullableContext));
+
+            if (entityClassType == EntityClassType.ObservablePoco)
+            {
+                input = input.ToObservableClass();
+            }
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -88,8 +90,7 @@ namespace DataFramework.ModelFramework.Tests
             // Arrange
             var settings = GeneratorSettings.Default;
             var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityIdentityClassBuilder(settings)
-                .Build();
+                .ToEntityIdentityClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);

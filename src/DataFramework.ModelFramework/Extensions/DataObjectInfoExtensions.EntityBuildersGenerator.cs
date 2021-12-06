@@ -4,11 +4,15 @@ using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.Contracts;
 
 namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
+        public static IClass ToEntityBuilderClass(this IDataObjectInfo instance, GeneratorSettings settings)
+            => instance.ToEntityBuilderClassBuilder(settings).Build();
+        
         public static ClassBuilder ToEntityBuilderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         {
             var entityClassType = instance.GetEntityClassType(settings.DefaultEntityClassType);

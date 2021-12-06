@@ -16,6 +16,9 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
+        public static IClass ToEntityClass(this IDataObjectInfo instance, GeneratorSettings settings)
+            => instance.ToEntityClassBuilder(settings).Build();
+
         public static ClassBuilder ToEntityClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         {
             var entityClassType = instance.GetEntityClassType(settings.DefaultEntityClassType);
@@ -93,10 +96,9 @@ namespace DataFramework.ModelFramework.Extensions
                         .WithName(field.CreatePropertyName(instance))
                         .Fill(field)
                         .WithHasSetter(entityClassType.HasPropertySetter())
-                        .AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
-                            .WithName(MFCommon.CustomTemplateName)
-                            .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate"))
-                            .Build())
+                        //.AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
+                        //    .WithName(MFCommon.CustomTemplateName)
+                        //    .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate")))
                         .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false, false))
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, false))
                         .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, false)))
