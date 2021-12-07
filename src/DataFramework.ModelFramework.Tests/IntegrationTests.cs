@@ -68,11 +68,6 @@ namespace DataFramework.ModelFramework.Tests
                                                                            poco: entityClassType.HasPropertySetter(),
                                                                            addNullChecks: settings.EnableNullableContext));
 
-            if (entityClassType == EntityClassType.ObservablePoco)
-            {
-                input = input.ToObservableClass();
-            }
-
             // Act
             var actual = GenerateCode(input, settings);
 
