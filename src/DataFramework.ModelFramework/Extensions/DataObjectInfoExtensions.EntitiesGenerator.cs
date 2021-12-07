@@ -10,7 +10,6 @@ using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 using ModelFramework.Objects.Extensions;
-using MFCommon = ModelFramework.Common.MetadataNames;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -99,9 +98,9 @@ namespace DataFramework.ModelFramework.Extensions
                         //.AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
                         //    .WithName(MFCommon.CustomTemplateName)
                         //    .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate")))
-                        .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false, false))
-                        .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, false))
-                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, false)))
+                        .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false))
+                        .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
+                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType)))
                 .Concat(instance.GetUpdateConcurrencyCheckFields().Select(field =>
                     new ClassPropertyBuilder()
                         .WithName($"{field.Name}Original")
@@ -131,17 +130,15 @@ namespace DataFramework.ModelFramework.Extensions
                                  $"return _{field.Name.Sanitize().ToPascalCase()}Original;");
 
         private static IEnumerable<ICodeStatementBuilder> GetSetterCodeStatements(IFieldInfo field,
-                                                                                  EntityClassType entityClassType,
-                                                                                  bool forBuilder)
-            => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement, !forBuilder
-                ? $"_{field.Name.Sanitize().ToPascalCase()} = value;"
+                                                                                  EntityClassType entityClassType)
+            => GetCodeStatements(field, entityClassType, Entities.PropertySetterCodeStatement,
+                $"_{field.Name.Sanitize().ToPascalCase()} = value;"
                     + Environment.NewLine
                     + string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name.Sanitize())
-                : string.Empty);
+                );
 
         private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatements(IFieldInfo field,
-                                                                                  EntityClassType entityClassType,
-                                                                                  bool forBuilder)
+                                                                                  EntityClassType entityClassType)
         {
             var statements = field.Metadata.GetMetadataStringValues(Entities.PropertyGetterCodeStatement).ToList();
             if (!statements.Any())
@@ -149,7 +146,7 @@ namespace DataFramework.ModelFramework.Extensions
                 statements.AddRange(field.Metadata.GetMetadataStringValues(Entities.ComputedTemplate));
             }
 
-            if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco && !forBuilder)
+            if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco)
             {
                 statements.Add($"return _{field.Name.Sanitize().ToPascalCase()};");
             }
@@ -173,7 +170,6 @@ namespace DataFramework.ModelFramework.Extensions
                                                                                       string instanceName,
                                                                                       EntityClassType entityClassType,
                                                                                       RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                                      bool forBuilder,
                                                                                       bool addReadOnlyAttribute)
         {
             if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.None)
@@ -196,14 +192,12 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DisplayName", field.DisplayName);
             }
 
-            if ((field.IsReadOnly
-                && !forBuilder
-                && !entityClassType.IsImmutable()) || addReadOnlyAttribute)
+            if ((field.IsReadOnly && !entityClassType.IsImmutable()) || addReadOnlyAttribute)
             {
                 yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true);
             }
 
-            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName && !forBuilder)
+            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
             {
                 //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
                 //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)

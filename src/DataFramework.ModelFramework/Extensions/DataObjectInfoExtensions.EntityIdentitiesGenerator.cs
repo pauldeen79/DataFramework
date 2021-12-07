@@ -97,9 +97,9 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithName(field.Name)
                     .Fill(field)
                     .WithHasSetter(entityClassType.HasPropertySetter())
-                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType, false))
-                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType, false))
-                    .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false, false)));
+                    .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
+                    .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType))
+                    .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false)));
         }
     }
 }

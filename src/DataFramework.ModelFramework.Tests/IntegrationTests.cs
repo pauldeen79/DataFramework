@@ -39,25 +39,6 @@ namespace DataFramework.ModelFramework.Tests
         [InlineData(EntityClassType.ObservablePoco)]
         [InlineData(EntityClassType.Poco)]
         [InlineData(EntityClassType.Record)]
-        public void Can_Generate_EntityBuilders(EntityClassType entityClassType)
-        {
-            // Arrange
-            var settings = GeneratorSettings.Default;
-            var input = CreateDataObjectInfoBuilder(entityClassType)
-                .ToEntityBuilderClass(settings);
-
-            // Act
-            var actual = GenerateCode(input, settings);
-
-            // Assert
-            actual.Should().NotBeEmpty();
-        }
-
-        [Theory]
-        [InlineData(EntityClassType.ImmutableClass)]
-        [InlineData(EntityClassType.ObservablePoco)]
-        [InlineData(EntityClassType.Poco)]
-        [InlineData(EntityClassType.Record)]
         public void Can_Generate_EntityBuilders_Using_ModelFramework(EntityClassType entityClassType)
         {
             // Arrange
