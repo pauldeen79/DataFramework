@@ -43,11 +43,14 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var settings = GeneratorSettings.Default;
-            var input = CreateDataObjectInfoBuilder(entityClassType)
+            var dataObjectInfo = CreateDataObjectInfoBuilder(entityClassType);
+            var input = dataObjectInfo
                 .ToEntityClass(settings)
-                .ToImmutableBuilderClass(new ImmutableBuilderClassSettings(addCopyConstructor: true,
-                                                                           poco: entityClassType.HasPropertySetter(),
-                                                                           addNullChecks: settings.EnableNullableContext));
+                .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(addCopyConstructor: true,
+                                                                                  poco: entityClassType.HasPropertySetter(),
+                                                                                  addNullChecks: settings.EnableNullableContext))
+                .WithNamespace(dataObjectInfo.GetEntityBuildersNamespace())
+                .Build();
 
             // Act
             var actual = GenerateCode(input, settings);

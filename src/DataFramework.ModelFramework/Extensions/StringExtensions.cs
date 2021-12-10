@@ -17,6 +17,43 @@ namespace DataFramework.ModelFramework.Extensions
             return type != null && _readerMethodNames.ContainsKey(type);
         }
 
+        internal static string GetSqlReaderMethodName(this string instance, bool isNullable)
+        {
+            if (instance.IsRequiredEnum() && !isNullable)
+            {
+                // assumption: enum is int32.
+                return "GetInt32";
+            }
+
+            if (instance.IsOptionalEnum() || (instance.IsRequiredEnum() && isNullable))
+            {
+                // assumption: enum is int32.
+                return "GetNullableInt32";
+            }
+
+            var type = Type.GetType(instance);
+            if (type == null)
+            {
+                return "GetValue";
+            }
+            if (!_readerMethodNames.TryGetValue(type, out var name))
+            {
+                return "GetValue";
+            }
+
+            if (isNullable && !name.Contains("Nullable"))
+            {
+                return name.Replace("Get", "GetNullable");
+            }
+
+            return name;
+        }
+
+        internal static string ReplaceProperties(this string sqlType, string abstractSqlType)
+            => sqlType.StartsWith(abstractSqlType, StringComparison.OrdinalIgnoreCase) && !sqlType.Equals(abstractSqlType, StringComparison.OrdinalIgnoreCase)
+                ? abstractSqlType
+                : sqlType;
+
         private static Dictionary<Type, string> _readerMethodNames = new Dictionary<Type, string>
         {
             { typeof(string), "GetString" },
@@ -42,37 +79,5 @@ namespace DataFramework.ModelFramework.Extensions
             { typeof(DateTime?), "GetNullableDateTime" },
             { typeof(byte[]), "GetByteArray" },
         };
-
-        internal static string GetSqlReaderMethodName(this string instance, bool isNullable)
-        {
-            if (instance.IsRequiredEnum() && !isNullable)
-            {
-                // assumption: enum is int32.
-                return "GetInt32";
-            }
-
-            if (instance.IsOptionalEnum() || (instance.IsRequiredEnum() && isNullable))
-            {
-                // assumption: enum is int32.
-                return "GetNullableInt32";
-            }
-
-            var type = Type.GetType(instance);
-            if (type == null)
-            {
-                return "GetValue";
-            }
-            if (!_readerMethodNames.TryGetValue(type, out var name))
-            {
-                return "GetValue";
-            }
-
-            if (isNullable)
-            {
-                return name.Replace("Get", "GetNullable");
-            }
-
-            return name;
-        }
     }
 }

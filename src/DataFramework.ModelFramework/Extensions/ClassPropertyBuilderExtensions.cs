@@ -9,16 +9,16 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static ClassPropertyBuilder Fill(this ClassPropertyBuilder instance, IFieldInfo field)
             => instance
-                .WithTypeName(field.Metadata.GetMetadataStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
-                .WithStatic(field.Metadata.GetMetadataStringValue(Entities.Static).IsTrue())
-                .WithVirtual(field.Metadata.GetMetadataStringValue(Entities.Virtual).IsTrue())
-                .WithAbstract(field.Metadata.GetMetadataStringValue(Entities.Abstract).IsTrue())
-                .WithProtected(field.Metadata.GetMetadataStringValue(Entities.Protected).IsTrue())
-                .WithOverride(field.Metadata.GetMetadataStringValue(Entities.Override).IsTrue())
+                .WithTypeName(field.Metadata.GetStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
+                .WithStatic(field.Metadata.GetStringValue(Entities.Static).IsTrue())
+                .WithVirtual(field.Metadata.GetStringValue(Entities.Virtual).IsTrue())
+                .WithAbstract(field.Metadata.GetStringValue(Entities.Abstract).IsTrue())
+                .WithProtected(field.Metadata.GetStringValue(Entities.Protected).IsTrue())
+                .WithOverride(field.Metadata.GetStringValue(Entities.Override).IsTrue())
                 .WithIsNullable(field.IsNullable)
-                .WithVisibility(field.Metadata.GetMetadataValue(Entities.Visibility, field.IsVisible.ToVisibility()))
-                .WithGetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, field.IsVisible.ToVisibility()))
-                .WithSetterVisibility(field.Metadata.GetMetadataValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, field.IsVisible.ToVisibility()))
+                .WithVisibility(field.Metadata.GetValue(Entities.Visibility, () => field.IsVisible.ToVisibility()))
+                .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, () => field.IsVisible.ToVisibility()))
+                .WithSetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, () => field.IsVisible.ToVisibility()))
                 .AddMetadata(field.Metadata.Convert());
     }
 }

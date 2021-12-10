@@ -153,7 +153,6 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             actual.Should().Be("GetValue");
         }
 
-
         [Theory]
         [InlineData(typeof(string), false, "GetString")]
         [InlineData(typeof(int), false, "GetInt32")]
@@ -174,15 +173,5 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Assert
             actual.Should().Be(expectedResult);
         }
-
-        //[Fact]
-        //public void CreatePropertyName_Returns_Same_Value_When_Not_Equal_To_Entity()
-        //{
-        //}
-
-        //[Fact]
-        //public void CreatePropertyName_Returns_DeconflictionName_When_Equal_To_Entity()
-        //{
-        //}
     }
 }

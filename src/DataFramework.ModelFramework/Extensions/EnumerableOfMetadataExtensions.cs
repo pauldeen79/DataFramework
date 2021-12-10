@@ -8,31 +8,42 @@ namespace DataFramework.ModelFramework.Extensions
 {
     internal static class EnumerableOfMetadataExtensions
     {
-        internal static string GetMetadataStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
-            => metadata.GetMetadataValue<object?>(metadataName, defaultValue).ToStringWithDefault(defaultValue);
+        internal static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
+            => metadata.GetStringValue(metadataName, () => defaultValue);
 
-        internal static T GetMetadataValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, T defaultValue)
+        internal static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<string> defaultValueDelegate)
+            => metadata.GetValue<object?>(metadataName, defaultValueDelegate)
+                .ToStringWithDefault(defaultValueDelegate())
+                .WhenNullOrEmpty(defaultValueDelegate());
+
+        internal static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, bool defaultValue = false)
+            => metadata.GetBooleanValue(metadataName, () => defaultValue);
+
+        internal static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<bool> defaultValueDelegate)
+            => metadata.GetValue<object?>(metadataName, () => defaultValueDelegate.Invoke()).ToStringWithDefault().IsTrue();
+
+        internal static T GetValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, Func<T> defaultValueDelegate)
         {
             var metadataItem = metadata.FirstOrDefault(md => md.Name == metadataName);
 
             if (metadataItem == null)
             {
-                return defaultValue;
+                return defaultValueDelegate();
             }
 
-            return CreateMetadata(metadataItem, defaultValue);
+            return CreateMetadata(metadataItem, defaultValueDelegate);
         }
 
-        internal static IEnumerable<string> GetMetadataStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
-            => metadata.GetMetadataValues<object?>(metadataName).Select(x => x.ToStringWithDefault());
+        internal static IEnumerable<string> GetStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
+            => metadata.GetValues<object?>(metadataName).Select(x => x.ToStringWithDefault());
 
-        internal static IEnumerable<T> GetMetadataValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
+        internal static IEnumerable<T> GetValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata
                 .Where(md => md.Name == metadataName)
                 .Select(md => md.Value)
                 .OfType<T>();
 
-        private static T CreateMetadata<T>(IMetadata metadataItem, T defaultValue)
+        private static T CreateMetadata<T>(IMetadata metadataItem, Func<T> defaultValueDelegate)
         {
             if (metadataItem.Value is T t)
             {
@@ -45,12 +56,12 @@ namespace DataFramework.ModelFramework.Extensions
                 {
                     var val = metadataItem.Value.ToStringWithNullCheck();
                     return string.IsNullOrEmpty(val)
-                        ? defaultValue
+                        ? defaultValueDelegate()
                         : (T)Enum.Parse(typeof(T), val, true);
                 }
                 catch
                 {
-                    return defaultValue;
+                    return defaultValueDelegate();
                 }
             }
 
@@ -60,12 +71,12 @@ namespace DataFramework.ModelFramework.Extensions
                 {
                     var val = metadataItem.Value.ToStringWithNullCheck();
                     return string.IsNullOrEmpty(val)
-                        ? defaultValue
+                        ? defaultValueDelegate()
                         : (T)Enum.Parse(typeof(T).GetGenericArguments()[0], val, true);
                 }
                 catch
                 {
-                    return defaultValue;
+                    return defaultValueDelegate();
                 }
             }
 

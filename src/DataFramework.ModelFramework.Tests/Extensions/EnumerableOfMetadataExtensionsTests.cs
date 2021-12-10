@@ -17,7 +17,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var sut = new DataObjectInfoBuilder().WithName("TestEntity").Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.Record);
@@ -35,7 +35,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.Record);
@@ -51,7 +51,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.Record);
@@ -67,7 +67,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -83,7 +83,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -99,7 +99,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -112,7 +112,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var sut = new DataObjectInfoBuilder().WithName("TestEntity").Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", null);
+            var actual = sut.Metadata.GetValue("MyName", () => default(EntityClassType?));
 
             // Assert
             actual.Should().BeNull();
@@ -130,7 +130,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", null);
+            var actual = sut.Metadata.GetValue("MyName", () => default(EntityClassType?));
 
             // Assert
             actual.Should().BeNull();
@@ -146,7 +146,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", null);
+            var actual = sut.Metadata.GetValue("MyName", () => default(EntityClassType?));
 
             // Assert
             actual.Should().BeNull();
@@ -162,7 +162,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue<EntityClassType?>("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -178,7 +178,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue<EntityClassType?>("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -194,7 +194,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<EntityClassType?>("MyName", EntityClassType.Record);
+            var actual = sut.Metadata.GetValue<EntityClassType?>("MyName", () => EntityClassType.Record);
 
             // Assert
             actual.Should().Be(EntityClassType.ObservablePoco);
@@ -210,7 +210,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue<string>("MyName", null);
+            var actual = sut.Metadata.GetValue("MyName", () => default(string));
 
             // Assert
             actual.Should().Be("1");
@@ -226,7 +226,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
 
             // Act
-            var actual = sut.Metadata.GetMetadataValue("MyName", int.MinValue);
+            var actual = sut.Metadata.GetValue("MyName", () => int.MinValue);
 
             // Assert
             actual.Should().Be(1);

@@ -89,7 +89,7 @@ namespace DataFramework.Core.Builders
 
         public FieldInfoBuilder WithType(Type? type)
         {
-            TypeName = type?.FullName;
+            TypeName = type?.AssemblyQualifiedName;
             return this;
         }
 

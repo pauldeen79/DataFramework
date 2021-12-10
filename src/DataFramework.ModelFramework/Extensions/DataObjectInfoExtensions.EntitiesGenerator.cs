@@ -27,7 +27,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName(instance.Name)
                 .WithNamespace(instance.GetEntitiesNamespace())
                 .FillFrom(instance)
-                .WithBaseClass(instance.Metadata.GetMetadataStringValue(Entities.BaseClass))
+                .WithBaseClass(instance.Metadata.GetStringValue(Entities.BaseClass))
                 .WithRecord(entityClassType == EntityClassType.Record)
                 .AddInterfaces(instance.Metadata
                     .Where(md => md.Name == Entities.Interfaces)
@@ -82,7 +82,7 @@ namespace DataFramework.ModelFramework.Extensions
 
             yield return new ClassFieldBuilder()
                 .WithName(nameof(INotifyPropertyChanged.PropertyChanged))
-                .WithTypeName(typeof(PropertyChangedEventHandler).FullName)
+                .WithType(typeof(PropertyChangedEventHandler))
                 .WithEvent()
                 .WithVisibility(Visibility.Public);
         }
@@ -95,9 +95,6 @@ namespace DataFramework.ModelFramework.Extensions
                         .WithName(field.CreatePropertyName(instance))
                         .Fill(field)
                         .WithHasSetter(entityClassType.HasPropertySetter())
-                        //.AddMetadata(new global::ModelFramework.Common.Builders.MetadataBuilder()
-                        //    .WithName(MFCommon.CustomTemplateName)
-                        //    .WithValue(field.Metadata.GetMetadataStringValue(MFCommon.CustomTemplateName, "CSharpClassGenerator.DefaultPropertyTemplate")))
                         .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false))
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
                         .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType)))
@@ -140,10 +137,10 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatements(IFieldInfo field,
                                                                                   EntityClassType entityClassType)
         {
-            var statements = field.Metadata.GetMetadataStringValues(Entities.PropertyGetterCodeStatement).ToList();
+            var statements = field.Metadata.GetStringValues(Entities.PropertyGetterCodeStatement).ToList();
             if (!statements.Any())
             {
-                statements.AddRange(field.Metadata.GetMetadataStringValues(Entities.ComputedTemplate));
+                statements.AddRange(field.Metadata.GetStringValues(Entities.ComputedTemplate));
             }
 
             if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco)
@@ -158,7 +155,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                                             string metadataName,
                                                                             string defaultForObservable)
         {
-            var statements = field.Metadata.GetMetadataStringValues(metadataName).ToList();
+            var statements = field.Metadata.GetStringValues(metadataName).ToList();
             if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco && defaultForObservable != string.Empty)
             {
                 statements.Add(defaultForObservable);
@@ -204,7 +201,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
             }
 
-            foreach (var attribute in field.Metadata.GetMetadataValues<IAttribute>(Entities.EntitiesAttribute))
+            foreach (var attribute in field.Metadata.GetValues<IAttribute>(Entities.EntitiesAttribute))
             {
                 yield return new AttributeBuilder(attribute);
             }

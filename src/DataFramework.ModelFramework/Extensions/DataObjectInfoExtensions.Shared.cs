@@ -14,13 +14,13 @@ namespace DataFramework.ModelFramework.Extensions
         internal static EntityClassType GetEntityClassType(this IDataObjectInfo instance, EntityClassType defaultValue)
             => instance
                 .Metadata
-                .GetMetadataValue(Entities.EntityClassType, defaultValue);
+                .GetValue(Entities.EntityClassType, () => defaultValue);
 
         internal static RenderMetadataAsAttributesType GetRenderMetadataAsAttributesType(this IDataObjectInfo instance,
                                                                                          RenderMetadataAsAttributesType defaultValue)
             => instance
                 .Metadata
-                .GetMetadataValue(Entities.RenderMetadataAsAttributesType, defaultValue);
+                .GetValue(Entities.RenderMetadataAsAttributesType, () => defaultValue);
 
         internal static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
         {
@@ -48,19 +48,19 @@ namespace DataFramework.ModelFramework.Extensions
                 && concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields;
 
         internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo dataObjectInfo)
-            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == DbCommand.ConcurrencyCheckBehavior)
-                ? dataObjectInfo.Metadata.First(md => md.Name == DbCommand.ConcurrencyCheckBehavior).Value.ToStringWithNullCheck()
+            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), dataObjectInfo.Metadata.Any(md => md.Name == Database.ConcurrencyCheckBehavior)
+                ? dataObjectInfo.Metadata.First(md => md.Name == Database.ConcurrencyCheckBehavior).Value.ToStringWithNullCheck()
                 : ConcurrencyCheckBehavior.NoFields.ToString());
 
         internal static string GetEntitiesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetMetadataStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
         internal static string GetEntityBuildersNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetMetadataStringValue(Entities.BuildersNamespace)
+            => instance.Metadata.GetStringValue(Entities.BuildersNamespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityIdentitiesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetMetadataStringValue(Entities.IdentitiesNamespace)
+            => instance.Metadata.GetStringValue(Entities.IdentitiesNamespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityFullName(this IDataObjectInfo instance)
@@ -86,7 +86,7 @@ namespace DataFramework.ModelFramework.Extensions
         {
             if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
             {
-                return instance.Metadata.GetMetadataValues<IAttribute>(attributeName).Select(x => new AttributeBuilder(x));
+                return instance.Metadata.GetValues<IAttribute>(attributeName).Select(x => new AttributeBuilder(x));
             }
 
             return Enumerable.Empty<AttributeBuilder>();
