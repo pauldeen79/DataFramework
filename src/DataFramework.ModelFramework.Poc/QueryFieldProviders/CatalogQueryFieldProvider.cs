@@ -20,7 +20,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public IEnumerable<string> GetAllFields()
         {
-            return GetFieldNames().Select(GetDatabaseFieldName).Where(x => x != null).Cast<string>();
+            return GetFieldNames();
         }
 
         private IEnumerable<string> GetFieldNames()
@@ -85,7 +85,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public bool ValidateExpression(IQueryExpression expression)
         {
-            return GetAllFields().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
+            return GetAllFields().Select(GetDatabaseFieldName).OfType<string>().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
