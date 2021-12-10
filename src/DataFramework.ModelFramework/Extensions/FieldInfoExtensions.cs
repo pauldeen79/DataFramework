@@ -20,6 +20,46 @@ namespace DataFramework.ModelFramework.Extensions
         internal static bool IsRequired(this IFieldInfo instance)
             => instance.Metadata.GetValues<IAttribute>(Entities.EntitiesAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
 
+        internal static int? GetStringMaxLength(this IFieldInfo instance)
+        {
+            var maxLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.EntitiesAttribute)
+                                                      .Select(md => md.Value)
+                                                      .OfType<IAttribute>()
+                                                      .FirstOrDefault(a => a.Name == "System.ComponentModel.DataAnnotations.MaxLength");
+
+            var length = AttributeParameterFirstValue(maxLengthAttribute);
+            if (length == null)
+            {
+                var stringLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.EntitiesAttribute)
+                                                             .Select(md => md.Value)
+                                                             .OfType<IAttribute>()
+                                                             .FirstOrDefault(a => a.Name == "System.ComponentModel.DataAnnotations.StringLength");
+                length = AttributeParameterFirstValue(stringLengthAttribute);
+            }
+
+            return length;
+        }
+
+        private static int? AttributeParameterFirstValue(IAttribute attribute)
+        {
+            if (attribute == null)
+            {
+                return null;
+            }
+
+            if (attribute.Parameters.Count == 0)
+            {
+                return null;
+            }
+
+            if (attribute.Parameters.First().Value is int i)
+            {
+                return i;
+            }
+
+            return null;
+        }
+
         internal static bool IsRowVersion(this IFieldInfo instance)
             => instance.Metadata.GetBooleanValue(Database.IsRowVersion);
 
@@ -78,8 +118,7 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetStringValue(Database.FieldAlias, instance.GetDatabaseFieldName());
 
         internal static string GetSqlFieldType(this IFieldInfo instance,
-                                               bool includeSpecificProperties = false,
-                                               int? fieldLength = null)
+                                               bool includeSpecificProperties = false)
         {
             var metadataValue = instance.Metadata.GetStringValue(Database.SqlFieldType);
             if (!string.IsNullOrEmpty(metadataValue))
@@ -91,7 +130,7 @@ namespace DataFramework.ModelFramework.Extensions
 
             if (instance.TypeName == typeof(string).FullName || instance.TypeName == typeof(string).AssemblyQualifiedName)
             {
-                return GetSqlVarcharType(instance, includeSpecificProperties, fieldLength);
+                return GetSqlVarcharType(instance, includeSpecificProperties, 32);
             }
 
             if (instance.TypeName == typeof(decimal).FullName
@@ -160,7 +199,7 @@ namespace DataFramework.ModelFramework.Extensions
                 ? $"decimal({instance.GetSqlNumericPrecision() ?? 8},{instance.GetSqlNumericScale() ?? 0})"
                 : "decimal";
 
-        private static string GetSqlVarcharType(IFieldInfo instance, bool includeSpecificProperties, int? fieldLength)
+        private static string GetSqlVarcharType(IFieldInfo instance, bool includeSpecificProperties, int defaultLength)
         {
             if (!includeSpecificProperties)
             {
@@ -168,9 +207,12 @@ namespace DataFramework.ModelFramework.Extensions
             }
             var length = instance.GetSqlIsStringMaxLength()
                 ? "max"
-                : fieldLength.GetValueOrDefault(32).ToString(CultureInfo.InvariantCulture);
+                : instance.GetSqlStringLength(defaultLength).ToString(CultureInfo.InvariantCulture);
             return $"varchar({length})";
         }
+
+        private static int GetSqlStringLength(this IFieldInfo instance, int defaultLength)
+            => instance.Metadata.GetValue(Database.SqlStringLength, () => instance.GetStringMaxLength() ?? defaultLength);
 
         private static string RemoveSpecificPropertiesFromSqlType(string sqlType)
             => sqlType.IndexOf("(") > -1

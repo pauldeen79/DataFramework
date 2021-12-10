@@ -36,19 +36,19 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
                 .AddNameAndParameter("System.ComponentModel.DataAnnotations.RegularExpression", pattern).Build());
 
-        public static FieldInfoBuilder WithIsRowVersion(this FieldInfoBuilder instance, bool? isRowVersion)
+        public static FieldInfoBuilder WithIsRowVersion(this FieldInfoBuilder instance, bool? isRowVersion = true)
             => instance.ReplaceMetadata(Database.IsRowVersion, isRowVersion);
 
-        public static FieldInfoBuilder WithIsSqlRequired(this FieldInfoBuilder instance, bool? isSqlRequired)
+        public static FieldInfoBuilder WithIsSqlRequired(this FieldInfoBuilder instance, bool? isSqlRequired = true)
             => instance.ReplaceMetadata(Database.IsRequired, isSqlRequired);
 
-        public static FieldInfoBuilder WithSkipFieldOnFind(this FieldInfoBuilder instance, bool? skipFieldOnFind)
+        public static FieldInfoBuilder WithSkipFieldOnFind(this FieldInfoBuilder instance, bool? skipFieldOnFind = true)
             => instance.ReplaceMetadata(Database.SkipFieldOnFind, skipFieldOnFind);
 
         public static FieldInfoBuilder WithSqlReaderMethodName(this FieldInfoBuilder instance, string? sqlReaderMethodName)
             => instance.ReplaceMetadata(Database.SqlReaderMethodName, sqlReaderMethodName);
 
-        public static FieldInfoBuilder WithIsSelectField(this FieldInfoBuilder instance, bool? isSelectField)
+        public static FieldInfoBuilder WithIsSelectField(this FieldInfoBuilder instance, bool? isSelectField = true)
             => instance.ReplaceMetadata(Database.IsSelectField, isSelectField);
 
         public static FieldInfoBuilder WithDatabaseFieldName(this FieldInfoBuilder instance, string? fieldName)
@@ -60,7 +60,10 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithSqlFieldType(this FieldInfoBuilder instance, string? sqlFieldType)
             => instance.ReplaceMetadata(Database.SqlFieldType, sqlFieldType);
 
-        public static FieldInfoBuilder WithSqlIsStringMaxLength(this FieldInfoBuilder instance, bool? isMaxLength)
+        public static FieldInfoBuilder WithSqlStringLength(this FieldInfoBuilder instance, int? length)
+            => instance.ReplaceMetadata(Database.SqlStringLength, length);
+
+        public static FieldInfoBuilder WithSqlIsStringMaxLength(this FieldInfoBuilder instance, bool? isMaxLength = true)
             => instance.ReplaceMetadata(Database.IsMaxLength, isMaxLength);
 
         public static FieldInfoBuilder WithSqlNumericPrecision(this FieldInfoBuilder instance, byte? precision)
@@ -75,13 +78,13 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithCheckConstraintExpression(this FieldInfoBuilder instance, string? checkConstraintExpression)
             => instance.ReplaceMetadata(Database.CheckConstraintExpression, checkConstraintExpression);
 
-        public static FieldInfoBuilder WithUseOnInsert(this FieldInfoBuilder instance, bool? useOnInsert)
+        public static FieldInfoBuilder WithUseOnInsert(this FieldInfoBuilder instance, bool? useOnInsert = true)
             => instance.ReplaceMetadata(Database.UseOnInsert, useOnInsert);
 
-        public static FieldInfoBuilder WithUseOnUpdate(this FieldInfoBuilder instance, bool? useOnUpdate)
+        public static FieldInfoBuilder WithUseOnUpdate(this FieldInfoBuilder instance, bool? useOnUpdate = true)
             => instance.ReplaceMetadata(Database.UseOnUpdate, useOnUpdate);
 
-        public static FieldInfoBuilder WithUseOnSelect(this FieldInfoBuilder instance, bool? useOnSelect)
+        public static FieldInfoBuilder WithUseOnSelect(this FieldInfoBuilder instance, bool? useOnSelect = true)
             => instance.ReplaceMetadata(Database.UseOnSelect, useOnSelect);
 
         private static IAttribute CreateStringLengthAttribute(int maxLength, int? minimumLength)

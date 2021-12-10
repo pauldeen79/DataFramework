@@ -13,6 +13,7 @@
         public const string NumericPrecision = "DataFramework.SqlServer.NumericPrecision";
         public const string NumericScale = "DataFramework.SqlServer.NumericScale";
         public const string SqlStringCollation = "DataFramework.SqlServer.StringCollation";
+        public const string SqlStringLength = "DataFramework.SqlServer.StringLength";
         public const string CheckConstraintExpression = "DataFramework.SqlServer.CheckConstraintExpression";
         public const string UseOnInsert = "DataFramework.SqlServer.UseOnInsert";
         public const string UseOnUpdate = "DataFramework.SqlServer.UseOnUpdate";

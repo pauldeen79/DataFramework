@@ -5,6 +5,7 @@ using DataFramework.ModelFramework.Extensions;
 using DataFramework.ModelFramework.MetadataNames;
 using DataFramework.ModelFramework.Tests.TestFixtures;
 using FluentAssertions;
+using ModelFramework.Objects.Builders;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Tests.Extensions
@@ -78,6 +79,79 @@ namespace DataFramework.ModelFramework.Tests.Extensions
 
             // Assert
             actual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void GetStringMaxLength_Returns_Null_When_No_Attributes_Are_Found()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Field").WithType(typeof(string)).Build();
+
+            // Act
+            var actual = sut.GetStringMaxLength();
+
+            // Assert
+            actual.Should().BeNull();
+        }
+
+        [Fact]
+        public void GetStringMaxLength_Returns_Null_When_Attribute_Does_Not_Have_Parameters()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder()
+                .WithName("Field")
+                .WithType(typeof(string))
+                .AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.MaxLength").Build())
+                .Build();
+
+            // Act
+            var actual = sut.GetStringMaxLength();
+
+            // Assert
+            actual.Should().BeNull();
+        }
+
+        [Fact]
+        public void GetStringMaxLength_Returns_Null_When_Attribute_Has_Parameter_With_Value_Which_Is_Not_Int32()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder()
+                .WithName("Field")
+                .WithType(typeof(string))
+                .AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.StringLength").AddParameters(new AttributeParameterBuilder().WithValue("test")).Build())
+                .Build();
+
+            // Act
+            var actual = sut.GetStringMaxLength();
+
+            // Assert
+            actual.Should().BeNull();
+        }
+
+        [Fact]
+        public void GetStringMaxLength_Returns_Value_When_MaxLengthAttribute_Is_Found()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Field").WithType(typeof(string)).WithMaxLength(16).Build();
+
+            // Act
+            var actual = sut.GetStringMaxLength();
+
+            // Assert
+            actual.Should().Be(16);
+        }
+
+        [Fact]
+        public void GetStringMaxLength_Returns_Value_When_StringLengthAttribute_Is_Found()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Field").WithType(typeof(string)).WithStringLength(16).Build();
+
+            // Act
+            var actual = sut.GetStringMaxLength();
+
+            // Assert
+            actual.Should().Be(16);
         }
 
         [Theory]
@@ -376,16 +450,68 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         }
 
         [Fact]
-        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details()
+        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details_No_MaxLength()
         {
             // Arrange
             var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).Build();
 
             // Act
-            var actual = sut.GetSqlFieldType(includeSpecificProperties: true, fieldLength: 10);
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("varchar(10)");
+            actual.Should().Be("varchar(32)");
+        }
+
+        [Fact]
+        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details_MaxLength_From_Attribute_StringLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(16).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(16)");
+        }
+
+        [Fact]
+        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details_MaxLength_From_Attribute_MaxLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithMaxLength(16).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(16)");
+        }
+
+        [Fact]
+        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details_MaxLength_From_Metadata_SqlStringLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithSqlStringLength(16).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(16)");
+        }
+
+        [Fact]
+        public void GetSqlFieldType_Returns_Correct_Result_For_Varchar_With_Specific_Details_MaxLength_From_Metadata_SqlIsStringMaxLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithSqlIsStringMaxLength().Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(max)");
         }
 
         [Fact]
@@ -395,7 +521,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).Build();
 
             // Act
-            var actual = sut.GetSqlFieldType(includeSpecificProperties: false, fieldLength: 10);
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
 
             // Assert
             actual.Should().Be("varchar");
