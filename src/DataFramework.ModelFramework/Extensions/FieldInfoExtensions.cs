@@ -48,7 +48,7 @@ namespace DataFramework.ModelFramework.Extensions
                 return metadataValue;
             }
 
-            if (string.IsNullOrEmpty(instance.TypeName))
+            if (instance.TypeName == null || instance.TypeName.Length == 0)
             {
                 //assume object
                 return "GetValue";

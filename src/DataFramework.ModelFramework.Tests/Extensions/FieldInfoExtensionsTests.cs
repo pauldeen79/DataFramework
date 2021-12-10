@@ -180,11 +180,13 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             actual.Should().Be("GetValue");
         }
 
-        [Fact]
-        public void GetSqlReaderMethodName_Returns_GetValue_When_No_Metadata_Is_Available_And_TypeName_Is_Null()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void GetSqlReaderMethodName_Returns_GetValue_When_No_Metadata_Is_Available_And_TypeName_Is_(string typeName)
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Test").WithTypeName(null).Build();
+            var sut = new FieldInfoBuilder().WithName("Test").WithTypeName(typeName).Build();
 
             // Act
             var actual = sut.GetSqlReaderMethodName();
@@ -192,6 +194,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Assert
             actual.Should().Be("GetValue");
         }
+
         [Fact]
         public void GetSqlReaderMethodName_Returns_GetInt32_On_Required_Enum_And_IsNullable_Is_False()
         {
