@@ -76,7 +76,6 @@ namespace PDC.Net.Core.Queries
                             IEnumerable<IQuerySortOrder> orderByFields)
             : base(limit, offset, conditions, orderByFields)
         {
-            Validator.ValidateObject(this, new ValidationContext(this, null, null), true);
         }
 
         public CatalogQuery(ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Limit,
