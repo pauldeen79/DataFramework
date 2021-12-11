@@ -27,7 +27,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName($"{instance.Name}Query")
                 .WithNamespace(instance.GetQueriesNamespace())
                 .FillFrom(instance)
-                .WithBaseClass(typeof(SingleEntityQuery).FullName)
+                .WithBaseClass(typeof(SingleEntityQuery))
                 .AddInterfaces(instance.Metadata
                     .Where(md => md.Name == Queries.AdditionalInterface)
                     .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name)))
@@ -155,14 +155,14 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithChainCall($"this(null, null, Enumerable.Empty<{typeof(IQueryCondition).FullName}>(), Enumerable.Empty<{typeof(IQuerySortOrder).FullName}>())");
 
             yield return new ClassConstructorBuilder()
-                .AddParameter("limit", typeof(int?).FullName)
-                .AddParameter("offset", typeof(int?).FullName)
-                .AddParameter("conditions", typeof(IEnumerable<IQueryCondition>).FullName)
-                .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>).FullName)
+                .AddParameter("limit", typeof(int?))
+                .AddParameter("offset", typeof(int?))
+                .AddParameter("conditions", typeof(IEnumerable<IQueryCondition>))
+                .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>))
                 .WithChainCall("base(limit, offset, conditions, orderByFields)");
 
             yield return new ClassConstructorBuilder()
-                .AddParameter("simpleEntityQuery", typeof(ISingleEntityQuery).FullName)
+                .AddParameter("simpleEntityQuery", typeof(ISingleEntityQuery))
                 .WithChainCall("this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Conditions, simpleEntityQuery.OrderByFields");
         }
 

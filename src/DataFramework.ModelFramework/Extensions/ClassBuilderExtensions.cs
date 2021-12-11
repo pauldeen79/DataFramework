@@ -1,4 +1,5 @@
-﻿using DataFramework.Abstractions;
+﻿using System;
+using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
 
@@ -11,5 +12,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithPartial()
                 .WithVisibility(dataObjectInfo.Metadata.GetValue(Entities.Visibility, () => dataObjectInfo.IsVisible.ToVisibility()))
                 .AddMetadata(dataObjectInfo.Metadata.Convert());
+
+        internal static ClassBuilder WithBaseClass(this ClassBuilder instance, Type baseClassType)
+            => instance.WithBaseClass(baseClassType.FullName);
     }
 }
