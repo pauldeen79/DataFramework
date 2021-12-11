@@ -35,7 +35,8 @@ namespace DataFramework.ModelFramework.Poc.Tests
         public void Can_Query_Database_Using_ExtraFieldNames()
         {
             // Arrange
-            Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" WHERE ExtraField1 = @p0 "), new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+            Connection.AddResultForDataReader(cmd => cmd.CommandText.Contains(" WHERE ExtraField1 = @p0 "),
+                                              () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
             var query = new CatalogQuery(new SingleEntityQueryBuilder()
                 .Where("MyField".IsEqualTo("Value"))
                 .Build());
@@ -46,6 +47,7 @@ namespace DataFramework.ModelFramework.Poc.Tests
             // Assert
             actual.Should().ContainSingle();
             actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+            actual.First().ExtraField1.Should().Be("Value");
         }
 
         [Fact]
