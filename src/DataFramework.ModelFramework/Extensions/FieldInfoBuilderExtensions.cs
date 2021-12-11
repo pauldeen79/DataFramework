@@ -9,31 +9,32 @@ namespace DataFramework.ModelFramework.Extensions
     public static class FieldInfoBuilderExtensions
     {
         public static FieldInfoBuilder WithStringLength(this FieldInfoBuilder instance, int maxLength, int? minimumLength = null)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, CreateStringLengthAttribute(maxLength, minimumLength));
+            => instance.ReplaceMetadata(Entities.FieldAttribute, CreateStringLengthAttribute(maxLength, minimumLength));
 
         public static FieldInfoBuilder WithMinLength(this FieldInfoBuilder instance, int length)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
+            => instance.ReplaceMetadata(Entities.FieldAttribute, new AttributeBuilder()
                 .AddNameAndParameter("System.ComponentModel.DataAnnotations.MinLength", length)
                 .Build());
 
         public static FieldInfoBuilder WithMaxLength(this FieldInfoBuilder instance, int length)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
+            => instance.ReplaceMetadata(Entities.FieldAttribute, new AttributeBuilder()
                 .AddNameAndParameter("System.ComponentModel.DataAnnotations.MaxLength", length)
                 .Build());
 
         public static FieldInfoBuilder WithRange(this FieldInfoBuilder instance, int minimumValue, int maximumValue)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
+            => instance.ReplaceMetadata(Entities.FieldAttribute, new AttributeBuilder()
                 .WithName("System.ComponentModel.DataAnnotations.Range")
                 .AddParameters(new AttributeParameterBuilder().WithValue(minimumValue),
                                new AttributeParameterBuilder().WithValue(maximumValue))
                 .Build());
 
-        public static FieldInfoBuilder WithIsRequired(this FieldInfoBuilder instance)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
-                .WithName("System.ComponentModel.DataAnnotations.Required").Build());
+        public static FieldInfoBuilder WithIsRequired(this FieldInfoBuilder instance, bool required = true)
+            => instance.ReplaceMetadata(Entities.FieldAttribute, required
+                ? new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.Required").Build()
+                : null);
 
         public static FieldInfoBuilder WithRegularExpression(this FieldInfoBuilder instance, string pattern)
-            => instance.ReplaceMetadata(Entities.EntitiesAttribute, new AttributeBuilder()
+            => instance.ReplaceMetadata(Entities.FieldAttribute, new AttributeBuilder()
                 .AddNameAndParameter("System.ComponentModel.DataAnnotations.RegularExpression", pattern).Build());
 
         public static FieldInfoBuilder WithIsRowVersion(this FieldInfoBuilder instance, bool? isRowVersion = true)

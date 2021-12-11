@@ -2,7 +2,6 @@
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
 
-
 namespace DataFramework.ModelFramework.Extensions
 {
     internal static class ClassBuilderExtensions

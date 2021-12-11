@@ -16,6 +16,18 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder WithConcurrencyCheckBehavior(this DataObjectInfoBuilder instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
             => instance.ReplaceMetadata(Database.ConcurrencyCheckBehavior, concurrencyCheckBehavior);
 
+        public static DataObjectInfoBuilder WithEntitiesNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Entities.Namespace, @namespace);
+
+        public static DataObjectInfoBuilder WithEntityBuildersNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Builders.Namespace, @namespace);
+
+        public static DataObjectInfoBuilder WithEntityIdentitiesNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Identities.Namespace, @namespace);
+
+        public static DataObjectInfoBuilder WithQueriesNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Queries.Namespace, @namespace);
+
         public static DataObjectInfoBuilder AddAdditionalDataObjectInfos(this DataObjectInfoBuilder instance, params IDataObjectInfo[] dataObjectInfos)
             => instance.AddMetadata(dataObjectInfos.Select(dataObjectInfo => new Metadata(Shared.CustomDataObjectInfo, dataObjectInfo)));
 

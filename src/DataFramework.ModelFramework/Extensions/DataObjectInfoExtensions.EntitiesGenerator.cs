@@ -33,10 +33,10 @@ namespace DataFramework.ModelFramework.Extensions
                     .Where(md => md.Name == Entities.Interfaces)
                     .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name))
                     .Union(GetEntityClassTypeInterfaces(instance, entityClassType)))
-                .AddFields(GetEntityClassBackingFields(instance, entityClassType))
+                .AddFields(GetEntityClassFields(instance, entityClassType))
                 .AddProperties(GetEntityClassProperties(instance, entityClassType, renderMetadataAsAttributes))
                 .AddMethods(GetEntityClassMethods(instance, entityClassType))
-                .AddConstructors(GetEntityClassConstructors(instance, entityClassType, renderMetadataAsAttributes))
+                .AddConstructors(GetEntityClassConstructors(instance, entityClassType, settings))
                 .AddAttributes(GetEntityClassAttributes(instance, renderMetadataAsAttributes));
         }
 
@@ -54,8 +54,8 @@ namespace DataFramework.ModelFramework.Extensions
             }
         }
 
-        private static IEnumerable<ClassFieldBuilder> GetEntityClassBackingFields(IDataObjectInfo instance,
-                                                                                  EntityClassType entityClassType)
+        private static IEnumerable<ClassFieldBuilder> GetEntityClassFields(IDataObjectInfo instance,
+                                                                           EntityClassType entityClassType)
         {
             if (entityClassType != EntityClassType.ObservablePoco)
             {
@@ -64,20 +64,15 @@ namespace DataFramework.ModelFramework.Extensions
 
             foreach (var field in instance.Fields)
             {
-                yield return new ClassFieldBuilder()
-                    .WithName($"_{field.Name.ToPascalCase()}")
-                    .WithTypeName(field.TypeName)
-                    .WithIsNullable(field.IsNullable)
-                    .WithVisibility(Visibility.Private);
+                yield return new ClassFieldBuilder().FillFrom(field);
             }
 
             foreach (var field in instance.GetUpdateConcurrencyCheckFields())
             {
                 yield return new ClassFieldBuilder()
-                    .WithName($"_{field.Name.Sanitize().ToPascalCase()}Original")
-                    .WithTypeName(field.TypeName)
-                    .WithIsNullable(true)
-                    .WithVisibility(Visibility.Private);
+                    .FillFrom(field)
+                    .WithName($"_{field.Name.ToPascalCase()}Original")
+                    .WithIsNullable(true);
             }
 
             yield return new ClassFieldBuilder()
@@ -89,7 +84,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<ClassPropertyBuilder> GetEntityClassProperties(IDataObjectInfo instance,
                                                                                   EntityClassType entityClassType,
-                                                                                  RenderMetadataAsAttributesType renderMetadataAsAttributes)
+                                                                                  RenderMetadataAsAttributesTypes renderMetadataAsAttributes)
             => instance.Fields.Select(field =>
                     new ClassPropertyBuilder()
                         .WithName(field.CreatePropertyName(instance))
@@ -140,7 +135,7 @@ namespace DataFramework.ModelFramework.Extensions
             var statements = field.Metadata.GetStringValues(Entities.PropertyGetterCodeStatement).ToList();
             if (!statements.Any())
             {
-                statements.AddRange(field.Metadata.GetStringValues(Entities.ComputedTemplate));
+                statements.AddRange(field.Metadata.GetStringValues(Entities.ComputedFieldStatement));
             }
 
             if (!statements.Any() && entityClassType == EntityClassType.ObservablePoco)
@@ -166,14 +161,37 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(IFieldInfo field,
                                                                                       string instanceName,
                                                                                       EntityClassType entityClassType,
-                                                                                      RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                                                                      RenderMetadataAsAttributesTypes renderMetadataAsAttributes,
                                                                                       bool addReadOnlyAttribute)
         {
-            if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.None)
+            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
             {
-                yield break;
+                //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
+                //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)
+                yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
             }
 
+            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Validation))
+            {
+                foreach (var attribute in GetEntityClassPropertyValidationAttributes(field, entityClassType, addReadOnlyAttribute))
+                {
+                    yield return attribute;
+                }
+            }
+
+            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
+            {
+                foreach (var attribute in field.Metadata.GetValues<IAttribute>(Entities.FieldAttribute))
+                {
+                    yield return new AttributeBuilder(attribute);
+                }
+            }
+        }
+
+        private static IEnumerable<AttributeBuilder> GetEntityClassPropertyValidationAttributes(IFieldInfo field,
+                                                                                                EntityClassType entityClassType,
+                                                                                                bool addReadOnlyAttribute)
+        {
             if (field.DefaultValue != null)
             {
                 yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DefaultValue", field.DefaultValue);
@@ -192,18 +210,6 @@ namespace DataFramework.ModelFramework.Extensions
             if ((field.IsReadOnly && !entityClassType.IsImmutable()) || addReadOnlyAttribute)
             {
                 yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true);
-            }
-
-            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
-            {
-                //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
-                //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)
-                yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
-            }
-
-            foreach (var attribute in field.Metadata.GetValues<IAttribute>(Entities.EntitiesAttribute))
-            {
-                yield return new AttributeBuilder(attribute);
             }
         }
 
@@ -269,31 +275,26 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<ClassConstructorBuilder> GetEntityClassConstructors(IDataObjectInfo instance,
                                                                                        EntityClassType entityClassType,
-                                                                                       RenderMetadataAsAttributesType renderMetadataAsAttributes)
+                                                                                       GeneratorSettings settings)
         {
             if (entityClassType.IsImmutable())
             {
                 yield return new ClassConstructorBuilder()
-                    .AddLiteralCodeStatements(GetEntityClassConstructorCodeStatements(instance, renderMetadataAsAttributes, true))
+                    .AddLiteralCodeStatements(GetEntityClassConstructorCodeStatements(instance, settings))
                     .AddParameters(GetFieldsWithConcurrencyCheckFields(instance).Select(f => f.ToParameterBuilder()));
             }
         }
 
         private static IEnumerable<string> GetEntityClassConstructorCodeStatements(IDataObjectInfo instance,
-                                                                                   RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                                   bool createPropertyName)
+                                                                                   GeneratorSettings settings)
         {
             foreach (var field in GetFieldsWithConcurrencyCheckFields(instance))
             {
-                var name = createPropertyName
-                    ? field.CreatePropertyName(instance)
-                    : field.Name.Sanitize();
-                yield return $"this.{name} = {field.Name.Sanitize().ToPascalCase()};";
+                yield return $"this.{field.CreatePropertyName(instance)} = {field.Name.Sanitize().ToPascalCase()};";
             }
 
-            if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
+            if (settings.AddValidationCodeInConstructor)
             {
-                // Add validation code
                 yield return "System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);";
             }
         }
@@ -324,12 +325,11 @@ namespace DataFramework.ModelFramework.Extensions
         }
 
         private static IEnumerable<AttributeBuilder> GetEntityClassAttributes(IDataObjectInfo instance,
-                                                                              RenderMetadataAsAttributesType renderMetadataAsAttributes,
-                                                                              string generatorName = "DataFramework.ModelFramework.Generators.Entities.EntityGenerator")
+                                                                              RenderMetadataAsAttributesTypes renderMetadataAsAttributes)
         {
-            yield return new AttributeBuilder().ForCodeGenerator(generatorName);
+            yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.Entities.EntityGenerator");
 
-            if (renderMetadataAsAttributes != RenderMetadataAsAttributesType.None)
+            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Validation))
             {
                 if (instance.IsReadOnly)
                 {
@@ -349,6 +349,14 @@ namespace DataFramework.ModelFramework.Extensions
                 if (!instance.IsVisible)
                 {
                     yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.Browsable", false);
+                }
+            }
+
+            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
+            {
+                foreach (var attribute in instance.Metadata.GetValues<IAttribute>(Entities.ClassAttribute))
+                {
+                    yield return new AttributeBuilder(attribute);
                 }
             }
         }

@@ -101,7 +101,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var sut = new FieldInfoBuilder()
                 .WithName("Field")
                 .WithType(typeof(string))
-                .AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.MaxLength").Build())
+                .AddMetadata(Entities.FieldAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.MaxLength").Build())
                 .Build();
 
             // Act
@@ -118,7 +118,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var sut = new FieldInfoBuilder()
                 .WithName("Field")
                 .WithType(typeof(string))
-                .AddMetadata(Entities.EntitiesAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.StringLength").AddParameters(new AttributeParameterBuilder().WithValue("test")).Build())
+                .AddMetadata(Entities.FieldAttribute, new AttributeBuilder().WithName("System.ComponentModel.DataAnnotations.StringLength").AddParameters(new AttributeParameterBuilder().WithValue("test")).Build())
                 .Build();
 
             // Act

@@ -9,7 +9,7 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static ClassPropertyBuilder Fill(this ClassPropertyBuilder instance, IFieldInfo field)
             => instance
-                .WithTypeName(field.Metadata.GetStringValue(Entities.PropertyType, field.TypeName ?? string.Empty))
+                .WithTypeName(field.Metadata.GetStringValue(Entities.PropertyType, field.TypeName ?? "System.Object"))
                 .WithStatic(field.Metadata.GetStringValue(Entities.Static).IsTrue())
                 .WithVirtual(field.Metadata.GetStringValue(Entities.Virtual).IsTrue())
                 .WithAbstract(field.Metadata.GetStringValue(Entities.Abstract).IsTrue())

@@ -16,8 +16,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .Metadata
                 .GetValue(Entities.EntityClassType, () => defaultValue);
 
-        internal static RenderMetadataAsAttributesType GetRenderMetadataAsAttributesType(this IDataObjectInfo instance,
-                                                                                         RenderMetadataAsAttributesType defaultValue)
+        internal static RenderMetadataAsAttributesTypes GetRenderMetadataAsAttributesType(this IDataObjectInfo instance,
+                                                                                         RenderMetadataAsAttributesTypes defaultValue)
             => instance
                 .Metadata
                 .GetValue(Entities.RenderMetadataAsAttributesType, () => defaultValue);
@@ -56,12 +56,15 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetStringValue(Entities.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
         internal static string GetEntityBuildersNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Entities.BuildersNamespace)
+            => instance.Metadata.GetStringValue(Builders.Namespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityIdentitiesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Entities.IdentitiesNamespace)
+            => instance.Metadata.GetStringValue(Identities.Namespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
+        internal static string GetQueriesNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(Queries.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
         internal static string GetEntityFullName(this IDataObjectInfo instance)
         {
@@ -81,10 +84,10 @@ namespace DataFramework.ModelFramework.Extensions
                 .OfType<T>();
 
         private static IEnumerable<AttributeBuilder> GetClassAttributes(this IDataObjectInfo instance,
-                                                                        RenderMetadataAsAttributesType renderMetadataAsAttributes,
+                                                                        RenderMetadataAsAttributesTypes renderMetadataAsAttributes,
                                                                         string attributeName)
         {
-            if (renderMetadataAsAttributes == RenderMetadataAsAttributesType.Validation)
+            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
             {
                 return instance.Metadata.GetValues<IAttribute>(attributeName).Select(x => new AttributeBuilder(x));
             }

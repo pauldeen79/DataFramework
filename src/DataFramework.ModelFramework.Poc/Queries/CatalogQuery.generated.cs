@@ -10,7 +10,7 @@ using QueryFramework.Core.Queries;
 namespace PDC.Net.Core.Queries
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryGenerator", @"1.0.0.0")]
-    public partial record CatalogQuery : SingleEntityQuery, IValidatableObject
+    public partial record CatalogQuery : SingleEntityQuery
     {
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

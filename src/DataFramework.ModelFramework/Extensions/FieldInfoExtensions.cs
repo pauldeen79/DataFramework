@@ -18,11 +18,11 @@ namespace DataFramework.ModelFramework.Extensions
                 : instance.Name.Sanitize();
 
         internal static bool IsRequired(this IFieldInfo instance)
-            => instance.Metadata.GetValues<IAttribute>(Entities.EntitiesAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
+            => instance.Metadata.GetValues<IAttribute>(Entities.FieldAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
 
         internal static int? GetStringMaxLength(this IFieldInfo instance)
         {
-            var maxLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.EntitiesAttribute)
+            var maxLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.FieldAttribute)
                                                       .Select(md => md.Value)
                                                       .OfType<IAttribute>()
                                                       .FirstOrDefault(a => a.Name == "System.ComponentModel.DataAnnotations.MaxLength");
@@ -30,7 +30,7 @@ namespace DataFramework.ModelFramework.Extensions
             var length = AttributeParameterFirstValue(maxLengthAttribute);
             if (length == null)
             {
-                var stringLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.EntitiesAttribute)
+                var stringLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.FieldAttribute)
                                                              .Select(md => md.Value)
                                                              .OfType<IAttribute>()
                                                              .FirstOrDefault(a => a.Name == "System.ComponentModel.DataAnnotations.StringLength");
