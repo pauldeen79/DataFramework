@@ -62,7 +62,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public string? GetDatabaseFieldName(string queryFieldName)
         {
-            // default: return queryFieldName;
+            // default: return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
             var extraField = ExtraFields.FirstOrDefault(x => x.Name == queryFieldName);
             if (extraField != null)
             {
@@ -74,7 +74,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
                 return "[Name] + ' ' + [StartDirectory] + ' ' + COALESCE([ExtraField1], '') + ' ' + COALESCE([ExtraField2], '') + ' ' + COALESCE([ExtraField3], '') + ' ' + COALESCE([ExtraField4], '') + ' ' + COALESCE([ExtraField5], '') + ' ' + COALESCE([ExtraField6], '') + ' ' + COALESCE([ExtraField7], '') + ' ' + COALESCE([ExtraField8], '') + ' ' + COALESCE([ExtraField9], '') + ' ' + COALESCE([ExtraField10], '') + ' ' + COALESCE([ExtraField11], '') + ' ' + COALESCE([ExtraField12], '') + ' ' + COALESCE([ExtraField13], '') + ' ' + COALESCE([ExtraField14], '') + ' ' + COALESCE([ExtraField15], '') + ' ' + COALESCE([ExtraField16], '')";
             }
 
-            return queryFieldName;
+            return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<string> GetSelectFields(IEnumerable<string> querySelectFields)
@@ -85,7 +85,8 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public bool ValidateExpression(IQueryExpression expression)
         {
-            return GetAllFields().Select(GetDatabaseFieldName).OfType<string>().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
+            // default: return true
+            return true;
         }
     }
 }
