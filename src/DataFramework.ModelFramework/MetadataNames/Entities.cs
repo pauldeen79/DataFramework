@@ -12,20 +12,10 @@
         internal const string ComputedFieldStatement = EntitiesRoot + ".ComputedTemplate";
         internal const string ClassAttribute = EntitiesRoot + ".Class.Attribute";
         internal const string FieldAttribute = EntitiesRoot + ".Field.Attribute";
-        internal const string DisallowAdd = EntitiesRoot + ".DisallowAdd";
-        internal const string DisallowUpdate = EntitiesRoot + ".DisallowUpdate";
-        internal const string DisallowDelete = EntitiesRoot + ".DisallowDelete";
-        internal const string Static = EntitiesRoot + ".Static";
-        internal const string Virtual = EntitiesRoot + ".Virtual";
-        internal const string Abstract = EntitiesRoot + ".Abstract";
-        internal const string Protected = EntitiesRoot + ".Protected";
-        internal const string Override = EntitiesRoot + ".Override";
-        internal const string SelectField = EntitiesRoot + ".SelectField";
+        internal const string PreventAdd = EntitiesRoot + ".PreventAdd";
+        internal const string PreventUpdate = EntitiesRoot + ".PreventUpdate";
+        internal const string PreventDelete = EntitiesRoot + ".PreventDelete";
         internal const string EntityClassType = EntitiesRoot + ".EntityClassType";
         internal const string RenderMetadataAsAttributesType = EntitiesRoot + ".RenderMetadataAsAttributesType";
-        internal const string PropertyGetterCodeStatement = EntitiesRoot + ".PropertyGetterBody";
-        internal const string PropertySetterCodeStatement = EntitiesRoot + ".PropertySetterBody";
-        internal const string OriginalPropertyGetterCodeStatement = EntitiesRoot + ".OriginalPropertyGetterBody";
-        internal const string OriginalPropertySetterCodeStatement = EntitiesRoot + ".OriginalPropertySetterBody";
     }
 }

@@ -36,7 +36,9 @@ namespace DataFramework.ModelFramework.Extensions
             var concurrencyCheckBehavior = dataObjectInfo.GetConcurrencyCheckBehavior();
             return dataObjectInfo
                 .Fields
-                .Where(fieldInfo => IsUpdateConcurrencyCheckField(dataObjectInfo, fieldInfo, concurrencyCheckBehavior));
+                .Where(fieldInfo => !fieldInfo.IsComputed
+                    && fieldInfo.CanSet
+                    && IsUpdateConcurrencyCheckField(dataObjectInfo, fieldInfo, concurrencyCheckBehavior));
         }
 
         internal static bool IsUpdateConcurrencyCheckField(this IDataObjectInfo dataObjectInfo,

@@ -4,6 +4,8 @@ using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
 using ModelFramework.Generators.Objects;
+using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.CodeStatements.Builders;
 using ModelFramework.Objects.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
@@ -94,14 +96,21 @@ namespace DataFramework.ModelFramework.Tests
         private static DataObjectInfo CreateDataObjectInfoBuilder(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .WithEntitiesNamespace("Entities")
-                .WithEntityBuildersNamespace("EntityBuilders")
-                .WithEntityIdentitiesNamespace("EntityIdentities")
-                .WithQueriesNamespace("Queries")
+                .WithEntityNamespace("Entities")
+                .AddEntityInterfaces("ITestEntity")
+                .AddEntityAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .WithEntityBuilderNamespace("EntityBuilders")
+                .AddEntityBuilderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .WithEntityIdentityNamespace("EntityIdentities")
+                .WithQueryNamespace("Queries")
+                .AddQueryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .AddQueryInterfaces("IMyQuery")
+                .AddQueryValidFieldNames("AdditionalValidFieldName")
                 .WithDescription("Description goes here")
-                .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(long)).WithIsIdentityField().WithIsRequired())
+                .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)))
                 .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired())
                 .AddFields(new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable())
+                .AddFields(new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;")))
                 .WithEntityClassType(entityClassType)
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
                 .Build();

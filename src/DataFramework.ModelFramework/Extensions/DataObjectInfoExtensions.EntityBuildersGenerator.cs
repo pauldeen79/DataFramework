@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
@@ -20,6 +22,13 @@ namespace DataFramework.ModelFramework.Extensions
 
             return instance
                 .ToEntityClass(settings)
+                .Chain(x =>
+                {
+                    x.Properties.Select(p => new { Property = p, FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name || $"{f.Name}Original" == p.Name) })
+                                .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
+                                .ToList()
+                                .ForEach(y => x.Properties.Remove(y.Property));
+                })
                 .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(addCopyConstructor: true,
                                                                                   poco: entityClassType.HasPropertySetter(),
                                                                                   addNullChecks: settings.EnableNullableContext))
