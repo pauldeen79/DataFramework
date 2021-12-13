@@ -1,7 +1,5 @@
-﻿using System;
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Linq;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
@@ -38,7 +36,8 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public bool ValidateExpression(IQueryExpression expression)
         {
-            return GetAllFields().Select(GetDatabaseFieldName).OfType<string>().Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
+            // default: return true
+            return true;
         }
     }
 }
