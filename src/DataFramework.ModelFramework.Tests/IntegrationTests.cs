@@ -84,7 +84,35 @@ namespace DataFramework.ModelFramework.Tests
             actual.Should().NotBeEmpty();
         }
 
-        private static string GenerateCode(IClass input, GeneratorSettings settings)
+        [Fact]
+        public void Can_Generate_Repository()
+        {
+            // Arrange
+            var settings = GeneratorSettings.Default;
+            var input = CreateDataObjectInfo(default(EntityClassType)).ToRepositoryClass(settings);
+
+            // Act
+            var actual = GenerateCode(input, settings);
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public void Can_Generate_RepositoryInterface()
+        {
+            // Arrange
+            var settings = GeneratorSettings.Default;
+            var input = CreateDataObjectInfo(default(EntityClassType)).ToRepositoryInterface(settings);
+
+            // Act
+            var actual = GenerateCode(input, settings);
+
+            // Assert
+            actual.Should().NotBeEmpty();
+        }
+
+        private static string GenerateCode(ITypeBase input, GeneratorSettings settings)
             => TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(),
                                                       new[] { input },
                                                       additionalParameters: new
@@ -118,6 +146,7 @@ namespace DataFramework.ModelFramework.Tests
                 .WithEntityClassType(entityClassType)
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
                 .WithRepositoryNamespace("Repositories")
+                .WithRepositoryInterfaceNamespace("Contracts.Repositories")
                 .WithRepositoryVisibility(Visibility.Internal)
                 .AddRepositoryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .AddRepositoryInterfaces("IMyRepository")

@@ -68,6 +68,12 @@ namespace DataFramework.ModelFramework.Extensions
         internal static string GetQueriesNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(Queries.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
+        internal static string GetRepositoriesNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(Repositories.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+
+        internal static string GetRepositoriesInterfaceNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(Repositories.InterfaceNamespace, instance.GetRepositoriesNamespace());
+
         internal static string GetEntityFullName(this IDataObjectInfo instance)
         {
             var ns = instance.GetEntitiesNamespace();

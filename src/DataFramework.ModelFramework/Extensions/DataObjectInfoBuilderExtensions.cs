@@ -24,6 +24,9 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder WithEntityBuilderNamespace(this DataObjectInfoBuilder instance, string? @namespace)
             => instance.ReplaceMetadata(Builders.Namespace, @namespace);
 
+        public static DataObjectInfoBuilder WithRepositoryNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Repositories.Namespace, @namespace);
+
         public static DataObjectInfoBuilder AddEntityBuilderAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Builders.Attribute).WithValue(x)));
 
@@ -132,8 +135,8 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder WithPropertyNameDeconflictionFormatString(this DataObjectInfoBuilder instance, string? propertyNameDeconflictionFormatString)
             => instance.ReplaceMetadata(Entities.PropertyNameDeconflictionFormatString, propertyNameDeconflictionFormatString);
 
-        public static DataObjectInfoBuilder WithRepositoryNamespace(this DataObjectInfoBuilder instance, string? @namespace)
-            => instance.ReplaceMetadata(Repositories.Namespace, @namespace);
+        public static DataObjectInfoBuilder WithRepositoryInterfaceNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Repositories.InterfaceNamespace, @namespace);
 
         public static DataObjectInfoBuilder AddRepositoryAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Repositories.Attribute).WithValue(x)));

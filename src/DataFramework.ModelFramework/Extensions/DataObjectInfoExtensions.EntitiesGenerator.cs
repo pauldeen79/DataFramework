@@ -10,7 +10,6 @@ using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.CodeStatements.Builders;
 using ModelFramework.Objects.Contracts;
-using ModelFramework.Objects.Extensions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -32,7 +31,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddInterfaces(instance.Metadata
                     .Where(md => md.Name == Entities.Interfaces)
                     .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name))
-                    .Union(GetEntityClassTypeInterfaces(instance, entityClassType)))
+                    .Union(GetEntityClassInterfaces(instance, entityClassType)))
                 .AddFields(GetEntityClassFields(instance, entityClassType))
                 .AddProperties(GetEntityClassProperties(instance, entityClassType, renderMetadataAsAttributes))
                 .AddMethods(GetEntityClassMethods(instance, entityClassType))
@@ -40,8 +39,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddAttributes(GetEntityClassAttributes(instance, renderMetadataAsAttributes));
         }
 
-        private static IEnumerable<string> GetEntityClassTypeInterfaces(IDataObjectInfo instance,
-                                                                        EntityClassType entityClassType)
+        private static IEnumerable<string> GetEntityClassInterfaces(IDataObjectInfo instance,
+                                                                    EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ObservablePoco)
             {
