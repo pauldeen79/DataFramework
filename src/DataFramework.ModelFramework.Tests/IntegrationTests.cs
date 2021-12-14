@@ -24,7 +24,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var settings = GeneratorSettings.Default;
-            var input = CreateDataObjectInfoBuilder(entityClassType).ToEntityClass(settings);
+            var input = CreateDataObjectInfo(entityClassType).ToEntityClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -42,7 +42,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var settings = GeneratorSettings.Default;
-            var dataObjectInfo = CreateDataObjectInfoBuilder(entityClassType);
+            var dataObjectInfo = CreateDataObjectInfo(entityClassType);
             var input = dataObjectInfo.ToEntityBuilderClass(settings);
 
             // Act
@@ -61,7 +61,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var settings = GeneratorSettings.Default;
-            var input = CreateDataObjectInfoBuilder(entityClassType).ToEntityIdentityClass(settings);
+            var input = CreateDataObjectInfo(entityClassType).ToEntityIdentityClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -75,7 +75,7 @@ namespace DataFramework.ModelFramework.Tests
         {
             // Arrange
             var settings = GeneratorSettings.Default;
-            var input = CreateDataObjectInfoBuilder(default(EntityClassType)).ToQueryClass(settings);
+            var input = CreateDataObjectInfo(default(EntityClassType)).ToQueryClass(settings);
 
             // Act
             var actual = GenerateCode(input, settings);
@@ -93,10 +93,11 @@ namespace DataFramework.ModelFramework.Tests
                                                           CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders
                                                       });
 
-        private static DataObjectInfo CreateDataObjectInfoBuilder(EntityClassType entityClassType)
+        private static DataObjectInfo CreateDataObjectInfo(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .WithEntityNamespace("Entities")
+                .WithEntityVisibility(Visibility.Internal)
                 .AddEntityInterfaces("ITestEntity")
                 .AddEntityAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .WithEntityBuilderNamespace("EntityBuilders")
@@ -107,12 +108,19 @@ namespace DataFramework.ModelFramework.Tests
                 .AddQueryInterfaces("IMyQuery")
                 .AddQueryValidFieldNames("AdditionalValidFieldName")
                 .WithDescription("Description goes here")
-                .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)))
-                .AddFields(new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired())
-                .AddFields(new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable())
-                .AddFields(new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;")))
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
+                    new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
+                    new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;"))
+                )
                 .WithEntityClassType(entityClassType)
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+                .WithRepositoryNamespace("Repositories")
+                .WithRepositoryVisibility(Visibility.Internal)
+                .AddRepositoryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .AddRepositoryInterfaces("IMyRepository")
                 .Build();
     }
 }

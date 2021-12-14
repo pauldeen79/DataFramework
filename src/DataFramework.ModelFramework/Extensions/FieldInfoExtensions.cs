@@ -14,7 +14,7 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static string CreatePropertyName(this IFieldInfo instance, IDataObjectInfo dataObjectInfo)
             => instance.Name == dataObjectInfo.Name
-                ? string.Format(dataObjectInfo.Metadata.GetStringValue(Shared.PropertyNameDeconflictionFormatString, "{0}Property"), instance.Name).Sanitize()
+                ? string.Format(dataObjectInfo.Metadata.GetStringValue(Entities.PropertyNameDeconflictionFormatString, "{0}Property"), instance.Name).Sanitize()
                 : instance.Name.Sanitize();
 
         internal static bool IsRequired(this IFieldInfo instance)

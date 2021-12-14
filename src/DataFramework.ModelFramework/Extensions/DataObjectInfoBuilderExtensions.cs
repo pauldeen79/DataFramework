@@ -121,13 +121,52 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.AddEntityAttributes(attributes.ToArray());
 
         public static DataObjectInfoBuilder WithPreventAdd(this DataObjectInfoBuilder instance, bool? preventAdd = true)
-            => instance.ReplaceMetadata(Entities.PreventAdd, preventAdd);
+            => instance.ReplaceMetadata(Repositories.PreventAdd, preventAdd);
 
         public static DataObjectInfoBuilder WithPreventUpdate(this DataObjectInfoBuilder instance, bool? preventUpdate = true)
-            => instance.ReplaceMetadata(Entities.PreventUpdate, preventUpdate);
+            => instance.ReplaceMetadata(Repositories.PreventUpdate, preventUpdate);
 
         public static DataObjectInfoBuilder WithPreventDelete(this DataObjectInfoBuilder instance, bool? preventDelete = true)
-            => instance.ReplaceMetadata(Entities.PreventDelete, preventDelete);
+            => instance.ReplaceMetadata(Repositories.PreventDelete, preventDelete);
+
+        public static DataObjectInfoBuilder WithPropertyNameDeconflictionFormatString(this DataObjectInfoBuilder instance, string? propertyNameDeconflictionFormatString)
+            => instance.ReplaceMetadata(Entities.PropertyNameDeconflictionFormatString, propertyNameDeconflictionFormatString);
+
+        public static DataObjectInfoBuilder WithRepositoryNamespace(this DataObjectInfoBuilder instance, string? @namespace)
+            => instance.ReplaceMetadata(Repositories.Namespace, @namespace);
+
+        public static DataObjectInfoBuilder AddRepositoryAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
+            => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Repositories.Attribute).WithValue(x)));
+
+        public static DataObjectInfoBuilder AddRepositoryAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
+            => instance.AddRepositoryAttributes(attributes.ToArray());
+
+        public static DataObjectInfoBuilder AddRepositoryAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
+            => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Repositories.Attribute).WithValue(x.Build())));
+
+        public static DataObjectInfoBuilder AddRepositoryAttributes(this DataObjectInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
+            => instance.AddRepositoryAttributes(attributes.ToArray());
+
+        public static DataObjectInfoBuilder AddRepositoryInterfaces(this DataObjectInfoBuilder instance, params string[] interfaces)
+            => instance.AddMetadata(interfaces.Select(x => new MetadataBuilder().WithName(Repositories.Interfaces).WithValue(x)));
+
+        public static DataObjectInfoBuilder AddRepositoryInterfaces(this DataObjectInfoBuilder instance, IEnumerable<string> interfaces)
+            => instance.AddRepositoryInterfaces(interfaces.ToArray());
+
+        public static DataObjectInfoBuilder WithRepositoryVisibility(this DataObjectInfoBuilder instance, Visibility? visibility)
+            => instance.ReplaceMetadata(Repositories.Visibility, visibility);
+
+        public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, params IClassMethod[] methods)
+            => instance.AddMetadata(methods.Select(x => new Metadata(Repositories.Method, x)));
+
+        public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, IEnumerable<IClassMethod> methods)
+            => instance.AddRepositoryMethods(methods.ToArray());
+
+        public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, params ClassMethodBuilder[] methods)
+            => instance.AddMetadata(methods.Select(x => new Metadata(Repositories.Method, x.Build())));
+
+        public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, IEnumerable<ClassMethodBuilder> methods)
+            => instance.AddRepositoryMethods(methods.ToArray());
 
         private static DataObjectInfoBuilder ReplaceMetadata(this DataObjectInfoBuilder instance, string name, object? newValue)
             => instance.Chain(() =>

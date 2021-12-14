@@ -2,20 +2,17 @@
 {
     internal static class Entities
     {
-        internal const string EntitiesRoot = Base.Root + ".Entities";
+        internal const string Root = Base.Root + ".Entities";
 
-        internal const string BaseClass = EntitiesRoot + ".BaseClass";
-        internal const string PropertyType = EntitiesRoot + ".PropertyType";
-        internal const string Interfaces = EntitiesRoot + ".Interfaces";
-        internal const string Visibility = EntitiesRoot + ".Visibility";
-        internal const string Namespace = EntitiesRoot + ".Namespace";
-        internal const string ComputedFieldStatement = EntitiesRoot + ".ComputedTemplate";
-        internal const string ClassAttribute = EntitiesRoot + ".Class.Attribute";
-        internal const string FieldAttribute = EntitiesRoot + ".Field.Attribute";
-        internal const string PreventAdd = EntitiesRoot + ".PreventAdd";
-        internal const string PreventUpdate = EntitiesRoot + ".PreventUpdate";
-        internal const string PreventDelete = EntitiesRoot + ".PreventDelete";
-        internal const string EntityClassType = EntitiesRoot + ".EntityClassType";
-        internal const string RenderMetadataAsAttributesType = EntitiesRoot + ".RenderMetadataAsAttributesType";
+        internal const string Namespace = Root + ".Namespace";
+        internal const string ClassAttribute = Root + ".Class.Attribute";
+        internal const string FieldAttribute = Root + ".Field.Attribute";
+        internal const string PropertyType = Root + ".PropertyType";
+        internal const string Interfaces = Root + ".Interfaces";
+        internal const string Visibility = Root + ".Visibility";
+        internal const string ComputedFieldStatement = Root + ".ComputedTemplate";
+        internal const string EntityClassType = Root + ".EntityClassType";
+        internal const string RenderMetadataAsAttributesType = Root + ".RenderMetadataAsAttributesType";
+        internal const string PropertyNameDeconflictionFormatString = Root + ".PropertyNameDeconflictionFormatString";
     }
 }
