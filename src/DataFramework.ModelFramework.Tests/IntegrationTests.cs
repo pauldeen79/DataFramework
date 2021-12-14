@@ -121,6 +121,8 @@ namespace DataFramework.ModelFramework.Tests
                 .WithRepositoryVisibility(Visibility.Internal)
                 .AddRepositoryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .AddRepositoryInterfaces("IMyRepository")
+                .WithCommandProviderNamespace("DatabaseCommandProviders")
+                .AddCommandProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .Build();
     }
 }
