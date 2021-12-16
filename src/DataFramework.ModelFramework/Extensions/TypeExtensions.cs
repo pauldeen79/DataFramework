@@ -6,6 +6,6 @@ namespace DataFramework.ModelFramework.Extensions
     public static class TypeExtensions
     {
         public static string CreateGenericTypeName(this Type instance, string genericTypeConstraintName)
-            => instance.MakeGenericType(typeof(object)).FullName.Replace("System.Object", genericTypeConstraintName).FixTypeName();
+            => instance.MakeGenericType(typeof(object)).FullName.Replace("<System.Object>", $"<{genericTypeConstraintName}>").FixTypeName();
     }
 }

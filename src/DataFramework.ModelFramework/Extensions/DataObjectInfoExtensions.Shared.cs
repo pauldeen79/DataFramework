@@ -74,12 +74,26 @@ namespace DataFramework.ModelFramework.Extensions
         internal static string GetRepositoriesInterfaceNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(Repositories.InterfaceNamespace, instance.GetRepositoriesNamespace());
 
+        internal static string GetCommandProvidersNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(CommandProviders.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+
+        internal static string GetQueryFieldProvidersNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(QueryFieldProviders.Namespace, instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+
         internal static string GetEntityFullName(this IDataObjectInfo instance)
         {
             var ns = instance.GetEntitiesNamespace();
             return string.IsNullOrEmpty(ns)
                 ? instance.Name
                 : $"{ns}.{instance.Name}";
+        }
+
+        internal static string GetEntityIdentityFullName(this IDataObjectInfo instance)
+        {
+            var ns = instance.GetEntityIdentitiesNamespace();
+            return string.IsNullOrEmpty(ns)
+                ? $"{instance.Name}Identity"
+                : $"{ns}.{instance.Name}Identity";
         }
 
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,

@@ -27,10 +27,11 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName($"{instance.Name}Query")
                 .WithNamespace(instance.GetQueriesNamespace())
                 .FillFrom(instance)
+                .WithVisibility(instance.Metadata.GetValue(Queries.Visibility, () => instance.IsVisible.ToVisibility()))
                 .WithBaseClass(typeof(SingleEntityQuery))
                 .AddInterfaces(instance.Metadata
-                    .Where(md => md.Name == Queries.AdditionalInterface)
-                    .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name)))
+                    .Where(md => md.Name == Queries.Interface)
+                    .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName())))
                 .WithRecord()
                 .AddFields(GetQueryClassFields(instance))
                 .AddMethods(GetQueryClassMethods(instance))
@@ -61,7 +62,7 @@ namespace DataFramework.ModelFramework.Extensions
                 yield return s;
             }
 
-            foreach (var md in instance.Metadata.Where(x => x.Name == Queries.AdditionalValidFieldName))
+            foreach (var md in instance.Metadata.Where(x => x.Name == Queries.ValidFieldName))
             {
                 var value = md.Value.ToStringWithNullCheck();
                 if (!string.IsNullOrEmpty(value))

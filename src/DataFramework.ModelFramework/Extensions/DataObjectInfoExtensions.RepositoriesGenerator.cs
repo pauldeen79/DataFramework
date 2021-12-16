@@ -20,7 +20,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithNamespace(instance.GetRepositoriesNamespace())
                 .WithPartial()
                 .WithVisibility(instance.Metadata.GetValue(Repositories.Visibility, () => instance.IsVisible.ToVisibility()))
-                .WithBaseClass($"CrossCutting.Data.Core.Repository<{instance.Name}, {instance.Name}Identity>")
+                .WithBaseClass($"CrossCutting.Data.Core.Repository<{instance.GetEntityFullName()}, {instance.GetEntityIdentityFullName()}>")
                 .AddMetadata(instance.Metadata.Convert())
                 .AddInterfaces(GetRepositoryClassInterfaces(instance))
                 .AddMethods(GetRepositoryClassMethods(instance))
@@ -30,7 +30,7 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<string> GetRepositoryClassInterfaces(IDataObjectInfo instance)
             => instance.Metadata
                 .Where(md => md.Name == Repositories.Interfaces)
-                .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.Name))
+                .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName()))
                 .Union(new[] { $"{instance.GetRepositoriesInterfaceNamespace()}.I{instance.Name}Repository" });
 
         private static IEnumerable<ClassMethodBuilder> GetRepositoryClassMethods(IDataObjectInfo instance)
@@ -39,12 +39,12 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<ClassConstructorBuilder> GetRepositoryClassConstructors(IDataObjectInfo instance)
         {
             yield return new ClassConstructorBuilder()
-                .AddParameter("commandProcessor", typeof(IDatabaseCommandProcessor<>).CreateGenericTypeName(instance.Name))
-                .AddParameter("entityRetriever", typeof(IDatabaseEntityRetriever<>).CreateGenericTypeName(instance.Name))
-                .AddParameter("identitySelectCommandProvider", typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.Name))
+                .AddParameter("commandProcessor", typeof(IDatabaseCommandProcessor<>).CreateGenericTypeName(instance.GetEntityFullName()))
+                .AddParameter("entityRetriever", typeof(IDatabaseEntityRetriever<>).CreateGenericTypeName(instance.GetEntityFullName()))
+                .AddParameter("identitySelectCommandProvider", typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.GetEntityFullName()))
                 .AddParameter("pagedEntitySelectCommandProvider", typeof(IPagedDatabaseCommandProvider))
                 .AddParameter("entitySelectCommandProvider", typeof(IDatabaseCommandProvider))
-                .AddParameter("entityCommandProvider", typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.Name))
+                .AddParameter("entityCommandProvider", typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.GetEntityFullName()))
                 .WithChainCall("base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)");
         }
 

@@ -36,7 +36,7 @@ namespace DataFramework.ModelFramework.Extensions
         {
             if (entityClassType == EntityClassType.ImmutableClass)
             {
-                yield return $"IEquatable<{instance.Name}>";
+                yield return $"IEquatable<{instance.Name}Identity>";
             }
         }
 

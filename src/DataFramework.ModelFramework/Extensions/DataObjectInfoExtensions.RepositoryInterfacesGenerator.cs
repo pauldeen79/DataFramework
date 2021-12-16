@@ -24,7 +24,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<string> GetRepositoryInterfaceInterfaces(IDataObjectInfo instance)
         {
-            yield return $"CrossCutting.Data.Abstractions.IRepository<{instance.Name}, {instance.Name}Identity>";
+            yield return $"CrossCutting.Data.Abstractions.IRepository<{instance.GetEntityFullName()}, {instance.GetEntityIdentityFullName()}>";
         }
 
         private static IEnumerable<AttributeBuilder> GetRepositoryInterfaceAttributes()
