@@ -10,11 +10,11 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogIdentityCommandProvider : IDatabaseCommandProvider<CatalogIdentity>
     {
-        private CatalogPagedEntityRetrieverSettings Settings { get; }
+        private readonly CatalogPagedEntityRetrieverSettings _settings;
 
         public CatalogIdentityCommandProvider()
         {
-            Settings = new CatalogPagedEntityRetrieverSettings();
+            _settings = new CatalogPagedEntityRetrieverSettings();
         }
 
         public IDatabaseCommand Create(CatalogIdentity source, DatabaseOperation operation)
@@ -25,8 +25,8 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
             }
 
             return new SelectCommandBuilder()
-                .Select(Settings.Fields)
-                .From(Settings.TableName)
+                .Select(_settings.Fields)
+                .From(_settings.TableName)
                 .Where("[Id] = @Id")
                 .AppendParameters(source)
                 .Build();

@@ -10,11 +10,11 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldIdentityCommandProvider : IDatabaseCommandProvider<ExtraFieldIdentity>
     {
-        private ExtraFieldPagedEntityRetrieverSettings Settings { get; }
+        private readonly ExtraFieldPagedEntityRetrieverSettings _settings;
 
         public ExtraFieldIdentityCommandProvider()
         {
-            Settings = new ExtraFieldPagedEntityRetrieverSettings();
+            _settings = new ExtraFieldPagedEntityRetrieverSettings();
         }
 
         public IDatabaseCommand Create(ExtraFieldIdentity source, DatabaseOperation operation)
@@ -25,8 +25,8 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
             }
 
             return new SelectCommandBuilder()
-                .Select(Settings.Fields)
-                .From(Settings.TableName)
+                .Select(_settings.Fields)
+                .From(_settings.TableName)
                 .Where("[EntityName] = @EntityName AND [Name] = @Name")
                 .AppendParameters(source)
                 .Build();
