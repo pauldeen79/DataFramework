@@ -17,6 +17,7 @@
         public const string CheckConstraintExpression = "DataFramework.SqlServer.CheckConstraintExpression";
         public const string UseOnInsert = "DataFramework.SqlServer.UseOnInsert";
         public const string UseOnUpdate = "DataFramework.SqlServer.UseOnUpdate";
+        public const string UseOnDelete = "DataFramework.SqlServer.UseOnDelete";
         public const string UseOnSelect = "DataFramework.SqlServer.UseOnSelect";
         public const string IsSelectField = "DataFramework.SqlServer.IsSelectField";
         public const string SqlReaderMethodName = "DataFramework.SqlServer.SqlReaderMethodName";

@@ -39,7 +39,9 @@ namespace DataFramework.ModelFramework.Extensions
                                                                               "    .Build();"));
 
         private static object GetIdentityWhereStatement(IDataObjectInfo instance)
-            => string.Concat("\"", string.Join(" AND ", instance.Fields.Where(x => x.IsIdentityField && !x.SkipFieldOnFind()).Select(x => $"[{x.Name}] = @{x.Name}")), "\"");
+            => string.Concat("\"",
+                             string.Join(" AND ", instance.Fields.Where(x => x.IsIdentityField && !x.SkipFieldOnFind()).Select(x => $"[{x.Name}] = @{x.Name}")),
+                             "\"");
 
         private static IEnumerable<AttributeBuilder> GetIdentityCommandProviderClassAttributes(IDataObjectInfo instance)
         {

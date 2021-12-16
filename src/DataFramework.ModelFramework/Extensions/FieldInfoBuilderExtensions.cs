@@ -88,6 +88,9 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithUseOnUpdate(this FieldInfoBuilder instance, bool? useOnUpdate = true)
             => instance.ReplaceMetadata(Database.UseOnUpdate, useOnUpdate);
 
+        public static FieldInfoBuilder WithUseOnDelete(this FieldInfoBuilder instance, bool? useOnDelete = true)
+            => instance.ReplaceMetadata(Database.UseOnDelete, useOnDelete);
+
         public static FieldInfoBuilder WithUseOnSelect(this FieldInfoBuilder instance, bool? useOnSelect = true)
             => instance.ReplaceMetadata(Database.UseOnSelect, useOnSelect);
 

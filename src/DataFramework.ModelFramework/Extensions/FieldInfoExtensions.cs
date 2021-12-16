@@ -187,6 +187,14 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsComputed);
 
         /// <summary>
+        /// Determines whether the specified field should be used on Delete in database
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
+        internal static bool UseOnDelete(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsComputed);
+
+        /// <summary>
         /// Determines whether the specified field should always be used on Select in database
         /// </summary>
         /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
