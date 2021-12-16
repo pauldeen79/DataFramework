@@ -84,7 +84,7 @@ namespace DataFramework.ModelFramework.Extensions
         {
             var validationResultType = typeof(ValidationResult).FullName;
             yield return new ClassMethodBuilder()
-                .WithName("Validate")
+                .WithName(nameof(IValidatableObject.Validate))
                 .WithVisibility(Visibility.Public)
                 .WithOverride()
                 .WithType(typeof(IEnumerable<ValidationResult>))

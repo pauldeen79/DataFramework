@@ -96,6 +96,14 @@ namespace DataFramework.ModelFramework.Extensions
                 : $"{ns}.{instance.Name}Identity";
         }
 
+        internal static string GetEntityRetrieverFullName(this IDataObjectInfo instance)
+        {
+            var ns = instance.GetEntityRetrieverSettingsNamespace();
+            return string.IsNullOrEmpty(ns)
+                ? $"{instance.Name}PagedEntityRetrieverSettings"
+                : $"{ns}.{instance.Name}PagedEntityRetrieverSettings";
+        }
+
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,
                                                                       string metadataName)
             where T : class

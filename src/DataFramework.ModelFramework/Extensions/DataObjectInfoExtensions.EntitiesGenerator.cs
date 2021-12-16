@@ -218,18 +218,18 @@ namespace DataFramework.ModelFramework.Extensions
                 yield break;
             }
 
-            yield return new ClassMethodBuilder().WithName("Equals")
+            yield return new ClassMethodBuilder().WithName(nameof(object.Equals))
                                                  .WithType(typeof(bool))
                                                  .WithOverride()
                                                  .AddParameter("obj", typeof(object))
                                                  .AddLiteralCodeStatements($"return Equals(obj as {instanceName});");
 
-            yield return new ClassMethodBuilder().WithName("Equals")
+            yield return new ClassMethodBuilder().WithName(nameof(IEquatable<object>.Equals))
                                                  .WithType(typeof(bool))
                                                  .AddParameter("other", instanceName)
                                                  .AddLiteralCodeStatements($"return other != null &&{Environment.NewLine}       {equalsProperties};");
 
-            yield return new ClassMethodBuilder().WithName("GetHashCode")
+            yield return new ClassMethodBuilder().WithName(nameof(object.GetHashCode))
                                                  .WithType(typeof(int))
                                                  .WithOverride()
                                                  .AddLiteralCodeStatements("int hashCode = 235838129;")
