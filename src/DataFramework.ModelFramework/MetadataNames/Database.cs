@@ -1,25 +1,37 @@
 ﻿namespace DataFramework.ModelFramework.MetadataNames
 {
-    public static class Database
+    internal static class Database
     {
-        public const string ConcurrencyCheckBehavior = "DataFramework.SqlServer.ConcurrencyCheckBehavior";
-        public const string SkipFieldOnFind = "DataFramework.SqlServer.SkipFieldOnFind";
-        public const string FieldName = "DataFramework.SqlServer.FieldName";
-        public const string FieldAlias = "DataFramework.SqlServer.FieldAlias";
-        public const string IsRowVersion = "DataFramework.SqlServer.IsRowVersion";
-        public const string IsMaxLength = "DataFramework.SqlServer.IsMaxLength";
-        public const string IsRequired = "DataFramework.SqlServer.IsRequired";
-        public const string SqlFieldType = "DataFramework.SqlServer.FieldType";
-        public const string NumericPrecision = "DataFramework.SqlServer.NumericPrecision";
-        public const string NumericScale = "DataFramework.SqlServer.NumericScale";
-        public const string SqlStringCollation = "DataFramework.SqlServer.StringCollation";
-        public const string SqlStringLength = "DataFramework.SqlServer.StringLength";
-        public const string CheckConstraintExpression = "DataFramework.SqlServer.CheckConstraintExpression";
-        public const string UseOnInsert = "DataFramework.SqlServer.UseOnInsert";
-        public const string UseOnUpdate = "DataFramework.SqlServer.UseOnUpdate";
-        public const string UseOnDelete = "DataFramework.SqlServer.UseOnDelete";
-        public const string UseOnSelect = "DataFramework.SqlServer.UseOnSelect";
-        public const string IsSelectField = "DataFramework.SqlServer.IsSelectField";
-        public const string SqlReaderMethodName = "DataFramework.SqlServer.SqlReaderMethodName";
+        internal const string Root = Base.Root + ".Database";
+
+        internal const string TableName = Root + ".TableName";
+        internal const string ConcurrencyCheckBehavior = Root + ".ConcurrencyCheckBehavior";
+        internal const string SkipFieldOnFind = Root + ".SkipFieldOnFind";
+        internal const string FieldName = Root + ".FieldName";
+        internal const string FieldAlias = Root + ".FieldAlias";
+        internal const string IsRowVersion = Root + ".IsRowVersion";
+        internal const string IsMaxLength = Root + ".IsMaxLength";
+        internal const string IsRequired = Root + ".IsRequired";
+        internal const string SqlFieldType = Root + ".FieldType";
+        internal const string NumericPrecision = Root + ".NumericPrecision";
+        internal const string NumericScale = Root + ".NumericScale";
+        internal const string SqlStringCollation = Root + ".StringCollation";
+        internal const string SqlStringLength = Root + ".StringLength";
+        internal const string CheckConstraintExpression = Root + ".CheckConstraintExpression";
+        internal const string UseOnInsert = Root + ".UseOnInsert";
+        internal const string UseOnUpdate = Root + ".UseOnUpdate";
+        internal const string UseOnDelete = Root + ".UseOnDelete";
+        internal const string UseOnSelect = Root + ".UseOnSelect";
+        internal const string IsSelectField = Root + ".IsSelectField";
+        internal const string SqlReaderMethodName = Root + ".SqlReaderMethodName";
+        internal const string AddStoredProcedureName = Root + ".AddStoredProcedureName";
+        internal const string AddStoredProcedureStatement = Root + ".AddStoredProcedureStatement";
+        internal const string AddCustomCommandText = Root + ".AddCustomCommandText";
+        internal const string UpdateStoredProcedureName = Root + ".UpdateStoredProcedureName";
+        internal const string UpdateStoredProcedureStatement = Root + ".UpdateStoredProcedureStatement";
+        internal const string UpdateCustomCommandText = Root + ".UpdateCustomCommandText";
+        internal const string DeleteStoredProcedureName = Root + ".DeleteStoredProcedureName";
+        internal const string DeleteStoredProcedureStatement = Root + ".DeleteStoredProcedureStatement";
+        internal const string DeleteCustomCommandText = Root + ".DeleteCustomCommandText";
     }
 }

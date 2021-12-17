@@ -130,6 +130,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .WithName("Test")
                 .WithIsPersistable(isPersistable)
                 .WithIsIdentityField(isIdentity)
+                .WithType(typeof(string))
                 .WithUseForCheckOnOriginalValues(useForCheckOnOriginalValues)
                 .Build();
             var dataObjectInfo = new DataObjectInfoBuilder()
@@ -151,7 +152,8 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var dataObjectInfo = new DataObjectInfoBuilder()
                 .WithName("Test")
-                .AddFields(new FieldInfoBuilder().WithName("Id").WithIsIdentityField(), new FieldInfoBuilder().WithName("Description"))
+                .AddFields(new FieldInfoBuilder().WithName("Id").WithIsIdentityField(),
+                           new FieldInfoBuilder().WithName("Description").WithType(typeof(string)))
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.MarkedFields)
                 .Build();
 

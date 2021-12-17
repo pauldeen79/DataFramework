@@ -297,6 +297,7 @@ namespace DataFramework.ModelFramework.Extensions
             foreach (var field in instance.GetUpdateConcurrencyCheckFields())
             {
                 if (!field.IsIdentityField
+                    && !field.IsSqlIdentity()
                     && !field.UseForCheckOnOriginalValues
                     && concurrencyCheckBehavior != ConcurrencyCheckBehavior.AllFields)
                 {

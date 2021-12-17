@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CrossCutting.Data.Abstractions;
+using CrossCutting.Data.Core.Commands;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 
@@ -15,7 +18,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static ClassBuilder ToCommandProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
             => new ClassBuilder()
-                .AddUsings("CrossCutting.Data.Core.Commands")
+                .AddUsings(typeof(SqlTextCommand).FullName.GetNamespaceWithDefault(string.Empty))
                 .WithName($"{instance.Name}CommandProvider")
                 .WithNamespace(instance.GetCommandProvidersNamespace())
                 .FillFrom(instance)
@@ -35,14 +38,14 @@ namespace DataFramework.ModelFramework.Extensions
                 (
                     "switch (operation)",
                     "{",
-                    "    case DatabaseOperation.Insert:",
+                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Insert}:",
                     $"        return new {GetInsertCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetInsertCommand(instance)}\", source, DatabaseOperation.Insert, AddParameters);",
-                    "    case DatabaseOperation.Update:",
+                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Update}:",
                     $"        return new {GetUpdateCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetUpdateCommand(instance)}\", source, DatabaseOperation.Update, UpdateParameters);",
-                    "    case DatabaseOperation.Delete:",
+                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Delete}:",
                     $"        return new {GetDeleteCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetDeleteCommand(instance)}\", source, DatabaseOperation.Delete, DeleteParameters);",
                     "    default:",
-                    @"        throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));",
+                    $@"        throw new {nameof(ArgumentOutOfRangeException)}(""operation"", string.Format(""Unsupported operation: {{0}}"", operation));",
                     "}"
                 );
 
@@ -60,7 +63,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddParameter("resultEntity", instance.GetEntityFullName())
                 .AddLiteralCodeStatements("return new[]", "{")
                 .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
-                .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnUpdate()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
+                .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnUpdate() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
                 .AddLiteralCodeStatements("};");
 
             yield return new ClassMethodBuilder()
@@ -68,7 +71,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithType(typeof(object))
                 .AddParameter("resultEntity", instance.GetEntityFullName())
                 .AddLiteralCodeStatements("return new[]", "{")
-                .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnDelete()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
+                .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnDelete() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
                 .AddLiteralCodeStatements("};");
         }
 
@@ -78,21 +81,33 @@ namespace DataFramework.ModelFramework.Extensions
                 : "object";
 
         private static string GetInsertCommandType(IDataObjectInfo instance)
-            => $"StoredProcedureCommand<{instance.GetEntityFullName()}>"; //might also want to use TextCommand maybe?
+            => instance.HasAddStoredProcedure()
+                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
+                : $"TextCommand<{instance.GetEntityFullName()}>";
 
         private static string GetInsertCommand(IDataObjectInfo instance)
-            => $"[Insert{instance.Name}]";
+            => instance.HasAddStoredProcedure()
+                ? $"[{instance.Metadata.GetStringValue(Database.AddStoredProcedureName)}]"
+                : instance.CreateDatabaseInsertCommandText();
 
         private static string GetUpdateCommandType(IDataObjectInfo instance)
-            => $"StoredProcedureCommand<{instance.GetEntityFullName()}>";
+            => instance.HasUpdateStoredProcedure()
+                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
+                : $"TextCommand<{instance.GetEntityFullName()}>";
 
         private static string GetUpdateCommand(IDataObjectInfo instance)
-            => $"[Update{instance.Name}]";
+            => instance.HasUpdateStoredProcedure()
+                ? $"[{instance.Metadata.GetStringValue(Database.UpdateStoredProcedureName)}]"
+                : instance.CreateDatabaseUpdateCommandText();
 
         private static string GetDeleteCommandType(IDataObjectInfo instance)
-            => $"StoredProcedureCommand<{instance.GetEntityFullName()}>";
+            => instance.HasDeleteStoredProcedure()
+                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
+                : $"TextCommand<{instance.GetEntityFullName()}>";
 
         private static string GetDeleteCommand(IDataObjectInfo instance)
-            => $"[Delete{instance.Name}]";
+            => instance.HasDeleteStoredProcedure()
+                ? $"[{instance.Metadata.GetStringValue(Database.DeleteStoredProcedureName)}]"
+                : instance.CreateDatabaseDeleteCommandText();
     }
 }

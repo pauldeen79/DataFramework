@@ -634,29 +634,55 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             actual.Should().BeEmpty();
         }
 
+        [Fact]
+        public void GetSqlFieldType_Returns_Empty_Result_For_Empty_Type()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(string.Empty).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void GetSqlFieldType_Returns_Empty_Result_For_Null_Type()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(null).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void GetSqlIsStringMaxLength_Returns_Correct_Result_When_Metadata_Available(bool maxLength)
+        public void SqlIsStringMaxLength_Returns_Correct_Result_When_Metadata_Available(bool maxLength)
         {
             // Arrange
             var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithSqlIsStringMaxLength(maxLength).Build();
 
             // Act
-            var actual = sut.GetSqlIsStringMaxLength();
+            var actual = sut.IsSqlStringMaxLength();
 
             // Assert
             actual.Should().Be(maxLength);
         }
 
         [Fact]
-        public void GetSqlIsStringMaxLength_Returns_Correct_Result_When_Metadata_Not_Available()
+        public void SqlIsStringMaxLength_Returns_Correct_Result_When_Metadata_Not_Available()
         {
             // Arrange
             var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).Build();
 
             // Act
-            var actual = sut.GetSqlIsStringMaxLength();
+            var actual = sut.IsSqlStringMaxLength();
 
             // Assert
             actual.Should().BeFalse();
@@ -773,7 +799,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnInsert_Returns_Correct_Value_When_Metadata_Is_Found(bool? metadataValue)
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithUseOnInsert(metadataValue).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithUseOnInsert(metadataValue).Build();
 
             // Act
             var actual = sut.UseOnInsert();
@@ -786,7 +812,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnInsert_Returns_False_On_Identity_Column_When_No_Metadata_Is_Found()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsIdentityField().Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsIdentityField().Build();
 
             // Act
             var actual = sut.UseOnInsert();
@@ -799,7 +825,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnInsert_Returns_False_On_Computed_Column_When_No_Metadata_Is_Found()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsComputed().Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsComputed().Build();
 
             // Act
             var actual = sut.UseOnInsert();
@@ -815,7 +841,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnUpdate_Returns_Correct_Value_When_Metadata_Is_Found(bool? metadataValue)
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithUseOnUpdate(metadataValue).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithUseOnUpdate(metadataValue).Build();
 
             // Act
             var actual = sut.UseOnUpdate();
@@ -828,7 +854,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnUpdate_Returns_False_On_Identity_Column_When_No_Metadata_Is_Found()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsIdentityField().Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsIdentityField().Build();
 
             // Act
             var actual = sut.UseOnUpdate();
@@ -841,7 +867,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void UseOnUpdate_Returns_False_On_Computed_Column_When_No_Metadata_Is_Found()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsComputed().Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsComputed().Build();
 
             // Act
             var actual = sut.UseOnUpdate();
@@ -854,10 +880,52 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         [InlineData(true)]
         [InlineData(false)]
         [InlineData(null)]
+        public void UseOnDelete_Returns_Correct_Value_When_Metadata_Is_Found(bool? metadataValue)
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithUseOnDelete(metadataValue).Build();
+
+            // Act
+            var actual = sut.UseOnDelete();
+
+            // Assert
+            actual.Should().Be(metadataValue.GetValueOrDefault(sut.IsPersistable));
+        }
+
+        [Fact]
+        public void UseOnDelete_Returns_False_On_Identity_Column_When_No_Metadata_Is_Found()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsIdentityField().Build();
+
+            // Act
+            var actual = sut.UseOnDelete();
+
+            // Assert
+            actual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void UseOnDelete_Returns_False_On_Computed_Column_When_No_Metadata_Is_Found()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithIsComputed().Build();
+
+            // Act
+            var actual = sut.UseOnDelete();
+
+            // Assert
+            actual.Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        [InlineData(null)]
         public void UseOnSelect_Returns_Correct_Value_When_Metadata_Is_Found(bool? metadataValue)
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithUseOnSelect(metadataValue).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithUseOnSelect(metadataValue).Build();
 
             // Act
             var actual = sut.UseOnSelect();

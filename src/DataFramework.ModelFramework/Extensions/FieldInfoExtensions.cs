@@ -117,6 +117,9 @@ namespace DataFramework.ModelFramework.Extensions
         internal static string GetDatabaseFieldAlias(this IFieldInfo instance)
             => instance.Metadata.GetStringValue(Database.FieldAlias, instance.GetDatabaseFieldName());
 
+        internal static bool IsSqlIdentity(this IFieldInfo instance)
+            => instance.GetSqlFieldType().StartsWith("IDENTITY");
+
         internal static string GetSqlFieldType(this IFieldInfo instance,
                                                bool includeSpecificProperties = false)
         {
@@ -126,6 +129,11 @@ namespace DataFramework.ModelFramework.Extensions
                 return includeSpecificProperties
                     ? metadataValue
                     : RemoveSpecificPropertiesFromSqlType(metadataValue);
+            }
+
+            if (string.IsNullOrEmpty(instance.TypeName))
+            {
+                return string.Empty;
             }
 
             if (instance.TypeName == typeof(string).FullName || instance.TypeName == typeof(string).AssemblyQualifiedName)
@@ -155,7 +163,7 @@ namespace DataFramework.ModelFramework.Extensions
             return string.Empty;
         }
 
-        internal static bool GetSqlIsStringMaxLength(this IFieldInfo instance)
+        internal static bool IsSqlStringMaxLength(this IFieldInfo instance)
             => instance.Metadata.GetBooleanValue(Database.IsMaxLength);
 
         internal static byte? GetSqlNumericPrecision(this IFieldInfo instance)
@@ -176,7 +184,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnInsert(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
 
         /// <summary>
         /// Determines whether the specified field should be used on Update in database
@@ -184,7 +192,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnUpdate(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
 
         /// <summary>
         /// Determines whether the specified field should be used on Delete in database
@@ -192,7 +200,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnDelete(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
 
         /// <summary>
         /// Determines whether the specified field should always be used on Select in database
@@ -213,7 +221,7 @@ namespace DataFramework.ModelFramework.Extensions
             {
                 return "varchar";
             }
-            var length = instance.GetSqlIsStringMaxLength()
+            var length = instance.IsSqlStringMaxLength()
                 ? "max"
                 : instance.GetSqlStringLength(defaultLength).ToString(CultureInfo.InvariantCulture);
             return $"varchar({length})";
