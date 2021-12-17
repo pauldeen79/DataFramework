@@ -45,7 +45,7 @@ namespace DataFramework.Core.Tests.Builders
             actual.IsReadOnly.Should().Be(sut.IsReadOnly);
             actual.IsVisible.Should().Be(sut.IsVisible);
             actual.TypeName.Should().Be(sut.TypeName);
-            actual.UseForCheckOnOriginalValues.Should().Be(sut.UseForCheckOnOriginalValues);
+            actual.UseForConcurrencyCheck.Should().Be(sut.UseForConcurrencyCheck);
             actual.Metadata.Should().HaveCount(1);
             actual.Metadata.First().Name.Should().Be(sut.Metadata.First().Name);
             actual.Metadata.First().Value.Should().Be(sut.Metadata.First().Value);
@@ -113,14 +113,14 @@ namespace DataFramework.Core.Tests.Builders
                 .WithDefaultValue("some default value")
                 .WithDescription("Description")
                 .WithDisplayName("Display name")
-                .WithIsComputed(true)
-                .WithIsIdentityField(true)
-                .WithIsNullable(true)
+                .WithIsComputed()
+                .WithIsIdentityField()
+                .WithIsNullable()
                 .WithIsPersistable(false)
-                .WithIsReadOnly(true)
+                .WithIsReadOnly()
                 .WithIsVisible(false)
                 .WithType(typeof(string))
-                .WithUseForCheckOnOriginalValues(true)
+                .WithUseForConcurrencyCheck()
                 .AddMetadata("Name1", "Value1");
     }
 }

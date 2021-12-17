@@ -16,7 +16,7 @@ namespace DataFramework.Abstractions
         bool IsPersistable { get; }
         bool CanGet { get; }
         bool CanSet { get; }
-        bool UseForCheckOnOriginalValues { get; }
+        bool UseForConcurrencyCheck { get; }
         object? DefaultValue { get; }
         ValueCollection<IMetadata> Metadata { get; }
     }

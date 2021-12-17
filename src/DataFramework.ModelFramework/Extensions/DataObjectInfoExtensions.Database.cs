@@ -37,7 +37,7 @@ namespace DataFramework.ModelFramework.Extensions
                 && fieldInfo.IsPersistable
                 && (fieldInfo.IsIdentityField
                     || fieldInfo.IsSqlIdentity()
-                    || fieldInfo.UseForCheckOnOriginalValues
+                    || fieldInfo.UseForConcurrencyCheck
                     || concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields);
 
         internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo instance)
@@ -121,7 +121,7 @@ namespace DataFramework.ModelFramework.Extensions
                             || fieldInfo.IsIdentityField
                             || fieldInfo.IsSqlIdentity()
                             || fieldInfo.IsComputed
-                            || fieldInfo.UseForCheckOnOriginalValues
+                            || fieldInfo.UseForConcurrencyCheck
                             || instance.GetConcurrencyCheckBehavior() == ConcurrencyCheckBehavior.AllFields
                         )
                         && fieldInfo.CanSet

@@ -66,7 +66,7 @@ namespace DataFramework.Core
             get;
         }
 
-        public bool UseForCheckOnOriginalValues
+        public bool UseForConcurrencyCheck
         {
             get;
         }
@@ -94,7 +94,7 @@ namespace DataFramework.Core
                          bool isPersistable,
                          bool canGet,
                          bool canSet,
-                         bool useForCheckOnOriginalValues,
+                         bool useForConcurrencyCheck,
                          object? defaultValue,
                          ValueCollection<IMetadata> metadata)
 #pragma warning restore S107 // Methods should not have too many parameters
@@ -116,7 +116,7 @@ namespace DataFramework.Core
             IsPersistable = isPersistable;
             CanGet = canGet;
             CanSet = canSet;
-            UseForCheckOnOriginalValues = useForCheckOnOriginalValues;
+            UseForConcurrencyCheck = useForConcurrencyCheck;
             DefaultValue = defaultValue;
             Metadata = metadata;
         }

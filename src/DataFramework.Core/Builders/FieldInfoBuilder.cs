@@ -20,7 +20,7 @@ namespace DataFramework.Core.Builders
         public bool IsPersistable { get; set; }
         public bool CanGet { get; set; }
         public bool CanSet { get; set; }
-        public bool UseForCheckOnOriginalValues { get; set; }
+        public bool UseForConcurrencyCheck { get; set; }
         public object? DefaultValue { get; set; }
         public List<MetadataBuilder> Metadata { get; set; }
 
@@ -38,7 +38,7 @@ namespace DataFramework.Core.Builders
                                  IsPersistable,
                                  CanGet,
                                  CanSet,
-                                 UseForCheckOnOriginalValues,
+                                 UseForConcurrencyCheck,
                                  DefaultValue,
                                  new ValueCollection<IMetadata>(Metadata.Select(x => x.Build())));
         }
@@ -57,7 +57,7 @@ namespace DataFramework.Core.Builders
             IsPersistable = true;
             CanGet = true;
             CanSet = true;
-            UseForCheckOnOriginalValues = default;
+            UseForConcurrencyCheck = default;
             DefaultValue = default;
             Metadata.Clear();
             return this;
@@ -141,9 +141,9 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public FieldInfoBuilder WithUseForCheckOnOriginalValues(bool useForCheckOnOriginalValues = true)
+        public FieldInfoBuilder WithUseForConcurrencyCheck(bool useForCheckOnOriginalValues = true)
         {
-            UseForCheckOnOriginalValues = useForCheckOnOriginalValues;
+            UseForConcurrencyCheck = useForCheckOnOriginalValues;
             return this;
         }
 
@@ -218,7 +218,7 @@ namespace DataFramework.Core.Builders
             IsPersistable = source.IsPersistable;
             CanGet = source.CanGet;
             CanSet = source.CanSet;
-            UseForCheckOnOriginalValues = source.UseForCheckOnOriginalValues;
+            UseForConcurrencyCheck = source.UseForConcurrencyCheck;
             DefaultValue = source.DefaultValue;
             foreach (var x in source.Metadata) Metadata.Add(new MetadataBuilder(x));
         }

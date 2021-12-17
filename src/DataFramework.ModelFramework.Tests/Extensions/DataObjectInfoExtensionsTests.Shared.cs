@@ -121,7 +121,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         public void IsUpdateConcurrencyCheckField_Returns_Correct_Value(bool dataObjectInfoIsReadOnly,
                                                                         bool isPersistable,
                                                                         bool isIdentity,
-                                                                        bool useForCheckOnOriginalValues,
+                                                                        bool useForConcurrencyCheck,
                                                                         ConcurrencyCheckBehavior concurrencyCheckBehavior,
                                                                         bool expectedResult)
         {
@@ -131,7 +131,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .WithIsPersistable(isPersistable)
                 .WithIsIdentityField(isIdentity)
                 .WithType(typeof(string))
-                .WithUseForCheckOnOriginalValues(useForCheckOnOriginalValues)
+                .WithUseForConcurrencyCheck(useForConcurrencyCheck)
                 .Build();
             var dataObjectInfo = new DataObjectInfoBuilder()
                 .WithName("Test")

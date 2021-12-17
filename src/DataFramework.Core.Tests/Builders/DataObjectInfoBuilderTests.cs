@@ -53,7 +53,7 @@ namespace DataFramework.Core.Tests.Builders
             actual.Fields.First().IsVisible.Should().Be(sut.Fields.First().IsVisible);
             actual.Fields.First().Name.Should().Be(sut.Fields.First().Name);
             actual.Fields.First().TypeName.Should().Be(sut.Fields.First().TypeName);
-            actual.Fields.First().UseForCheckOnOriginalValues.Should().Be(sut.Fields.First().UseForCheckOnOriginalValues);
+            actual.Fields.First().UseForConcurrencyCheck.Should().Be(sut.Fields.First().UseForConcurrencyCheck);
             actual.Fields.First().Metadata.Should().HaveCount(1);
             actual.Fields.First().Metadata.First().Name.Should().Be(sut.Fields.First().Metadata.First().Name);
             actual.Fields.First().Metadata.First().Value.Should().Be(sut.Fields.First().Metadata.First().Value);

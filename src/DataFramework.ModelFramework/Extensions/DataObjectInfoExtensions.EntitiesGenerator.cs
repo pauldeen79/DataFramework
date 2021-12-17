@@ -298,7 +298,7 @@ namespace DataFramework.ModelFramework.Extensions
             {
                 if (!field.IsIdentityField
                     && !field.IsSqlIdentity()
-                    && !field.UseForCheckOnOriginalValues
+                    && !field.UseForConcurrencyCheck
                     && concurrencyCheckBehavior != ConcurrencyCheckBehavior.AllFields)
                 {
                     continue;
