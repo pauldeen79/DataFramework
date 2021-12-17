@@ -281,7 +281,7 @@ namespace DatabaseCommandProviders
     {
         public void Create(EntityIdentities.TestEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
         {
-            if (operation != DatabaseOperation.Select)
+            if (operation != CrossCutting.Data.Abstractions.DatabaseOperation.Select)
             {
                 throw new ArgumentOutOfRangeException(""operation"", ""Only Select operation is supported"");
             }
@@ -325,7 +325,6 @@ namespace DatabaseCommandProviders
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-using CrossCutting.Data.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -342,12 +341,12 @@ namespace DatabaseCommandProviders
         {
             switch (operation)
             {
-                case DatabaseOperation.Insert:
-                    return new StoredProcedureCommand<Entities.TestEntity><Entities.TestEntity>(""[InsertTestEntity]"", source, DatabaseOperation.Insert, AddParameters);
-                case DatabaseOperation.Update:
-                    return new StoredProcedureCommand<Entities.TestEntity><Entities.TestEntity>(""[UpdateTestEntity]"", source, DatabaseOperation.Update, UpdateParameters);
-                case DatabaseOperation.Delete:
-                    return new StoredProcedureCommand<Entities.TestEntity><Entities.TestEntity>(""[DeleteTestEntity]"", source, DatabaseOperation.Delete, DeleteParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                    return new CrossCutting.Data.Core.Commands.StoredProcedureCommand<System.Object><Entities.TestEntity>(""[InsertTestEntity]"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Insert, AddParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
+                    return new CrossCutting.Data.Core.Commands.StoredProcedureCommand<System.Object><Entities.TestEntity>(""[UpdateTestEntity]"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Update, UpdateParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
+                    return new CrossCutting.Data.Core.Commands.StoredProcedureCommand<System.Object><Entities.TestEntity>(""[DeleteTestEntity]"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Delete, DeleteParameters);
                 default:
                     throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
             }
@@ -423,7 +422,6 @@ namespace DatabaseCommandProviders
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-using CrossCutting.Data.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -440,12 +438,12 @@ namespace DatabaseCommandProviders
         {
             switch (operation)
             {
-                case DatabaseOperation.Insert:
-                    return new TextCommand<TestEntity><TestEntity>(""INSERT INTO [TestEntity]([Name], [Description]) OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] VALUES(@Name, @Description)"", source, DatabaseOperation.Insert, AddParameters);
-                case DatabaseOperation.Update:
-                    return new TextCommand<TestEntity><TestEntity>(""UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Update, UpdateParameters);
-                case DatabaseOperation.Delete:
-                    return new TextCommand<TestEntity><TestEntity>(""DELETE FROM [TestEntity] OUTPUT DELETED.[Id], DELETED.[Name], DELETED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Delete, DeleteParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<System.Object><TestEntity>(""INSERT INTO [TestEntity]([Name], [Description]) OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] VALUES(@Name, @Description)"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Insert, AddParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<System.Object><TestEntity>(""UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Update, UpdateParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<System.Object><TestEntity>(""DELETE FROM [TestEntity] OUTPUT DELETED.[Id], DELETED.[Name], DELETED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Delete, DeleteParameters);
                 default:
                     throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
             }

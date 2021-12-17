@@ -29,7 +29,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddMethods(new ClassMethodBuilder().WithName(nameof(IDatabaseCommandProvider<object>.Create))
                                                     .AddParameter("source", instance.GetEntityIdentityFullName())
                                                     .AddParameter("operation", typeof(DatabaseOperation))
-                                                    .AddLiteralCodeStatements($"if (operation != {nameof(DatabaseOperation)}.{DatabaseOperation.Select})",
+                                                    .AddLiteralCodeStatements($"if (operation != {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Select})",
                                                                               "{",
                                                                               $@"    throw new {nameof(ArgumentOutOfRangeException)}(""operation"", ""Only Select operation is supported"");",
                                                                               "}",

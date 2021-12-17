@@ -18,7 +18,6 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static ClassBuilder ToCommandProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
             => new ClassBuilder()
-                .AddUsings(typeof(SqlTextCommand).FullName.GetNamespaceWithDefault(string.Empty))
                 .WithName($"{instance.Name}CommandProvider")
                 .WithNamespace(instance.GetCommandProvidersNamespace())
                 .FillFrom(instance)
@@ -38,12 +37,12 @@ namespace DataFramework.ModelFramework.Extensions
                 (
                     "switch (operation)",
                     "{",
-                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Insert}:",
-                    $"        return new {GetInsertCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetInsertCommand(instance)}\", source, DatabaseOperation.Insert, AddParameters);",
-                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Update}:",
-                    $"        return new {GetUpdateCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetUpdateCommand(instance)}\", source, DatabaseOperation.Update, UpdateParameters);",
-                    $"    case {nameof(DatabaseOperation)}.{DatabaseOperation.Delete}:",
-                    $"        return new {GetDeleteCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetDeleteCommand(instance)}\", source, DatabaseOperation.Delete, DeleteParameters);",
+                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Insert}:",
+                    $"        return new {GetInsertCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);",
+                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Update}:",
+                    $"        return new {GetUpdateCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);",
+                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Delete}:",
+                    $"        return new {GetDeleteCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);",
                     "    default:",
                     $@"        throw new {nameof(ArgumentOutOfRangeException)}(""operation"", string.Format(""Unsupported operation: {{0}}"", operation));",
                     "}"
@@ -82,8 +81,8 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetInsertCommandType(IDataObjectInfo instance)
             => instance.HasAddStoredProcedure()
-                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
-                : $"TextCommand<{instance.GetEntityFullName()}>";
+                ? typeof(StoredProcedureCommand<>).CreateGenericTypeName(instance.GetEntityFullName())
+                : typeof(TextCommand<>).CreateGenericTypeName(instance.GetEntityFullName());
 
         private static string GetInsertCommand(IDataObjectInfo instance)
             => instance.HasAddStoredProcedure()
@@ -92,8 +91,8 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetUpdateCommandType(IDataObjectInfo instance)
             => instance.HasUpdateStoredProcedure()
-                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
-                : $"TextCommand<{instance.GetEntityFullName()}>";
+                ? typeof(StoredProcedureCommand<>).CreateGenericTypeName(instance.GetEntityFullName())
+                : typeof(TextCommand<>).CreateGenericTypeName(instance.GetEntityFullName());
 
         private static string GetUpdateCommand(IDataObjectInfo instance)
             => instance.HasUpdateStoredProcedure()
@@ -102,8 +101,8 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetDeleteCommandType(IDataObjectInfo instance)
             => instance.HasDeleteStoredProcedure()
-                ? $"StoredProcedureCommand<{instance.GetEntityFullName()}>"
-                : $"TextCommand<{instance.GetEntityFullName()}>";
+                ? typeof(StoredProcedureCommand<>).CreateGenericTypeName(instance.GetEntityFullName())
+                : typeof(TextCommand<>).CreateGenericTypeName(instance.GetEntityFullName());
 
         private static string GetDeleteCommand(IDataObjectInfo instance)
             => instance.HasDeleteStoredProcedure()
