@@ -69,7 +69,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .Into($"[{instance.GetTableName()}]")
                 .AddFieldNames(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
                 .AddFieldValues(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"@{x.Name.Sanitize()}"))
-                .AddOutputFields(instance.GetInsertOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
+                .AddOutputFields(instance.GetOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
         }
@@ -87,6 +87,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .Where(instance.GetUpdateWhereStatement(x => x.UseOnUpdate()))
                 .AddFieldNames(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
                 .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.Name.Sanitize()}"))
+                .AddOutputFields(instance.GetOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
         }
@@ -102,11 +103,12 @@ namespace DataFramework.ModelFramework.Extensions
             return new DeleteCommandBuilder()
                 .From($"[{instance.GetTableName()}]")
                 .Where(instance.GetUpdateWhereStatement(x => x.UseOnDelete()))
+                .AddOutputFields(instance.GetOutputFields().Select(x => $"DELETED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
         }
 
-        private static IEnumerable<IFieldInfo> GetInsertOutputFields(this IDataObjectInfo instance)
+        private static IEnumerable<IFieldInfo> GetOutputFields(this IDataObjectInfo instance)
             => instance
                 .Fields
                 .Where

@@ -443,9 +443,9 @@ namespace DatabaseCommandProviders
                 case DatabaseOperation.Insert:
                     return new TextCommand<TestEntity><TestEntity>(""INSERT INTO [TestEntity]([Name], [Description]) OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] VALUES(@Name, @Description)"", source, DatabaseOperation.Insert, AddParameters);
                 case DatabaseOperation.Update:
-                    return new TextCommand<TestEntity><TestEntity>(""UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Update, UpdateParameters);
+                    return new TextCommand<TestEntity><TestEntity>(""UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Update, UpdateParameters);
                 case DatabaseOperation.Delete:
-                    return new TextCommand<TestEntity><TestEntity>(""DELETE FROM [TestEntity] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Delete, DeleteParameters);
+                    return new TextCommand<TestEntity><TestEntity>(""DELETE FROM [TestEntity] OUTPUT DELETED.[Id], DELETED.[Name], DELETED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal"", source, DatabaseOperation.Delete, DeleteParameters);
                 default:
                     throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
             }
@@ -510,7 +510,7 @@ namespace DatabaseCommandProviders
             var actual = input.CreateDatabaseUpdateCommandText();
 
             // Assert
-            actual.Should().Be(@"UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal");
+            actual.Should().Be(@"UPDATE [TestEntity] SET [Name] = @Name, [Description] = @Description OUTPUT INSERTED.[Id], INSERTED.[Name], INSERTED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal");
         }
 
         [Fact]
@@ -523,7 +523,7 @@ namespace DatabaseCommandProviders
             var actual = input.CreateDatabaseDeleteCommandText();
 
             // Assert
-            actual.Should().Be(@"DELETE FROM [TestEntity] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal");
+            actual.Should().Be(@"DELETE FROM [TestEntity] OUTPUT DELETED.[Id], DELETED.[Name], DELETED.[Description] WHERE [Id] = @IdOriginal AND [Name] = @NameOriginal AND [Description] = @DescriptionOriginal");
         }
         
         private static string GenerateCode(ITypeBase input, GeneratorSettings settings)
