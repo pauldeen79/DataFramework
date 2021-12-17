@@ -67,9 +67,9 @@ namespace DataFramework.ModelFramework.Extensions
 
             return new InsertCommandBuilder()
                 .Into($"[{instance.GetTableName()}]")
-                .WithFieldNames(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
-                .WithFieldValues(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"@{x.Name.Sanitize()}"))
-                .WithOutputFields(instance.GetInsertOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
+                .AddFieldNames(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
+                .AddFieldValues(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"@{x.Name.Sanitize()}"))
+                .AddOutputFields(instance.GetInsertOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
         }
@@ -85,8 +85,8 @@ namespace DataFramework.ModelFramework.Extensions
             return new UpdateCommandBuilder()
                 .WithTable($"[{instance.GetTableName()}]")
                 .Where(instance.GetUpdateWhereStatement(x => x.UseOnUpdate()))
-                .WithFieldNames(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
-                .WithFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.Name.Sanitize()}"))
+                .AddFieldNames(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
+                .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.Name.Sanitize()}"))
                 .Build()
                 .CommandText;
         }
