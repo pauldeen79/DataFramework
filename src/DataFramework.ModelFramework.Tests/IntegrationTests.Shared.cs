@@ -87,5 +87,41 @@ namespace DataFramework.ModelFramework.Tests
                 .AddDeleteResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
 
                 .Build();
+
+        private static DataObjectInfo CreateDataObjectInfoInsertOnly(EntityClassType entityClassType)
+            => new DataObjectInfoBuilder()
+                .WithName("TestEntity")
+                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
+                    new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
+                    new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().WithIsPersistable(false).AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;"))
+                )
+                .WithEntityClassType(entityClassType)
+                .WithCommandProviderNamespace("DatabaseCommandProviders")
+                .WithCommandProviderVisibility(Visibility.Internal)
+                .AddCommandProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .WithPreventUpdate()
+                .WithPreventDelete()
+                .Build();
+
+        private static DataObjectInfo CreateDataObjectInfoWithoutStoredProcedures(EntityClassType entityClassType)
+            => new DataObjectInfoBuilder()
+                .WithName("TestEntity")
+                .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
+                    new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
+                    new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().WithIsPersistable(false).AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;"))
+                )
+                .WithEntityClassType(entityClassType)
+                .WithCommandProviderNamespace("DatabaseCommandProviders")
+                .WithCommandProviderVisibility(Visibility.Internal)
+                .AddCommandProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .Build();
     }
 }

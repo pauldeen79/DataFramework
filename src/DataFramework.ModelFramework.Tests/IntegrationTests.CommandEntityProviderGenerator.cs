@@ -1,6 +1,11 @@
-﻿using CrossCutting.Common.Extensions;
+﻿using System.Diagnostics.CodeAnalysis;
+using CrossCutting.Common.Extensions;
+using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
+using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.CodeStatements.Builders;
+using ModelFramework.Objects.Contracts;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Tests
@@ -103,18 +108,6 @@ namespace CommandEntityProviders
             return resultEntity;
         }
 
-        public EntityBuilders.TestEntityBuilder UpdateResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
-        {
-            // additional code goes here
-            return resultEntity;
-        }
-
-        public EntityBuilders.TestEntityBuilder DeleteResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
-        {
-            // additional code goes here
-            return resultEntity;
-        }
-
         public EntityBuilders.TestEntityBuilder AddAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
             resultEntity = resultEntity.SetId(reader.GetInt32(""Id""));
@@ -126,6 +119,12 @@ namespace CommandEntityProviders
             return resultEntity;
         }
 
+        public EntityBuilders.TestEntityBuilder UpdateResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
+        {
+            // additional code goes here
+            return resultEntity;
+        }
+
         public EntityBuilders.TestEntityBuilder UpdateAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
             resultEntity = resultEntity.SetId(reader.GetInt32(""Id""));
@@ -134,6 +133,12 @@ namespace CommandEntityProviders
             resultEntity = resultEntity.SetIdOriginal(reader.GetInt32(""Id""));
             resultEntity = resultEntity.SetNameOriginal(reader.GetString(""Name""));
             resultEntity = resultEntity.SetDescriptionOriginal(reader.GetNullableString(""Description""));
+            return resultEntity;
+        }
+
+        public EntityBuilders.TestEntityBuilder DeleteResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
+        {
+            // additional code goes here
             return resultEntity;
         }
 
@@ -249,18 +254,6 @@ namespace CommandEntityProviders
             return resultEntity;
         }
 
-        public EntityBuilders.TestEntityBuilder UpdateResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
-        {
-            // additional code goes here
-            return resultEntity;
-        }
-
-        public EntityBuilders.TestEntityBuilder DeleteResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
-        {
-            // additional code goes here
-            return resultEntity;
-        }
-
         public EntityBuilders.TestEntityBuilder AddAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
             resultEntity.Id = reader.GetInt32(""GetInt32"");
@@ -269,6 +262,12 @@ namespace CommandEntityProviders
             resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
             resultEntity.NameOriginal = reader.GetString(""GetString"");
             resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            return resultEntity;
+        }
+
+        public EntityBuilders.TestEntityBuilder UpdateResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
+        {
+            // additional code goes here
             return resultEntity;
         }
 
@@ -283,7 +282,115 @@ namespace CommandEntityProviders
             return resultEntity;
         }
 
+        public EntityBuilders.TestEntityBuilder DeleteResultEntity(EntityBuilders.TestEntityBuilder resultEntity)
+        {
+            // additional code goes here
+            return resultEntity;
+        }
+
         public EntityBuilders.TestEntityBuilder DeleteAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
+        {
+            resultEntity.Id = reader.GetInt32(""GetInt32"");
+            resultEntity.Name = reader.GetString(""GetString"");
+            resultEntity.Description = reader.GetNullableString(""GetNullableString"");
+            resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
+            resultEntity.NameOriginal = reader.GetString(""GetString"");
+            resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            return resultEntity;
+        }
+    }
+#nullable restore
+}
+");
+        }
+
+        [Fact]
+        public void Can_Generate_CommandEntityProvider_With_Prevention_For_Update_And_Delete()
+        {
+            // Arrange
+            var settings = GeneratorSettings.Default;
+            var input = CreateDataObjectInfoInsertOnly(EntityClassType.Poco).ToCommandEntityProviderClass(settings);
+
+            // Act
+            var actual = GenerateCode(input, settings);
+
+            // Assert
+            actual.NormalizeLineEndings().Should().Be(@"// ------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version: 1.0.0
+//  
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+// ------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace GeneratedNamespace
+{
+#nullable enable
+    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    public partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<TestEntity,TestEntityBuilder>
+    {
+        public Func<TestEntityBuilder? ResultEntityDelegate
+        {
+            get
+            {
+                return (entity, operation) =>
+                {
+                    switch (operation)
+                    {
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                            return AddResultEntity(entity);
+                         default:
+                             throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
+                    }
+                }
+            }
+        }
+
+        public Func<TestEntityBuilder? AfterReadDelegate
+        {
+            get
+            {
+                return (entity, operation, reader) =>
+                {
+                    switch (operation)
+                    {
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                            return AddAfterRead(entity);
+                         default:
+                             throw new ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
+                    }
+                }
+            }
+        }
+
+        public Func<TestEntityBuilder? CreateBuilderDelegate
+        {
+            get
+            {
+                return entity => new TestEntityBuilder(entity);
+            }
+        }
+
+        public Func<TestEntityBuilder? CreateEntityDelegate
+        {
+            get
+            {
+                return builder => builder.Build();
+            }
+        }
+
+        public TestEntityBuilder AddResultEntity(TestEntityBuilder resultEntity)
+        {
+            return resultEntity;
+        }
+
+        public TestEntityBuilder AddAfterRead(TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
             resultEntity.Id = reader.GetInt32(""GetInt32"");
             resultEntity.Name = reader.GetString(""GetString"");

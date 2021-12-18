@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Commands;
 using DataFramework.Abstractions;
@@ -45,42 +46,81 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddLiteralCodeStatements
                 (
                     "switch (operation)",
-                    "{",
-                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Insert}:",
-                    $"        return new {GetInsertCommandType(instance)}(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);",
-                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Update}:",
-                    $"        return new {GetUpdateCommandType(instance)}(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);",
-                    $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Delete}:",
-                    $"        return new {GetDeleteCommandType(instance)}(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);",
+                    "{"
+                )
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
+                    {
+                        builder.AddLiteralCodeStatements
+                        (
+                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Insert}:",
+                            $"        return new {GetInsertCommandType(instance)}(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
+                    {
+                        builder.AddLiteralCodeStatements
+                        (
+                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Update}:",
+                            $"        return new {GetUpdateCommandType(instance)}(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
+                    {
+                        builder.AddLiteralCodeStatements
+                        (
+                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Delete}:",
+                            $"        return new {GetDeleteCommandType(instance)}(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);"
+                        );
+                    }
+                })
+                .AddLiteralCodeStatements
+                (
                     "    default:",
                     $@"        throw new {nameof(ArgumentOutOfRangeException)}(""operation"", string.Format(""Unsupported operation: {{0}}"", operation));",
                     "}"
                 );
 
-            yield return new ClassMethodBuilder()
-                .WithName("AddParameters")
-                .WithType(typeof(object))
-                .AddParameter("resultEntity", instance.GetEntityFullName())
-                .AddLiteralCodeStatements("return new[]", "{")
-                .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
-                .AddLiteralCodeStatements("};");
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("AddParameters")
+                    .WithType(typeof(object))
+                    .AddParameter("resultEntity", instance.GetEntityFullName())
+                    .AddLiteralCodeStatements("return new[]", "{")
+                    .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
+                    .AddLiteralCodeStatements("};");
+            }
 
-            yield return new ClassMethodBuilder()
-                .WithName("UpdateParameters")
-                .WithType(typeof(object))
-                .AddParameter("resultEntity", instance.GetEntityFullName())
-                .AddLiteralCodeStatements("return new[]", "{")
-                .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
-                .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnUpdate() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
-                .AddLiteralCodeStatements("};");
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("UpdateParameters")
+                    .WithType(typeof(object))
+                    .AddParameter("resultEntity", instance.GetEntityFullName())
+                    .AddLiteralCodeStatements("return new[]", "{")
+                    .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}\", resultEntity.{x.Name}),"))
+                    .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnUpdate() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
+                    .AddLiteralCodeStatements("};");
+            }
 
-            yield return new ClassMethodBuilder()
-                .WithName("DeleteParameters")
-                .WithType(typeof(object))
-                .AddParameter("resultEntity", instance.GetEntityFullName())
-                .AddLiteralCodeStatements("return new[]", "{")
-                .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnDelete() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
-                .AddLiteralCodeStatements("};");
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("DeleteParameters")
+                    .WithType(typeof(object))
+                    .AddParameter("resultEntity", instance.GetEntityFullName())
+                    .AddLiteralCodeStatements("return new[]", "{")
+                    .AddLiteralCodeStatements(instance.GetUpdateConcurrencyCheckFields().Where(x => x.UseOnDelete() || x.IsIdentityField || x.IsSqlIdentity()).Select(x => $"    new KeyValuePair<string, {GetObjectType(settings)}>(\"@{x.Name}Original\", resultEntity.{x.Name}Original),"))
+                    .AddLiteralCodeStatements("};");
+            }
         }
 
         private static string GetObjectType(GeneratorSettings settings)

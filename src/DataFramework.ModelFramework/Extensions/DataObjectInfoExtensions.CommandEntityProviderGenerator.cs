@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
@@ -48,13 +49,43 @@ namespace DataFramework.ModelFramework.Extensions
                     "return (entity, operation) =>",
                     "{",
                     "    switch (operation)",
-                    "    {",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
-                    "            return AddResultEntity(entity);",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
-                    "            return UpdateResultEntity(entity);",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
-                    "            return DeleteResultEntity(entity);",
+                    "    {"
+                )
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
+                            "            return AddResultEntity(entity);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
+                            "            return UpdateResultEntity(entity);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
+                            "            return DeleteResultEntity(entity);"
+                        );
+                    }
+                })
+                .AddGetterLiteralCodeStatements
+                (
                     "         default:",
                     $"             throw new {nameof(ArgumentOutOfRangeException)}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
                     "    }",
@@ -71,13 +102,43 @@ namespace DataFramework.ModelFramework.Extensions
                     "return (entity, operation, reader) =>",
                     "{",
                     "    switch (operation)",
-                    "    {",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
-                    "            return AddAfterRead(entity);",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
-                    "            return UpdateAfterRead(entity);",
-                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
-                    "            return DeleteAfterRead(entity);",
+                    "    {"
+                )
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
+                            "            return AddAfterRead(entity);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
+                            "            return UpdateAfterRead(entity);"
+                        );
+                    }
+                })
+                .Chain(builder =>
+                {
+                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
+                    {
+                        builder.AddGetterLiteralCodeStatements
+                        (
+                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
+                            "            return DeleteAfterRead(entity);"
+                        );
+                    }
+                })
+                .AddGetterLiteralCodeStatements
+                (
                     "         default:",
                     $"             throw new {nameof(ArgumentOutOfRangeException)}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
                     "    }",
@@ -101,61 +162,69 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<ClassMethodBuilder> GetEntityCommandProviderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
         {
-            yield return new ClassMethodBuilder()
-                .WithName("AddResultEntity")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddResultEntityStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
-
-            yield return new ClassMethodBuilder()
-                .WithName("UpdateResultEntity")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateResultEntityStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
-
-            yield return new ClassMethodBuilder()
-                .WithName("DeleteResultEntity")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteResultEntityStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
-
             var outputFields = instance.GetOutputFields().ToArray();
             var originalFields = instance.GetUpdateConcurrencyCheckFields().ToArray();
             var outputFieldsForOriginal = outputFields.Where(x => originalFields.Contains(x)).ToArray();
 
-            yield return new ClassMethodBuilder()
-                .WithName("AddAfterRead")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddParameter("reader", typeof(IDataReader))
-                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
-                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddAfterReadStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("AddResultEntity")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddResultEntityStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
 
+                yield return new ClassMethodBuilder()
+                    .WithName("AddAfterRead")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddParameter("reader", typeof(IDataReader))
+                    .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                    .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddAfterReadStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
+            }
 
-            yield return new ClassMethodBuilder()
-                .WithName("UpdateAfterRead")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddParameter("reader", typeof(IDataReader))
-                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
-                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateAfterReadStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("UpdateResultEntity")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateResultEntityStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
 
-            yield return new ClassMethodBuilder()
-                .WithName("DeleteAfterRead")
-                .WithTypeName(instance.GetEntityBuilderFullName())
-                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                .AddParameter("reader", typeof(IDataReader))
-                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
-                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteAfterReadStatement))
-                .AddLiteralCodeStatements("return resultEntity;");
+                yield return new ClassMethodBuilder()
+                    .WithName("UpdateAfterRead")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddParameter("reader", typeof(IDataReader))
+                    .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                    .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateAfterReadStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
+            }
+
+            if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("DeleteResultEntity")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteResultEntityStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
+
+                yield return new ClassMethodBuilder()
+                    .WithName("DeleteAfterRead")
+                    .WithTypeName(instance.GetEntityBuilderFullName())
+                    .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                    .AddParameter("reader", typeof(IDataReader))
+                    .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                    .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteAfterReadStatement))
+                    .AddLiteralCodeStatements("return resultEntity;");
+            }
         }
 
         private static string CreateAfterReadStatement(IFieldInfo field, IDataObjectInfo instance, bool isImmutable, string suffix)
