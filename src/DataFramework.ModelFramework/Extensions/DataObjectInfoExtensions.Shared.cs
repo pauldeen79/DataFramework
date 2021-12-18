@@ -22,7 +22,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .GetValue(Entities.RenderMetadataAsAttributesType, () => defaultValue);
 
         internal static string GetEntitiesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Entities.Namespace, () => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(Entities.Namespace)
+                .WhenNullOrEmpty(() => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
 
         internal static string GetEntityBuildersNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(Builders.Namespace)
@@ -54,6 +55,10 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static string GetQueryFieldProvidersNamespace(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(QueryFieldProviders.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
+        internal static string GetEntityRetrieverSettingsNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(EntityRetrieverSettings.Namespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityFullName(this IDataObjectInfo instance)

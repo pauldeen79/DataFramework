@@ -27,6 +27,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName(instance.Name)
                 .WithNamespace(instance.GetEntitiesNamespace())
                 .FillFrom(instance)
+                .WithVisibility(instance.Metadata.GetValue(Entities.Visibility, () => instance.IsVisible.ToVisibility()))
                 .WithRecord(entityClassType == EntityClassType.Record)
                 .AddInterfaces(instance.Metadata
                     .Where(md => md.Name == Entities.Interfaces)

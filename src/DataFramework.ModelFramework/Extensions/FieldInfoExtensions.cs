@@ -115,7 +115,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <returns></returns>
         internal static string GetDatabaseFieldAlias(this IFieldInfo instance)
-            => instance.Metadata.GetStringValue(Database.FieldAlias, instance.GetDatabaseFieldName());
+            => instance.Metadata.GetStringValue(Database.FieldAlias, () => instance.GetDatabaseFieldName());
 
         internal static bool IsSqlIdentity(this IFieldInfo instance)
             => instance.GetSqlFieldType().StartsWith("IDENTITY");

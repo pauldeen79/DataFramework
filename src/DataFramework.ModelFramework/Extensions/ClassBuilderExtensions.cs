@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataFramework.Abstractions;
-using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Builders;
 using ModelFramework.Objects.Builders;
 
@@ -13,7 +12,6 @@ namespace DataFramework.ModelFramework.Extensions
         internal static ClassBuilder FillFrom(this ClassBuilder instance, IDataObjectInfo dataObjectInfo)
             => instance
                 .WithPartial()
-                .WithVisibility(dataObjectInfo.Metadata.GetValue(Entities.Visibility, () => dataObjectInfo.IsVisible.ToVisibility()))
                 .AddMetadata(dataObjectInfo.Metadata.Convert());
 
         internal static ClassBuilder WithBaseClass(this ClassBuilder instance, Type baseClassType)
@@ -27,5 +25,11 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static ClassBuilder AddUsings(this ClassBuilder instance, IEnumerable<string> usings)
             => instance.AddUsings(usings.ToArray());
+
+        internal static ClassBuilder AddInterfaces(this ClassBuilder instance, params Type[] types)
+            => instance.AddInterfaces(types.Select(x => x.FullName));
+
+        internal static ClassBuilder AddInterfaces(this ClassBuilder instance, IEnumerable<Type> types)
+            => instance.AddInterfaces(types.ToArray());
     }
 }

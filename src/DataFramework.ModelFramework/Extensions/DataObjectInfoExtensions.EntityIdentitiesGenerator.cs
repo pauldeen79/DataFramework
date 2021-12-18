@@ -23,6 +23,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName(instance.Name + "Identity")
                 .WithNamespace(instance.GetEntityIdentitiesNamespace())
                 .FillFrom(instance)
+                .WithVisibility(instance.Metadata.GetValue(Entities.Visibility, () => instance.IsVisible.ToVisibility()))
                 .WithRecord(entityClassType == EntityClassType.Record)
                 .AddInterfaces(GetEntityIdentityClassTypeInterfaces(instance, entityClassType))
                 .AddProperties(GetEntityIdentityClassProperties(instance, renderMetadataAsAttributes, entityClassType))
