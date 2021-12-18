@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Core.Builders;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
-using ModelFramework.Common.Extensions;
 
 namespace DataFramework.ModelFramework.Extensions
 {

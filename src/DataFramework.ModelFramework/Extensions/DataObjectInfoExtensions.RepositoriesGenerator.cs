@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
-using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 

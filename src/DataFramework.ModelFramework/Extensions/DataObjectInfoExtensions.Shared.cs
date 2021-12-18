@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;

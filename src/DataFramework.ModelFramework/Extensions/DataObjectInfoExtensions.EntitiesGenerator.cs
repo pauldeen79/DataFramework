@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
