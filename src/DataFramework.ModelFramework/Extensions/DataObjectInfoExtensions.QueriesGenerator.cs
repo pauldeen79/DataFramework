@@ -160,7 +160,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddParameter("offset", typeof(int?))
                 .AddParameter("conditions", typeof(IEnumerable<IQueryCondition>))
                 .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>))
-                .WithChainCall("base(limit, offset, conditions, orderByFields)");
+                .ChainCallToBaseUsingParameters();
 
             yield return new ClassConstructorBuilder()
                 .AddParameter("simpleEntityQuery", typeof(ISingleEntityQuery))

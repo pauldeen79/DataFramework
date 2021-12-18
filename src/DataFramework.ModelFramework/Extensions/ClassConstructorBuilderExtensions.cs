@@ -19,5 +19,8 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static ClassConstructorBuilder AddParameter(this ClassConstructorBuilder instance, string name, Type type)
             => instance.AddParameters(new ParameterBuilder().WithName(name).WithType(type));
+
+        internal static ClassConstructorBuilder ChainCallToBaseUsingParameters(this ClassConstructorBuilder instance)
+            => instance.WithChainCall($"base({string.Join(", ", instance.Parameters.Select(x => x.Name))})");
     }
 }

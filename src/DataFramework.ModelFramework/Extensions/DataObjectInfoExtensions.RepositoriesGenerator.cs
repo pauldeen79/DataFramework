@@ -44,7 +44,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .AddParameter("pagedEntitySelectCommandProvider", typeof(IPagedDatabaseCommandProvider))
                 .AddParameter("entitySelectCommandProvider", typeof(IDatabaseCommandProvider))
                 .AddParameter("entityCommandProvider", typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.GetEntityFullName()))
-                .WithChainCall("base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)");
+                .ChainCallToBaseUsingParameters();
         }
 
         private static IEnumerable<AttributeBuilder> GetRepositoryClassAttributes(IDataObjectInfo instance)
