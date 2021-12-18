@@ -2,6 +2,7 @@
 using System.Linq;
 using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
+using CrossCutting.Data.Core;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
@@ -20,7 +21,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithNamespace(instance.GetRepositoriesNamespace())
                 .FillFrom(instance)
                 .WithVisibility(instance.Metadata.GetValue(Repositories.Visibility, () => instance.IsVisible.ToVisibility()))
-                .WithBaseClass($"CrossCutting.Data.Core.Repository<{instance.GetEntityFullName()}, {instance.GetEntityIdentityFullName()}>")
+                .WithBaseClass(typeof(Repository<,>).CreateGenericTypeName(instance.GetEntityFullName(), instance.GetEntityIdentityFullName()))
                 .AddInterfaces(GetRepositoryClassInterfaces(instance))
                 .AddMethods(GetRepositoryClassMethods(instance))
                 .AddConstructors(GetRepositoryClassConstructors(instance))

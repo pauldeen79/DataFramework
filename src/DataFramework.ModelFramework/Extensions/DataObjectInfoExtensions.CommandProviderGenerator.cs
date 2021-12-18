@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Commands;
 using DataFramework.Abstractions;
@@ -48,39 +47,9 @@ namespace DataFramework.ModelFramework.Extensions
                     "switch (operation)",
                     "{"
                 )
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
-                    {
-                        builder.AddLiteralCodeStatements
-                        (
-                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Insert}:",
-                            $"        return new {GetInsertCommandType(instance)}(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
-                    {
-                        builder.AddLiteralCodeStatements
-                        (
-                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Update}:",
-                            $"        return new {GetUpdateCommandType(instance)}(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
-                    {
-                        builder.AddLiteralCodeStatements
-                        (
-                            $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Delete}:",
-                            $"        return new {GetDeleteCommandType(instance)}(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);"
-                        );
-                    }
-                })
+                .AddCommandProviderMethod(instance, CommandProviders.PreventAdd, DatabaseOperation.Insert, GetInsertCommandType(instance), GetInsertCommand(instance))
+                .AddCommandProviderMethod(instance, CommandProviders.PreventUpdate, DatabaseOperation.Update, GetUpdateCommandType(instance), GetUpdateCommand(instance))
+                .AddCommandProviderMethod(instance, CommandProviders.PreventDelete, DatabaseOperation.Delete, GetDeleteCommandType(instance), GetDeleteCommand(instance))
                 .AddLiteralCodeStatements
                 (
                     "    default:",

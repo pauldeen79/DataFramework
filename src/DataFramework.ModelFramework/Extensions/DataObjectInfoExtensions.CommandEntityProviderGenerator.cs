@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
@@ -51,39 +50,9 @@ namespace DataFramework.ModelFramework.Extensions
                     "    switch (operation)",
                     "    {"
                 )
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
-                            "            return AddResultEntity(entity);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
-                            "            return UpdateResultEntity(entity);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
-                            "            return DeleteResultEntity(entity);"
-                        );
-                    }
-                })
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventAdd, DatabaseOperation.Insert, "ResultEntity")
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventUpdate, DatabaseOperation.Update, "ResultEntity")
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventDelete, DatabaseOperation.Delete, "ResultEntity")
                 .AddGetterLiteralCodeStatements
                 (
                     "         default:",
@@ -104,39 +73,9 @@ namespace DataFramework.ModelFramework.Extensions
                     "    switch (operation)",
                     "    {"
                 )
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventAdd))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
-                            "            return AddAfterRead(entity);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventUpdate))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
-                            "            return UpdateAfterRead(entity);"
-                        );
-                    }
-                })
-                .Chain(builder =>
-                {
-                    if (!instance.Metadata.GetBooleanValue(CommandProviders.PreventDelete))
-                    {
-                        builder.AddGetterLiteralCodeStatements
-                        (
-                            $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
-                            "            return DeleteAfterRead(entity);"
-                        );
-                    }
-                })
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventAdd, DatabaseOperation.Insert, "AfterRead")
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventUpdate, DatabaseOperation.Update, "AfterRead")
+                .AddEntityCommandProviderMethod(instance, CommandProviders.PreventDelete, DatabaseOperation.Delete, "AfterRead")
                 .AddGetterLiteralCodeStatements
                 (
                     "         default:",

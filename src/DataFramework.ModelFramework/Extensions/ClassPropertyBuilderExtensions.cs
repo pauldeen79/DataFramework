@@ -1,4 +1,6 @@
-﻿using DataFramework.Abstractions;
+﻿using CrossCutting.Common.Extensions;
+using CrossCutting.Data.Abstractions;
+using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Extensions;
@@ -18,5 +20,22 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static ClassPropertyBuilder AddGetterLiteralCodeStatements(this ClassPropertyBuilder instance, params string[] statements)
             => instance.AddGetterCodeStatements(statements.ToLiteralCodeStatementBuilders());
+
+        public static ClassPropertyBuilder AddEntityCommandProviderMethod(this ClassPropertyBuilder instance,
+                                                                          IDataObjectInfo dataObjectInfo,
+                                                                          string preventMetadataName,
+                                                                          DatabaseOperation operation,
+                                                                          string methodSuffix)
+            => instance.Chain(() =>
+            {
+                if (!dataObjectInfo.Metadata.GetBooleanValue(preventMetadataName))
+                {
+                    instance.AddGetterLiteralCodeStatements
+                    (
+                        $"        case {typeof(DatabaseOperation).FullName}.{operation}:",
+                        $"            return {operation.GetMethodNamePrefix()}{methodSuffix}(entity);"
+                    );
+                }
+            });
     }
 }
