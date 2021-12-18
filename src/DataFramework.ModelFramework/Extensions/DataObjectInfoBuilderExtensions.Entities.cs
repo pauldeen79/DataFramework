@@ -18,23 +18,11 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddEntityInterfaces(this DataObjectInfoBuilder instance, params string[] interfaces)
             => instance.AddMetadata(interfaces.Select(x => new MetadataBuilder().WithName(Entities.Interfaces).WithValue(x)));
 
-        public static DataObjectInfoBuilder AddEntityInterfaces(this DataObjectInfoBuilder instance, IEnumerable<string> interfaces)
-            => instance.AddEntityInterfaces(interfaces.ToArray());
-
         public static DataObjectInfoBuilder WithEntityVisibility(this DataObjectInfoBuilder instance, Visibility? visibility)
             => instance.ReplaceMetadata(Entities.Visibility, visibility);
 
-        public static DataObjectInfoBuilder AddEntityAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
-            => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Entities.ClassAttribute).WithValue(x)));
-
-        public static DataObjectInfoBuilder AddEntityAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddEntityAttributes(attributes.ToArray());
-
         public static DataObjectInfoBuilder AddEntityAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Entities.ClassAttribute).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddEntityAttributes(this DataObjectInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
-            => instance.AddEntityAttributes(attributes.ToArray());
 
         public static DataObjectInfoBuilder WithPropertyNameDeconflictionFormatString(this DataObjectInfoBuilder instance, string? propertyNameDeconflictionFormatString)
             => instance.ReplaceMetadata(Entities.PropertyNameDeconflictionFormatString, propertyNameDeconflictionFormatString);

@@ -11,8 +11,11 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static bool IsSupportedByMap(this string instance)
         {
-            if (instance.IsRequiredEnum()) return true;
-            if (instance.IsOptionalEnum()) return true;
+            if (instance.IsRequiredEnum() || instance.IsOptionalEnum())
+            {
+                return true;
+            }
+
             var type = Type.GetType(instance);
             return type != null && _readerMethodNames.ContainsKey(type);
         }

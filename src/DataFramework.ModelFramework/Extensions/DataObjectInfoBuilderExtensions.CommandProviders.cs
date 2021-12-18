@@ -21,12 +21,6 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder WithCommandProviderNamespace(this DataObjectInfoBuilder instance, string? @namespace)
             => instance.ReplaceMetadata(CommandProviders.Namespace, @namespace);
 
-        public static DataObjectInfoBuilder AddCommandProviderAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
-            => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(CommandProviders.Attribute).WithValue(x)));
-
-        public static DataObjectInfoBuilder AddCommandProviderAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddCommandProviderAttributes(attributes.ToArray());
-
         public static DataObjectInfoBuilder AddCommandProviderAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(CommandProviders.Attribute).WithValue(x.Build())));
 

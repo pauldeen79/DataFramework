@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using DataFramework.Abstractions;
+﻿using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Extensions;
@@ -20,8 +18,5 @@ namespace DataFramework.ModelFramework.Extensions
 
         internal static ClassPropertyBuilder AddGetterLiteralCodeStatements(this ClassPropertyBuilder instance, params string[] statements)
             => instance.AddGetterCodeStatements(statements.ToLiteralCodeStatementBuilders());
-
-        internal static ClassPropertyBuilder AddGetterLiteralCodeStatements(this ClassPropertyBuilder instance, IEnumerable<string> statements)
-            => instance.AddGetterLiteralCodeStatements(statements.ToArray());
     }
 }

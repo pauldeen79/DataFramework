@@ -15,13 +15,7 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddEntityIdentityAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Identities.Attribute).WithValue(x)));
 
-        public static DataObjectInfoBuilder AddEntityIdentityAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddEntityIdentityAttributes(attributes.ToArray());
-
         public static DataObjectInfoBuilder AddEntityIdentityAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Identities.Attribute).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddEntityIDentityAttributes(this DataObjectInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
-            => instance.AddEntityIdentityAttributes(attributes.ToArray());
     }
 }

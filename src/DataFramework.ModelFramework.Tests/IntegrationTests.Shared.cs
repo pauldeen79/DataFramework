@@ -78,8 +78,10 @@ namespace DataFramework.ModelFramework.Tests
                 .WithUpdateStoredProcedureName("UpdateTestEntity")
                 .WithDeleteStoredProcedureName("DeleteTestEntity")
 
-                .WithCommandEntityProviderNamespace("CommandEntityProviers")
+                .WithCommandEntityProviderNamespace("CommandEntityProviders")
                 .WithCommandEntityProviderVisibility(Visibility.Internal)
+                .AddCommandEntityProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+
                 .AddAddResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
                 .AddUpdateResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
                 .AddDeleteResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())

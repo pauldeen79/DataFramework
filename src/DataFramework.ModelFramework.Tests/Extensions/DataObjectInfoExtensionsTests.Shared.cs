@@ -59,7 +59,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         }
 
         [Fact]
-        public void WithAdditionalDataObjectInfos_Returns_Correct_Enumerable_When_Found_Using_Array()
+        public void WithAdditionalDataObjectInfos_Returns_Correct_Enumerable_When_Found()
         {
             // Arrange
             var sut = new DataObjectInfoBuilder()
@@ -68,32 +68,6 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 (
                     new DataObjectInfoBuilder().WithName("FirstAdditional").Build(),
                     new DataObjectInfoBuilder().WithName("SecondAdditional").Build()
-                )
-                .Build();
-
-            // Act
-            var actual = sut.WithAdditionalDataObjectInfos();
-
-            // Assert
-            actual.Should().HaveCount(3);
-            actual.First().Should().Be(sut);
-            actual.ElementAt(1).Name.Should().Be("FirstAdditional");
-            actual.ElementAt(2).Name.Should().Be("SecondAdditional");
-        }
-
-        [Fact]
-        public void WithAdditionalDataObjectInfos_Returns_Correct_Enumerable_When_Found_Using_Enumerable()
-        {
-            // Arrange
-            var sut = new DataObjectInfoBuilder()
-                .WithName("TestEntity")
-                .AddAdditionalDataObjectInfos
-                (
-                    new[]
-                    {
-                        new DataObjectInfoBuilder().WithName("FirstAdditional").Build(),
-                        new DataObjectInfoBuilder().WithName("SecondAdditional").Build()
-                    }.AsEnumerable()
                 )
                 .Build();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using CrossCutting.Common.Extensions;
 using DataFramework.Core.Builders;
@@ -103,26 +102,14 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder AddComputedFieldStatements(this FieldInfoBuilder instance, params ICodeStatement[] codeStatements)
             => instance.AddMetadata(codeStatements.Select(x => new MetadataBuilder().WithName(Entities.ComputedFieldStatement).WithValue(x)));
 
-        public static FieldInfoBuilder AddComputedFieldStatements(this FieldInfoBuilder instance, IEnumerable<ICodeStatement> codeStatements)
-            => instance.AddComputedFieldStatements(codeStatements.ToArray());
-
         public static FieldInfoBuilder AddComputedFieldStatements(this FieldInfoBuilder instance, params ICodeStatementBuilder[] codeStatementBuilders)
             => instance.AddMetadata(codeStatementBuilders.Select(x => new MetadataBuilder().WithName(Entities.ComputedFieldStatement).WithValue(x.Build())));
-
-        public static FieldInfoBuilder AddComputedFieldStatements(this FieldInfoBuilder instance, IEnumerable<ICodeStatementBuilder> codeStatementBuilders)
-            => instance.AddComputedFieldStatements(codeStatementBuilders.ToArray());
 
         public static FieldInfoBuilder AddAttributes(this FieldInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Entities.FieldAttribute).WithValue(x)));
 
-        public static FieldInfoBuilder AddAttributes(this FieldInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddAttributes(attributes.ToArray());
-
         public static FieldInfoBuilder AddAttributes(this FieldInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(Entities.FieldAttribute).WithValue(x.Build())));
-
-        public static FieldInfoBuilder AddAttributes(this FieldInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
-            => instance.AddAttributes(attributes.ToArray());
 
         private static IAttribute CreateStringLengthAttribute(int maxLength, int? minimumLength)
         {

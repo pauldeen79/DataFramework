@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
@@ -15,14 +14,8 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddQueryFieldProviderAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.Attribute).WithValue(x)));
 
-        public static DataObjectInfoBuilder AddQueryFieldProviderAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddQueryFieldProviderAttributes(attributes.ToArray());
-
         public static DataObjectInfoBuilder AddQueryFieldProviderAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.Attribute).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddQueryFieldProviderAttributes(this DataObjectInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
-            => instance.AddQueryFieldProviderAttributes(attributes.ToArray());
 
         public static DataObjectInfoBuilder WithQueryFieldProviderVisibility(this DataObjectInfoBuilder instance, Visibility? visibility)
             => instance.ReplaceMetadata(QueryFieldProviders.Visibility, visibility);

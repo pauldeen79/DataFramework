@@ -32,10 +32,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CommandEntityProviers
+namespace CommandEntityProviders
 {
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
         public Func<EntityBuilders.TestEntityBuilder? ResultEntityDelegate
@@ -177,10 +178,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CommandEntityProviers
+namespace CommandEntityProviders
 {
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
         public Func<EntityBuilders.TestEntityBuilder? ResultEntityDelegate

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
@@ -15,14 +14,8 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddEntityRetrieverSettingsAttributes(this DataObjectInfoBuilder instance, params IAttribute[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(EntityRetrieverSettings.Attribute).WithValue(x)));
 
-        public static DataObjectInfoBuilder AddEntityRetrieverSettingsAttributes(this DataObjectInfoBuilder instance, IEnumerable<IAttribute> attributes)
-            => instance.AddEntityRetrieverSettingsAttributes(attributes.ToArray());
-
         public static DataObjectInfoBuilder AddEntityRetrieverSettingsAttributes(this DataObjectInfoBuilder instance, params AttributeBuilder[] attributes)
             => instance.AddMetadata(attributes.Select(x => new MetadataBuilder().WithName(EntityRetrieverSettings.Attribute).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddEntityRetrieverSettingsAttributes(this DataObjectInfoBuilder instance, IEnumerable<AttributeBuilder> attributes)
-            => instance.AddEntityRetrieverSettingsAttributes(attributes.ToArray());
 
         public static DataObjectInfoBuilder WithEntityRetrieverSettingsVisibility(this DataObjectInfoBuilder instance, Visibility? visibility)
             => instance.ReplaceMetadata(EntityRetrieverSettings.Visibility, visibility);
@@ -32,9 +25,6 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static DataObjectInfoBuilder AddEntityRetrieverSettingsFields(this DataObjectInfoBuilder instance, params string[] fields)
             => instance.AddMetadata(fields.Select(x => new MetadataBuilder().WithName(EntityRetrieverSettings.Field).WithValue(x)));
-
-        public static DataObjectInfoBuilder AddEntityRetrieverSettingsFields(this DataObjectInfoBuilder instance, IEnumerable<string> fields)
-            => instance.AddEntityRetrieverSettingsFields(fields.ToArray());
 
         public static DataObjectInfoBuilder WithDefaultOrderByFields(this DataObjectInfoBuilder instance, string? orderByFields)
             => instance.ReplaceMetadata(EntityRetrieverSettings.DefaultOrderByFields, orderByFields);
