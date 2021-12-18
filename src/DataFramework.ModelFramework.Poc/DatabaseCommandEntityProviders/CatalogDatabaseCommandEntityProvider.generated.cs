@@ -12,40 +12,62 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
     public partial class CatalogDatabaseCommandEntityProvider : IDatabaseCommandEntityProvider<Catalog, CatalogBuilder>
     {
         public Func<CatalogBuilder, DatabaseOperation, CatalogBuilder>? ResultEntityDelegate
-            => (entity, operation) =>
+        {
+            get
             {
-                switch (operation)
+                return (entity, operation) =>
                 {
-                    case DatabaseOperation.Insert:
-                        return AddResultEntity(entity);
-                    case DatabaseOperation.Update:
-                        return UpdateResultEntity(entity);
-                    case DatabaseOperation.Delete:
-                        return DeleteResultEntity(entity);
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
-                }
-            };
+                    switch (operation)
+                    {
+                        case DatabaseOperation.Insert:
+                            return AddResultEntity(entity);
+                        case DatabaseOperation.Update:
+                            return UpdateResultEntity(entity);
+                        case DatabaseOperation.Delete:
+                            return DeleteResultEntity(entity);
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
+                    }
+                };
+            }
+        }
 
         public Func<CatalogBuilder, DatabaseOperation, IDataReader, CatalogBuilder>? AfterReadDelegate
-            => (entity, operation, reader) =>
+        {
+            get
             {
-                switch (operation)
+                return (entity, operation, reader) =>
                 {
-                    case DatabaseOperation.Insert:
-                        return AddAfterRead(entity, reader);
-                    case DatabaseOperation.Update:
-                        return UpdateAfterRead(entity, reader);
-                    case DatabaseOperation.Delete:
-                        return entity;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
-                }
-            };
+                    switch (operation)
+                    {
+                        case DatabaseOperation.Insert:
+                            return AddAfterRead(entity, reader);
+                        case DatabaseOperation.Update:
+                            return UpdateAfterRead(entity, reader);
+                        case DatabaseOperation.Delete:
+                            return entity;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(operation), string.Format("Unsupported operation: {0}", operation));
+                    }
+                };
+            }
+        }
 
-        public Func<Catalog, CatalogBuilder>? CreateBuilderDelegate => entity => new CatalogBuilder(entity);
+        public Func<Catalog, CatalogBuilder>? CreateBuilderDelegate
+        {
+            get
+            {
+                return entity => new CatalogBuilder(entity);
+            }
+        }
 
-        public Func<CatalogBuilder, Catalog>? CreateEntityDelegate => builder => builder.Build();
+        public Func<CatalogBuilder, Catalog>? CreateEntityDelegate
+        {
+            get
+            {
+                return builder => builder.Build();
+            }
+        }
 
         private CatalogBuilder AddResultEntity(CatalogBuilder resultEntity)
         {

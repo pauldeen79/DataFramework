@@ -32,13 +32,17 @@ namespace DataFramework.ModelFramework.Extensions
                                                            IFieldInfo fieldInfo,
                                                            ConcurrencyCheckBehavior concurrencyCheckBehavior)
             => concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields
-                && !instance.IsReadOnly
-                && !fieldInfo.IsComputed
-                && fieldInfo.IsPersistable
-                && (fieldInfo.IsIdentityField
-                    || fieldInfo.IsSqlIdentity()
+                &&
+                (
+                    concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields
                     || fieldInfo.UseForConcurrencyCheck
-                    || concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields);
+                    ||
+                    (
+                        !fieldInfo.IsComputed
+                        && fieldInfo.IsPersistable
+                        && (fieldInfo.IsIdentityField || fieldInfo.IsSqlIdentity())
+                    )
+                );
 
         internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo instance)
             => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), instance.Metadata.Any(md => md.Name == Database.ConcurrencyCheckBehavior)
@@ -68,7 +72,7 @@ namespace DataFramework.ModelFramework.Extensions
             return new InsertCommandBuilder()
                 .Into($"[{instance.GetTableName()}]")
                 .AddFieldNames(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
-                .AddFieldValues(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"@{x.Name.Sanitize()}"))
+                .AddFieldValues(instance.Fields.Where(x => x.UseOnInsert()).Select(x => $"@{x.CreatePropertyName(instance)}"))
                 .AddOutputFields(instance.GetOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
@@ -86,7 +90,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithTable($"[{instance.GetTableName()}]")
                 .Where(instance.GetUpdateWhereStatement(x => x.UseOnUpdate()))
                 .AddFieldNames(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
-                .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.Name.Sanitize()}"))
+                .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.CreatePropertyName(instance)}"))
                 .AddOutputFields(instance.GetOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
@@ -128,11 +132,11 @@ namespace DataFramework.ModelFramework.Extensions
                 );
 
         internal static string GetFindWhereStatement(this IDataObjectInfo instance)
-            => string.Join(" AND ", instance.GetFindFields().Select(x => $"[{x.Name}] = @{x.Name.Sanitize()}"));
+            => string.Join(" AND ", instance.GetFindFields().Select(x => $"[{x.GetDatabaseFieldName()}] = @{x.CreatePropertyName(instance)}"));
 
         internal static string GetUpdateWhereStatement(this IDataObjectInfo instance, Predicate<IFieldInfo> predicate)
             => string.Join(" AND ", instance.GetUpdateConcurrencyCheckFields()
                                             .Where(x => predicate(x) || x.IsIdentityField || x.IsSqlIdentity())
-                                            .Select(x => $"[{x.Name}] = @{x.Name.Sanitize()}Original"));
+                                            .Select(x => $"[{x.CreatePropertyName(instance)}] = @{x.CreatePropertyName(instance)}Original"));
     }
 }

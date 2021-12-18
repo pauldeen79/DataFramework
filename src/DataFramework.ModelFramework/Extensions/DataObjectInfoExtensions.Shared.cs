@@ -33,19 +33,28 @@ namespace DataFramework.ModelFramework.Extensions
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetQueriesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Queries.Namespace, () => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(Queries.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetRepositoriesNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Repositories.Namespace, () => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(Repositories.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetRepositoriesInterfaceNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(Repositories.InterfaceNamespace, () => instance.GetRepositoriesNamespace());
+            => instance.Metadata.GetStringValue(Repositories.InterfaceNamespace)
+                .WhenNullOrEmpty(() => instance.GetRepositoriesNamespace());
 
         internal static string GetCommandProvidersNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(CommandProviders.Namespace, () => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(CommandProviders.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
+        internal static string GetCommandEntityProvidersNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(CommandEntityProviders.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetQueryFieldProvidersNamespace(this IDataObjectInfo instance)
-            => instance.Metadata.GetStringValue(QueryFieldProviders.Namespace, () => instance.TypeName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty);
+            => instance.Metadata.GetStringValue(QueryFieldProviders.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
         internal static string GetEntityFullName(this IDataObjectInfo instance)
         {
@@ -61,6 +70,14 @@ namespace DataFramework.ModelFramework.Extensions
             return string.IsNullOrEmpty(ns)
                 ? $"{instance.Name}Identity"
                 : $"{ns}.{instance.Name}Identity";
+        }
+
+        internal static string GetEntityBuilderFullName(this IDataObjectInfo instance)
+        {
+            var ns = instance.GetEntityBuildersNamespace();
+            return string.IsNullOrEmpty(ns)
+                ? $"{instance.Name}Builder"
+                : $"{ns}.{instance.Name}Builder";
         }
 
         internal static string GetEntityRetrieverFullName(this IDataObjectInfo instance)

@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using CrossCutting.Data.Abstractions;
+using DataFramework.Abstractions;
+using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.Contracts;
+
+namespace DataFramework.ModelFramework.Extensions
+{
+    public static partial class DataObjectInfoExtensions
+    {
+        public static IClass ToCommandEntityProviderClass(this IDataObjectInfo instance, GeneratorSettings settings)
+            => instance.ToCommandEntityProviderClassBuilder(settings).Build();
+
+        public static ClassBuilder ToCommandEntityProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
+            => new ClassBuilder()
+                .WithName($"{instance.Name}CommandEntityProvider")
+                .WithNamespace(instance.GetCommandEntityProvidersNamespace())
+                .FillFrom(instance)
+                .WithVisibility(instance.Metadata.GetValue(CommandEntityProviders.Visibility, () => instance.IsVisible.ToVisibility()))
+                .AddInterfaces(typeof(IDatabaseCommandEntityProvider<,>).CreateGenericTypeName(instance.GetEntityFullName(), instance.GetEntityBuilderFullName()))
+                .AddAttributes(GetEntityCommandProviderClassAttributes(instance))
+                .AddProperties(GetEntityCommandProviderClassProperties(instance))
+                .AddMethods(GetEntityCommandProviderClassMethods(instance, instance.GetEntityClassType(settings.DefaultEntityClassType)));
+
+        private static IEnumerable<AttributeBuilder> GetEntityCommandProviderClassAttributes(IDataObjectInfo instance)
+        {
+            yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator");
+
+            foreach (var attribute in instance.Metadata.GetValues<IAttribute>(CommandEntityProviders.Attribute))
+            {
+                yield return new AttributeBuilder(attribute);
+            }
+        }
+
+        private static IEnumerable<ClassPropertyBuilder> GetEntityCommandProviderClassProperties(IDataObjectInfo instance)
+        {
+            yield return new ClassPropertyBuilder()
+                .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.ResultEntityDelegate)}")
+                .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {typeof(DatabaseOperation).FullName}, {instance.GetEntityBuilderFullName()}>")
+                .WithIsNullable()
+                .WithHasSetter(false)
+                .AddGetterLiteralCodeStatements
+                (
+                    "return (entity, operation) =>",
+                    "{",
+                    "    switch (operation)",
+                    "    {",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
+                    "            return AddResultEntity(entity);",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
+                    "            return UpdateResultEntity(entity);",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
+                    "            return DeleteResultEntity(entity);",
+                    "         default:",
+                    $"             throw new {nameof(ArgumentOutOfRangeException)}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
+                    "    }",
+                    "}"
+                );
+
+            yield return new ClassPropertyBuilder()
+                .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.AfterReadDelegate)}")
+                .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {typeof(DatabaseOperation).FullName}, {typeof(IDataReader).FullName}, {instance.GetEntityBuilderFullName()}>")
+                .WithIsNullable()
+                .WithHasSetter(false)
+                .AddGetterLiteralCodeStatements
+                (
+                    "return (entity, operation, reader) =>",
+                    "{",
+                    "    switch (operation)",
+                    "    {",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}:",
+                    "            return AddAfterRead(entity);",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}:",
+                    "            return UpdateAfterRead(entity);",
+                    $"        case {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}:",
+                    "            return DeleteAfterRead(entity);",
+                    "         default:",
+                    $"             throw new {nameof(ArgumentOutOfRangeException)}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
+                    "    }",
+                    "}"
+                );
+
+            yield return new ClassPropertyBuilder()
+                .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateBuilderDelegate)}")
+                .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {instance.GetEntityFullName()}>")
+                .WithIsNullable()
+                .WithHasSetter(false)
+                .AddGetterLiteralCodeStatements($"return entity => new {instance.GetEntityBuilderFullName()}(entity);");
+
+            yield return new ClassPropertyBuilder()
+                .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateEntityDelegate)}")
+                .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {instance.GetEntityFullName()}>")
+                .WithIsNullable()
+                .WithHasSetter(false)
+                .AddGetterLiteralCodeStatements("return builder => builder.Build();");
+        }
+
+        private static IEnumerable<ClassMethodBuilder> GetEntityCommandProviderClassMethods(IDataObjectInfo instance, EntityClassType entityClassType)
+        {
+            yield return new ClassMethodBuilder()
+                .WithName("AddResultEntity")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddResultEntityStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+
+            yield return new ClassMethodBuilder()
+                .WithName("UpdateResultEntity")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateResultEntityStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+
+            yield return new ClassMethodBuilder()
+                .WithName("DeleteResultEntity")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteResultEntityStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+
+            var outputFields = instance.GetOutputFields().ToArray();
+            var originalFields = instance.GetUpdateConcurrencyCheckFields().ToArray();
+            var outputFieldsForOriginal = outputFields.Where(x => originalFields.Contains(x)).ToArray();
+
+            yield return new ClassMethodBuilder()
+                .WithName("AddAfterRead")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddParameter("reader", typeof(IDataReader))
+                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddAfterReadStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+
+
+            yield return new ClassMethodBuilder()
+                .WithName("UpdateAfterRead")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddParameter("reader", typeof(IDataReader))
+                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateAfterReadStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+
+            yield return new ClassMethodBuilder()
+                .WithName("DeleteAfterRead")
+                .WithTypeName(instance.GetEntityBuilderFullName())
+                .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
+                .AddParameter("reader", typeof(IDataReader))
+                .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
+                .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteAfterReadStatement))
+                .AddLiteralCodeStatements("return resultEntity;");
+        }
+
+        private static string CreateAfterReadStatement(IFieldInfo field, IDataObjectInfo instance, bool isImmutable, string suffix)
+            => isImmutable
+                ? $"resultEntity = resultEntity.Set{field.CreatePropertyName(instance)}{suffix}(reader.{field.GetSqlReaderMethodName()}(\"{field.GetDatabaseFieldName()}\"));"
+                : $"resultEntity.{field.CreatePropertyName(instance)}{suffix} = reader.{field.GetSqlReaderMethodName()}(\"{field.GetSqlReaderMethodName()}\");";
+    }
+}

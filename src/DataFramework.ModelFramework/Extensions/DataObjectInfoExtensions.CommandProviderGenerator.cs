@@ -5,7 +5,6 @@ using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core.Commands;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
-using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 
@@ -23,10 +22,20 @@ namespace DataFramework.ModelFramework.Extensions
                 .FillFrom(instance)
                 .WithVisibility(instance.Metadata.GetValue(CommandProviders.Visibility, () => instance.IsVisible.ToVisibility()))
                 .AddInterfaces(typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.GetEntityIdentityFullName()))
-                .AddAttributes(GetIdentityCommandProviderClassAttributes(instance))
-                .AddMethods(GetIdentityCommandProviderClassMethods(instance, settings));
+                .AddAttributes(GetCommandProviderClassAttributes(instance))
+                .AddMethods(GetCommandProviderClassMethods(instance, settings));
 
-        private static IEnumerable<ClassMethodBuilder> GetIdentityCommandProviderClassMethods(IDataObjectInfo instance, GeneratorSettings settings)
+        private static IEnumerable<AttributeBuilder> GetCommandProviderClassAttributes(IDataObjectInfo instance)
+        {
+            yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.CommandProviderGenerator");
+
+            foreach (var attribute in instance.Metadata.GetValues<IAttribute>(CommandProviders.Attribute))
+            {
+                yield return new AttributeBuilder(attribute);
+            }
+        }
+
+        private static IEnumerable<ClassMethodBuilder> GetCommandProviderClassMethods(IDataObjectInfo instance, GeneratorSettings settings)
         {
             yield return new ClassMethodBuilder()
                 .WithName(nameof(IDatabaseCommandProvider<object>.Create))
@@ -38,11 +47,11 @@ namespace DataFramework.ModelFramework.Extensions
                     "switch (operation)",
                     "{",
                     $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Insert}:",
-                    $"        return new {GetInsertCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);",
+                    $"        return new {GetInsertCommandType(instance)}(\"{GetInsertCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Insert)}, AddParameters);",
                     $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Update}:",
-                    $"        return new {GetUpdateCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);",
+                    $"        return new {GetUpdateCommandType(instance)}(\"{GetUpdateCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Update)}, UpdateParameters);",
                     $"    case {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Delete}:",
-                    $"        return new {GetDeleteCommandType(instance)}<{instance.GetEntityFullName()}>(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);",
+                    $"        return new {GetDeleteCommandType(instance)}(\"{GetDeleteCommand(instance)}\", source, {typeof(DatabaseOperation).FullName}.{nameof(DatabaseOperation.Delete)}, DeleteParameters);",
                     "    default:",
                     $@"        throw new {nameof(ArgumentOutOfRangeException)}(""operation"", string.Format(""Unsupported operation: {{0}}"", operation));",
                     "}"

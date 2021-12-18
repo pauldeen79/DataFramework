@@ -108,18 +108,18 @@ namespace DataFramework.ModelFramework.Tests.Extensions
         }
 
         [Theory]
-        [InlineData(true, true, true, true, ConcurrencyCheckBehavior.AllFields, false)]
-        [InlineData(true, true, true, true, ConcurrencyCheckBehavior.MarkedFields, false)]
-        [InlineData(false, true, true, true, ConcurrencyCheckBehavior.AllFields, true)]
-        [InlineData(false, true, false, false, ConcurrencyCheckBehavior.MarkedFields, false)]
-        [InlineData(false, true, true, false, ConcurrencyCheckBehavior.MarkedFields, true)]
-        [InlineData(false, true, false, true, ConcurrencyCheckBehavior.MarkedFields, true)]
-        [InlineData(false, true, true, true, ConcurrencyCheckBehavior.NoFields, false)]
-        [InlineData(false, false, true, true, ConcurrencyCheckBehavior.MarkedFields, false)]
-        [InlineData(false, false, false, true, ConcurrencyCheckBehavior.MarkedFields, false)]
-        [InlineData(false, false, true, false, ConcurrencyCheckBehavior.MarkedFields, false)]
-        public void IsUpdateConcurrencyCheckField_Returns_Correct_Value(bool dataObjectInfoIsReadOnly,
-                                                                        bool isPersistable,
+        [InlineData(true, true, true, ConcurrencyCheckBehavior.MarkedFields, true)]
+        [InlineData(true, true, true, ConcurrencyCheckBehavior.AllFields, true)]
+        [InlineData(false, false, false, ConcurrencyCheckBehavior.MarkedFields, false)]
+        [InlineData(false, false, false, ConcurrencyCheckBehavior.AllFields, true)]
+        [InlineData(true, false, false, ConcurrencyCheckBehavior.MarkedFields, false)]
+        [InlineData(true, true, false, ConcurrencyCheckBehavior.MarkedFields, true)]
+        [InlineData(true, false, true, ConcurrencyCheckBehavior.MarkedFields, true)]
+        [InlineData(true, true, true, ConcurrencyCheckBehavior.NoFields, false)]
+        [InlineData(false, true, true, ConcurrencyCheckBehavior.MarkedFields, true)]
+        [InlineData(false, false, true, ConcurrencyCheckBehavior.MarkedFields, true)]
+        [InlineData(false, true, false, ConcurrencyCheckBehavior.MarkedFields, false)]
+        public void IsUpdateConcurrencyCheckField_Returns_Correct_Value(bool isPersistable,
                                                                         bool isIdentity,
                                                                         bool useForConcurrencyCheck,
                                                                         ConcurrencyCheckBehavior concurrencyCheckBehavior,
@@ -135,7 +135,6 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .Build();
             var dataObjectInfo = new DataObjectInfoBuilder()
                 .WithName("Test")
-                .WithIsReadOnly(dataObjectInfoIsReadOnly)
                 .AddFields(fieldInfo)
                 .Build();
 
