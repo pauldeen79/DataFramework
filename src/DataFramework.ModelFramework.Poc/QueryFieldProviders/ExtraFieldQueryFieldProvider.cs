@@ -1,5 +1,7 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
@@ -10,11 +12,6 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
     {
         public IEnumerable<string> GetAllFields()
         {
-            return GetFieldNames();
-        }
-
-        private IEnumerable<string> GetFieldNames()
-        {
             yield return "[EntityName]";
             yield return "[Name]";
             yield return "[Description]";
@@ -24,8 +21,8 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 
         public string? GetDatabaseFieldName(string queryFieldName)
         {
-            // default: return queryFieldName;
-            return queryFieldName;
+            // default: return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
+            return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public IEnumerable<string> GetSelectFields(IEnumerable<string> querySelectFields)

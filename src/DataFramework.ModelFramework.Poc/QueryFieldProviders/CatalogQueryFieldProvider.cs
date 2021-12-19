@@ -11,19 +11,14 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogQueryFieldProvider : IQueryFieldProvider
     {
-        private IEnumerable<ExtraField> ExtraFields { get; }
+        private readonly IEnumerable<ExtraField> _extraFields;
 
         public CatalogQueryFieldProvider(IEnumerable<ExtraField> extraFields)
         {
-            ExtraFields = extraFields;
+            _extraFields = extraFields;
         }
 
         public IEnumerable<string> GetAllFields()
-        {
-            return GetFieldNames();
-        }
-
-        private IEnumerable<string> GetFieldNames()
         {
             yield return @"Id";
             yield return @"Name";
@@ -63,7 +58,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
         public string? GetDatabaseFieldName(string queryFieldName)
         {
             // default: return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
-            var extraField = ExtraFields.FirstOrDefault(x => x.Name == queryFieldName);
+            var extraField = _extraFields.FirstOrDefault(x => x.Name == queryFieldName);
             if (extraField != null)
             {
                 return string.Format("ExtraField{0}", extraField.FieldNumber);
