@@ -143,7 +143,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .Select(md => md.Value)
                 .OfType<T>();
 
-        private static IEnumerable<AttributeBuilder> GetClassAttributes(this IDataObjectInfo instance,
+        private static IEnumerable<AttributeBuilder> GetClassAttributeBuilderAttributes(this IDataObjectInfo instance,
                                                                         RenderMetadataAsAttributesTypes renderMetadataAsAttributes,
                                                                         string attributeName)
         {

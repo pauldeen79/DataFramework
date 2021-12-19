@@ -18,6 +18,7 @@
     <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.2.31" />
     <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.2.31" />
     <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.5.14" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.5.14" />
   </ItemGroup>
 
   <ItemGroup>

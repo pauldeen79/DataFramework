@@ -42,12 +42,9 @@ namespace DataFramework.ModelFramework.Extensions
         {
             yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator");
 
-            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
+            foreach (var attributeBuilder in instance.GetClassAttributeBuilderAttributes(renderMetadataAsAttributes, Builders.Attribute))
             {
-                foreach (var attributeBuilder in instance.GetClassAttributes(renderMetadataAsAttributes, Builders.Attribute))
-                {
-                    yield return attributeBuilder;
-                }
+                yield return attributeBuilder;
             }
         }
     }

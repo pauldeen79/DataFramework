@@ -123,5 +123,31 @@ namespace DataFramework.ModelFramework.Tests
                 .WithCommandProviderVisibility(Visibility.Internal)
                 .AddCommandProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .Build();
+
+        private static DataObjectInfo CreateDataObjectInfoWithCustomQueryFieldProviderStuff()
+            => new DataObjectInfoBuilder()
+                .WithName("TestEntity")
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
+                    new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
+                    new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().WithIsPersistable(false).AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;")),
+                    new FieldInfoBuilder().WithName("ExtraField").WithType(typeof(string)).WithIsNullable().WithSkipFieldInQueryFieldProvider()
+                )
+                .AddQueryFieldProviderFields(new ClassFieldBuilder().WithName("_extraFields").WithReadOnly().WithTypeName("IEnumerable<ExtraField>"))
+                .AddQueryFieldProviderConstructorParameters(new ParameterBuilder().WithName("extraFields").WithTypeName("IEnumerable<ExtraField>"))
+                .AddQueryFieldProviderConstructorCodeStatements(new LiteralCodeStatementBuilder().WithStatement("_extraFields = extraFields;"))
+                .AddQueryFieldProviderGetAllFieldsCodeStatements(new LiteralCodeStatementBuilder().WithStatement("yield return \"AllFields\";"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("var extraField = _extraFields.FirstOrDefault(x => x.Name == queryFieldName);"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("if (extraField != null)"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("{"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("    return string.Format(\"ExtraField{0}\", extraField.FieldNumber);"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("}"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("if (queryFieldName == \"AllFields\")"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("{"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("    return \"[Name] + ' ' + COALESCE([Description], '')\";"))
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("}"))
+                .Build();
     }
 }

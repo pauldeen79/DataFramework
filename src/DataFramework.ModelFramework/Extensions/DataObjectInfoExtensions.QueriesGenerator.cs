@@ -171,12 +171,9 @@ namespace DataFramework.ModelFramework.Extensions
         {
             yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.Queries.QueryGenerator");
 
-            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
+            foreach (var attribute in instance.GetClassAttributeBuilderAttributes(renderMetadataAsAttributes, Queries.Attribute))
             {
-                foreach (var attribute in instance.Metadata.GetValues<IAttribute>(Queries.Attribute))
-                {
-                    yield return new AttributeBuilder(attribute);
-                }
+                yield return attribute;
             }
         }
     }

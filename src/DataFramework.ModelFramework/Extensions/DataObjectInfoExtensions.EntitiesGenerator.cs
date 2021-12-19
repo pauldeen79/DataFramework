@@ -342,12 +342,9 @@ namespace DataFramework.ModelFramework.Extensions
                 }
             }
 
-            if (renderMetadataAsAttributes.HasFlag(RenderMetadataAsAttributesTypes.Custom))
+            foreach (var attribute in instance.GetClassAttributeBuilderAttributes(renderMetadataAsAttributes, Entities.ClassAttribute))
             {
-                foreach (var attribute in instance.Metadata.GetValues<IAttribute>(Entities.ClassAttribute))
-                {
-                    yield return new AttributeBuilder(attribute);
-                }
+                yield return attribute;
             }
         }
     }

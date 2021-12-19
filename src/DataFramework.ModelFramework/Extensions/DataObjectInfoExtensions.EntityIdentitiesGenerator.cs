@@ -46,7 +46,7 @@ namespace DataFramework.ModelFramework.Extensions
         {
             yield return new AttributeBuilder().ForCodeGenerator("DataFramework.ModelFramework.Generators.Entities.EntityIdentityGenerator");
 
-            foreach (var attributeBuilder in instance.GetClassAttributes(renderMetadataAsAttributes, Identities.Attribute))
+            foreach (var attributeBuilder in instance.GetClassAttributeBuilderAttributes(renderMetadataAsAttributes, Identities.Attribute))
             {
                 yield return attributeBuilder;
             }

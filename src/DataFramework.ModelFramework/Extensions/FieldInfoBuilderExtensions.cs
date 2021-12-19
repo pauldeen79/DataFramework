@@ -48,6 +48,9 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithSkipFieldOnFind(this FieldInfoBuilder instance, bool? skipFieldOnFind = true)
             => instance.ReplaceMetadata(Database.SkipFieldOnFind, skipFieldOnFind);
 
+        public static FieldInfoBuilder WithSkipFieldInQueryFieldProvider(this FieldInfoBuilder instance, bool? skipFieldOnFind = true)
+            => instance.ReplaceMetadata(QueryFieldProviders.SkipField, skipFieldOnFind);
+
         public static FieldInfoBuilder WithSqlReaderMethodName(this FieldInfoBuilder instance, string? sqlReaderMethodName)
             => instance.ReplaceMetadata(Database.SqlReaderMethodName, sqlReaderMethodName);
 
