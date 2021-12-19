@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CrossCutting.Data.Abstractions;
+using CrossCutting.Data.Core;
 using CrossCutting.Data.Core.Builders;
+using CrossCutting.Data.Core.CommandProviders;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
@@ -17,28 +19,21 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static ClassBuilder ToIdentityCommandProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
             => new ClassBuilder()
-                .AddUsings(typeof(SelectCommandBuilder).FullName.GetNamespaceWithDefault(string.Empty))
                 .WithName($"{instance.Name}IdentityCommandProvider")
                 .WithNamespace(instance.GetCommandProvidersNamespace())
                 .FillFrom(instance)
                 .WithVisibility(instance.Metadata.GetValue(CommandProviders.Visibility, () => instance.IsVisible.ToVisibility()))
-                .AddInterfaces(typeof(IDatabaseCommandProvider<>).CreateGenericTypeName(instance.GetEntityIdentityFullName()))
+                .WithBaseClass(typeof(IdentityDatabaseCommandProviderBase<>).CreateGenericTypeName(instance.GetEntityIdentityFullName()))
                 .AddAttributes(GetIdentityCommandProviderClassAttributes(instance))
-                .AddFields(new ClassFieldBuilder().WithName("_settings").WithTypeName(instance.GetEntityRetrieverFullName()).WithReadOnly())
-                .AddConstructors(new ClassConstructorBuilder().AddLiteralCodeStatements($"_settings = new {instance.GetEntityRetrieverFullName()}();"))
-                .AddMethods(new ClassMethodBuilder().WithName(nameof(IDatabaseCommandProvider<object>.Create))
+                .AddConstructors(new ClassConstructorBuilder().WithChainCall($"base(new {instance.GetEntityRetrieverFullName()}())"))
+                .AddMethods(new ClassMethodBuilder().WithName("GetFields")
+                                                    .WithProtected()
+                                                    .WithOverride()
+                                                    .WithVisibility(Visibility.Private)
+                                                    .WithType(typeof(IEnumerable<IdentityDatabaseCommandProviderField>))
                                                     .AddParameter("source", instance.GetEntityIdentityFullName())
                                                     .AddParameter("operation", typeof(DatabaseOperation))
-                                                    .AddLiteralCodeStatements($"if (operation != {typeof(DatabaseOperation).FullName}.{DatabaseOperation.Select})",
-                                                                              "{",
-                                                                              $@"    throw new {nameof(ArgumentOutOfRangeException)}(""operation"", ""Only Select operation is supported"");",
-                                                                              "}",
-                                                                              $"return new {nameof(SelectCommandBuilder)}()",
-                                                                              "    .Select(_settings.Fields)",
-                                                                              "    .From(_settings.TableName)",
-                                                                              $"    .Where(\"{GetFindWhereStatement(instance)}\")",
-                                                                              "    .AppendParameters(source)",
-                                                                              "    .Build();"));
+                                                    .AddLiteralCodeStatements(instance.GetFindFields().Select(x => $"yield return new {nameof(IdentityDatabaseCommandProviderField)}({x.CreatePropertyName(instance).CsharpFormat()}, {x.GetDatabaseFieldName().CsharpFormat()});")));
 
         private static IEnumerable<AttributeBuilder> GetIdentityCommandProviderClassAttributes(IDataObjectInfo instance)
         {

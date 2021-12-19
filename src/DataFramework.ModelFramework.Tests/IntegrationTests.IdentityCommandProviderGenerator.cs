@@ -27,7 +27,6 @@ namespace DataFramework.ModelFramework.Tests
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-using CrossCutting.Data.Core.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,28 +37,16 @@ namespace DatabaseCommandProviders
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.IdentityCommandProviderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    internal partial class TestEntityIdentityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<EntityIdentities.TestEntityIdentity>
+    internal partial class TestEntityIdentityCommandProvider : CrossCutting.Data.Core.CommandProviders.IdentityDatabaseCommandProviderBase<EntityIdentities.TestEntityIdentity>
     {
-        public void Create(EntityIdentities.TestEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
+        protected override System.Collections.Generic.IEnumerable<CrossCutting.Data.Core.IdentityDatabaseCommandProviderField> GetFields(EntityIdentities.TestEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
         {
-            if (operation != CrossCutting.Data.Abstractions.DatabaseOperation.Select)
-            {
-                throw new ArgumentOutOfRangeException(""operation"", ""Only Select operation is supported"");
-            }
-            return new SelectCommandBuilder()
-                .Select(_settings.Fields)
-                .From(_settings.TableName)
-                .Where(""[Id] = @Id"")
-                .AppendParameters(source)
-                .Build();
+            yield return new IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
         }
 
-        public TestEntityIdentityCommandProvider()
+        public TestEntityIdentityCommandProvider(): base(new EntityRetrieverSettings.TestEntityPagedEntityRetrieverSettings())
         {
-            _settings = new EntityRetrieverSettings.TestEntityPagedEntityRetrieverSettings();
         }
-
-        private readonly EntityRetrieverSettings.TestEntityPagedEntityRetrieverSettings _settings;
     }
 #nullable restore
 }

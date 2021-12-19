@@ -1,35 +1,22 @@
-﻿using System;
-using System.CodeDom.Compiler;
-using CrossCutting.Data.Abstractions;
-using CrossCutting.Data.Core.Builders;
+﻿using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using CrossCutting.Data.Core;
+using CrossCutting.Data.Core.CommandProviders;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
 using PDC.Net.Core.Entities;
 
 namespace DataFramework.ModelFramework.Poc.DatabaseCommandProviders
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogIdentityCommandProvider : IDatabaseCommandProvider<CatalogIdentity>
+    public partial class CatalogIdentityCommandProvider : IdentityDatabaseCommandProviderBase<CatalogIdentity>
     {
-        private readonly CatalogPagedEntityRetrieverSettings _settings;
-
-        public CatalogIdentityCommandProvider()
+        public CatalogIdentityCommandProvider() : base(new CatalogPagedEntityRetrieverSettings())
         {
-            _settings = new CatalogPagedEntityRetrieverSettings();
         }
 
-        public IDatabaseCommand Create(CatalogIdentity source, DatabaseOperation operation)
+        protected override IEnumerable<IdentityDatabaseCommandProviderField> GetFields()
         {
-            if (operation != DatabaseOperation.Select)
-            {
-                throw new ArgumentOutOfRangeException(nameof(operation), "Only Select operation is supported");
-            }
-
-            return new SelectCommandBuilder()
-                .Select(_settings.Fields)
-                .From(_settings.TableName)
-                .Where("[Id] = @Id")
-                .AppendParameters(source)
-                .Build();
+            yield return new IdentityDatabaseCommandProviderField("Id", "Id");
         }
     }
 }

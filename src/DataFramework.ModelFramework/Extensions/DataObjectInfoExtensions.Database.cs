@@ -131,9 +131,6 @@ namespace DataFramework.ModelFramework.Extensions
                         && fieldInfo.CanSet
                 );
 
-        internal static string GetFindWhereStatement(this IDataObjectInfo instance)
-            => string.Join(" AND ", instance.GetFindFields().Select(x => $"[{x.GetDatabaseFieldName()}] = @{x.CreatePropertyName(instance)}"));
-
         internal static string GetUpdateWhereStatement(this IDataObjectInfo instance, Predicate<IFieldInfo> predicate)
             => string.Join(" AND ", instance.GetUpdateConcurrencyCheckFields()
                                             .Where(x => predicate(x) || x.IsIdentityField || x.IsSqlIdentity())
