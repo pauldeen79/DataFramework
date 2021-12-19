@@ -2,7 +2,6 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
@@ -23,18 +22,6 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
         {
             // default: return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public IEnumerable<string> GetSelectFields(IEnumerable<string> querySelectFields)
-        {
-            // fields which are not mapped need to be excluded
-            return querySelectFields;
-        }
-
-        public bool ValidateExpression(IQueryExpression expression)
-        {
-            // default: return true
-            return true;
         }
     }
 }

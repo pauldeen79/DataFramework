@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
-using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Extensions
@@ -72,32 +70,6 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithIsNullable()
                 .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetDatabaseFieldNameCodeStatement))
                 .AddLiteralCodeStatements("return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));");
-
-            yield return new ClassMethodBuilder()
-                .WithName(nameof(IQueryFieldProvider.GetSelectFields))
-                .WithType(typeof(IEnumerable<string>))
-                .AddParameter("querySelectFields", typeof(IEnumerable<string>))
-                .Chain(builder =>
-                {
-                    builder.AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetSelectFieldsCodeStatement));
-                    if (!builder.CodeStatements.Any())
-                    {
-                        builder.AddLiteralCodeStatements("return querySelectFields;");
-                    }
-                });
-
-            yield return new ClassMethodBuilder()
-                .WithName(nameof(IQueryFieldProvider.ValidateExpression))
-                .WithType(typeof(bool))
-                .AddParameter("expression", typeof(IQueryExpression))
-                .Chain(builder =>
-                {
-                    builder.AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.ValidateExpressionStatement));
-                    if (!builder.CodeStatements.Any())
-                    {
-                        builder.AddLiteralCodeStatements("return true;");
-                    }
-                });
         }
     }
 }

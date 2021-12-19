@@ -13,7 +13,5 @@
         internal const string ConstructorCodeStatement = Root + ".ConstructorCodeStatement";
         internal const string GetAllFieldsCodeStatement = Root + ".GetAllFieldsCodeStatement";
         internal const string GetDatabaseFieldNameCodeStatement = Root + ".GetDatabaseFieldNameStatement";
-        internal const string GetSelectFieldsCodeStatement = Root + ".GetSelectFieldsStatement";
-        internal const string ValidateExpressionStatement = Root + ".ValidateExpressionStatement";
     }
 }

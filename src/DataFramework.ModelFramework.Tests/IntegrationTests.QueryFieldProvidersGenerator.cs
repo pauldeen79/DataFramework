@@ -50,16 +50,6 @@ namespace QueryFieldProviders
         {
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
-
-        public System.Collections.Generic.IEnumerable<string> GetSelectFields(System.Collections.Generic.IEnumerable<string> querySelectFields)
-        {
-            return querySelectFields;
-        }
-
-        public bool ValidateExpression(QueryFramework.Abstractions.IQueryExpression expression)
-        {
-            return true;
-        }
     }
 #nullable restore
 }
@@ -117,16 +107,6 @@ namespace GeneratedNamespace
                 return ""[Name] + ' ' + COALESCE([Description], '')"";
             }
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public System.Collections.Generic.IEnumerable<string> GetSelectFields(System.Collections.Generic.IEnumerable<string> querySelectFields)
-        {
-            return querySelectFields;
-        }
-
-        public bool ValidateExpression(QueryFramework.Abstractions.IQueryExpression expression)
-        {
-            return true;
         }
 
         public TestEntityQueryFieldProvider(IEnumerable<ExtraField> extraFields)

@@ -49,17 +49,5 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static DataObjectInfoBuilder AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetDatabaseFieldNameCodeStatement).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddQueryFieldProviderGetSelectFieldsCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatement[] statements)
-            => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetSelectFieldsCodeStatement).WithValue(x)));
-
-        public static DataObjectInfoBuilder AddQueryFieldProviderGetSelectFieldsCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
-            => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetSelectFieldsCodeStatement).WithValue(x.Build())));
-
-        public static DataObjectInfoBuilder AddQueryFieldProviderValidateExpressionCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatement[] statements)
-            => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.ValidateExpressionStatement).WithValue(x)));
-
-        public static DataObjectInfoBuilder AddQueryFieldProviderValidateExpressionCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
-            => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.ValidateExpressionStatement).WithValue(x.Build())));
     }
 }
