@@ -57,7 +57,7 @@ namespace DataFramework.ModelFramework.Extensions
             => ClassMethods(instance,
                             $"{instance.Name}Identity",
                             GetIdentityEntityEqualsProperties(instance),
-                            instance.GetFindFields(),
+                            instance.GetIdentityFields(),
                             entityClassType);
         
         private static IEnumerable<ClassConstructorBuilder> GetEntityIdentityClassConstructors(IDataObjectInfo instance,
@@ -65,7 +65,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                                                                GeneratorSettings settings)
         {
             yield return new ClassConstructorBuilder().AddParameter("instance", instance.GetEntityFullName())
-                                                      .AddLiteralCodeStatements(instance.GetFindFields().Select(x => $"{x.Name.Sanitize()} = instance.{x.CreatePropertyName(instance)};"))
+                                                      .AddLiteralCodeStatements(instance.GetIdentityFields().Select(x => $"{x.Name.Sanitize()} = instance.{x.CreatePropertyName(instance)};"))
                                                       .AddLiteralCodeStatements(GetValidationCodeStatements(settings));
 
             if (!entityClassType.IsImmutable())
@@ -74,15 +74,15 @@ namespace DataFramework.ModelFramework.Extensions
             }
 
             yield return new ClassConstructorBuilder()
-                .AddParameters(instance.GetFindFields().Select(f => f.ToParameterBuilder()))
-                .AddLiteralCodeStatements(instance.GetFindFields().Select(x => $"{x.Name.Sanitize()} = {x.Name.Sanitize().ToPascalCase()};"))
+                .AddParameters(instance.GetIdentityFields().Select(f => f.ToParameterBuilder()))
+                .AddLiteralCodeStatements(instance.GetIdentityFields().Select(x => $"{x.Name.Sanitize()} = {x.Name.Sanitize().ToPascalCase()};"))
                 .AddLiteralCodeStatements(GetValidationCodeStatements(settings));
         }
 
         private static string GetIdentityEntityEqualsProperties(IDataObjectInfo instance)
             => string.Join(" &&"
                 + Environment.NewLine
-                + "       ", instance.GetFindFields().Select(f => $"{f.Name.Sanitize()} == other.{f.Name.Sanitize()}"));
+                + "       ", instance.GetIdentityFields().Select(f => $"{f.Name.Sanitize()} == other.{f.Name.Sanitize()}"));
 
         private static IEnumerable<string> GetValidationCodeStatements(GeneratorSettings settings)
         {
@@ -99,7 +99,7 @@ namespace DataFramework.ModelFramework.Extensions
             EntityClassType entityClassType
         )
         {
-            return instance.GetFindFields()
+            return instance.GetIdentityFields()
                 .Select(field => new ClassPropertyBuilder()
                     .WithName(field.Name)
                     .Fill(field)

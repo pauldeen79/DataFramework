@@ -19,7 +19,7 @@ namespace DataFramework.ModelFramework.Extensions
             }
         }
 
-        internal static IEnumerable<IFieldInfo> GetFindFields(this IDataObjectInfo instance)
+        internal static IEnumerable<IFieldInfo> GetIdentityFields(this IDataObjectInfo instance)
             => instance.Fields.Where(x => (x.IsIdentityField || x.IsSqlIdentity()) && !x.SkipFieldOnFind());
 
         internal static IEnumerable<IFieldInfo> GetUpdateConcurrencyCheckFields(this IDataObjectInfo instance)

@@ -33,7 +33,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                     .WithType(typeof(IEnumerable<IdentityDatabaseCommandProviderField>))
                                                     .AddParameter("source", instance.GetEntityIdentityFullName())
                                                     .AddParameter("operation", typeof(DatabaseOperation))
-                                                    .AddLiteralCodeStatements(instance.GetFindFields().Select(x => $"yield return new {nameof(IdentityDatabaseCommandProviderField)}({x.CreatePropertyName(instance).CsharpFormat()}, {x.GetDatabaseFieldName().CsharpFormat()});")));
+                                                    .AddLiteralCodeStatements(instance.GetIdentityFields().Select(x => $"yield return new {nameof(IdentityDatabaseCommandProviderField)}({x.CreatePropertyName(instance).CsharpFormat()}, {x.GetDatabaseFieldName().CsharpFormat()});")));
 
         private static IEnumerable<AttributeBuilder> GetIdentityCommandProviderClassAttributes(IDataObjectInfo instance)
         {
