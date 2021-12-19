@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
@@ -11,6 +12,15 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
+        internal static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
+        {
+            yield return instance;
+            foreach (var item in GetCustomMembersFromMetadata<IDataObjectInfo>(instance, Shared.CustomDataObjectInfo))
+            {
+                yield return item;
+            }
+        }
+
         internal static EntityClassType GetEntityClassType(this IDataObjectInfo instance, EntityClassType defaultValue)
             => instance
                 .Metadata
@@ -93,6 +103,36 @@ namespace DataFramework.ModelFramework.Extensions
                 ? $"{instance.Name}PagedEntityRetrieverSettings"
                 : $"{ns}.{instance.Name}PagedEntityRetrieverSettings";
         }
+
+        internal static IEnumerable<IFieldInfo> GetIdentityFields(this IDataObjectInfo instance)
+            => instance.Fields.Where(x => (x.IsIdentityField || x.IsSqlIdentity()) && !x.SkipFieldOnFind());
+
+        internal static IEnumerable<IFieldInfo> GetUpdateConcurrencyCheckFields(this IDataObjectInfo instance)
+        {
+            var concurrencyCheckBehavior = instance.GetConcurrencyCheckBehavior();
+            return instance.Fields.Where(fieldInfo => IsUpdateConcurrencyCheckField(instance, fieldInfo, concurrencyCheckBehavior));
+        }
+
+        internal static bool IsUpdateConcurrencyCheckField(this IDataObjectInfo instance,
+                                                           IFieldInfo fieldInfo,
+                                                           ConcurrencyCheckBehavior concurrencyCheckBehavior)
+            => concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields
+                &&
+                (
+                    concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields
+                    || fieldInfo.UseForConcurrencyCheck
+                    ||
+                    (
+                        !fieldInfo.IsComputed
+                        && fieldInfo.IsPersistable
+                        && (fieldInfo.IsIdentityField || fieldInfo.IsSqlIdentity())
+                    )
+                );
+
+        internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo instance)
+            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), instance.Metadata.Any(md => md.Name == Database.ConcurrencyCheckBehavior)
+                ? instance.Metadata.First(md => md.Name == Database.ConcurrencyCheckBehavior).Value.ToStringWithNullCheck()
+                : ConcurrencyCheckBehavior.NoFields.ToString());
 
         private static IEnumerable<T> GetCustomMembersFromMetadata<T>(IDataObjectInfo instance,
                                                                       string metadataName)

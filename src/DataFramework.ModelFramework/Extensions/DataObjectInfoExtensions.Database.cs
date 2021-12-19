@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Core.Builders;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
@@ -10,45 +9,6 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
-        internal static IEnumerable<IDataObjectInfo> WithAdditionalDataObjectInfos(this IDataObjectInfo instance)
-        {
-            yield return instance;
-            foreach (var item in GetCustomMembersFromMetadata<IDataObjectInfo>(instance, Shared.CustomDataObjectInfo))
-            {
-                yield return item;
-            }
-        }
-
-        internal static IEnumerable<IFieldInfo> GetIdentityFields(this IDataObjectInfo instance)
-            => instance.Fields.Where(x => (x.IsIdentityField || x.IsSqlIdentity()) && !x.SkipFieldOnFind());
-
-        internal static IEnumerable<IFieldInfo> GetUpdateConcurrencyCheckFields(this IDataObjectInfo instance)
-        {
-            var concurrencyCheckBehavior = instance.GetConcurrencyCheckBehavior();
-            return instance.Fields.Where(fieldInfo => IsUpdateConcurrencyCheckField(instance, fieldInfo, concurrencyCheckBehavior));
-        }
-
-        internal static bool IsUpdateConcurrencyCheckField(this IDataObjectInfo instance,
-                                                           IFieldInfo fieldInfo,
-                                                           ConcurrencyCheckBehavior concurrencyCheckBehavior)
-            => concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields
-                &&
-                (
-                    concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields
-                    || fieldInfo.UseForConcurrencyCheck
-                    ||
-                    (
-                        !fieldInfo.IsComputed
-                        && fieldInfo.IsPersistable
-                        && (fieldInfo.IsIdentityField || fieldInfo.IsSqlIdentity())
-                    )
-                );
-
-        internal static ConcurrencyCheckBehavior GetConcurrencyCheckBehavior(this IDataObjectInfo instance)
-            => (ConcurrencyCheckBehavior)Enum.Parse(typeof(ConcurrencyCheckBehavior), instance.Metadata.Any(md => md.Name == Database.ConcurrencyCheckBehavior)
-                ? instance.Metadata.First(md => md.Name == Database.ConcurrencyCheckBehavior).Value.ToStringWithNullCheck()
-                : ConcurrencyCheckBehavior.NoFields.ToString());
-
         internal static string GetTableName(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(Database.TableName, instance.Name);
 
@@ -88,7 +48,7 @@ namespace DataFramework.ModelFramework.Extensions
 
             return new UpdateCommandBuilder()
                 .WithTable($"[{instance.GetTableName()}]")
-                .Where(instance.GetUpdateWhereStatement(x => x.UseOnUpdate()))
+                .Where(instance.GetUpdateConcurrencyWhereStatement(x => x.UseOnUpdate()))
                 .AddFieldNames(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"[{x.GetDatabaseFieldName()}]"))
                 .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate()).Select(x => $"@{x.CreatePropertyName(instance)}"))
                 .AddOutputFields(instance.GetOutputFields().Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
@@ -106,7 +66,7 @@ namespace DataFramework.ModelFramework.Extensions
 
             return new DeleteCommandBuilder()
                 .From($"[{instance.GetTableName()}]")
-                .Where(instance.GetUpdateWhereStatement(x => x.UseOnDelete()))
+                .Where(instance.GetUpdateConcurrencyWhereStatement(x => x.UseOnDelete()))
                 .AddOutputFields(instance.GetOutputFields().Select(x => $"DELETED.[{x.GetDatabaseFieldName()}]"))
                 .Build()
                 .CommandText;
@@ -131,7 +91,7 @@ namespace DataFramework.ModelFramework.Extensions
                         && fieldInfo.CanSet
                 );
 
-        internal static string GetUpdateWhereStatement(this IDataObjectInfo instance, Predicate<IFieldInfo> predicate)
+        private static string GetUpdateConcurrencyWhereStatement(this IDataObjectInfo instance, Predicate<IFieldInfo> predicate)
             => string.Join(" AND ", instance.GetUpdateConcurrencyCheckFields()
                                             .Where(x => predicate(x) || x.IsIdentityField || x.IsSqlIdentity())
                                             .Select(x => $"[{x.CreatePropertyName(instance)}] = @{x.CreatePropertyName(instance)}Original"));
