@@ -79,16 +79,16 @@ namespace DataFramework.ModelFramework.Extensions
                 (
                     fieldInfo =>
                         fieldInfo.IsPersistable
+                        && fieldInfo.CanSet
+                        && fieldInfo.TypeName?.IsSupportedByMap() == true
                         &&
                         (
                             fieldInfo.IsComputed
                             || fieldInfo.IsIdentityField
                             || fieldInfo.IsSqlIdentity()
-                            || fieldInfo.IsComputed
                             || fieldInfo.UseForConcurrencyCheck
                             || instance.GetConcurrencyCheckBehavior() == ConcurrencyCheckBehavior.AllFields
                         )
-                        && fieldInfo.CanSet
                 );
 
         private static string GetUpdateConcurrencyWhereStatement(this IDataObjectInfo instance, Predicate<IFieldInfo> predicate)

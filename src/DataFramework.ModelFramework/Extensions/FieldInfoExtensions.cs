@@ -184,7 +184,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnInsert(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
 
         /// <summary>
         /// Determines whether the specified field should be used on Update in database
@@ -192,7 +192,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnUpdate(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
 
         /// <summary>
         /// Determines whether the specified field should be used on Delete in database
@@ -200,7 +200,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         internal static bool UseOnDelete(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed);
+            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
 
         /// <summary>
         /// Determines whether the specified field should always be used on Select in database
