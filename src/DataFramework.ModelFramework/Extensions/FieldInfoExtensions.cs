@@ -10,17 +10,17 @@ using ModelFramework.Objects.Contracts;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    internal static class FieldInfoExtensions
+    public static class FieldInfoExtensions
     {
-        internal static string CreatePropertyName(this IFieldInfo instance, IDataObjectInfo dataObjectInfo)
+        public static string CreatePropertyName(this IFieldInfo instance, IDataObjectInfo dataObjectInfo)
             => instance.Name == dataObjectInfo.Name
                 ? string.Format(dataObjectInfo.Metadata.GetStringValue(Entities.PropertyNameDeconflictionFormatString, "{0}Property"), instance.Name).Sanitize()
                 : instance.Name.Sanitize();
 
-        internal static bool IsRequired(this IFieldInfo instance)
+        public static bool IsRequired(this IFieldInfo instance)
             => instance.Metadata.GetValues<IAttribute>(Entities.FieldAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
 
-        internal static int? GetStringMaxLength(this IFieldInfo instance)
+        public static int? GetStringMaxLength(this IFieldInfo instance)
         {
             var maxLengthAttribute = instance.Metadata.Where(md => md.Name == Entities.FieldAttribute)
                                                       .Select(md => md.Value)
@@ -40,45 +40,68 @@ namespace DataFramework.ModelFramework.Extensions
             return length;
         }
 
-        private static int? AttributeParameterFirstValue(IAttribute attribute)
-        {
-            if (attribute == null)
-            {
-                return null;
-            }
-
-            if (attribute.Parameters.Count == 0)
-            {
-                return null;
-            }
-
-            if (attribute.Parameters.First().Value is int i)
-            {
-                return i;
-            }
-
-            return null;
-        }
-
-        internal static bool IsRowVersion(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.IsRowVersion);
-
-        internal static bool IsSqlRequired(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.IsRequired, () => instance.IsNullable || instance.IsRequired());
-
         /// <summary>
         /// Indicates whether the field should be skipped on Find method, even though it is an identity field
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        internal static bool SkipFieldOnFind(this IFieldInfo instance)
+        public static bool SkipFieldOnFind(this IFieldInfo instance)
             => instance.Metadata.GetBooleanValue(Database.SkipFieldOnFind);
+
+        public static string GetDatabaseFieldName(this IFieldInfo instance)
+            => instance.Metadata.GetStringValue(Database.FieldName, instance.Name);
+
+        /// <summary>
+        /// Gets field alias, or field name when not present
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static string GetDatabaseFieldAlias(this IFieldInfo instance)
+            => instance.Metadata.GetStringValue(Database.FieldAlias, () => instance.GetDatabaseFieldName());
+
+        /// <summary>
+        /// Determines whether the specified field should be used on Insert in database
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
+        public static bool UseOnInsert(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+
+        /// <summary>
+        /// Determines whether the specified field should be used on Update in database
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
+        public static bool UseOnUpdate(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+
+        /// <summary>
+        /// Determines whether the specified field should be used on Delete in database
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
+        public static bool UseOnDelete(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+
+        /// <summary>
+        /// Determines whether the specified field should always be used on Select in database
+        /// </summary>
+        /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
+        /// <param name="instance"></param>
+        public static bool UseOnSelect(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.TypeName?.IsSupportedByMap() == true);
 
         internal static ParameterBuilder ToParameterBuilder(this IFieldInfo instance)
             => new ParameterBuilder().WithName(instance.Name.Sanitize().ToPascalCase())
                                      .WithTypeName(instance.TypeName)
                                      .WithDefaultValue(instance.DefaultValue)
                                      .WithIsNullable(instance.IsNullable);
+
+        internal static bool IsRowVersion(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.IsRowVersion);
+
+        internal static bool IsSqlRequired(this IFieldInfo instance)
+            => instance.Metadata.GetBooleanValue(Database.IsRequired, () => instance.IsNullable || instance.IsRequired());
 
         internal static string GetSqlReaderMethodName(this IFieldInfo instance)
         {
@@ -96,17 +119,6 @@ namespace DataFramework.ModelFramework.Extensions
 
             return instance.TypeName.GetSqlReaderMethodName(instance.IsNullable);
         }
-
-        internal static string GetDatabaseFieldName(this IFieldInfo instance)
-            => instance.Metadata.GetStringValue(Database.FieldName, instance.Name);
-
-        /// <summary>
-        /// Gets field alias, or field name when not present
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <returns></returns>
-        internal static string GetDatabaseFieldAlias(this IFieldInfo instance)
-            => instance.Metadata.GetStringValue(Database.FieldAlias, () => instance.GetDatabaseFieldName());
 
         internal static bool IsSqlIdentity(this IFieldInfo instance)
             => instance.GetSqlFieldType().StartsWith("IDENTITY");
@@ -169,38 +181,6 @@ namespace DataFramework.ModelFramework.Extensions
         internal static string GetCheckConstraintExpression(this IFieldInfo instance)
             => instance.Metadata.GetStringValue(Database.CheckConstraintExpression);
 
-        /// <summary>
-        /// Determines whether the specified field should be used on Insert in database
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
-        internal static bool UseOnInsert(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
-
-        /// <summary>
-        /// Determines whether the specified field should be used on Update in database
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
-        internal static bool UseOnUpdate(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
-
-        /// <summary>
-        /// Determines whether the specified field should be used on Delete in database
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
-        internal static bool UseOnDelete(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
-
-        /// <summary>
-        /// Determines whether the specified field should always be used on Select in database
-        /// </summary>
-        /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
-        /// <param name="instance"></param>
-        internal static bool UseOnSelect(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.TypeName?.IsSupportedByMap() == true);
-
         private static string GetSqlDecimalType(IFieldInfo instance, bool includeSpecificProperties)
             => includeSpecificProperties
                 ? $"decimal({instance.GetSqlNumericPrecision() ?? 8},{instance.GetSqlNumericScale() ?? 0})"
@@ -225,6 +205,26 @@ namespace DataFramework.ModelFramework.Extensions
             => sqlType.IndexOf("(") > -1
                 ? sqlType.Substring(0, sqlType.IndexOf("("))
                 : sqlType;
+
+        private static int? AttributeParameterFirstValue(IAttribute attribute)
+        {
+            if (attribute == null)
+            {
+                return null;
+            }
+
+            if (attribute.Parameters.Count == 0)
+            {
+                return null;
+            }
+
+            if (attribute.Parameters.First().Value is int i)
+            {
+                return i;
+            }
+
+            return null;
+        }
 
         private static Dictionary<Type, string> _sqlTypeNameMappings = new Dictionary<Type, string>
         {
