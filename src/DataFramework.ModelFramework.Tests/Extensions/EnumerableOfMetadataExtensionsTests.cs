@@ -231,5 +231,165 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Assert
             actual.Should().Be(1);
         }
+
+        [Fact]
+        public void GetStringValue_Returns_StringEmpty_When_No_Value_Is_Found_And_DefaultValue_Is_Not_Supplied()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("WrongName").WithValue("Value").Build() };
+
+            // Act
+            var actual = sut.GetStringValue("Name");
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void GetStringValue_Returns_DefaultValueDelegate_Result_When_No_Value_Is_Found()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("WrongName").WithValue("Value").Build() };
+
+            // Act
+            var actual = sut.GetStringValue("Name", () => "DelegateResult");
+
+            // Assert
+            actual.Should().Be("DelegateResult");
+        }
+
+        [Fact]
+        public void GetStringValue_Returns_String_When_Found_Value_Is_String()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("Name").WithValue("Value").Build() };
+
+            // Act
+            var actual = sut.GetStringValue("Name");
+
+            // Assert
+            actual.Should().Be("Value");
+        }
+
+        [Fact]
+        public void GetStringValue_Returns_String_When_Found_Value_Is_Not_String()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("Name").WithValue(false).Build() };
+
+            // Act
+            var actual = sut.GetStringValue("Name");
+
+            // Assert
+            actual.Should().Be(false.ToString());
+        }
+
+        [Fact]
+        public void GetStringValue_Returns_String_When_Found_Value_Is_Null()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("Name").WithValue(null).Build() };
+
+            // Act
+            var actual = sut.GetStringValue("Name", "DefaultValue");
+
+            // Assert
+            actual.Should().Be("DefaultValue");
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GetBooleanValue_Returns_Value_When_Found(bool value)
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("Name").WithValue(value).Build() };
+
+            // Act
+            var actual = sut.GetBooleanValue("Name");
+
+            // Assert
+            actual.Should().Be(value);
+        }
+
+        [Fact]
+        public void GetBooleanValue_Returns_DefaultValue_When_Not_Found()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("WrongName").WithValue(false).Build() };
+
+            // Act
+            var actual = sut.GetBooleanValue("Name", true);
+
+            // Assert
+            actual.Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetBooleanValue_Returns_DefaultValueDelegate_Result_When_Not_Found()
+        {
+            // Arrange
+            var sut = new[] { new MetadataBuilder().WithName("WrongName").WithValue(false).Build() };
+
+            // Act
+            var actual = sut.GetBooleanValue("Name", () => true);
+
+            // Assert
+            actual.Should().BeTrue();
+        }
+
+        [Fact]
+        public void GetStringValues_Returns_All_Data_When_Name_Is_Found()
+        {
+            // Arrange
+            var sut = new[]
+            {
+                new MetadataBuilder().WithName("Name").WithValue("Value1").Build(),
+                new MetadataBuilder().WithName("Name").WithValue("Value2").Build(),
+                new MetadataBuilder().WithName("Name").WithValue(3).Build()
+            };
+
+            // Act
+            var actual = sut.GetStringValues("Name");
+
+            // Assert
+            actual.Should().BeEquivalentTo(new[] { "Value1", "Value2", "3" });
+        }
+
+        [Fact]
+        public void GetValues_Returns_All_Data_Of_Correct_Type_When_Name_Is_Found()
+        {
+            // Arrange
+            var sut = new[]
+            {
+                new MetadataBuilder().WithName("Name").WithValue("Value1").Build(),
+                new MetadataBuilder().WithName("Name").WithValue("Value2").Build(),
+                new MetadataBuilder().WithName("Name").WithValue(3).Build()
+            };
+
+            // Act
+            var actual = sut.GetValues<string>("Name");
+
+            // Assert
+            actual.Should().BeEquivalentTo(new[] { "Value1", "Value2" });
+        }
+
+        [Fact]
+        public void GetValues_Returns_Empty_Sequence_When_Name_Is_Not_Foudn()
+        {
+            // Arrange
+            var sut = new[]
+            {
+                new MetadataBuilder().WithName("WrongName").WithValue("Value1").Build(),
+                new MetadataBuilder().WithName("WrongName").WithValue("Value2").Build(),
+                new MetadataBuilder().WithName("WrongName").WithValue(3).Build()
+            };
+
+            // Act
+            var actual = sut.GetValues<string>("Name");
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
     }
 }

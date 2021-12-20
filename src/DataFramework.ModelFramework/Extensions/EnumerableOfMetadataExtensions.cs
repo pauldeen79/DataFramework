@@ -6,23 +6,22 @@ using DataFramework.Abstractions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
-    internal static class EnumerableOfMetadataExtensions
+    public static class EnumerableOfMetadataExtensions
     {
-        internal static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
+        public static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, string defaultValue = "")
             => metadata.GetStringValue(metadataName, () => defaultValue);
 
-        internal static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<string> defaultValueDelegate)
+        public static string GetStringValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<string> defaultValueDelegate)
             => metadata.GetValue<object?>(metadataName, defaultValueDelegate)
-                .ToStringWithDefault(defaultValueDelegate())
-                .WhenNullOrEmpty(defaultValueDelegate());
+                .ToStringWithDefault(defaultValueDelegate());
 
-        internal static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, bool defaultValue = false)
+        public static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, bool defaultValue = false)
             => metadata.GetBooleanValue(metadataName, () => defaultValue);
 
-        internal static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<bool> defaultValueDelegate)
+        public static bool GetBooleanValue(this IEnumerable<IMetadata> metadata, string metadataName, Func<bool> defaultValueDelegate)
             => metadata.GetValue<object?>(metadataName, () => defaultValueDelegate.Invoke()).ToStringWithDefault().IsTrue();
 
-        internal static T GetValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, Func<T> defaultValueDelegate)
+        public static T GetValue<T>(this IEnumerable<IMetadata> metadata, string metadataName, Func<T> defaultValueDelegate)
         {
             var metadataItem = metadata.FirstOrDefault(md => md.Name == metadataName);
 
@@ -34,10 +33,10 @@ namespace DataFramework.ModelFramework.Extensions
             return CreateMetadata(metadataItem, defaultValueDelegate);
         }
 
-        internal static IEnumerable<string> GetStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
+        public static IEnumerable<string> GetStringValues(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata.GetValues<object?>(metadataName).Select(x => x.ToStringWithDefault());
 
-        internal static IEnumerable<T> GetValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
+        public static IEnumerable<T> GetValues<T>(this IEnumerable<IMetadata> metadata, string metadataName)
             => metadata
                 .Where(md => md.Name == metadataName)
                 .Select(md => md.Value)

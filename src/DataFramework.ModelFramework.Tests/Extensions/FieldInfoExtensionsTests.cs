@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using DataFramework.ModelFramework.MetadataNames;
 using DataFramework.ModelFramework.Tests.TestFixtures;
 using FluentAssertions;
+using ModelFramework.Generators.Objects;
 using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.Contracts;
+using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Tests.Extensions
@@ -927,6 +932,121 @@ namespace DataFramework.ModelFramework.Tests.Extensions
 
             // Assert
             actual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void WithMinLength_Produces_MinLengthAttribute()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test").WithType(typeof(string));
+
+            // Act
+            var actual = sut.WithMinLength(1).Build();
+
+            // Assert
+            actual.Metadata.Should().ContainSingle();
+            actual.Metadata.First().Name.Should().Be(Entities.FieldAttribute);
+            actual.Metadata.First().Value.Should().BeAssignableTo<IAttribute>();
+            var attr = actual.Metadata.First().Value as IAttribute;
+            if (attr != null)
+            {
+                attr.Name.Should().Be("System.ComponentModel.DataAnnotations.MinLength");
+                attr.Parameters.Should().ContainSingle();
+                attr.Parameters.First().Value.Should().Be(1);
+            }
+        }
+
+        [Fact]
+        public void WithRange_Produces_RangeAttribute()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test").WithType(typeof(int));
+
+            // Act
+            var actual = sut.WithRange(2, 4).Build();
+
+            // Assert
+            actual.Metadata.Should().ContainSingle();
+            actual.Metadata.First().Name.Should().Be(Entities.FieldAttribute);
+            actual.Metadata.First().Value.Should().BeAssignableTo<IAttribute>();
+            var attr = actual.Metadata.First().Value as IAttribute;
+            if (attr != null)
+            {
+                attr.Name.Should().Be("System.ComponentModel.DataAnnotations.Range");
+                attr.Parameters.Should().HaveCount(2);
+                attr.Parameters.First().Value.Should().Be(2);
+                attr.Parameters.Last().Value.Should().Be(4);
+            }
+        }
+
+        [Fact]
+        public void WithRegularExpression_Produces_MinLengthAttribute()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test").WithType(typeof(string));
+
+            // Act
+            var actual = sut.WithRegularExpression("expression").Build();
+
+            // Assert
+            actual.Metadata.Should().ContainSingle();
+            actual.Metadata.First().Name.Should().Be(Entities.FieldAttribute);
+            actual.Metadata.First().Value.Should().BeAssignableTo<IAttribute>();
+            var attr = actual.Metadata.First().Value as IAttribute;
+            if (attr != null)
+            {
+                attr.Name.Should().Be("System.ComponentModel.DataAnnotations.RegularExpression");
+                attr.Parameters.Should().ContainSingle();
+                attr.Parameters.First().Value.Should().Be("expression");
+            }
+        }
+
+        [Fact]
+        public void AddAttributes_Adds_Attributes_From_Attributes()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test").WithType(typeof(string));
+
+            // Act
+            var actual = sut.AddAttributes(new AttributeBuilder().WithName("MyAttribute0").Build(),
+                                           new AttributeBuilder().WithName("MyAttribute1").Build()).Build();
+
+            // Assert
+            actual.Metadata.Should().HaveCount(2);
+            foreach (var x in actual.Metadata.Select((x, index) => new { Metadata = x, Index = index }))
+            {
+                x.Metadata.Name.Should().Be(Entities.FieldAttribute);
+                x.Metadata.Value.Should().BeAssignableTo<IAttribute>();
+                var attr = x.Metadata.Value as IAttribute;
+                if (attr != null)
+                {
+                    attr.Name.Should().Be($"MyAttribute{x.Index}");
+                }
+            }
+        }
+
+        [Fact]
+        public void AddAttributes_Adds_Attributes_From_AttributeBuilders()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Test").WithType(typeof(string));
+
+            // Act
+            var actual = sut.AddAttributes(new AttributeBuilder().WithName("MyAttribute0"),
+                                           new AttributeBuilder().WithName("MyAttribute1")).Build();
+
+            // Assert
+            actual.Metadata.Should().HaveCount(2);
+            foreach (var x in actual.Metadata.Select((x, index) => new { Metadata = x, Index = index }))
+            {
+                x.Metadata.Name.Should().Be(Entities.FieldAttribute);
+                x.Metadata.Value.Should().BeAssignableTo<IAttribute>();
+                var attr = x.Metadata.Value as IAttribute;
+                if (attr != null)
+                {
+                    attr.Name.Should().Be($"MyAttribute{x.Index}");
+                }
+            }
         }
     }
 }
