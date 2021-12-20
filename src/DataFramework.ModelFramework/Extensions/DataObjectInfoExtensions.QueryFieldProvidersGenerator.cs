@@ -60,7 +60,7 @@ namespace DataFramework.ModelFramework.Extensions
             yield return new ClassMethodBuilder()
                 .WithName(nameof(IQueryFieldProvider.GetAllFields))
                 .WithType(typeof(IEnumerable<string>))
-                .AddLiteralCodeStatements(instance.Fields.Where(x => x.IsPersistable && x.TypeName?.IsSupportedByMap() == true && !x.Metadata.GetBooleanValue(QueryFieldProviders.SkipField)).Select(x => $"yield return {x.CreatePropertyName(instance).CsharpFormat()};"))
+                .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnSelect() && !x.Metadata.GetBooleanValue(QueryFieldProviders.SkipField)).Select(x => $"yield return {x.CreatePropertyName(instance).CsharpFormat()};"))
                 .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetAllFieldsCodeStatement));
 
             yield return new ClassMethodBuilder()

@@ -330,37 +330,6 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             actual.Should().Be(expectedResult);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        [InlineData(null)]
-        public void IsSelectField_Returns_Correct_Value_When_Metadata_Is_Found(bool? isSelectField)
-        {
-            // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsSelectField(isSelectField).WithIsPersistable(false).Build();
-
-            // Act
-            var actual = sut.IsSelectField();
-
-            // Assert
-            actual.Should().Be(isSelectField.GetValueOrDefault());
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void IsSelectField_Returns_Value_From_IsPersistable_WHen_No_Metadata_Is_Found(bool persistable)
-        {
-            // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithIsPersistable(persistable).Build();
-
-            // Act
-            var actual = sut.IsSelectField();
-
-            // Assert
-            actual.Should().Be(persistable);
-        }
-
         [Fact]
         public void GetDatabaseFieldName_Returns_Value_From_Metadata_When_Available()
         {
@@ -932,6 +901,32 @@ namespace DataFramework.ModelFramework.Tests.Extensions
 
             // Assert
             actual.Should().Be(metadataValue.GetValueOrDefault(sut.IsPersistable));
+        }
+
+        [Fact]
+        public void UseOnSelect_Returns_False_On_NonPersistable_Column()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithIsPersistable(false).Build();
+
+            // Act
+            var actual = sut.UseOnSelect();
+
+            // Assert
+            actual.Should().BeFalse();
+        }
+
+        [Fact]
+        public void UseOnSelect_Returns_False_On_NonSupported_ColumnType()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName("SomeUnsupportedType").Build();
+
+            // Act
+            var actual = sut.UseOnSelect();
+
+            // Assert
+            actual.Should().BeFalse();
         }
     }
 }

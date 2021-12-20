@@ -22,7 +22,6 @@
         internal const string UseOnUpdate = Root + ".UseOnUpdate";
         internal const string UseOnDelete = Root + ".UseOnDelete";
         internal const string UseOnSelect = Root + ".UseOnSelect";
-        internal const string IsSelectField = Root + ".IsSelectField";
         internal const string SqlReaderMethodName = Root + ".SqlReaderMethodName";
         internal const string AddStoredProcedureName = Root + ".AddStoredProcedureName";
         internal const string AddStoredProcedureStatement = Root + ".AddStoredProcedureStatement";

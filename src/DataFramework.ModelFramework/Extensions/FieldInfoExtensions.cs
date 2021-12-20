@@ -97,15 +97,6 @@ namespace DataFramework.ModelFramework.Extensions
             return instance.TypeName.GetSqlReaderMethodName(instance.IsNullable);
         }
 
-        /// <summary>
-        /// Indicates whether the field should be included in a Select (read) operation on database
-        /// </summary>
-        /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
-        /// <param name="instance"></param>
-        /// <returns></returns>
-        internal static bool IsSelectField(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.IsSelectField, instance.IsPersistable);
-
         internal static string GetDatabaseFieldName(this IFieldInfo instance)
             => instance.Metadata.GetStringValue(Database.FieldName, instance.Name);
 
@@ -208,7 +199,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
         /// <param name="instance"></param>
         internal static bool UseOnSelect(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable);
+            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.TypeName?.IsSupportedByMap() == true);
 
         private static string GetSqlDecimalType(IFieldInfo instance, bool includeSpecificProperties)
             => includeSpecificProperties

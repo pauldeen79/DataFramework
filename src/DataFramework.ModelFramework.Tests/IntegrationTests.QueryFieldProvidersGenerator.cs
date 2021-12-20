@@ -92,7 +92,8 @@ namespace GeneratedNamespace
             yield return @""Id"";
             yield return @""Name"";
             yield return @""Description"";
-            yield return ""AllFields"";
+            yield return @""CustomExtraField"";
+            yield return @""AllFields"";
         }
 
         public string? GetDatabaseFieldName(string queryFieldName)

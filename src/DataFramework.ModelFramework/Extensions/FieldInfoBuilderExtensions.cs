@@ -54,9 +54,6 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithSqlReaderMethodName(this FieldInfoBuilder instance, string? sqlReaderMethodName)
             => instance.ReplaceMetadata(Database.SqlReaderMethodName, sqlReaderMethodName);
 
-        public static FieldInfoBuilder WithIsSelectField(this FieldInfoBuilder instance, bool? isSelectField = true)
-            => instance.ReplaceMetadata(Database.IsSelectField, isSelectField);
-
         public static FieldInfoBuilder WithDatabaseFieldName(this FieldInfoBuilder instance, string? fieldName)
             => instance.ReplaceMetadata(Database.FieldName, fieldName);
 
