@@ -57,9 +57,6 @@ namespace DataFramework.ModelFramework.Extensions
         public static FieldInfoBuilder WithDatabaseFieldName(this FieldInfoBuilder instance, string? fieldName)
             => instance.ReplaceMetadata(Database.FieldName, fieldName);
 
-        public static FieldInfoBuilder WithDatabaseFieldAlias(this FieldInfoBuilder instance, string? fieldAlias)
-            => instance.ReplaceMetadata(Database.FieldAlias, fieldAlias);
-
         public static FieldInfoBuilder WithSqlFieldType(this FieldInfoBuilder instance, string? sqlFieldType)
             => instance.ReplaceMetadata(Database.SqlFieldType, sqlFieldType);
 

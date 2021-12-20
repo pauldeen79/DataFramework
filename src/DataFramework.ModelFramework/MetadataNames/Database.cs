@@ -8,7 +8,6 @@
         internal const string ConcurrencyCheckBehavior = Root + ".ConcurrencyCheckBehavior";
         internal const string SkipFieldOnFind = Root + ".SkipFieldOnFind";
         internal const string FieldName = Root + ".FieldName";
-        internal const string FieldAlias = Root + ".FieldAlias";
         internal const string IsRowVersion = Root + ".IsRowVersion";
         internal const string IsMaxLength = Root + ".IsMaxLength";
         internal const string IsRequired = Root + ".IsRequired";

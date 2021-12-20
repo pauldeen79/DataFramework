@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using DataFramework.ModelFramework.MetadataNames;
 using DataFramework.ModelFramework.Tests.TestFixtures;
 using FluentAssertions;
-using ModelFramework.Generators.Objects;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
-using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Tests.Extensions
@@ -356,45 +353,6 @@ namespace DataFramework.ModelFramework.Tests.Extensions
 
             // Act
             var actual = sut.GetDatabaseFieldName();
-
-            // Assert
-            actual.Should().Be("Name");
-        }
-
-        [Fact]
-        public void GetDatabaseFieldAlias_Returns_Value_From_Metadata_When_Available()
-        {
-            // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithDatabaseFieldAlias("MyAlias").Build();
-
-            // Act
-            var actual = sut.GetDatabaseFieldAlias();
-
-            // Assert
-            actual.Should().Be("MyAlias");
-        }
-
-        [Fact]
-        public void GetDatabaseFieldAlias_Returns_FieldName_Metadata_When_FieldAlias_Metadata_Is_Not_Available()
-        {
-            // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithDatabaseFieldName("DatabaseFieldName").Build();
-
-            // Act
-            var actual = sut.GetDatabaseFieldAlias();
-
-            // Assert
-            actual.Should().Be("DatabaseFieldName");
-        }
-
-        [Fact]
-        public void GetDatabaseFieldAlias_Returns_Name_When_FieldAlias_And_FieldName_Metadata_Is_Not_Available()
-        {
-            // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithDatabaseFieldAlias(null).WithDatabaseFieldName(null).Build();
-
-            // Act
-            var actual = sut.GetDatabaseFieldAlias();
 
             // Assert
             actual.Should().Be("Name");

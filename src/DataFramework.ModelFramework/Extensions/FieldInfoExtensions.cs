@@ -52,14 +52,6 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetStringValue(Database.FieldName, instance.Name);
 
         /// <summary>
-        /// Gets field alias, or field name when not present
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <returns></returns>
-        public static string GetDatabaseFieldAlias(this IFieldInfo instance)
-            => instance.Metadata.GetStringValue(Database.FieldAlias, () => instance.GetDatabaseFieldName());
-
-        /// <summary>
         /// Determines whether the specified field should be used on Insert in database
         /// </summary>
         /// <param name="instance"></param>
