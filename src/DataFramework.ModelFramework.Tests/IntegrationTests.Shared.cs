@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using DataFramework.Core;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
@@ -85,6 +86,11 @@ namespace DataFramework.ModelFramework.Tests
                 .AddAddResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
                 .AddUpdateResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
                 .AddDeleteResultEntityStatements(new LiteralCodeStatementBuilder().WithStatement(CreateResultEntitytatement).Build())
+
+                .WithEntityMapperNamespace("EntityMappers")
+                .WithEntityMapperVisibility(Visibility.Internal)
+                .AddEntityMapperAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+                .AddEntityMapperCustomMappings(new KeyValuePair<string, object>("IsExistingEntity", true))
 
                 .Build();
 

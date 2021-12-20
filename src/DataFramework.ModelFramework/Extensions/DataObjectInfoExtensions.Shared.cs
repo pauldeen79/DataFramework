@@ -72,6 +72,10 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetStringValue(EntityRetrieverSettings.Namespace)
                 .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
+        internal static string GetEntityMapperNamespace(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(EntityMappers.Namespace)
+                .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
+
         internal static string GetEntityFullName(this IDataObjectInfo instance)
         {
             var ns = instance.GetEntitiesNamespace();

@@ -58,7 +58,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<string> GetQueryClassValidFieldNames(IDataObjectInfo instance)
         {
-            foreach (var s in instance.Fields.Select(f => f.Name))
+            foreach (var s in instance.Fields.Where(x => x.UseOnSelect()).Select(f => f.Name))
             {
                 yield return s;
             }

@@ -95,7 +95,7 @@ namespace Queries
         {
         }
 
-        private static readonly string[] ValidFieldNames = new[] { ""Id"", ""Name"", ""Description"", ""IsExistingEntity"", ""AdditionalValidFieldName"" };
+        private static readonly string[] ValidFieldNames = new[] { ""Id"", ""Name"", ""Description"", ""AdditionalValidFieldName"" };
 
         private const int MaxLimit = int.MaxValue;
     }
