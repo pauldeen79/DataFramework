@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
@@ -69,7 +70,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithType(typeof(string))
                 .WithIsNullable()
                 .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetDatabaseFieldNameCodeStatement))
-                .AddLiteralCodeStatements("return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));");
+                .AddLiteralCodeStatements($"return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, {nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}));");
         }
     }
 }

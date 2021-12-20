@@ -153,7 +153,7 @@ namespace DataFramework.ModelFramework.Extensions
                                                                                       RenderMetadataAsAttributesTypes renderMetadataAsAttributes,
                                                                                       bool addReadOnlyAttribute)
         {
-            if (!string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
+            if (string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
             {
                 //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
                 //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
@@ -145,7 +146,7 @@ namespace DataFramework.ModelFramework.Extensions
                 {
                     if (x.CodeStatements.Count == 0)
                     {
-                        x.AddLiteralCodeStatements("return ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));");
+                        x.AddLiteralCodeStatements($"return ValidFieldNames.Any(s => s.Equals(expression.FieldName, {nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}));");
                     }
                 });
         }
@@ -153,7 +154,7 @@ namespace DataFramework.ModelFramework.Extensions
         private static IEnumerable<ClassConstructorBuilder> GetQueryClassConstructors()
         {
             yield return new ClassConstructorBuilder()
-                .WithChainCall($"this(null, null, Enumerable.Empty<{typeof(IQueryCondition).FullName}>(), Enumerable.Empty<{typeof(IQuerySortOrder).FullName}>())");
+                .WithChainCall($"this(null, null, {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQueryCondition).FullName}>(), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
 
             yield return new ClassConstructorBuilder()
                 .AddParameter("limit", typeof(int?))
