@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using DataFramework.Core;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
+using ModelFramework.Database.Builders;
+using ModelFramework.Database.Contracts;
+using ModelFramework.Generators.Database;
 using ModelFramework.Generators.Objects;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.CodeStatements.Builders;
@@ -26,13 +29,21 @@ namespace DataFramework.ModelFramework.Tests
                                                           EnvironmentVersion = "1.0.0"
                                                       });
 
+        private static string GenerateCode(IEnumerable<ISchema> input, GeneratorSettings settings)
+            => TemplateRenderHelper.GetTemplateOutput(new SqlServerDatabaseSchemaGenerator(),
+                                                      input,
+                                                      additionalParameters: new
+                                                      {
+                                                          CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders
+                                                      });
+
         private static DataObjectInfo CreateDataObjectInfo(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .WithDescription("Description goes here")
                 .AddFields
                 (
-                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithSqlIdentity().WithIsRequired(),
                     new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
                     new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
                     new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().WithIsPersistable(false).AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;").Build())
@@ -92,6 +103,8 @@ namespace DataFramework.ModelFramework.Tests
                 .AddEntityMapperAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .AddEntityMapperCustomMappings(new KeyValuePair<string, object>("IsExistingEntity", true))
 
+                .AddPrimaryKeyConstraints(new PrimaryKeyConstraintBuilder().WithName("PK_TestEntity").AddFields(new PrimaryKeyConstraintFieldBuilder().WithName("Id")))
+
                 .Build();
 
         private static DataObjectInfo CreateDataObjectInfoInsertOnly(EntityClassType entityClassType)
@@ -100,7 +113,7 @@ namespace DataFramework.ModelFramework.Tests
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
                 .AddFields
                 (
-                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsRequired().WithPropertyType(typeof(long)),
+                    new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithSqlIdentity().WithIsRequired().WithPropertyType(typeof(int)),
                     new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringLength(30).WithIsRequired(),
                     new FieldInfoBuilder().WithName("Description").WithType(typeof(string)).WithStringLength(255).WithIsNullable(),
                     new FieldInfoBuilder().WithName("IsExistingEntity").WithType(typeof(bool)).WithIsComputed().WithIsPersistable(false).AddComputedFieldStatements(new LiteralCodeStatementBuilder().WithStatement("return Id > 0;"))

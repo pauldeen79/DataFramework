@@ -169,6 +169,6 @@ namespace DataFramework.ModelFramework.Extensions
         private static string CreateAfterReadStatement(IFieldInfo field, IDataObjectInfo instance, bool isImmutable, string suffix)
             => isImmutable
                 ? $"resultEntity = resultEntity.Set{field.CreatePropertyName(instance)}{suffix}(reader.{field.GetSqlReaderMethodName()}(\"{field.GetDatabaseFieldName()}\"));"
-                : $"resultEntity.{field.CreatePropertyName(instance)}{suffix} = reader.{field.GetSqlReaderMethodName()}(\"{field.GetSqlReaderMethodName()}\");";
+                : $"resultEntity.{field.CreatePropertyName(instance)}{suffix} = reader.{field.GetSqlReaderMethodName()}(\"{field.GetDatabaseFieldName()}\");";
     }
 }

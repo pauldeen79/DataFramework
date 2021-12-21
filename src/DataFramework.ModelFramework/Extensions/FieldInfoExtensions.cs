@@ -12,10 +12,15 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static class FieldInfoExtensions
     {
+        public const int DefaultStringLength = 32;
+
         public static string CreatePropertyName(this IFieldInfo instance, IDataObjectInfo dataObjectInfo)
             => instance.Name == dataObjectInfo.Name
                 ? string.Format(dataObjectInfo.Metadata.GetStringValue(Entities.PropertyNameDeconflictionFormatString, "{0}Property"), instance.Name).Sanitize()
                 : instance.Name.Sanitize();
+
+        public static string GetPropertyTypeName(this IFieldInfo instance)
+            => instance.Metadata.GetStringValue(Entities.PropertyType, instance.TypeName ?? "System.Object");
 
         public static bool IsRequired(this IFieldInfo instance)
             => instance.Metadata.GetValues<IAttribute>(Entities.FieldAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
@@ -57,7 +62,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         public static bool UseOnInsert(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+            => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
         /// <summary>
         /// Determines whether the specified field should be used on Update in database
@@ -65,7 +70,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         public static bool UseOnUpdate(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+            => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
         /// <summary>
         /// Determines whether the specified field should be used on Delete in database
@@ -73,7 +78,7 @@ namespace DataFramework.ModelFramework.Extensions
         /// <param name="instance"></param>
         /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
         public static bool UseOnDelete(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.TypeName?.IsSupportedByMap() == true);
+            => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
         /// <summary>
         /// Determines whether the specified field should always be used on Select in database
@@ -81,11 +86,11 @@ namespace DataFramework.ModelFramework.Extensions
         /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
         /// <param name="instance"></param>
         public static bool UseOnSelect(this IFieldInfo instance)
-            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.TypeName?.IsSupportedByMap() == true);
+            => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.GetPropertyTypeName().IsSupportedByMap());
 
         internal static ParameterBuilder ToParameterBuilder(this IFieldInfo instance)
             => new ParameterBuilder().WithName(instance.Name.Sanitize().ToPascalCase())
-                                     .WithTypeName(instance.TypeName)
+                                     .WithTypeName(instance.GetPropertyTypeName())
                                      .WithDefaultValue(instance.DefaultValue)
                                      .WithIsNullable(instance.IsNullable);
 
@@ -103,17 +108,18 @@ namespace DataFramework.ModelFramework.Extensions
                 return metadataValue;
             }
 
-            if (instance.TypeName == null || instance.TypeName.Length == 0)
+            var typeName = instance.GetPropertyTypeName();
+            if (typeName.Length == 0)
             {
                 //assume object
                 return "GetValue";
             }
 
-            return instance.TypeName.GetSqlReaderMethodName(instance.IsNullable);
+            return typeName.GetSqlReaderMethodName(instance.IsNullable);
         }
 
         internal static bool IsSqlIdentity(this IFieldInfo instance)
-            => instance.GetSqlFieldType().StartsWith("IDENTITY");
+            => instance.Metadata.GetBooleanValue(Database.IdentityField);
 
         internal static string GetSqlFieldType(this IFieldInfo instance,
                                                bool includeSpecificProperties = false)
@@ -126,30 +132,31 @@ namespace DataFramework.ModelFramework.Extensions
                     : RemoveSpecificPropertiesFromSqlType(metadataValue);
             }
 
-            if (string.IsNullOrEmpty(instance.TypeName))
+            var typeName = instance.GetPropertyTypeName();
+            if (string.IsNullOrEmpty(typeName))
             {
                 return string.Empty;
             }
 
-            if (instance.TypeName == typeof(string).FullName || instance.TypeName == typeof(string).AssemblyQualifiedName)
+            if (typeName == typeof(string).FullName || typeName == typeof(string).AssemblyQualifiedName)
             {
-                return GetSqlVarcharType(instance, includeSpecificProperties, 32);
+                return GetSqlVarcharType(instance, includeSpecificProperties, DefaultStringLength);
             }
 
-            if (instance.TypeName == typeof(decimal).FullName
-                || instance.TypeName == typeof(decimal).AssemblyQualifiedName
-                || instance.TypeName == typeof(decimal?).FullName
-                || instance.TypeName == typeof(decimal?).AssemblyQualifiedName)
+            if (typeName == typeof(decimal).FullName
+                || typeName == typeof(decimal).AssemblyQualifiedName
+                || typeName == typeof(decimal?).FullName
+                || typeName == typeof(decimal?).AssemblyQualifiedName)
             {
                 return GetSqlDecimalType(instance, includeSpecificProperties);
             }
 
-            if (instance.TypeName.IsRequiredEnum() || instance.TypeName.IsOptionalEnum())
+            if (typeName.IsRequiredEnum() || typeName.IsOptionalEnum())
             {
                 return "int";
             }
 
-            var type = Type.GetType(instance.TypeName);
+            var type = Type.GetType(typeName);
             if (type != null && _sqlTypeNameMappings.TryGetValue(type, out var sqlType))
             {
                 return sqlType;
@@ -190,7 +197,7 @@ namespace DataFramework.ModelFramework.Extensions
             return $"varchar({length})";
         }
 
-        private static int GetSqlStringLength(this IFieldInfo instance, int defaultLength)
+        internal static int GetSqlStringLength(this IFieldInfo instance, int defaultLength)
             => instance.Metadata.GetValue(Database.SqlStringLength, () => instance.GetStringMaxLength() ?? defaultLength);
 
         private static string RemoveSpecificPropertiesFromSqlType(string sqlType)

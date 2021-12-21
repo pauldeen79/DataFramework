@@ -8,7 +8,7 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static ClassFieldBuilder FillFrom(this ClassFieldBuilder instance, IFieldInfo fieldInfo)
             => instance.WithName($"_{fieldInfo.Name.ToPascalCase()}")
-                .WithTypeName(fieldInfo.TypeName)
+                .WithTypeName(fieldInfo.GetPropertyTypeName())
                 .WithIsNullable(fieldInfo.IsNullable);
     }
 }

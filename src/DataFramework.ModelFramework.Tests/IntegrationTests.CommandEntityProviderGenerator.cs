@@ -1,11 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CrossCutting.Common.Extensions;
-using DataFramework.Core.Builders;
+﻿using CrossCutting.Common.Extensions;
 using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
-using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.CodeStatements.Builders;
-using ModelFramework.Objects.Contracts;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Tests
@@ -256,12 +251,12 @@ namespace CommandEntityProviders
 
         public EntityBuilders.TestEntityBuilder AddAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.Id = reader.GetInt32(""GetInt32"");
-            resultEntity.Name = reader.GetString(""GetString"");
-            resultEntity.Description = reader.GetNullableString(""GetNullableString"");
-            resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
-            resultEntity.NameOriginal = reader.GetString(""GetString"");
-            resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            resultEntity.Id = reader.GetInt32(""Id"");
+            resultEntity.Name = reader.GetString(""Name"");
+            resultEntity.Description = reader.GetNullableString(""Description"");
+            resultEntity.IdOriginal = reader.GetInt32(""Id"");
+            resultEntity.NameOriginal = reader.GetString(""Name"");
+            resultEntity.DescriptionOriginal = reader.GetNullableString(""Description"");
             return resultEntity;
         }
 
@@ -273,12 +268,12 @@ namespace CommandEntityProviders
 
         public EntityBuilders.TestEntityBuilder UpdateAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.Id = reader.GetInt32(""GetInt32"");
-            resultEntity.Name = reader.GetString(""GetString"");
-            resultEntity.Description = reader.GetNullableString(""GetNullableString"");
-            resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
-            resultEntity.NameOriginal = reader.GetString(""GetString"");
-            resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            resultEntity.Id = reader.GetInt32(""Id"");
+            resultEntity.Name = reader.GetString(""Name"");
+            resultEntity.Description = reader.GetNullableString(""Description"");
+            resultEntity.IdOriginal = reader.GetInt32(""Id"");
+            resultEntity.NameOriginal = reader.GetString(""Name"");
+            resultEntity.DescriptionOriginal = reader.GetNullableString(""Description"");
             return resultEntity;
         }
 
@@ -290,12 +285,12 @@ namespace CommandEntityProviders
 
         public EntityBuilders.TestEntityBuilder DeleteAfterRead(EntityBuilders.TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.Id = reader.GetInt32(""GetInt32"");
-            resultEntity.Name = reader.GetString(""GetString"");
-            resultEntity.Description = reader.GetNullableString(""GetNullableString"");
-            resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
-            resultEntity.NameOriginal = reader.GetString(""GetString"");
-            resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            resultEntity.Id = reader.GetInt32(""Id"");
+            resultEntity.Name = reader.GetString(""Name"");
+            resultEntity.Description = reader.GetNullableString(""Description"");
+            resultEntity.IdOriginal = reader.GetInt32(""Id"");
+            resultEntity.NameOriginal = reader.GetString(""Name"");
+            resultEntity.DescriptionOriginal = reader.GetNullableString(""Description"");
             return resultEntity;
         }
     }
@@ -392,12 +387,12 @@ namespace GeneratedNamespace
 
         public TestEntityBuilder AddAfterRead(TestEntityBuilder resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.Id = reader.GetInt32(""GetInt32"");
-            resultEntity.Name = reader.GetString(""GetString"");
-            resultEntity.Description = reader.GetNullableString(""GetNullableString"");
-            resultEntity.IdOriginal = reader.GetInt32(""GetInt32"");
-            resultEntity.NameOriginal = reader.GetString(""GetString"");
-            resultEntity.DescriptionOriginal = reader.GetNullableString(""GetNullableString"");
+            resultEntity.Id = reader.GetInt32(""Id"");
+            resultEntity.Name = reader.GetString(""Name"");
+            resultEntity.Description = reader.GetNullableString(""Description"");
+            resultEntity.IdOriginal = reader.GetInt32(""Id"");
+            resultEntity.NameOriginal = reader.GetString(""Name"");
+            resultEntity.DescriptionOriginal = reader.GetNullableString(""Description"");
             return resultEntity;
         }
     }

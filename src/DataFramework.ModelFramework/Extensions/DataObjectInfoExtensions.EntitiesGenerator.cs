@@ -235,9 +235,9 @@ namespace DataFramework.ModelFramework.Extensions
                                                  .WithType(typeof(int))
                                                  .WithOverride()
                                                  .AddLiteralCodeStatements("int hashCode = 235838129;")
-                                                 .AddLiteralCodeStatements(fields.Select(f => Type.GetType(f.TypeName.FixTypeName())?.IsValueType == true
+                                                 .AddLiteralCodeStatements(fields.Select(f => Type.GetType(f.GetPropertyTypeName().FixTypeName()).IsValueType
                                                     ? $"hashCode = hashCode * -1521134295 + {f.CreatePropertyName(instance)}.GetHashCode();"
-                                                    : $"hashCode = hashCode * -1521134295 + EqualityComparer<{f.TypeName.FixTypeName()}>.Default.GetHashCode({f.CreatePropertyName(instance)});"))
+                                                    : $"hashCode = hashCode * -1521134295 + EqualityComparer<{f.GetPropertyTypeName().FixTypeName()}>.Default.GetHashCode({f.CreatePropertyName(instance)});"))
                                                  .AddLiteralCodeStatements("return hashCode;");
 
             yield return new ClassMethodBuilder().WithName("==")

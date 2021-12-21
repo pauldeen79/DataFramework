@@ -40,7 +40,7 @@ namespace EntityIdentities
     internal partial class TestEntityIdentity
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
             set;
@@ -90,7 +90,7 @@ namespace EntityIdentities
     internal partial record TestEntityIdentity
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
         }
@@ -145,7 +145,7 @@ namespace EntityIdentities
     internal partial class TestEntityIdentity : IEquatable<TestEntityIdentity>
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
         }
@@ -228,7 +228,7 @@ namespace EntityIdentities
     internal partial class TestEntityIdentity
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get
             {

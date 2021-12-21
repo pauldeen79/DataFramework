@@ -42,7 +42,7 @@ namespace Entities
     internal partial class TestEntity : ITestEntity
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
             set;
@@ -71,7 +71,7 @@ namespace Entities
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
             set;
@@ -137,7 +137,7 @@ namespace Entities
     internal partial record TestEntity : ITestEntity
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
         }
@@ -162,7 +162,7 @@ namespace Entities
             }
         }
 
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
         }
@@ -233,7 +233,7 @@ namespace Entities
     internal partial class TestEntity : ITestEntity, IEquatable<TestEntity>
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
         }
@@ -258,7 +258,7 @@ namespace Entities
             }
         }
 
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
         }
@@ -363,7 +363,7 @@ namespace Entities
     internal partial class TestEntity : ITestEntity, System.ComponentModel.INotifyPropertyChanged
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get
             {
@@ -413,7 +413,7 @@ namespace Entities
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get
             {

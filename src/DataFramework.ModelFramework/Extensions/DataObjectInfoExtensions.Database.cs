@@ -9,6 +9,12 @@ namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
+        internal static string GetDatabaseFileGroupName(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(Database.FileGroupName);
+
+        internal static string GetDatabaseSchemaName(this IDataObjectInfo instance)
+            => instance.Metadata.GetStringValue(Database.SchemaName, "dbo");
+
         internal static string GetTableName(this IDataObjectInfo instance)
             => instance.Metadata.GetStringValue(Database.TableName, instance.Name);
 

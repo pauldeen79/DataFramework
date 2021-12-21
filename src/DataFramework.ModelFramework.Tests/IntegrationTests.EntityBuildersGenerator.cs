@@ -41,7 +41,7 @@ namespace EntityBuilders
     public partial class TestEntityBuilder
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
             set;
@@ -62,7 +62,7 @@ namespace EntityBuilders
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
             set;
@@ -109,7 +109,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(long id)
+        public TestEntityBuilder WithId(int id)
         {
             Id = id;
             return this;
@@ -127,7 +127,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(long? idOriginal)
+        public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
             return this;
@@ -159,7 +159,7 @@ namespace EntityBuilders
             DescriptionOriginal = source.DescriptionOriginal;
         }
 
-        public TestEntityBuilder(long id, string name, string? description, long? idOriginal, string? nameOriginal, string? descriptionOriginal)
+        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
         {
             Id = id;
             Name = name;
@@ -208,7 +208,7 @@ namespace EntityBuilders
     public partial class TestEntityBuilder
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
             set;
@@ -228,7 +228,7 @@ namespace EntityBuilders
             set;
         }
 
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
             set;
@@ -273,7 +273,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(long id)
+        public TestEntityBuilder WithId(int id)
         {
             Id = id;
             return this;
@@ -291,7 +291,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(long? idOriginal)
+        public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
             return this;
@@ -323,7 +323,7 @@ namespace EntityBuilders
             DescriptionOriginal = source.DescriptionOriginal;
         }
 
-        public TestEntityBuilder(long id, string name, string? description, long? idOriginal, string? nameOriginal, string? descriptionOriginal)
+        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
         {
             Id = id;
             Name = name;
@@ -372,7 +372,7 @@ namespace EntityBuilders
     public partial class TestEntityBuilder
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get;
             set;
@@ -392,7 +392,7 @@ namespace EntityBuilders
             set;
         }
 
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get;
             set;
@@ -437,7 +437,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(long id)
+        public TestEntityBuilder WithId(int id)
         {
             Id = id;
             return this;
@@ -455,7 +455,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(long? idOriginal)
+        public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
             return this;
@@ -487,7 +487,7 @@ namespace EntityBuilders
             DescriptionOriginal = source.DescriptionOriginal;
         }
 
-        public TestEntityBuilder(long id, string name, string? description, long? idOriginal, string? nameOriginal, string? descriptionOriginal)
+        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
         {
             Id = id;
             Name = name;
@@ -536,7 +536,7 @@ namespace EntityBuilders
     public partial class TestEntityBuilder
     {
         [System.ComponentModel.DataAnnotations.Required]
-        public long Id
+        public int Id
         {
             get
             {
@@ -578,7 +578,7 @@ namespace EntityBuilders
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public long? IdOriginal
+        public int? IdOriginal
         {
             get
             {
@@ -646,7 +646,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(long id)
+        public TestEntityBuilder WithId(int id)
         {
             Id = id;
             return this;
@@ -664,7 +664,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(long? idOriginal)
+        public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
             return this;
@@ -696,7 +696,7 @@ namespace EntityBuilders
             DescriptionOriginal = source.DescriptionOriginal;
         }
 
-        public TestEntityBuilder(long id, string name, string? description, long? idOriginal, string? nameOriginal, string? descriptionOriginal)
+        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
         {
             Id = id;
             Name = name;

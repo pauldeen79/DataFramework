@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Extensions
     {
         internal static ClassPropertyBuilder Fill(this ClassPropertyBuilder instance, IFieldInfo field)
             => instance
-                .WithTypeName(field.Metadata.GetStringValue(Entities.PropertyType, field.TypeName ?? "System.Object"))
+                .WithTypeName(field.GetPropertyTypeName())
                 .WithIsNullable(field.IsNullable)
                 .WithVisibility(field.Metadata.GetValue(Entities.Visibility, () => field.IsVisible.ToVisibility()))
                 .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, () => field.IsVisible.ToVisibility()))
