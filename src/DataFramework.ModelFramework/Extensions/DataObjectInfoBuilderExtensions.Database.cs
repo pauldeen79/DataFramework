@@ -97,5 +97,14 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static DataObjectInfoBuilder AddCheckConstraints(this DataObjectInfoBuilder instance, params CheckConstraintBuilder[] checkConstraints)
             => instance.AddMetadata(checkConstraints.Select(x => new MetadataBuilder().WithName(Database.CheckConstraint).WithValue(x.Build())));
+
+        public static DataObjectInfoBuilder WithHasAddStoredProcedure(this DataObjectInfoBuilder instance, bool? hasStoredProcedure = true)
+            => instance.ReplaceMetadata(Database.HasAddStoredProcedure, hasStoredProcedure);
+
+        public static DataObjectInfoBuilder WithHasUpdateStoredProcedure(this DataObjectInfoBuilder instance, bool? hasStoredProcedure = true)
+            => instance.ReplaceMetadata(Database.HasUpdateStoredProcedure, hasStoredProcedure);
+
+        public static DataObjectInfoBuilder WithHasDeleteStoredProcedure(this DataObjectInfoBuilder instance, bool? hasStoredProcedure = true)
+            => instance.ReplaceMetadata(Database.HasDeleteStoredProcedure, hasStoredProcedure);
     }
 }

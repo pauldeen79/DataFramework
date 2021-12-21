@@ -25,6 +25,9 @@
         internal const string UseOnDelete = Root + ".UseOnDelete";
         internal const string UseOnSelect = Root + ".UseOnSelect";
         internal const string SqlReaderMethodName = Root + ".SqlReaderMethodName";
+        internal const string HasAddStoredProcedure = Root + ".HasAddStoredProcedure";
+        internal const string HasUpdateStoredProcedure = Root + ".HasUpdateStoredProcedure";
+        internal const string HasDeleteStoredProcedure = Root + ".HasDeleteStoredProcedure";
         internal const string AddStoredProcedureName = Root + ".AddStoredProcedureName";
         internal const string AddStoredProcedureStatement = Root + ".AddStoredProcedureStatement";
         internal const string AddCustomCommandText = Root + ".AddCustomCommandText";

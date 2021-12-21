@@ -19,13 +19,13 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.Metadata.GetStringValue(Database.TableName, instance.Name);
 
         internal static bool HasAddStoredProcedure(this IDataObjectInfo instance)
-            => !string.IsNullOrEmpty(instance.Metadata.GetStringValue(Database.AddStoredProcedureName));
+            => instance.Metadata.GetBooleanValue(Database.HasAddStoredProcedure);
 
         internal static bool HasUpdateStoredProcedure(this IDataObjectInfo instance)
-            => !string.IsNullOrEmpty(instance.Metadata.GetStringValue(Database.UpdateStoredProcedureName));
+            => instance.Metadata.GetBooleanValue(Database.HasUpdateStoredProcedure);
 
         internal static bool HasDeleteStoredProcedure(this IDataObjectInfo instance)
-            => !string.IsNullOrEmpty(instance.Metadata.GetStringValue(Database.DeleteStoredProcedureName));
+            => instance.Metadata.GetBooleanValue(Database.HasDeleteStoredProcedure);
 
         internal static string CreateDatabaseInsertCommandText(this IDataObjectInfo instance)
         {

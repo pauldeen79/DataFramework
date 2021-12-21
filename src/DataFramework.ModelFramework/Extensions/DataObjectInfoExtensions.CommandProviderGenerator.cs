@@ -104,7 +104,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetInsertCommand(IDataObjectInfo instance)
             => instance.HasAddStoredProcedure()
-                ? $"[{instance.Metadata.GetStringValue(Database.AddStoredProcedureName)}]"
+                ? $"[{string.Format(instance.Metadata.GetStringValue(Database.AddStoredProcedureName, "Insert{0}"), instance.GetTableName())}]"
                 : instance.CreateDatabaseInsertCommandText();
 
         private static string GetUpdateCommandType(IDataObjectInfo instance)
@@ -114,7 +114,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetUpdateCommand(IDataObjectInfo instance)
             => instance.HasUpdateStoredProcedure()
-                ? $"[{instance.Metadata.GetStringValue(Database.UpdateStoredProcedureName)}]"
+                ? $"[{string.Format(instance.Metadata.GetStringValue(Database.UpdateStoredProcedureName, "Update{0}"), instance.GetTableName())}]"
                 : instance.CreateDatabaseUpdateCommandText();
 
         private static string GetDeleteCommandType(IDataObjectInfo instance)
@@ -124,7 +124,7 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static string GetDeleteCommand(IDataObjectInfo instance)
             => instance.HasDeleteStoredProcedure()
-                ? $"[{instance.Metadata.GetStringValue(Database.DeleteStoredProcedureName)}]"
+                ? $"[{string.Format(instance.Metadata.GetStringValue(Database.DeleteStoredProcedureName, "Delete{0}"), instance.GetTableName())}]"
                 : instance.CreateDatabaseDeleteCommandText();
     }
 }

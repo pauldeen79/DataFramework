@@ -86,10 +86,6 @@ namespace DataFramework.ModelFramework.Tests
                 .WithEntityRetrieverSettingsVisibility(Visibility.Internal)
                 .AddEntityRetrieverSettingsAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
 
-                .WithAddStoredProcedureName("InsertTestEntity")
-                .WithUpdateStoredProcedureName("UpdateTestEntity")
-                .WithDeleteStoredProcedureName("DeleteTestEntity")
-
                 .WithCommandEntityProviderNamespace("CommandEntityProviders")
                 .WithCommandEntityProviderVisibility(Visibility.Internal)
                 .AddCommandEntityProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
@@ -103,6 +99,9 @@ namespace DataFramework.ModelFramework.Tests
                 .AddEntityMapperAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .AddEntityMapperCustomMappings(new KeyValuePair<string, object>("IsExistingEntity", true))
 
+                .WithHasAddStoredProcedure()
+                .WithHasUpdateStoredProcedure()
+                .WithHasDeleteStoredProcedure()
                 .AddPrimaryKeyConstraints(new PrimaryKeyConstraintBuilder().WithName("PK_TestEntity").AddFields(new PrimaryKeyConstraintFieldBuilder().WithName("Id")))
 
                 .Build();
