@@ -4,7 +4,6 @@ using System.Linq;
 using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using DataFramework.Abstractions;
-using DataFramework.ModelFramework.Extensions;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Database.Builders;
@@ -13,7 +12,7 @@ using ModelFramework.Database.Default;
 using ModelFramework.Database.Extensions;
 using ModelFramework.Database.SqlStatements.Builders;
 
-namespace DataFramework.ModelFramework
+namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoExtensions
     {
