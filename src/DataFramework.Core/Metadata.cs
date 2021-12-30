@@ -19,6 +19,8 @@ namespace DataFramework.Core
             Value = value;
         }
 
-        public override string ToString() => $"[{Name}] = [{Value}]";
+        public override string ToString() => Value == null
+            ? $"[{Name}] = NULL"
+            : $"[{Name}] = [{Value}]";
     }
 }
