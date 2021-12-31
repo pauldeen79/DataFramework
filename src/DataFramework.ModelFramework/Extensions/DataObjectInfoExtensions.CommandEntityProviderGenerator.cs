@@ -111,7 +111,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithName("AddResultEntity")
                     .WithTypeName(instance.GetEntityBuilderFullName())
                     .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddResultEntityStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddResultEntityStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
 
                 yield return new ClassMethodBuilder()
@@ -121,7 +121,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .AddParameter("reader", typeof(IDataReader))
                     .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
                     .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddAfterReadStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.AddAfterReadStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
             }
 
@@ -131,7 +131,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithName("UpdateResultEntity")
                     .WithTypeName(instance.GetEntityBuilderFullName())
                     .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateResultEntityStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateResultEntityStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
 
                 yield return new ClassMethodBuilder()
@@ -141,7 +141,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .AddParameter("reader", typeof(IDataReader))
                     .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
                     .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateAfterReadStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.UpdateAfterReadStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
             }
 
@@ -151,7 +151,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .WithName("DeleteResultEntity")
                     .WithTypeName(instance.GetEntityBuilderFullName())
                     .AddParameter("resultEntity", instance.GetEntityBuilderFullName())
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteResultEntityStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteResultEntityStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
 
                 yield return new ClassMethodBuilder()
@@ -161,7 +161,7 @@ namespace DataFramework.ModelFramework.Extensions
                     .AddParameter("reader", typeof(IDataReader))
                     .AddLiteralCodeStatements(outputFields.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), string.Empty)))
                     .AddLiteralCodeStatements(outputFieldsForOriginal.Select(x => CreateAfterReadStatement(x, instance, entityClassType.IsImmutable(), "Original")))
-                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteAfterReadStatement))
+                    .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(CommandEntityProviders.DeleteAfterReadStatement).Select(x => x.CreateBuilder()))
                     .AddLiteralCodeStatements("return resultEntity;");
             }
         }

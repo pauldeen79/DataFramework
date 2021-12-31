@@ -35,7 +35,7 @@ using System.Text;
 namespace EntityRetrieverSettings
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityPagedEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
     {

@@ -35,7 +35,7 @@ using System.Text;
 namespace CommandEntityProviders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
@@ -181,7 +181,7 @@ using System.Text;
 namespace CommandEntityProviders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
@@ -327,7 +327,7 @@ using System.Text;
 namespace GeneratedNamespace
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
     public partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<TestEntity,TestEntityBuilder>
     {
         public Func<TestEntityBuilder? ResultEntityDelegate

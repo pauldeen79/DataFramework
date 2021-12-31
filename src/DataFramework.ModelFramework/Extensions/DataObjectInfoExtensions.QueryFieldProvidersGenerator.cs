@@ -46,8 +46,8 @@ namespace DataFramework.ModelFramework.Extensions
 
         private static IEnumerable<ClassConstructorBuilder> GetQueryFieldProviderClassConstructors(IDataObjectInfo instance)
         {
-            var constructorParameters = instance.Metadata.GetValues<IParameter>(QueryFieldProviders.ConstructorParameter).ToArray();
-            var constructorStatements = instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.ConstructorCodeStatement).ToArray();
+            var constructorParameters = instance.Metadata.GetValues<IParameter>(QueryFieldProviders.ConstructorParameter).Select(x => new ParameterBuilder(x)).ToArray();
+            var constructorStatements = instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.ConstructorCodeStatement).Select(x => x.CreateBuilder()).ToArray();
             if (constructorParameters.Any() || constructorStatements.Any())
             {
                 yield return new ClassConstructorBuilder()
@@ -62,14 +62,14 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName(nameof(IQueryFieldProvider.GetAllFields))
                 .WithType(typeof(IEnumerable<string>))
                 .AddLiteralCodeStatements(instance.Fields.Where(x => x.UseOnSelect() && !x.Metadata.GetBooleanValue(QueryFieldProviders.SkipField)).Select(x => $"yield return {x.CreatePropertyName(instance).CsharpFormat()};"))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetAllFieldsCodeStatement));
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetAllFieldsCodeStatement).Select(x => x.CreateBuilder()));
 
             yield return new ClassMethodBuilder()
                 .WithName(nameof(IQueryFieldProvider.GetDatabaseFieldName))
                 .AddParameter("queryFieldName", typeof(string))
                 .WithType(typeof(string))
                 .WithIsNullable()
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetDatabaseFieldNameCodeStatement))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(QueryFieldProviders.GetDatabaseFieldNameCodeStatement).Select(x => x.CreateBuilder()))
                 .AddLiteralCodeStatements($"return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, {nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}));");
         }
     }

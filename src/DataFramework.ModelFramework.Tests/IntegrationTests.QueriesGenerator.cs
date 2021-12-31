@@ -35,7 +35,7 @@ using System.Text;
 namespace Queries
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Queries.QueryGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery
     {

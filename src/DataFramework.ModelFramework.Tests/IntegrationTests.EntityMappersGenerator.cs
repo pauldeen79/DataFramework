@@ -36,7 +36,7 @@ using System.Text;
 namespace EntityMappers
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityMapperGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityMapperGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityEntityMapper : CrossCutting.Data.Abstractions.IDatabaseEntityMapper<Entities.TestEntity>
     {
@@ -85,7 +85,7 @@ using System.Text;
 namespace EntityMappers
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.EntityMapperGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityMapperGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityEntityMapper : CrossCutting.Data.Abstractions.IDatabaseEntityMapper<Entities.TestEntity>
     {

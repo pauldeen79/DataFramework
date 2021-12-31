@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Builders;
 using ModelFramework.Objects.Builders;
 using ModelFramework.Objects.Contracts;
 
@@ -17,7 +19,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithNamespace(instance.GetRepositoriesInterfaceNamespace())
                 .WithPartial()
                 .WithVisibility(instance.Metadata.GetValue(Repositories.Visibility, () => instance.IsVisible.ToVisibility()))
-                .AddMetadata(instance.Metadata.Convert())
+                .AddMetadata(instance.Metadata.Convert().Select(x => new MetadataBuilder(x)))
                 .AddInterfaces(GetRepositoryInterfaceInterfaces(instance))
                 .AddMethods(GetRepositoryClassMethods(instance))
                 .AddAttributes(GetRepositoryInterfaceAttributes());

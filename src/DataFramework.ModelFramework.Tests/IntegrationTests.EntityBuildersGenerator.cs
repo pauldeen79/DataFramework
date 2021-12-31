@@ -36,7 +36,7 @@ using System.Text;
 namespace EntityBuilders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class TestEntityBuilder
     {
@@ -87,28 +87,6 @@ namespace EntityBuilders
             return new Entities.TestEntity { Id = Id, Name = Name, Description = Description, IdOriginal = IdOriginal, NameOriginal = NameOriginal, DescriptionOriginal = DescriptionOriginal };
         }
 
-        public TestEntityBuilder Clear()
-        {
-            Id = default;
-            Name = default;
-            Description = default;
-            IdOriginal = default;
-            NameOriginal = default;
-            DescriptionOriginal = default;
-            return this;
-        }
-
-        public TestEntityBuilder Update(Entities.TestEntity source)
-        {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
-            return this;
-        }
-
         public TestEntityBuilder WithId(int id)
         {
             Id = id;
@@ -157,16 +135,6 @@ namespace EntityBuilders
             IdOriginal = source.IdOriginal;
             NameOriginal = source.NameOriginal;
             DescriptionOriginal = source.DescriptionOriginal;
-        }
-
-        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            IdOriginal = idOriginal;
-            NameOriginal = nameOriginal;
-            DescriptionOriginal = descriptionOriginal;
         }
     }
 #nullable restore
@@ -203,7 +171,7 @@ using System.Text;
 namespace EntityBuilders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class TestEntityBuilder
     {
@@ -249,28 +217,6 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             return new Entities.TestEntity(Id, Name, Description, IdOriginal, NameOriginal, DescriptionOriginal);
-        }
-
-        public TestEntityBuilder Clear()
-        {
-            Id = default;
-            Name = default;
-            Description = default;
-            IdOriginal = default;
-            NameOriginal = default;
-            DescriptionOriginal = default;
-            return this;
-        }
-
-        public TestEntityBuilder Update(Entities.TestEntity source)
-        {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
-            return this;
         }
 
         public TestEntityBuilder WithId(int id)
@@ -321,16 +267,6 @@ namespace EntityBuilders
             IdOriginal = source.IdOriginal;
             NameOriginal = source.NameOriginal;
             DescriptionOriginal = source.DescriptionOriginal;
-        }
-
-        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            IdOriginal = idOriginal;
-            NameOriginal = nameOriginal;
-            DescriptionOriginal = descriptionOriginal;
         }
     }
 #nullable restore
@@ -367,7 +303,7 @@ using System.Text;
 namespace EntityBuilders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class TestEntityBuilder
     {
@@ -413,28 +349,6 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             return new Entities.TestEntity(Id, Name, Description, IdOriginal, NameOriginal, DescriptionOriginal);
-        }
-
-        public TestEntityBuilder Clear()
-        {
-            Id = default;
-            Name = default;
-            Description = default;
-            IdOriginal = default;
-            NameOriginal = default;
-            DescriptionOriginal = default;
-            return this;
-        }
-
-        public TestEntityBuilder Update(Entities.TestEntity source)
-        {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
-            return this;
         }
 
         public TestEntityBuilder WithId(int id)
@@ -486,16 +400,6 @@ namespace EntityBuilders
             NameOriginal = source.NameOriginal;
             DescriptionOriginal = source.DescriptionOriginal;
         }
-
-        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            IdOriginal = idOriginal;
-            NameOriginal = nameOriginal;
-            DescriptionOriginal = descriptionOriginal;
-        }
     }
 #nullable restore
 }
@@ -531,7 +435,7 @@ using System.Text;
 namespace EntityBuilders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityBuilderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class TestEntityBuilder
     {
@@ -624,28 +528,6 @@ namespace EntityBuilders
             return new Entities.TestEntity { Id = Id, Name = Name, Description = Description, IdOriginal = IdOriginal, NameOriginal = NameOriginal, DescriptionOriginal = DescriptionOriginal };
         }
 
-        public TestEntityBuilder Clear()
-        {
-            Id = default;
-            Name = default;
-            Description = default;
-            IdOriginal = default;
-            NameOriginal = default;
-            DescriptionOriginal = default;
-            return this;
-        }
-
-        public TestEntityBuilder Update(Entities.TestEntity source)
-        {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
-            return this;
-        }
-
         public TestEntityBuilder WithId(int id)
         {
             Id = id;
@@ -694,16 +576,6 @@ namespace EntityBuilders
             IdOriginal = source.IdOriginal;
             NameOriginal = source.NameOriginal;
             DescriptionOriginal = source.DescriptionOriginal;
-        }
-
-        public TestEntityBuilder(int id, string name, string? description, int? idOriginal, string? nameOriginal, string? descriptionOriginal)
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-            IdOriginal = idOriginal;
-            NameOriginal = nameOriginal;
-            DescriptionOriginal = descriptionOriginal;
         }
 
         private int _id;

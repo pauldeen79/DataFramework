@@ -188,12 +188,12 @@ namespace DataFramework.ModelFramework.Extensions
 
             if (!string.IsNullOrEmpty(field.Description))
             {
-                yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.Description", field.Description);
+                yield return new AttributeBuilder().AddNameAndOptionalParameter("System.ComponentModel.Description", field.Description);
             }
 
             if (!string.IsNullOrEmpty(field.DisplayName))
             {
-                yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DisplayName", field.DisplayName);
+                yield return new AttributeBuilder().AddNameAndOptionalParameter("System.ComponentModel.DisplayName", field.DisplayName);
             }
 
             if ((field.IsReadOnly && !entityClassType.IsImmutable()) || addReadOnlyAttribute)
@@ -328,12 +328,12 @@ namespace DataFramework.ModelFramework.Extensions
 
                 if (!string.IsNullOrEmpty(instance.Description))
                 {
-                    yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.Description", instance.Description);
+                    yield return new AttributeBuilder().AddNameAndOptionalParameter("System.ComponentModel.Description", instance.Description);
                 }
 
                 if (!string.IsNullOrEmpty(instance.DisplayName))
                 {
-                    yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DisplayName", instance.DisplayName);
+                    yield return new AttributeBuilder().AddNameAndOptionalParameter("System.ComponentModel.DisplayName", instance.DisplayName);
                 }
 
                 if (!instance.IsVisible)

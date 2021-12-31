@@ -35,7 +35,7 @@ using System.Text;
 namespace QueryFieldProviders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityQueryFieldProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldProvider
     {
@@ -84,7 +84,7 @@ using System.Text;
 namespace GeneratedNamespace
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
     public partial class TestEntityQueryFieldProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldProvider
     {
         public System.Collections.Generic.IEnumerable<string> GetAllFields()

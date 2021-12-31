@@ -1,9 +1,10 @@
-﻿using CrossCutting.Common.Extensions;
+﻿using System.Linq;
+using CrossCutting.Common.Extensions;
 using CrossCutting.Data.Abstractions;
 using DataFramework.Abstractions;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Builders;
 using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.Extensions;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -16,10 +17,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithVisibility(field.Metadata.GetValue(Entities.Visibility, () => field.IsVisible.ToVisibility()))
                 .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, () => field.IsVisible.ToVisibility()))
                 .WithSetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, () => field.IsVisible.ToVisibility()))
-                .AddMetadata(field.Metadata.Convert());
-
-        internal static ClassPropertyBuilder AddGetterLiteralCodeStatements(this ClassPropertyBuilder instance, params string[] statements)
-            => instance.AddGetterCodeStatements(statements.ToLiteralCodeStatementBuilders());
+                .AddMetadata(field.Metadata.Convert().Select(x => new MetadataBuilder(x)));
 
         public static ClassPropertyBuilder AddEntityCommandProviderMethod(this ClassPropertyBuilder instance,
                                                                           IDataObjectInfo dataObjectInfo,

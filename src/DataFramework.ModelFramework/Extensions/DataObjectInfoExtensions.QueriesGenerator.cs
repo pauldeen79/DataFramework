@@ -128,7 +128,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName("IsValidExpression")
                 .WithVisibility(Visibility.Private)
                 .WithType(typeof(bool))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidExpressionStatement))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidExpressionStatement).Select(x => x.CreateBuilder()))
                 .Chain(x =>
                 {
                     if (x.CodeStatements.Count == 0)
@@ -141,7 +141,7 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithName("IsValidFieldName")
                 .WithVisibility(Visibility.Private)
                 .WithType(typeof(bool))
-                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidFieldNameStatement))
+                .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidFieldNameStatement).Select(x => x.CreateBuilder()))
                 .Chain(x =>
                 {
                     if (x.CodeStatements.Count == 0)

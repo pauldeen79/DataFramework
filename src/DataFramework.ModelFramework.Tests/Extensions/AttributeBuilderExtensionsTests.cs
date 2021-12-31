@@ -23,7 +23,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             var code = GenerateCode(sut.Build());
 
             // Assert
-            code.Should().Contain(@"[System.CodeDom.Compiler.GeneratedCode(@""MyCodeGenerator"", @""1.0.0.0"")]");
+            code.Should().Contain(@"[System.CodeDom.Compiler.GeneratedCodeAttribute(@""MyCodeGenerator"", @""1.0.0.0"")]");
         }
 
         private static string GenerateCode(IClass input)

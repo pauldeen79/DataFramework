@@ -8,7 +8,6 @@ using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Common.Extensions;
 using ModelFramework.Database.Builders;
 using ModelFramework.Database.Contracts;
-using ModelFramework.Database.Default;
 using ModelFramework.Database.Extensions;
 using ModelFramework.Database.SqlStatements.Builders;
 
@@ -28,9 +27,9 @@ namespace DataFramework.ModelFramework.Extensions
                     x => new SchemaBuilder()
                         .WithName(x.Key)
                         .AddTables(instance.Select(x => x.ToTableBuilder()))
-                        .AddTables(instance.SelectMany(x => x.GetAdditionalTables()))
+                        .AddTables(instance.SelectMany(x => x.GetAdditionalTables()).Select(x => new TableBuilder(x)))
                         .AddStoredProcedures(instance.SelectMany(doi => doi.GetStoredProcedures()))
-                        .AddViews(instance.SelectMany(GetViews))
+                        .AddViews(instance.SelectMany(GetViews).Select(x => new ViewBuilder(x)))
                 );
         }
 
@@ -75,20 +74,18 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithExpression(stringValue);
         }
 
-        private static IEnumerable<IPrimaryKeyConstraint> GetTablePrimaryKeyConstraints(IDataObjectInfo instance)
-            => instance.Metadata.GetValues<IPrimaryKeyConstraint>(Database.PrimaryKeyConstraint);
+        private static IEnumerable<PrimaryKeyConstraintBuilder> GetTablePrimaryKeyConstraints(IDataObjectInfo instance)
+            => instance.Metadata.GetValues<IPrimaryKeyConstraint>(Database.PrimaryKeyConstraint).Select(x => new PrimaryKeyConstraintBuilder(x));
 
-        private static IEnumerable<IDefaultValueConstraint> GetTableDefaultValueConstraints(IDataObjectInfo instance)
+        private static IEnumerable<DefaultValueConstraintBuilder> GetTableDefaultValueConstraints(IDataObjectInfo instance)
             => instance
                 .Fields
                 .Where(fi => fi.DefaultValue != null)
                 .Select
-                    (fi => new DefaultValueConstraint
-                        (
-                            fi.GetDatabaseFieldName(),
-                            GenerateDefaultValue(fi),
-                            "DF_" + fi.GetDatabaseFieldName()
-                        )
+                    (fi => new DefaultValueConstraintBuilder()
+                        .WithFieldName(fi.GetDatabaseFieldName())
+                        .WithDefaultValue(GenerateDefaultValue(fi))
+                        .WithName( "DF_" + fi.GetDatabaseFieldName())
                     );
 
         private static string GenerateDefaultValue(IFieldInfo fi)
@@ -101,14 +98,14 @@ namespace DataFramework.ModelFramework.Extensions
             return fi.DefaultValue.ToStringWithNullCheck();
         }
 
-        private static IEnumerable<IForeignKeyConstraint> GetTableForeignKeyConstraints(IDataObjectInfo instance)
-            => instance.Metadata.GetValues<IForeignKeyConstraint>(Database.ForeignKeyConstraint);
+        private static IEnumerable<ForeignKeyConstraintBuilder> GetTableForeignKeyConstraints(IDataObjectInfo instance)
+            => instance.Metadata.GetValues<IForeignKeyConstraint>(Database.ForeignKeyConstraint).Select(x => new ForeignKeyConstraintBuilder(x));
 
-        private static IEnumerable<IIndex> GetTableIndexes(IDataObjectInfo instance)
-            => instance.Metadata.GetValues<IIndex>(Database.Index);
+        private static IEnumerable<IndexBuilder> GetTableIndexes(IDataObjectInfo instance)
+            => instance.Metadata.GetValues<IIndex>(Database.Index).Select(x => new IndexBuilder(x));
 
-        private static IEnumerable<ICheckConstraint> GetTableCheckConstraints(IDataObjectInfo instance)
-            => instance.Metadata.GetValues<ICheckConstraint>(Database.CheckConstraint);
+        private static IEnumerable<CheckConstraintBuilder> GetTableCheckConstraints(IDataObjectInfo instance)
+            => instance.Metadata.GetValues<ICheckConstraint>(Database.CheckConstraint).Select(x => new CheckConstraintBuilder(x));
 
         private static IEnumerable<IView> GetViews(this IDataObjectInfo instance)
             => instance.Metadata.GetValues<IView>(Database.View);

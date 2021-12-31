@@ -35,7 +35,7 @@ using System.Text;
 namespace Repositories
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.RepositoryGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.RepositoryGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityRepository : CrossCutting.Data.Core.Repository<Entities.TestEntity,EntityIdentities.TestEntityIdentity>, IMyRepository, Contracts.Repositories.ITestEntityRepository
     {

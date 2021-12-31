@@ -36,7 +36,7 @@ using System.Text;
 namespace Entities
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     [System.ComponentModel.Description(@""Description goes here"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntity : ITestEntity
@@ -131,7 +131,7 @@ using System.Text;
 namespace Entities
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     [System.ComponentModel.Description(@""Description goes here"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial record TestEntity : ITestEntity
@@ -227,7 +227,7 @@ using System.Text;
 namespace Entities
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     [System.ComponentModel.Description(@""Description goes here"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntity : ITestEntity, IEquatable<TestEntity>
@@ -357,7 +357,7 @@ using System.Text;
 namespace Entities
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     [System.ComponentModel.Description(@""Description goes here"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntity : ITestEntity, System.ComponentModel.INotifyPropertyChanged
@@ -523,7 +523,7 @@ using System.Text;
 namespace GeneratedNamespace
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     public partial class Test
     {
         [System.ComponentModel.DisplayName(@""CustomDisplayName"")]
@@ -570,7 +570,7 @@ using System.Text;
 namespace GeneratedNamespace
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCode(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.EntityGenerator"", @""1.0.0.0"")]
     public partial class Test
     {
         [System.ComponentModel.DataAnnotations.DisplayName(@""Test"")]

@@ -29,11 +29,11 @@ namespace DataFramework.ModelFramework.Extensions
                                 .ToList()
                                 .ForEach(y => x.Properties.Remove(y.Property));
                 })
-                .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(addCopyConstructor: true,
+                .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true),
                                                                                   poco: entityClassType.HasPropertySetter(),
                                                                                   addNullChecks: settings.EnableNullableContext))
                 .WithNamespace(instance.GetEntityBuildersNamespace())
-                .ClearAttributes()
+                .Chain(x => x.Attributes.Clear())
                 .AddAttributes(instance.GetEntityBuilderClassAttributes(renderMetadataAsAttributes));
         }
 

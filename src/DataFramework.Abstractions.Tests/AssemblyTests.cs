@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using CrossCutting.Common.Extensions;
 using FluentAssertions;
 using ModelFramework.Generators.Objects;
 using ModelFramework.Objects.Contracts;
@@ -25,7 +26,7 @@ namespace DataFramework.Abstractions.Tests
                 typeof(IFieldInfo),
                 typeof(IMetadata)
             }.Select(x => x.ToClassBuilder(new ClassSettings())
-                           .ClearAttributes()
+                           .Chain(x => x.Attributes.Clear())
                            .WithName(x.Name.Substring(1))
                            .Build()
                            .ToImmutableClassBuilder(settings)
@@ -60,7 +61,7 @@ namespace DataFramework.Abstractions.Tests
                 typeof(IFieldInfo),
                 typeof(IMetadata)
             }.Select(x => x.ToClassBuilder(new ClassSettings())
-                           .ClearAttributes()
+                           .Chain(x => x.Attributes.Clear())
                            .WithName(x.Name.Substring(1))
                            .Build()
                            .ToImmutableBuilderClass(settings)
