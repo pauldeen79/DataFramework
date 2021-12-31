@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CrossCutting.Common;
 using DataFramework.Abstractions;
 
@@ -96,7 +97,7 @@ namespace DataFramework.Core
                          bool canSet,
                          bool useForConcurrencyCheck,
                          object? defaultValue,
-                         ValueCollection<IMetadata> metadata)
+                         IEnumerable<IMetadata> metadata)
 #pragma warning restore S107 // Methods should not have too many parameters
         {
             if (string.IsNullOrEmpty(name))
@@ -118,7 +119,7 @@ namespace DataFramework.Core
             CanSet = canSet;
             UseForConcurrencyCheck = useForConcurrencyCheck;
             DefaultValue = defaultValue;
-            Metadata = metadata;
+            Metadata = new ValueCollection<IMetadata>(metadata);
         }
 
         public override string ToString() => Name;

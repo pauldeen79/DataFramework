@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DataFramework.Core;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using FluentAssertions;
@@ -31,7 +30,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", value))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(value))
                 .Build();
 
             // Act
@@ -47,7 +46,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", "some unknown value"))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue("some unknown value"))
                 .Build();
 
             // Act
@@ -63,7 +62,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", EntityClassType.ObservablePoco.ToString()))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(EntityClassType.ObservablePoco.ToString()))
                 .Build();
 
             // Act
@@ -79,7 +78,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", EntityClassType.ObservablePoco))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(EntityClassType.ObservablePoco))
                 .Build();
 
             // Act
@@ -95,7 +94,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", (int)EntityClassType.ObservablePoco))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue((int)EntityClassType.ObservablePoco))
                 .Build();
 
             // Act
@@ -126,7 +125,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", value))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(value))
                 .Build();
 
             // Act
@@ -142,7 +141,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", "some unknown value"))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue("some unknown value"))
                 .Build();
 
             // Act
@@ -158,7 +157,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", EntityClassType.ObservablePoco.ToString()))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(EntityClassType.ObservablePoco.ToString()))
                 .Build();
 
             // Act
@@ -174,7 +173,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", EntityClassType.ObservablePoco))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(EntityClassType.ObservablePoco))
                 .Build();
 
             // Act
@@ -190,7 +189,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", (int)EntityClassType.ObservablePoco))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue((int)EntityClassType.ObservablePoco))
                 .Build();
 
             // Act
@@ -206,7 +205,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", 1))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue(1))
                 .Build();
 
             // Act
@@ -222,7 +221,7 @@ namespace DataFramework.ModelFramework.Tests.Extensions
             // Arrange
             var sut = new DataObjectInfoBuilder()
                 .WithName("TestEntity")
-                .AddMetadata(new Metadata("MyName", "1"))
+                .AddMetadata(new MetadataBuilder().WithName("MyName").WithValue("1"))
                 .Build();
 
             // Act

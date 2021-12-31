@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using DataFramework.Core;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
 using ModelFramework.Objects.Builders;
@@ -28,9 +27,9 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.ReplaceMetadata(Repositories.Visibility, visibility);
 
         public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, params IClassMethod[] methods)
-            => instance.AddMetadata(methods.Select(x => new Metadata(Repositories.Method, x)));
+            => instance.AddMetadata(methods.Select(x => new MetadataBuilder().WithName(Repositories.Method).WithValue(x)));
 
         public static DataObjectInfoBuilder AddRepositoryMethods(this DataObjectInfoBuilder instance, params ClassMethodBuilder[] methods)
-            => instance.AddMetadata(methods.Select(x => new Metadata(Repositories.Method, x.Build())));
+            => instance.AddMetadata(methods.Select(x => new MetadataBuilder().WithName(Repositories.Method).WithValue(x.Build())));
     }
 }

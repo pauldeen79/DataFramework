@@ -63,19 +63,6 @@ namespace DataFramework.Core.Tests.Builders
         }
 
         [Fact]
-        public void Can_Clear_Entity_With_All_Properties()
-        {
-            // Arrange
-            var sut = CreateFilledDataObjectInfoBuilder();
-
-            // Act
-            var actual = sut.Clear();
-
-            // Assert
-            actual.WithName("TestEntity").Build().Should().BeEquivalentTo(new DataObjectInfoBuilder().WithName("TestEntity").Build());
-        }
-
-        [Fact]
         public void Can_Create_DataObjectInfoBuilder_From_Existing_Entity()
         {
             // Arrange
@@ -154,7 +141,7 @@ namespace DataFramework.Core.Tests.Builders
                 .WithIsQueryable(false)
                 .WithIsReadOnly(true)
                 .WithIsVisible(false)
-                .AddFields(new FieldInfoBuilder().WithName("Test").WithType(typeof(string)).AddMetadata("Name1", "Value1").Build())
+                .AddFields(new FieldInfoBuilder().WithName("Test").WithType(typeof(string)).AddMetadata("Name1", "Value1"))
                 .AddMetadata("Name1", "Value1");
     }
 }

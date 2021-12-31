@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using DataFramework.Core;
+using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.Extensions;
 using ModelFramework.Database.Builders;
@@ -37,7 +37,7 @@ namespace DataFramework.ModelFramework.Tests
                                                           CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders
                                                       });
 
-        private static DataObjectInfo CreateDataObjectInfo(EntityClassType entityClassType)
+        private static IDataObjectInfo CreateDataObjectInfo(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .WithDescription("Description goes here")
@@ -106,7 +106,7 @@ namespace DataFramework.ModelFramework.Tests
 
                 .Build();
 
-        private static DataObjectInfo CreateDataObjectInfoInsertOnly(EntityClassType entityClassType)
+        private static IDataObjectInfo CreateDataObjectInfoInsertOnly(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
@@ -125,7 +125,7 @@ namespace DataFramework.ModelFramework.Tests
                 .WithPreventDelete()
                 .Build();
 
-        private static DataObjectInfo CreateDataObjectInfoWithoutStoredProcedures(EntityClassType entityClassType)
+        private static IDataObjectInfo CreateDataObjectInfoWithoutStoredProcedures(EntityClassType entityClassType)
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
@@ -142,7 +142,7 @@ namespace DataFramework.ModelFramework.Tests
                 .AddCommandProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .Build();
 
-        private static DataObjectInfo CreateDataObjectInfoWithCustomQueryFieldProviderStuff()
+        private static IDataObjectInfo CreateDataObjectInfoWithCustomQueryFieldProviderStuff()
             => new DataObjectInfoBuilder()
                 .WithName("TestEntity")
                 .AddFields

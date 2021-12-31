@@ -52,19 +52,6 @@ namespace DataFramework.Core.Tests.Builders
         }
 
         [Fact]
-        public void Can_Clear_Entity_With_All_Properties()
-        {
-            // Arrange
-            var sut = CreateFilledFieldInfoBuilder();
-
-            // Act
-            var actual = sut.Clear();
-
-            // Assert
-            actual.WithName("TestEntity").Build().Should().BeEquivalentTo(new FieldInfoBuilder().WithName("TestEntity").Build());
-        }
-
-        [Fact]
         public void Can_Create_FieldInfoBuilder_From_Existing_Entity()
         {
             // Arrange

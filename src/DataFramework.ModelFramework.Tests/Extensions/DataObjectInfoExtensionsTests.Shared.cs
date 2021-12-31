@@ -105,15 +105,14 @@ namespace DataFramework.ModelFramework.Tests.Extensions
                 .WithIsPersistable(isPersistable)
                 .WithIsIdentityField(isIdentity)
                 .WithType(typeof(string))
-                .WithUseForConcurrencyCheck(useForConcurrencyCheck)
-                .Build();
+                .WithUseForConcurrencyCheck(useForConcurrencyCheck);
             var dataObjectInfo = new DataObjectInfoBuilder()
                 .WithName("Test")
                 .AddFields(fieldInfo)
                 .Build();
 
             // Act
-            var actual = dataObjectInfo.IsUpdateConcurrencyCheckField(fieldInfo, concurrencyCheckBehavior);
+            var actual = dataObjectInfo.IsUpdateConcurrencyCheckField(fieldInfo.Build(), concurrencyCheckBehavior);
 
             // Asset
             actual.Should().Be(expectedResult);
