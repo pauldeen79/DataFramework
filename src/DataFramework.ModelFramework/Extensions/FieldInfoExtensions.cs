@@ -121,8 +121,7 @@ namespace DataFramework.ModelFramework.Extensions
         internal static bool IsSqlIdentity(this IFieldInfo instance)
             => instance.Metadata.GetBooleanValue(Database.IdentityField);
 
-        internal static string GetSqlFieldType(this IFieldInfo instance,
-                                               bool includeSpecificProperties = false)
+        internal static string GetSqlFieldType(this IFieldInfo instance, bool includeSpecificProperties = false)
         {
             var metadataValue = instance.Metadata.GetStringValue(Database.SqlFieldType);
             if (!string.IsNullOrEmpty(metadataValue))
