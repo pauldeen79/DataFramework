@@ -57,14 +57,14 @@ namespace DataFramework.CodeGeneration.Tests
                     var typeName = property.TypeName.FixTypeName();
                     if (typeName.StartsWith("DataFramework.Abstractions.I", StringComparison.InvariantCulture))
                     {
-                        property.ConvertSinglePropertyToBuilder
+                        property.ConvertSinglePropertyToBuilderOnBuilder
                         (
                             typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture) + "Builder"
                         );
                     }
                     else if (typeName.Contains("Collection<DataFramework."))
                     {
-                        property.ConvertCollectionPropertyToBuilder
+                        property.ConvertCollectionPropertyToBuilderOnBuider
                         (
                             typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture).ReplaceSuffix(">", "Builder>", StringComparison.InvariantCulture),
                             null

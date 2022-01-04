@@ -125,6 +125,8 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
+            Id = default;
+            Name = string.Empty;
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -257,6 +259,8 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
+            Id = default;
+            Name = string.Empty;
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -389,6 +393,8 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
+            Id = default;
+            Name = string.Empty;
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -566,6 +572,8 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
+            Id = default;
+            Name = string.Empty;
         }
 
         public TestEntityBuilder(Entities.TestEntity source)

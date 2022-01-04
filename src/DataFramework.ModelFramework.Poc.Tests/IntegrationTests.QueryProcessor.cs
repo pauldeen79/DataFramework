@@ -7,7 +7,6 @@ using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using QueryFramework.Core.Extensions;
 using QueryFramework.Core.Queries.Builders;
-using QueryFramework.Core.Queries.Builders.Extensions;
 using Xunit;
 
 namespace DataFramework.ModelFramework.Poc.Tests

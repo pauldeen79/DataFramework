@@ -15,8 +15,8 @@ namespace DataFramework.ModelFramework.Extensions
                 .WithTypeName(field.GetPropertyTypeName())
                 .WithIsNullable(field.IsNullable)
                 .WithVisibility(field.Metadata.GetValue(Entities.Visibility, () => field.IsVisible.ToVisibility()))
-                .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterVisibility, () => field.IsVisible.ToVisibility()))
-                .WithSetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertySetterVisibility, () => field.IsVisible.ToVisibility()))
+                .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterModifiers, () => field.IsVisible.ToVisibility()))
+                .WithSetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertySetterModifiers, () => field.IsVisible.ToVisibility()))
                 .AddMetadata(field.Metadata.Convert().Select(x => new MetadataBuilder(x)));
 
         public static ClassPropertyBuilder AddEntityCommandProviderMethod(this ClassPropertyBuilder instance,
