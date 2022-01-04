@@ -15,7 +15,6 @@ using System.Text;
 namespace DataFramework.Core.Builders
 {
 #nullable enable
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class DataObjectInfoBuilder
     {
         public System.Collections.Generic.List<DataFramework.Core.Builders.FieldInfoBuilder> Fields
@@ -194,7 +193,6 @@ namespace DataFramework.Core.Builders
 #nullable restore
 
 #nullable enable
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class FieldInfoBuilder
     {
         public string Name
@@ -437,7 +435,6 @@ namespace DataFramework.Core.Builders
 #nullable restore
 
 #nullable enable
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class MetadataBuilder
     {
         public string Name

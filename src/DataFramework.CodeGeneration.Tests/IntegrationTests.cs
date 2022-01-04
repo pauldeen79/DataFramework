@@ -39,7 +39,6 @@ namespace DataFramework.CodeGeneration.Tests
                                                     .ToImmutableBuilderClassBuilder(settings)
                                                     .WithNamespace("DataFramework.Core.Builders")
                                                     .WithPartial()
-                                                    .AddExcludeFromCodeCoverageAttribute()
                                                     .Chain(x => { if (x.Name != "MetadataBuilder") { x.AddMethods(CreateAddMetadataOverload(x)); } })
                                                     .Build()).ToArray();
             var sut = new CSharpClassGenerator();
