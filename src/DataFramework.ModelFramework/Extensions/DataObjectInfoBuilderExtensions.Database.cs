@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Contracts;
 using ModelFramework.Database.Builders;
 using ModelFramework.Database.Contracts;
+using ModelFramework.Database.SqlStatements;
 
 namespace DataFramework.ModelFramework.Extensions
 {
@@ -20,6 +22,9 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddAddStoredProcedureStatements(this DataObjectInfoBuilder instance, params ISqlStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Database.AddStoredProcedureStatement).WithValue(x.Build())));
 
+        public static DataObjectInfoBuilder AddAddStoredProcedureStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddAddStoredProcedureStatements(statements.Select(x => new LiteralSqlStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+
         public static DataObjectInfoBuilder WithUpdateStoredProcedureName(this DataObjectInfoBuilder instance, string? storedProcedureName)
             => instance.ReplaceMetadata(Database.UpdateStoredProcedureName, storedProcedureName);
 
@@ -29,6 +34,9 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddUpdateStoredProcedureStatements(this DataObjectInfoBuilder instance, params ISqlStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Database.UpdateStoredProcedureStatement).WithValue(x.Build())));
 
+        public static DataObjectInfoBuilder AddUpdateStoredProcedureStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddUpdateStoredProcedureStatements(statements.Select(x => new LiteralSqlStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+
         public static DataObjectInfoBuilder WithDeleteStoredProcedureName(this DataObjectInfoBuilder instance, string? storedProcedureName)
             => instance.ReplaceMetadata(Database.DeleteStoredProcedureName, storedProcedureName);
 
@@ -37,6 +45,9 @@ namespace DataFramework.ModelFramework.Extensions
 
         public static DataObjectInfoBuilder AddDeleteStoredProcedureStatements(this DataObjectInfoBuilder instance, params ISqlStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Database.DeleteStoredProcedureStatement).WithValue(x.Build())));
+
+        public static DataObjectInfoBuilder AddDeleteStoredProcedureStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddDeleteStoredProcedureStatements(statements.Select(x => new LiteralSqlStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
 
         public static DataObjectInfoBuilder WithCustomAddCommandText(this DataObjectInfoBuilder instance, string? commandText)
             => instance.ReplaceMetadata(Database.AddCustomCommandText, commandText);

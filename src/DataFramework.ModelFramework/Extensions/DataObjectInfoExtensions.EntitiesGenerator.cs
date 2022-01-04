@@ -93,7 +93,7 @@ namespace DataFramework.ModelFramework.Extensions
                         .WithHasSetter(!field.IsComputed && field.CanSet && entityClassType.HasPropertySetter())
                         .AddAttributes(GetEntityClassPropertyAttributes(field, instance.Name, entityClassType, renderMetadataAsAttributes, false))
                         .AddGetterCodeStatements(GetGetterCodeStatements(field, entityClassType))
-                        .AddSetterCodeStatements(GetSetterCodeStatements(field, entityClassType)))
+                        .AddSetterLiteralCodeStatements(GetSetterCodeStatements(field, entityClassType).ToArray()))
                 .Concat(instance.GetUpdateConcurrencyCheckFields().Select(field =>
                     new ClassPropertyBuilder()
                         .WithName($"{field.Name}Original")
@@ -103,40 +103,37 @@ namespace DataFramework.ModelFramework.Extensions
                         .AddAttributes(entityClassType.IsImmutable()
                             ? Enumerable.Empty<AttributeBuilder>()
                             : new[] { new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true) })
-                        .AddGetterCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType))
-                        .AddSetterCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType))));
+                        .AddGetterLiteralCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType).ToArray())
+                        .AddSetterLiteralCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType).ToArray())));
 
-        private static IEnumerable<ICodeStatementBuilder> GetSetterCodeStatementsForOriginal(IFieldInfo field,
+        private static IEnumerable<string> GetSetterCodeStatementsForOriginal(IFieldInfo field,
                                                                                              EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ObservablePoco)
             {
-                yield return new LiteralCodeStatementBuilder().WithStatement($"_{field.Name.Sanitize().ToPascalCase()}Original = value;");
-                yield return new LiteralCodeStatementBuilder().WithStatement($@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{field.Name.Sanitize()}""));");
+                yield return $"_{field.Name.Sanitize().ToPascalCase()}Original = value;";
+                yield return $@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{field.Name.Sanitize()}""));";
             }
         }
 
-        private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatementsForOriginal(IFieldInfo field,
-                                                                                             EntityClassType entityClassType)
+        private static IEnumerable<string> GetGetterCodeStatementsForOriginal(IFieldInfo field, EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ObservablePoco)
             {
-                yield return new LiteralCodeStatementBuilder().WithStatement($"return _{field.Name.Sanitize().ToPascalCase()}Original;");
+                yield return $"return _{field.Name.Sanitize().ToPascalCase()}Original;";
             }
         }
 
-        private static IEnumerable<ICodeStatementBuilder> GetSetterCodeStatements(IFieldInfo field,
-                                                                                  EntityClassType entityClassType)
+        private static IEnumerable<string> GetSetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
         {
             if (entityClassType == EntityClassType.ObservablePoco)
             {
-                yield return new LiteralCodeStatementBuilder().WithStatement($"_{field.Name.Sanitize().ToPascalCase()} = value;");
-                yield return new LiteralCodeStatementBuilder().WithStatement(string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name.Sanitize()));
+                yield return $"_{field.Name.Sanitize().ToPascalCase()} = value;";
+                yield return string.Format(@"if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""{0}""));", field.Name.Sanitize());
             }
         }
 
-        private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatements(IFieldInfo field,
-                                                                                  EntityClassType entityClassType)
+        private static IEnumerable<ICodeStatementBuilder> GetGetterCodeStatements(IFieldInfo field, EntityClassType entityClassType)
         {
             var statements = field.Metadata.GetValues<ICodeStatement>(Entities.ComputedFieldStatement).Select(x => x.CreateBuilder()).ToList();
 

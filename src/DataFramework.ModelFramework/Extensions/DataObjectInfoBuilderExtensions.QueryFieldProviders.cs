@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using DataFramework.Core.Builders;
 using DataFramework.ModelFramework.MetadataNames;
+using ModelFramework.Common.Contracts;
 using ModelFramework.Objects.Builders;
+using ModelFramework.Objects.CodeStatements;
 using ModelFramework.Objects.Contracts;
 
 namespace DataFramework.ModelFramework.Extensions
@@ -38,16 +40,25 @@ namespace DataFramework.ModelFramework.Extensions
         public static DataObjectInfoBuilder AddQueryFieldProviderConstructorCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.ConstructorCodeStatement).WithValue(x.Build())));
 
+        public static DataObjectInfoBuilder AddQueryFieldProviderConstructorCodeStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddQueryFieldProviderConstructorCodeStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+
         public static DataObjectInfoBuilder AddQueryFieldProviderGetAllFieldsCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatement[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetAllFieldsCodeStatement).WithValue(x)));
 
         public static DataObjectInfoBuilder AddQueryFieldProviderGetAllFieldsCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetAllFieldsCodeStatement).WithValue(x.Build())));
 
+        public static DataObjectInfoBuilder AddQueryFieldProviderGetAllFieldsCodeStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddQueryFieldProviderGetAllFieldsCodeStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+
         public static DataObjectInfoBuilder AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatement[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetDatabaseFieldNameCodeStatement).WithValue(x)));
 
         public static DataObjectInfoBuilder AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(this DataObjectInfoBuilder instance, params ICodeStatementBuilder[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(QueryFieldProviders.GetDatabaseFieldNameCodeStatement).WithValue(x.Build())));
+
+        public static DataObjectInfoBuilder AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(this DataObjectInfoBuilder instance, params string[] statements)
+            => instance.AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
     }
 }

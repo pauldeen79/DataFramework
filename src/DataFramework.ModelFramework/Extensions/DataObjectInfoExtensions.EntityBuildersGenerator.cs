@@ -24,14 +24,20 @@ namespace DataFramework.ModelFramework.Extensions
                 .ToEntityClass(settings)
                 .Chain(x =>
                 {
-                    x.Properties.Select(p => new { Property = p, FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name || $"{f.Name}Original" == p.Name) })
-                                .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
-                                .ToList()
-                                .ForEach(y => x.Properties.Remove(y.Property));
+                    x.Properties.Select
+                    (p => new
+                        { 
+                            Property = p,
+                            FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name || $"{f.Name}Original" == p.Name)
+                        }
+                    )
+                    .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
+                    .ToList()
+                    .ForEach(y => x.Properties.Remove(y.Property));
                 })
                 .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true),
                                                                                   poco: entityClassType.HasPropertySetter(),
-                                                                                  addNullChecks: settings.EnableNullableContext))
+                                                                                  addNullChecks: !settings.EnableNullableContext))
                 .WithNamespace(instance.GetEntityBuildersNamespace())
                 .Chain(x => x.Attributes.Clear())
                 .AddAttributes(instance.GetEntityBuilderClassAttributes(renderMetadataAsAttributes));

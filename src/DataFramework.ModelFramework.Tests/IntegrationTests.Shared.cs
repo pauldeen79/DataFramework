@@ -66,7 +66,7 @@ namespace DataFramework.ModelFramework.Tests
                 .AddQueryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
                 .AddQueryInterfaces("IMyQuery")
                 .AddQueryValidFieldNames("AdditionalValidFieldName")
-                .AddQueryValidFieldNameStatements(new LiteralCodeStatementBuilder().WithStatement(@"return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));"))
+                .AddQueryValidFieldNameStatements(@"return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));")
 
                 .WithRepositoryNamespace("Repositories")
                 .WithRepositoryInterfaceNamespace("Contracts.Repositories")
@@ -155,18 +155,39 @@ namespace DataFramework.ModelFramework.Tests
                 )
                 .AddQueryFieldProviderFields(new ClassFieldBuilder().WithName("_extraFields").WithReadOnly().WithTypeName("IEnumerable<ExtraField>"))
                 .AddQueryFieldProviderConstructorParameters(new ParameterBuilder().WithName("extraFields").WithTypeName("IEnumerable<ExtraField>"))
-                .AddQueryFieldProviderConstructorCodeStatements(new LiteralCodeStatementBuilder().WithStatement("_extraFields = extraFields;"))
-                .AddQueryFieldProviderGetAllFieldsCodeStatements(new LiteralCodeStatementBuilder().WithStatement("yield return @\"CustomExtraField\";"))
-                .AddQueryFieldProviderGetAllFieldsCodeStatements(new LiteralCodeStatementBuilder().WithStatement("yield return @\"AllFields\";"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("var extraField = _extraFields.FirstOrDefault(x => x.Name == queryFieldName);"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("if (extraField != null)"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("{"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("    return string.Format(\"ExtraField{0}\", extraField.FieldNumber);"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("}"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("if (queryFieldName == \"AllFields\")"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("{"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("    return \"[Name] + ' ' + COALESCE([Description], '')\";"))
-                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements(new LiteralCodeStatementBuilder().WithStatement("}"))
+                .AddQueryFieldProviderConstructorCodeStatements("_extraFields = extraFields;")
+                .AddQueryFieldProviderGetAllFieldsCodeStatements
+                (
+                    "yield return @\"CustomExtraField\";",
+                    "yield return @\"AllFields\";"
+                )
+                .AddQueryFieldProviderGetDatabaseFieldNameCodeStatements
+                (
+                    "var extraField = _extraFields.FirstOrDefault(x => x.Name == queryFieldName);",
+                    "if (extraField != null)",
+                    "{",
+                    "    return string.Format(\"ExtraField{0}\", extraField.FieldNumber);",
+                    "}",
+                    "if (queryFieldName == \"AllFields\")",
+                    "{",
+                    "    return \"[Name] + ' ' + COALESCE([Description], '')\";",
+                    "}"
+                )
+                .Build();
+
+        private static IDataObjectInfo CreateDataObjectInfoWithCollectionField()
+            => new DataObjectInfoBuilder()
+                .WithName("TestEntity")
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id")
+                                          .WithType(typeof(int))
+                                          .WithIsIdentityField()
+                                          .WithIsRequired()
+                                          .WithPropertyTypeName(typeof(long).FullName),
+                    new FieldInfoBuilder().WithName("Tags")
+                                          .WithType(typeof(List<string>))
+                )
                 .Build();
     }
 }
