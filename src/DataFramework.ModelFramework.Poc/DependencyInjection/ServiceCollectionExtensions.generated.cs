@@ -33,7 +33,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             //find:
             instance.AddSingleton<IDatabaseCommandProvider<CatalogIdentity>, CatalogIdentityCommandProvider>();
 
-            //query:
+            //query (custom c'tor argument for QueryFieldProvider, needs to be injectable through code generation):
             instance.AddSingleton<IPagedDatabaseCommandProvider<CatalogQuery>>(serviceProvider =>
                 new QueryPagedDatabaseCommandProvider<CatalogQuery>(new CatalogQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("Catalog")),
                                                                     new CatalogPagedEntityRetrieverSettings()));
@@ -76,13 +76,13 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                                          new SelectDatabaseCommandProvider(new ExtraFieldPagedEntityRetrieverSettings()),
                                          serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraField>>()));
 
-            //query:
-            //instance.AddSingleton<IPagedDatabaseCommandProvider<ExtraFieldQuery>>(serviceProvider =>
-            //    new QueryPagedDatabaseCommandProvider<ExtraFieldQuery>(new ExtraFieldQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("ExtraField")),
-            //                                                           new ExtraFieldQueryProcessorSettings()));
-            //instance.AddSingleton<IQueryProcessor<ExtraFieldQuery, ExtraField>>(serviceProvider =>
-            //    new QueryProcessor<ExtraFieldQuery, ExtraField>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
-            //                                                    serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<ExtraFieldQuery>>()));
+            //query (default implementation):
+            instance.AddSingleton<IPagedDatabaseCommandProvider<ExtraFieldQuery>>(serviceProvider =>
+                new QueryPagedDatabaseCommandProvider<ExtraFieldQuery>(new ExtraFieldQueryFieldProvider(),
+                                                                       new ExtraFieldPagedEntityRetrieverSettings()));
+            instance.AddSingleton<IQueryProcessor<ExtraFieldQuery, ExtraField>>(serviceProvider =>
+                new QueryProcessor<ExtraFieldQuery, ExtraField>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
+                                                                serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<ExtraFieldQuery>>()));
 
 
             return instance;
