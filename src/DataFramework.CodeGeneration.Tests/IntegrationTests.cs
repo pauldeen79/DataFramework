@@ -65,6 +65,7 @@ namespace DataFramework.CodeGeneration.Tests
                     {
                         property.ConvertCollectionPropertyToBuilderOnBuider
                         (
+                            false,
                             typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture).ReplaceSuffix(">", "Builder>", StringComparison.InvariantCulture),
                             null
                         );

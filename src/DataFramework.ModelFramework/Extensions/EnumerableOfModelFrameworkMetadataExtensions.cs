@@ -8,6 +8,6 @@ namespace DataFramework.ModelFramework.Extensions
     internal static class EnumerableOfModelFrameworkMetadataExtensions
     {
         internal static IEnumerable<global::ModelFramework.Common.Contracts.IMetadata> Convert(this IEnumerable<IMetadata> metadata)
-            => metadata.Select(md => new Metadata(md.Name, md.Value));
+            => metadata.Select(md => new Metadata(md.Value, md.Name));
     }
 }
