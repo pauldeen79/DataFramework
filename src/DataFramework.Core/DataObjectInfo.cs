@@ -1,90 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using CrossCutting.Common;
-using DataFramework.Abstractions;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataFramework.Core
 {
-    public record DataObjectInfo : IDataObjectInfo
+    public partial record DataObjectInfo : IValidatableObject
     {
-        public ValueCollection<IFieldInfo> Fields
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            get;
-        }
-
-        public string? AssemblyName
-        {
-            get;
-        }
-
-        public string? TypeName
-        {
-            get;
-        }
-
-        public string Name
-        {
-            get;
-        }
-
-        public string? Description
-        {
-            get;
-        }
-
-        public string? DisplayName
-        {
-            get;
-        }
-
-        public bool IsVisible
-        {
-            get;
-        }
-
-        public bool IsReadOnly
-        {
-            get;
-        }
-
-        public bool IsQueryable
-        {
-            get;
-        }
-
-        public ValueCollection<IMetadata> Metadata
-        {
-            get;
-        }
-
-#pragma warning disable S107 // Methods should not have too many parameters
-        public DataObjectInfo(string name, 
-                              string? typeName,
-                              string? assemblyName,
-                              string? description,
-                              string? displayName,
-                              bool isVisible,
-                              bool isReadOnly,
-                              bool isQueryable,
-                              IEnumerable<IFieldInfo> fields,
-                              IEnumerable<IMetadata> metadata)
-#pragma warning restore S107 // Methods should not have too many parameters
-        {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
-                throw new ArgumentNullException(nameof(name));
+                yield return new ValidationResult("Name cannot be null or whitespace", new[] { nameof(Name) });
             }
-
-            Fields = new ValueCollection<IFieldInfo>(fields);
-            AssemblyName = assemblyName;
-            TypeName = typeName;
-            Name = name;
-            Description = description;
-            DisplayName = displayName;
-            IsVisible = isVisible;
-            IsReadOnly = isReadOnly;
-            IsQueryable = isQueryable;
-            Metadata = new ValueCollection<IMetadata>(metadata);
         }
 
         public override string ToString() => Name;

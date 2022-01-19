@@ -1,22 +1,16 @@
-﻿using System;
-using DataFramework.Abstractions;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataFramework.Core
 {
-    public record Metadata : IMetadata
+    public partial record Metadata : IValidatableObject
     {
-        public string Name { get; }
-        public object? Value { get; }
-
-        public Metadata(string name, object? value)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
-                throw new ArgumentNullException(nameof(name));
+                yield return new ValidationResult("Name cannot be null or whitespace", new[] { nameof(Name) });
             }
-
-            Name = name;
-            Value = value;
         }
 
         public override string ToString() => Value == null

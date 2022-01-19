@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
-using DataFramework.Core;
 using DataFramework.Core.Builders;
 using FluentAssertions;
 using ModelFramework.Common;
@@ -22,70 +22,103 @@ namespace DataFramework.CodeGeneration.Tests
     public class IntegrationTests
     {
         [Fact]
-        public void CanGenerateImmutableBuilderClassesForEntities()
+        public void CanGenerateImmutableBuilderClassesForContracts()
         {
             // Arrange
-            var models = typeof(DataObjectInfo).Assembly.GetExportedTypes()
-                .Where(t => t.FullName?.StartsWith("DataFramework.Core.") == true && t.FullName?.Contains("Builders.") != true)
-                .Select(t => t.ToClassBuilder(new ClassSettings(createConstructors: true)).WithName(t.Name).WithNamespace(GetNamespace(t)))
-                .ToArray();
-
-            FixImmutableBuilderProperties(models);
-            var settings = new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true),
-                                                             formatInstanceTypeNameDelegate: FormatInstanceTypeName);
+            var settings = new ImmutableClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection", validateArgumentsInConstructor: true);
+            var model = new[]
+            {
+                typeof(IMetadata),
+                typeof(IDataObjectInfo),
+                typeof(IFieldInfo)
+            }.Select(x => CreateBuilder(x.ToClassBuilder(new ClassSettings())
+                           .WithName(x.Name.Substring(1))
+                           .WithNamespace("DataFramework.Core")
+                           .Chain(x => FixImmutableBuilderProperties(x))
+                           .Build()
+                           .ToImmutableClass(settings), "DataFramework.Core.Builders")
+                           .Build()
+                    ).ToArray();
 
             // Act
-            var builderModels = models.Select(c => c.Build()
-                                                    .ToImmutableBuilderClassBuilder(settings)
-                                                    .WithNamespace("DataFramework.Core.Builders")
-                                                    .WithPartial()
-                                                    .Chain(x => { if (x.Name != "MetadataBuilder") { x.AddMethods(CreateAddMetadataOverload(x)); } })
-                                                    .Build()).ToArray();
-            var sut = new CSharpClassGenerator();
-            var actual = TemplateRenderHelper.GetTemplateOutput(sut, builderModels, additionalParameters: new { EnableNullableContext = true, CreateCodeGenerationHeader = true });
+            var actual = CreateCode(model);
 
+            // Assert
             actual.NormalizeLineEndings().Should().NotBeNullOrEmpty().And.NotStartWith("Error:");
         }
 
-        private static void FixImmutableBuilderProperties(ClassBuilder[] models)
+        [Fact]
+        public void CanGenerateRecordsForContracts()
         {
-            foreach (var classBuilder in models)
+            // Arrange
+            var settings = new ImmutableClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection", validateArgumentsInConstructor: true);
+            var model = new[]
             {
-                foreach (var property in classBuilder.Properties)
+                typeof(IMetadata),
+                typeof(IDataObjectInfo),
+                typeof(IFieldInfo)
+            }.Select(x => x.ToClassBuilder(new ClassSettings())
+                           .WithName(x.Name.Substring(1))
+                           .WithNamespace("DataFramework.Core")
+                           .Chain(x => FixImmutableBuilderProperties(x))
+                           .Build()
+                           .ToImmutableClassBuilder(settings)
+                           .WithRecord()
+                           .WithPartial()
+                           .AddInterfaces(x)
+                           .Build()
+                    ).ToArray();
+
+            // Act
+            var actual = CreateCode(model);
+
+            // Assert
+            actual.NormalizeLineEndings().Should().NotBeNullOrEmpty().And.NotStartWith("Error:");
+        }
+
+        private static void FixImmutableBuilderProperties(ClassBuilder model)
+        {
+            foreach (var property in model.Properties)
+            {
+                var typeName = property.TypeName.FixTypeName();
+                if (typeName.StartsWith("DataFramework.Abstractions.I", StringComparison.InvariantCulture))
                 {
-                    var typeName = property.TypeName.FixTypeName();
-                    if (typeName.StartsWith("DataFramework.Abstractions.I", StringComparison.InvariantCulture))
+                    property.ConvertSinglePropertyToBuilderOnBuilder
+                    (
+                        typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture) + "Builder"
+                    );
+                }
+                else if (typeName.Contains("Collection<DataFramework."))
+                {
+                    property.ConvertCollectionPropertyToBuilderOnBuider
+                    (
+                        false,
+                        "CrossCutting.Common.ValueCollection",
+                        typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture).ReplaceSuffix(">", "Builder>", StringComparison.InvariantCulture),
+                        null
+                    );
+                }
+                else if (typeName.IsBooleanTypeName() || typeName.IsNullableBooleanTypeName())
+                {
+                    property.SetDefaultArgumentValueForWithMethod(true);
+                    if (_propertiesWithDefaultValueTrue.Contains(property.Name))
                     {
-                        property.ConvertSinglePropertyToBuilderOnBuilder
-                        (
-                            typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture) + "Builder"
-                        );
+                        property.SetDefaultValueForBuilderClassConstructor(new Literal("true"));
                     }
-                    else if (typeName.Contains("Collection<DataFramework."))
-                    {
-                        property.ConvertCollectionPropertyToBuilderOnBuider
-                        (
-                            false,
-                            "CrossCutting.Common.ValueCollection",
-                            typeName.Replace("Abstractions.I", "Core.Builders.", StringComparison.InvariantCulture).ReplaceSuffix(">", "Builder>", StringComparison.InvariantCulture),
-                            null
-                        );
-                    }
-                    else if (typeName == typeof(bool).FullName || typeName == typeof(bool?).FullName)
-                    {
-                        property.SetDefaultArgumentValueForWithMethod(true);
-                        if (_propertiesWithDefaultValueTrue.Contains(property.Name))
-                        {
-                            property.SetDefaultValueForBuilderClassConstructor(new Literal("true"));
-                        }
-                    }
-                    else if (property.Name == "TypeName" && property.TypeName == typeof(string).FullName)
-                    {
-                        property.AddBuilderOverload("WithType", typeof(Type), "type", "{2} = type?.AssemblyQualifiedName;");
-                    }
+                }
+                else if (property.Name == "TypeName" && property.TypeName.IsStringTypeName())
+                {
+                    property.AddBuilderOverload("WithType", typeof(Type), "type", "{2} = type?.AssemblyQualifiedName;");
                 }
             }
         }
+
+        private static ClassBuilder CreateBuilder(IClass c, string @namespace)
+            => c.ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true),
+                                                formatInstanceTypeNameDelegate: FormatInstanceTypeName))
+                .WithNamespace(@namespace)
+                .WithPartial()
+                .AddMethods(CreateExtraOverloads(c));
 
         private static readonly string[] _propertiesWithDefaultValueTrue = new[]
         {
@@ -96,8 +129,6 @@ namespace DataFramework.CodeGeneration.Tests
             nameof(IDataObjectInfo.IsQueryable),
             nameof(IDataObjectInfo.IsVisible)
         };
-        private static string GetNamespace(Type t)
-            => t.FullName?.GetNamespaceWithDefault(string.Empty) ?? string.Empty;
 
         private static string FormatInstanceTypeName(ITypeBase instance, bool forCreate)
         {
@@ -111,14 +142,27 @@ namespace DataFramework.CodeGeneration.Tests
             return string.Empty;
         }
 
-        private static ClassMethodBuilder CreateAddMetadataOverload(ClassBuilder c)
-            => new ClassMethodBuilder()
-                .WithName("AddMetadata")
-                .WithTypeName($"{c.Name}")
-                .AddParameter("name", typeof(string))
-                .AddParameters(new ParameterBuilder().WithName("value").WithType(typeof(object)).WithIsNullable())
-                .AddLiteralCodeStatements($"AddMetadata(new {typeof(MetadataBuilder).FullName}().WithName(name).WithValue(value));",
-                                          "return this;");
+        private static IEnumerable<ClassMethodBuilder> CreateExtraOverloads(IClass c)
+        {
+            if (c.Properties.Any(p => p.Name == "Metadata"))
+            {
+                yield return new ClassMethodBuilder()
+                    .WithName("AddMetadata")
+                    .WithTypeName($"{c.Name}Builder")
+                    .AddParameter("name", typeof(string))
+                    .AddParameters(new ParameterBuilder().WithName("value").WithType(typeof(object)).WithIsNullable())
+                    .AddLiteralCodeStatements($"AddMetadata(new {typeof(MetadataBuilder).FullName}().WithName(name).WithValue(value));",
+                                                "return this;");
+            }
+        }
 
+        private static string CreateCode(ITypeBase[] builderModels)
+            => TemplateRenderHelper.GetTemplateOutput(new CSharpClassGenerator(),
+                                                      builderModels,
+                                                      additionalParameters: new
+                                                      {
+                                                          EnableNullableContext = true,
+                                                          CreateCodeGenerationHeader = true
+                                                      });
     }
 }

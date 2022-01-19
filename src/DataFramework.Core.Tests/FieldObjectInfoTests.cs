@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using DataFramework.Core.Builders;
 using FluentAssertions;
@@ -16,7 +17,7 @@ namespace DataFramework.Core.Tests
             var action = new Action(() => new FieldInfoBuilder().WithName(string.Empty).Build());
 
             // Act & Assert
-            action.Should().ThrowExactly<ArgumentNullException>().WithParameterName("name");
+            action.Should().Throw<ValidationException>().WithMessage("Name cannot be null or whitespace");
         }
     }
 }

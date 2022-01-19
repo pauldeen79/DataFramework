@@ -79,7 +79,7 @@ namespace DataFramework.Core.Builders
 
         public DataFramework.Abstractions.IDataObjectInfo Build()
         {
-            return new DataFramework.Core.DataObjectInfo(Name, TypeName, AssemblyName, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Fields.Select(x => x.Build()), Metadata.Select(x => x.Build()));
+            return new DataFramework.Core.DataObjectInfo(Fields.Select(x => x.Build()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
         }
 
         public DataObjectInfoBuilder AddFields(System.Collections.Generic.IEnumerable<DataFramework.Core.Builders.FieldInfoBuilder> fields)
@@ -287,7 +287,7 @@ namespace DataFramework.Core.Builders
 
         public DataFramework.Abstractions.IFieldInfo Build()
         {
-            return new DataFramework.Core.FieldInfo(Name, TypeName, Description, DisplayName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
+            return new DataFramework.Core.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
         }
 
         public FieldInfoBuilder WithName(string name)
