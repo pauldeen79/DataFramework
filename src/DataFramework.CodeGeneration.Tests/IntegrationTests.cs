@@ -90,7 +90,7 @@ namespace DataFramework.CodeGeneration.Tests
                 }
                 else if (typeName.Contains("Collection<DataFramework."))
                 {
-                    property.ConvertCollectionPropertyToBuilderOnBuider
+                    property.ConvertCollectionPropertyToBuilderOnBuilder
                     (
                         false,
                         "CrossCutting.Common.ValueCollection",
