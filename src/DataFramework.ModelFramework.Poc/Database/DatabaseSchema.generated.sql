@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [dbo].[Catalog] ******/
+﻿--****** Object:  Table [dbo].[Catalog] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -50,7 +50,7 @@ CREATE NONCLUSTERED INDEX [IX_Catalog_Name] ON [dbo].[Catalog]
 GO
 ALTER TABLE [Catalog] ADD CONSTRAINT [DF_DriveTypeCodeType] DEFAULT ('CDT') FOR [DriveTypeCodeType]
 GO
-/****** Object:  Table [dbo].[File] ******/
+--****** Object:  Table [dbo].[File] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -114,7 +114,7 @@ CREATE NONCLUSTERED INDEX [IX_File_CatalogId] ON [dbo].[File]
 	[Path] ASC
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Code] ******/
+--****** Object:  Table [dbo].[Code] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +134,7 @@ CREATE TABLE [dbo].[Code](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[ExtraField] ******/
+--****** Object:  Table [dbo].[ExtraField] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -156,7 +156,7 @@ CREATE TABLE [dbo].[ExtraField](
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  ForeignKey [Catalog_DriveType] ******/
+--****** Object:  ForeignKey [Catalog_DriveType] ******
 ALTER TABLE [dbo].[Catalog]  WITH CHECK ADD  CONSTRAINT [Catalog_DriveType] FOREIGN KEY([DriveTypeCodeType],[DriveTypeCode])
 REFERENCES [dbo].[Code] ([CodeType],[Code])
 ON UPDATE NO ACTION
@@ -164,7 +164,7 @@ ON DELETE NO ACTION
 GO
 ALTER TABLE [dbo].[Catalog] CHECK CONSTRAINT [Catalog_DriveType]
 GO
-/****** Object:  ForeignKey [File_Catalog] ******/
+--****** Object:  ForeignKey [File_Catalog] ******
 ALTER TABLE [dbo].[File]  WITH CHECK ADD  CONSTRAINT [File_Catalog] FOREIGN KEY([CatalogId])
 REFERENCES [dbo].[Catalog] ([Id])
 ON UPDATE NO ACTION
@@ -172,7 +172,7 @@ ON DELETE NO ACTION
 GO
 ALTER TABLE [dbo].[File] CHECK CONSTRAINT [File_Catalog]
 GO
-/****** Object:  StoredProcedure [dbo].[InsertCatalog] ******/
+--****** Object:  StoredProcedure [dbo].[InsertCatalog] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -213,7 +213,7 @@ INSERT INTO [Catalog] ([Name], [DateCreated], [DateLastModified], [DateSynchroni
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateCatalog] ******/
+--****** Object:  StoredProcedure [dbo].[UpdateCatalog] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -283,7 +283,7 @@ UPDATE [Catalog] SET [Name] = @Name, [DateCreated] = @DateCreated, [DateLastModi
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteCatalog] ******/
+--****** Object:  StoredProcedure [dbo].[DeleteCatalog] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -325,7 +325,7 @@ DELETE FROM [Catalog] WHERE [Id] = @Id AND ((@Name IS NOT NULL AND [Name] = @Nam
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[InsertFile] ******/
+--****** Object:  StoredProcedure [dbo].[InsertFile] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -360,7 +360,7 @@ INSERT INTO [File] ([Path], [FileName], [Extension], [Date], [Size], [CatalogId]
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateFile] ******/
+--****** Object:  StoredProcedure [dbo].[UpdateFile] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -418,7 +418,7 @@ UPDATE [File] SET [Path] = @Path, [FileName] = @FileName, [Extension] = @Extensi
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteFile] ******/
+--****** Object:  StoredProcedure [dbo].[DeleteFile] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -454,7 +454,7 @@ DELETE FROM [File] WHERE [Id] = @Id AND ((@Path IS NOT NULL AND [Path] = @Path) 
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[InsertCode] ******/
+--****** Object:  StoredProcedure [dbo].[InsertCode] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -470,7 +470,7 @@ INSERT INTO [Code] ([Code], [CodeType], [Description]) OUTPUT INSERTED.[Code], I
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateCode] ******/
+--****** Object:  StoredProcedure [dbo].[UpdateCode] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -489,7 +489,7 @@ UPDATE [Code] SET [Code] = @Code, [CodeType] = @CodeType, [Description] = @Descr
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteCode] ******/
+--****** Object:  StoredProcedure [dbo].[DeleteCode] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -505,7 +505,7 @@ DELETE FROM [Code] WHERE ((@Code IS NOT NULL AND [Code] = @Code) OR (@Code IS NU
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[InsertExtraField] ******/
+--****** Object:  StoredProcedure [dbo].[InsertExtraField] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -523,7 +523,7 @@ INSERT INTO [ExtraField] ([EntityName], [Name], [Description], [FieldNumber], [F
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[UpdateExtraField] ******/
+--****** Object:  StoredProcedure [dbo].[UpdateExtraField] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -546,7 +546,7 @@ UPDATE [ExtraField] SET [EntityName] = @EntityName, [Name] = @Name, [Description
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[DeleteExtraField] ******/
+--****** Object:  StoredProcedure [dbo].[DeleteExtraField] ******
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
