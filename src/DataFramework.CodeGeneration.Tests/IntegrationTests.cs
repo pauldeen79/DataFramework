@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using CrossCutting.Common;
 using CrossCutting.Common.Extensions;
 using DataFramework.Abstractions;
 using DataFramework.Core.Builders;
@@ -25,7 +26,8 @@ namespace DataFramework.CodeGeneration.Tests
         public void CanGenerateImmutableBuilderClassesForContracts()
         {
             // Arrange
-            var settings = new ImmutableClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection", validateArgumentsInConstructor: true);
+            var settings = new ImmutableClassSettings(newCollectionTypeName: typeof(ValueCollection<>).WithoutGenerics(),
+                                                      validateArgumentsInConstructor: true);
             var model = new[]
             {
                 typeof(IMetadata),
@@ -51,7 +53,8 @@ namespace DataFramework.CodeGeneration.Tests
         public void CanGenerateRecordsForContracts()
         {
             // Arrange
-            var settings = new ImmutableClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection", validateArgumentsInConstructor: true);
+            var settings = new ImmutableClassSettings(newCollectionTypeName: typeof(ValueCollection<>).WithoutGenerics(),
+                                                      validateArgumentsInConstructor: true);
             var model = new[]
             {
                 typeof(IMetadata),
