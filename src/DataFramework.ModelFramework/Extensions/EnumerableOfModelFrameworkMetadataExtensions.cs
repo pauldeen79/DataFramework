@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataFramework.Abstractions;
-using ModelFramework.Common.Default;
+using ModelFramework.Common;
 
 namespace DataFramework.ModelFramework.Extensions
 {
