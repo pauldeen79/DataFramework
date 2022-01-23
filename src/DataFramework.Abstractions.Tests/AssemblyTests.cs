@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using CrossCutting.Common;
 using CrossCutting.Common.Extensions;
 using FluentAssertions;
 using ModelFramework.Generators.Objects;
@@ -19,7 +20,7 @@ namespace DataFramework.Abstractions.Tests
         public void CanGenerateEntitiesForContracts()
         {
             // Arrange
-            var settings = new ImmutableClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection");
+            var settings = new ImmutableClassSettings(newCollectionTypeName: typeof(ValueCollection<>).WithoutGenerics());
             var model = new[]
             {
                 typeof(IDataObjectInfo),
@@ -54,7 +55,7 @@ namespace DataFramework.Abstractions.Tests
         public void CanGenerateBuildersForContracts()
         {
             // Arrange
-            var settings = new ImmutableBuilderClassSettings(newCollectionTypeName: "CrossCutting.Common.ValueCollection");
+            var settings = new ImmutableBuilderClassSettings(newCollectionTypeName: typeof(ValueCollection<>).WithoutGenerics());
             var model = new[]
             {
                 typeof(IDataObjectInfo),

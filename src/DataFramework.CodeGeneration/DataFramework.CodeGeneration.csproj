@@ -1,11 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <PackageId>pauldeen79.DataFramework.ModelFramework</PackageId>
-    <RepositoryUrl>https://github.com/pauldeen79/DataFramework</RepositoryUrl>
+    <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_dataframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
@@ -14,11 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.3" />
-    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.3.11" />
-    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.3.11" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.5.16" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.5.16" />
+    <PackageReference Include="pauldeen79.ModelFramework.CodeGeneration" Version="0.3.11" />
   </ItemGroup>
 
   <ItemGroup>

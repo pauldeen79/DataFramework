@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFramework.ModelFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFramework.ModelFramework.Tests", "src\DataFramework.ModelFramework.Tests\DataFramework.ModelFramework.Tests.csproj", "{3659D330-D46B-4C7E-94A7-4E86452A3946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFramework.CodeGeneration.Tests", "src\DataFramework.CodeGeneration.Tests\DataFramework.CodeGeneration.Tests.csproj", "{E9CD253F-3093-4D67-98B0-47E74929E073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFramework.CodeGeneration.Tests", "src\DataFramework.CodeGeneration.Tests\DataFramework.CodeGeneration.Tests.csproj", "{E9CD253F-3093-4D67-98B0-47E74929E073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFramework.CodeGeneration", "src\DataFramework.CodeGeneration\DataFramework.CodeGeneration.csproj", "{F9C4524F-ECF1-4047-BC96-C423287B3FF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +146,18 @@ Global
 		{E9CD253F-3093-4D67-98B0-47E74929E073}.Release|x64.Build.0 = Release|Any CPU
 		{E9CD253F-3093-4D67-98B0-47E74929E073}.Release|x86.ActiveCfg = Release|Any CPU
 		{E9CD253F-3093-4D67-98B0-47E74929E073}.Release|x86.Build.0 = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|x64.Build.0 = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9C4524F-ECF1-4047-BC96-C423287B3FF7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
