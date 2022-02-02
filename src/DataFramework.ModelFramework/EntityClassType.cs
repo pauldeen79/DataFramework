@@ -1,10 +1,9 @@
-﻿namespace DataFramework.ModelFramework
+﻿namespace DataFramework.ModelFramework;
+
+public enum EntityClassType
 {
-    public enum EntityClassType
-    {
-        Poco = 0,
-        ImmutableClass = 1,
-        ObservablePoco = 2,
-        Record = 3
-    }
+    Poco = 0,
+    ImmutableClass = 1,
+    ObservablePoco = 2,
+    Record = 3
 }

@@ -1,8 +1,7 @@
-﻿namespace DataFramework.Abstractions
+﻿namespace DataFramework.Abstractions;
+
+public interface IMetadata
 {
-    public interface IMetadata
-    {
-        string Name { get; }
-        object? Value { get; }
-    }
+    string Name { get; }
+    object? Value { get; }
 }

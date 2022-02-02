@@ -1,7 +1,6 @@
-﻿namespace DataFramework.ModelFramework.MetadataNames
+﻿namespace DataFramework.ModelFramework.MetadataNames;
+
+internal static class Base
 {
-    internal static class Base
-    {
-        internal const string Root = "DataFramework.ModelFramework";
-    }
+    internal const string Root = "DataFramework.ModelFramework";
 }

@@ -1,28 +1,22 @@
-﻿using CrossCutting.Common.Extensions;
-using CrossCutting.Data.Abstractions;
-using DataFramework.Abstractions;
-using ModelFramework.Objects.Builders;
+﻿namespace DataFramework.ModelFramework.Extensions;
 
-namespace DataFramework.ModelFramework.Extensions
+internal static class ClassMethodBuilderExtensions
 {
-    internal static class ClassMethodBuilderExtensions
-    {
-        public static ClassMethodBuilder AddCommandProviderMethod(this ClassMethodBuilder instance,
-                                                                  IDataObjectInfo dataObjectInfo,
-                                                                  string preventMetadataName,
-                                                                  DatabaseOperation operation,
-                                                                  string commandType,
-                                                                  string commentText)
-            => instance.Chain(builder =>
+    public static ClassMethodBuilder AddCommandProviderMethod(this ClassMethodBuilder instance,
+                                                              IDataObjectInfo dataObjectInfo,
+                                                              string preventMetadataName,
+                                                              DatabaseOperation operation,
+                                                              string commandType,
+                                                              string commentText)
+        => instance.Chain(builder =>
+        {
+            if (!dataObjectInfo.Metadata.GetBooleanValue(preventMetadataName))
             {
-                if (!dataObjectInfo.Metadata.GetBooleanValue(preventMetadataName))
-                {
-                    instance.AddLiteralCodeStatements
-                    (
-                        $"    case {typeof(DatabaseOperation).FullName}.{operation}:",
-                        $"        return new {commandType}(\"{commentText}\", source, {typeof(DatabaseOperation).FullName}.{operation}, {operation.GetMethodNamePrefix()}Parameters);"
-                    );
-                }
-            });
-    }
+                instance.AddLiteralCodeStatements
+                (
+                    $"    case {typeof(DatabaseOperation).FullName}.{operation}:",
+                    $"        return new {commandType}(\"{commentText}\", source, {typeof(DatabaseOperation).FullName}.{operation}, {operation.GetMethodNamePrefix()}Parameters);"
+                );
+            }
+        });
 }

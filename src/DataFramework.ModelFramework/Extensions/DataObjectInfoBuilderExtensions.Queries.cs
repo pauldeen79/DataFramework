@@ -1,12 +1,4 @@
-﻿using System.Linq;
-using DataFramework.Core.Builders;
-using DataFramework.ModelFramework.MetadataNames;
-using ModelFramework.Common.Contracts;
-using ModelFramework.Objects.Builders;
-using ModelFramework.Objects.CodeStatements;
-using ModelFramework.Objects.Contracts;
-
-namespace DataFramework.ModelFramework.Extensions
+﻿namespace DataFramework.ModelFramework.Extensions
 {
     public static partial class DataObjectInfoBuilderExtensions
     {
@@ -26,7 +18,7 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Queries.ValidExpressionStatement).WithValue(x.Build())));
 
         public static DataObjectInfoBuilder AddQueryValidExpressionStatements(this DataObjectInfoBuilder instance, params string[] statements)
-            => instance.AddQueryValidExpressionStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+            => instance.AddQueryValidExpressionStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<global::ModelFramework.Common.Contracts.IMetadata>())).ToArray());
 
         public static DataObjectInfoBuilder AddQueryValidFieldNameStatements(this DataObjectInfoBuilder instance, params ICodeStatement[] statements)
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Queries.ValidFieldNameStatement).WithValue(x)));
@@ -35,7 +27,7 @@ namespace DataFramework.ModelFramework.Extensions
             => instance.AddMetadata(statements.Select(x => new MetadataBuilder().WithName(Queries.ValidFieldNameStatement).WithValue(x.Build())));
 
         public static DataObjectInfoBuilder AddQueryValidFieldNameStatements(this DataObjectInfoBuilder instance, params string[] statements)
-            => instance.AddQueryValidFieldNameStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<IMetadata>())).ToArray());
+            => instance.AddQueryValidFieldNameStatements(statements.Select(x => new LiteralCodeStatement(x, Enumerable.Empty<global::ModelFramework.Common.Contracts.IMetadata>())).ToArray());
 
         public static DataObjectInfoBuilder AddQueryInterfaces(this DataObjectInfoBuilder instance, params string[] interfaces)
             => instance.AddMetadata(interfaces.Select(x => new MetadataBuilder().WithName(Queries.Interface).WithValue(x)));
