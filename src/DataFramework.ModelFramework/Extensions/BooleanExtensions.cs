@@ -1,12 +1,9 @@
-﻿using ModelFramework.Objects.Contracts;
+﻿namespace DataFramework.ModelFramework.Extensions;
 
-namespace DataFramework.ModelFramework.Extensions
+internal static class BooleanExtensions
 {
-    internal static class BooleanExtensions
-    {
-        internal static Visibility ToVisibility(this bool isVisible)
-            => isVisible
-                ? Visibility.Public
-                : Visibility.Internal;
-    }
+    internal static Visibility ToVisibility(this bool isVisible)
+        => isVisible
+            ? Visibility.Public
+            : Visibility.Internal;
 }

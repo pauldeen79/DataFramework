@@ -1,27 +1,19 @@
-﻿using CrossCutting.Common.Extensions;
-using DataFramework.Core.Builders;
-using DataFramework.ModelFramework.Extensions;
-using FluentAssertions;
-using ModelFramework.Database.Builders;
-using ModelFramework.Database.SqlStatements.Builders;
-using Xunit;
+﻿namespace DataFramework.ModelFramework.Tests;
 
-namespace DataFramework.ModelFramework.Tests
+public partial class IntegrationTests
 {
-    public partial class IntegrationTests
+    [Fact]
+    public void Can_Generate_Basic_DatabaseSchema()
     {
-        [Fact]
-        public void Can_Generate_Basic_DatabaseSchema()
-        {
-            // Arrange
-            var settings = GeneratorSettings.Default;
-            var input = new[] { CreateDataObjectInfo(default(EntityClassType)) }.ToSchemas(settings);
+        // Arrange
+        var settings = GeneratorSettings.Default;
+        var input = new[] { CreateDataObjectInfo(default(EntityClassType)) }.ToSchemas(settings);
 
-            // Act
-            var actual = GenerateCode(input, settings);
+        // Act
+        var actual = GenerateCode(input, settings);
 
-            // Assert
-            actual.NormalizeLineEndings().Should().Be(@"/****** Object:  Table [dbo].[TestEntity] ******/
+        // Assert
+        actual.NormalizeLineEndings().Should().Be(@"/****** Object:  Table [dbo].[TestEntity] ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -80,39 +72,39 @@ BEGIN
 END
 GO
 ");
-        }
+    }
 
-        [Fact]
-        public void Can_Generate_DatabaseSchema_With_All_Bells_And_Whistles()
+    [Fact]
+    public void Can_Generate_DatabaseSchema_With_All_Bells_And_Whistles()
+    {
+        // Arrange
+        var settings = GeneratorSettings.Default;
+        var input = new[]
         {
-            // Arrange
-            var settings = GeneratorSettings.Default;
-            var input = new[]
-            {
-                new DataObjectInfoBuilder()
-                    .WithName("Test")
-                    .AddFields
-                    (
-                        new FieldInfoBuilder().WithName("Id").WithSqlIdentity().WithType(typeof(int)),
-                        new FieldInfoBuilder().WithName("Name").WithIsSqlRequired().WithType(typeof(string)).WithStringLength(50)
-                    )
-                    .AddAdditionalStoredProcedures(new StoredProcedureBuilder().WithName("usp_Custom").AddStatements(new LiteralSqlStatementBuilder().WithStatement("--Code goes here")))
-                    .AddViews(new ViewBuilder().WithName("VW_MyView").AddSelectFields(new ViewFieldBuilder().WithSourceObjectName("Field").WithName("MyField")).AddSources(new ViewSourceBuilder().WithName("MyTable")))
-                    .AddIndexes(new IndexBuilder().WithName("IX_MyIndex").AddFields(new IndexFieldBuilder().WithName("MyField")))
-                    .AddForeignKeyConstraints(new ForeignKeyConstraintBuilder()
-                        .WithName("FK_MyFK")
-                        .WithForeignTableName("ForeignTable")
-                        .AddLocalFields(new ForeignKeyConstraintFieldBuilder().WithName("Name"))
-                        .AddForeignFields(new ForeignKeyConstraintFieldBuilder().WithName("Name")))
-                    .AddCheckConstraints(new CheckConstraintBuilder().WithName("MyContraint").WithExpression("LEN(Name) > 1 AND LEN(Description) > 1"))
-                    .Build()
-            }.ToSchemas(settings);
+            new DataObjectInfoBuilder()
+                .WithName("Test")
+                .AddFields
+                (
+                    new FieldInfoBuilder().WithName("Id").WithSqlIdentity().WithType(typeof(int)),
+                    new FieldInfoBuilder().WithName("Name").WithIsSqlRequired().WithType(typeof(string)).WithStringLength(50)
+                )
+                .AddAdditionalStoredProcedures(new StoredProcedureBuilder().WithName("usp_Custom").AddStatements(new LiteralSqlStatementBuilder().WithStatement("--Code goes here")))
+                .AddViews(new ViewBuilder().WithName("VW_MyView").AddSelectFields(new ViewFieldBuilder().WithSourceObjectName("Field").WithName("MyField")).AddSources(new ViewSourceBuilder().WithName("MyTable")))
+                .AddIndexes(new IndexBuilder().WithName("IX_MyIndex").AddFields(new IndexFieldBuilder().WithName("MyField")))
+                .AddForeignKeyConstraints(new ForeignKeyConstraintBuilder()
+                    .WithName("FK_MyFK")
+                    .WithForeignTableName("ForeignTable")
+                    .AddLocalFields(new ForeignKeyConstraintFieldBuilder().WithName("Name"))
+                    .AddForeignFields(new ForeignKeyConstraintFieldBuilder().WithName("Name")))
+                .AddCheckConstraints(new CheckConstraintBuilder().WithName("MyContraint").WithExpression("LEN(Name) > 1 AND LEN(Description) > 1"))
+                .Build()
+        }.ToSchemas(settings);
 
-            // Act
-            var actual = GenerateCode(input, settings);
+        // Act
+        var actual = GenerateCode(input, settings);
 
-            // Assert
-            actual.NormalizeLineEndings().Should().Be(@"/****** Object:  Table [dbo].[Test] ******/
+        // Assert
+        actual.NormalizeLineEndings().Should().Be(@"/****** Object:  Table [dbo].[Test] ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -165,6 +157,5 @@ FROM
     [MyTable]
 GO
 ");
-        }
     }
 }

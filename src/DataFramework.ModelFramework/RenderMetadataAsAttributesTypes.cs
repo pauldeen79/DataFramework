@@ -1,12 +1,9 @@
-﻿using System;
+﻿namespace DataFramework.ModelFramework;
 
-namespace DataFramework.ModelFramework
+[Flags]
+public enum RenderMetadataAsAttributesTypes
 {
-    [Flags]
-    public enum RenderMetadataAsAttributesTypes
-    {
-        None = 0,
-        Validation = 1,
-        Custom = 2
-    }
+    None = 0,
+    Validation = 1,
+    Custom = 2
 }

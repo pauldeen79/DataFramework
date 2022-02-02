@@ -1,8 +1,7 @@
-﻿namespace DataFramework.ModelFramework.Tests.TestFixtures
+﻿namespace DataFramework.ModelFramework.Tests.TestFixtures;
+
+public enum MyEnumeration
 {
-    public enum MyEnumeration
-    {
-        First,
-        Second
-    }
+    First,
+    Second
 }

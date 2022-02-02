@@ -1,13 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using DataFramework.ModelFramework.Extensions;
-using DataFramework.ModelFramework.Tests.TestFixtures;
-using FluentAssertions;
-using Xunit;
-
-namespace DataFramework.ModelFramework.Tests.Extensions
+﻿namespace DataFramework.ModelFramework.Tests.Extensions
 {
-    [ExcludeFromCodeCoverage]
     public class StringExtensionsTests
     {
         [Fact]
