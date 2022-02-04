@@ -7,6 +7,7 @@ using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 {
+#nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogQueryFieldProvider : IQueryFieldProvider
     {
@@ -71,4 +72,5 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
     }
+#nullable restore
 }
