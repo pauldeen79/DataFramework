@@ -74,8 +74,8 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
                 .WithTypeName($"{c.Name}Builder")
                 .AddParameter("name", typeof(string))
                 .AddParameters(new ParameterBuilder().WithName("value").WithType(typeof(object)).WithIsNullable())
-                .AddLiteralCodeStatements($"AddMetadata(new {typeof(MetadataBuilder).FullName}().WithName(name).WithValue(value));",
-                                          "return this;");
+                .AddLiteralCodeStatements($"AddMetadata(new DataFramework.Core.Builders.MetadataBuilder().WithName(name).WithValue(value));",
+                                           "return this;");
         }
     }
 

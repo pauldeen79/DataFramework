@@ -4,7 +4,6 @@ global using System.Linq;
 global using CrossCutting.Common;
 global using CrossCutting.Common.Extensions;
 global using DataFramework.Abstractions;
-global using DataFramework.Core.Builders;
 global using ModelFramework.CodeGeneration.CodeGenerationProviders;
 global using ModelFramework.Common.Extensions;
 global using ModelFramework.Objects.Builders;
