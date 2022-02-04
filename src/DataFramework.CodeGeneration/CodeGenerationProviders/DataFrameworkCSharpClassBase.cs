@@ -82,18 +82,18 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
     protected static Type[] GetDataFrameworkModelTypes()
         => new[]
         {
-                typeof(IDataObjectInfo),
-                typeof(IFieldInfo),
-                typeof(IMetadata)
+            typeof(IDataObjectInfo),
+            typeof(IFieldInfo),
+            typeof(IMetadata)
         };
 
     private static readonly string[] _propertiesWithDefaultValueTrue = new[]
     {
-            nameof(IFieldInfo.IsVisible),
-            nameof(IFieldInfo.IsPersistable),
-            nameof(IFieldInfo.CanGet),
-            nameof(IFieldInfo.CanSet),
-            nameof(IDataObjectInfo.IsQueryable),
-            nameof(IDataObjectInfo.IsVisible)
-        };
+        nameof(IFieldInfo.IsVisible),
+        nameof(IFieldInfo.IsPersistable),
+        nameof(IFieldInfo.CanGet),
+        nameof(IFieldInfo.CanSet),
+        nameof(IDataObjectInfo.IsQueryable),
+        nameof(IDataObjectInfo.IsVisible)
+    };
 }
