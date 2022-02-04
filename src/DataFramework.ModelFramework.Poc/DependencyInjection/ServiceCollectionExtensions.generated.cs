@@ -14,6 +14,7 @@ using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer;
+using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.DependencyInjection
 {
@@ -36,7 +37,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             //query (custom c'tor argument for QueryFieldProvider, needs to be injectable through code generation):
             instance.AddSingleton<IPagedDatabaseCommandProvider<CatalogQuery>>(serviceProvider =>
                 new QueryPagedDatabaseCommandProvider<CatalogQuery>(new CatalogQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("Catalog")),
-                                                                    new CatalogPagedEntityRetrieverSettings()));
+                                                                    new CatalogPagedEntityRetrieverSettings(),
+                                                                    serviceProvider.GetRequiredService<IQueryExpressionEvaluator>()));
             instance.AddSingleton<IQueryProcessor<CatalogQuery, Catalog>>(serviceProvider =>
                 new QueryProcessor<CatalogQuery, Catalog>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
                                                           serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<CatalogQuery>>()));
@@ -79,7 +81,8 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             //query (default implementation):
             instance.AddSingleton<IPagedDatabaseCommandProvider<ExtraFieldQuery>>(serviceProvider =>
                 new QueryPagedDatabaseCommandProvider<ExtraFieldQuery>(new ExtraFieldQueryFieldProvider(),
-                                                                       new ExtraFieldPagedEntityRetrieverSettings()));
+                                                                       new ExtraFieldPagedEntityRetrieverSettings(),
+                                                                       serviceProvider.GetRequiredService<IQueryExpressionEvaluator>()));
             instance.AddSingleton<IQueryProcessor<ExtraFieldQuery, ExtraField>>(serviceProvider =>
                 new QueryProcessor<ExtraFieldQuery, ExtraField>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
                                                                 serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<ExtraFieldQuery>>()));

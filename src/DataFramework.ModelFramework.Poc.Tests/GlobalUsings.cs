@@ -12,6 +12,8 @@ global using Microsoft.Extensions.DependencyInjection;
 global using PDC.Net.Core.Entities;
 global using PDC.Net.Core.Queries;
 global using QueryFramework.Abstractions;
+global using QueryFramework.Abstractions.Queries;
 global using QueryFramework.Core.Extensions;
 global using QueryFramework.Core.Queries.Builders;
+global using QueryFramework.SqlServer.Extensions;
 global using Xunit;
