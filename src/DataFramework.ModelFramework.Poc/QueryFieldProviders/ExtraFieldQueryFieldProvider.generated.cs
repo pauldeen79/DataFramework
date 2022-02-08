@@ -2,13 +2,30 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using PDC.Net.Core.Queries;
+using QueryFramework.Abstractions.Queries;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class ExtraFieldQueryFieldProvider : IQueryFieldProvider
+    public partial class ExtraFieldQueryFieldInfoProvider : IQueryFieldInfoProvider
+    {
+        public bool TryCreate(ISingleEntityQuery query, out IQueryFieldInfo? result)
+        {
+            if (query is ExtraFieldQuery)
+            {
+                result = new ExtraFieldQueryFieldInfo();
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+    }
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
+    public partial class ExtraFieldQueryFieldInfo : IQueryFieldInfo
     {
         public IEnumerable<string> GetAllFields()
         {

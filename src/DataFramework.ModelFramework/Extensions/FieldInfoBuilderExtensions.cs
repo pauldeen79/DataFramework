@@ -41,7 +41,7 @@ public static class FieldInfoBuilderExtensions
         => instance.ReplaceMetadata(Database.SkipFieldOnFind, skipFieldOnFind);
 
     public static FieldInfoBuilder WithSkipFieldInQueryFieldProvider(this FieldInfoBuilder instance, bool? skipFieldOnFind = true)
-        => instance.ReplaceMetadata(QueryFieldProviders.SkipField, skipFieldOnFind);
+        => instance.ReplaceMetadata(QueryFieldInfos.SkipField, skipFieldOnFind);
 
     public static FieldInfoBuilder WithSqlReaderMethodName(this FieldInfoBuilder instance, string? sqlReaderMethodName)
         => instance.ReplaceMetadata(Database.SqlReaderMethodName, sqlReaderMethodName);

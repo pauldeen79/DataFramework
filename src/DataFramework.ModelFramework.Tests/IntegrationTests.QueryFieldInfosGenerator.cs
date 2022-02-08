@@ -3,11 +3,11 @@
 public partial class IntegrationTests
 {
     [Fact]
-    public void Can_Generate_QueryFieldProvider()
+    public void Can_Generate_QueryFieldInfo()
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToQueryFieldProviderClass(settings);
+        var input = CreateDataObjectInfo(default(EntityClassType)).ToQueryFieldInfoClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -30,9 +30,9 @@ using System.Text;
 namespace QueryFieldProviders
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldInfoGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    internal partial class TestEntityQueryFieldProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldProvider
+    internal partial class TestEntityQueryFieldInfo : QueryFramework.SqlServer.Abstractions.IQueryFieldInfo
     {
         public System.Collections.Generic.IEnumerable<string> GetAllFields()
         {
@@ -52,11 +52,11 @@ namespace QueryFieldProviders
     }
 
     [Fact]
-    public void Can_Generate_QueryFieldProvider_With_Custom_Stuff()
+    public void Can_Generate_QueryFieldInfo_With_Custom_Stuff()
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfoWithCustomQueryFieldProviderStuff().ToQueryFieldProviderClass(settings);
+        var input = CreateDataObjectInfoWithCustomQueryFieldProviderStuff().ToQueryFieldInfoClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -79,8 +79,8 @@ using System.Text;
 namespace GeneratedNamespace
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldProviderGenerator"", @""1.0.0.0"")]
-    public partial class TestEntityQueryFieldProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldProvider
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryFieldInfoGenerator"", @""1.0.0.0"")]
+    public partial class TestEntityQueryFieldInfo : QueryFramework.SqlServer.Abstractions.IQueryFieldInfo
     {
         public System.Collections.Generic.IEnumerable<string> GetAllFields()
         {
@@ -105,7 +105,7 @@ namespace GeneratedNamespace
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public TestEntityQueryFieldProvider(IEnumerable<ExtraField> extraFields)
+        public TestEntityQueryFieldInfo(IEnumerable<ExtraField> extraFields)
         {
             _extraFields = extraFields;
         }

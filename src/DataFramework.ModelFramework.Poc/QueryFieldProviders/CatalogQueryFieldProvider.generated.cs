@@ -2,18 +2,41 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using DataFramework.ModelFramework.Poc.Repositories;
 using PDC.Net.Core.Entities;
+using PDC.Net.Core.Queries;
+using QueryFramework.Abstractions.Queries;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
-    public partial class CatalogQueryFieldProvider : IQueryFieldProvider
+    public partial class CatalogQueryFieldInfoProvider : IQueryFieldInfoProvider
+    {
+        private readonly IExtraFieldRepository _extraFieldRepository;
+
+        public CatalogQueryFieldInfoProvider(IExtraFieldRepository extraFieldRepository)
+            => _extraFieldRepository = extraFieldRepository;
+
+        public bool TryCreate(ISingleEntityQuery query, out IQueryFieldInfo? result)
+        {
+            if (query is CatalogQuery)
+            {
+                result = new CatalogQueryFieldInfo(_extraFieldRepository.FindExtraFieldsByEntityName(nameof(Catalog)));
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
+    }
+    [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
+    public partial class CatalogQueryFieldInfo : IQueryFieldInfo
     {
         private readonly IEnumerable<ExtraField> _extraFields;
 
-        public CatalogQueryFieldProvider(IEnumerable<ExtraField> extraFields)
+        public CatalogQueryFieldInfo(IEnumerable<ExtraField> extraFields)
         {
             _extraFields = extraFields;
         }

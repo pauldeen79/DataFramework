@@ -1,8 +1,8 @@
 ﻿namespace DataFramework.ModelFramework.MetadataNames;
 
-internal static class QueryFieldProviders
+internal static class QueryFieldInfos
 {
-    internal const string Root = Base.Root + ".QueryFieldProviders";
+    internal const string Root = Base.Root + ".QueryFieldInfos";
 
     internal const string Namespace = Root + ".Namespace";
     internal const string Visibility = Root + ".Visibility";

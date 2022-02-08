@@ -55,7 +55,7 @@ public static partial class DataObjectInfoExtensions
             .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
     internal static string GetQueryFieldProvidersNamespace(this IDataObjectInfo instance)
-        => instance.Metadata.GetStringValue(QueryFieldProviders.Namespace)
+        => instance.Metadata.GetStringValue(QueryFieldInfos.Namespace)
             .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
     internal static string GetEntityRetrieverSettingsNamespace(this IDataObjectInfo instance)
