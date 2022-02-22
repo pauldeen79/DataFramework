@@ -72,36 +72,27 @@ public static partial class DataObjectInfoExtensions
         yield return new ClassMethodBuilder()
             .WithName(nameof(IValidatableObject.Validate))
             .WithVisibility(Visibility.Public)
-            .WithOverride()
             .WithType(typeof(IEnumerable<ValidationResult>))
             .AddParameter("validationContext", typeof(ValidationContext))
             .AddLiteralCodeStatements
             (
-                @"foreach (var validationResult in base.Validate(validationContext))",
-                @"{",
-                @"    yield return validationResult;",
-                @"}",
                 @"if (Limit.HasValue && Limit.Value > MaxLimit)",
                 @"{",
                 $@"    yield return new {validationResultType}(""Limit exceeds the maximum of "" + MaxLimit, new[] {{ nameof(Limit), nameof(Limit) }});",
                 @"}",
                 @"foreach (var condition in Conditions)",
                 @"{",
-                @"    if (!IsValidFieldName(condition.Field))",
+                @"    if (!IsValidExpression(condition.LeftExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid field name in conditions: "" + condition.Field.FieldName, new[] {{ nameof(Conditions), nameof(Conditions) }});",
+                $@"        yield return new {validationResultType}(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] {{ nameof(Conditions), nameof(Conditions) }});",
                 @"    }",
-                @"    if (!IsValidExpression(condition.Field))",
+                @"    if (!IsValidExpression(condition.RightExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid expression in conditions: "" + condition.Field, new[] {{ nameof(Conditions), nameof(Conditions) }});",
+                $@"        yield return new {validationResultType}(""Invalid right expression in conditions: "" + condition.RightExpression, new[] {{ nameof(Conditions), nameof(Conditions) }});",
                 @"    }",
                 @"}",
                 @"foreach (var querySortOrder in OrderByFields)",
                 @"{",
-                @"    if (!IsValidFieldName(querySortOrder.Field))",
-                @"    {",
-                $@"        yield return new {validationResultType}(""Invalid field name in order by fields: "" + querySortOrder.Field.FieldName, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
-                @"    }",
                 @"    if (!IsValidExpression(querySortOrder.Field))",
                 @"    {",
                 $@"        yield return new {validationResultType}(""Invalid expression in order by fields: "" + querySortOrder.Field, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
@@ -109,42 +100,51 @@ public static partial class DataObjectInfoExtensions
                 @"}"
             );
 
+        var fieldNameStatements = instance.Metadata.GetValues<ICodeStatement>(Queries.ValidFieldNameStatement)
+            .Select(x => x.CreateBuilder())
+            .ToList();
+
+        if (!fieldNameStatements.Any())
+        {
+            fieldNameStatements.Add(new LiteralCodeStatementBuilder().WithStatement($"    return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, \"{nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}\"));"));
+        }
+
+        var expressionStatements = instance.Metadata.GetValues<ICodeStatement>(Queries.ValidExpressionStatement)
+            .Select(x => x.CreateBuilder())
+            .ToList();
+
+        if (!expressionStatements.Any())
+        {
+            expressionStatements.Add(new LiteralCodeStatementBuilder().WithStatement("return true;"));
+        }
+
         yield return new ClassMethodBuilder()
             .WithName("IsValidExpression")
             .WithVisibility(Visibility.Private)
             .WithType(typeof(bool))
-            .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidExpressionStatement).Select(x => x.CreateBuilder()))
-            .Chain(x =>
-            {
-                if (x.CodeStatements.Count == 0)
-                {
-                    x.AddLiteralCodeStatements("return true;");
-                }
-            });
-
-        yield return new ClassMethodBuilder()
-            .WithName("IsValidFieldName")
-            .WithVisibility(Visibility.Private)
-            .WithType(typeof(bool))
-            .AddCodeStatements(instance.Metadata.GetValues<ICodeStatement>(Queries.ValidFieldNameStatement).Select(x => x.CreateBuilder()))
-            .Chain(x =>
-            {
-                if (x.CodeStatements.Count == 0)
-                {
-                    x.AddLiteralCodeStatements($"return ValidFieldNames.Any(s => s.Equals(expression.FieldName, {nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}));");
-                }
-            });
+            .AddParameter("expression", typeof(IExpression))
+            .AddLiteralCodeStatements
+            (
+                "if (expression is IFieldExpression fieldExpression)",
+                "{"
+            )
+            .AddCodeStatements(fieldNameStatements)
+            .AddLiteralCodeStatements
+            (
+                "}"
+            )
+            .AddCodeStatements(expressionStatements);
     }
 
     private static IEnumerable<ClassConstructorBuilder> GetQueryClassConstructors()
     {
         yield return new ClassConstructorBuilder()
-            .WithChainCall($"this(null, null, {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQueryCondition).FullName}>(), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
+            .WithChainCall($"this(null, null, {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(ICondition).FullName}>(), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
 
         yield return new ClassConstructorBuilder()
             .AddParameter("limit", typeof(int?))
             .AddParameter("offset", typeof(int?))
-            .AddParameter("conditions", typeof(IEnumerable<IQueryCondition>))
+            .AddParameter("conditions", typeof(IEnumerable<ICondition>))
             .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>))
             .ChainCallToBaseUsingParameters();
 

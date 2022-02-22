@@ -51,7 +51,7 @@ public partial class IntegrationTests
             .AddQueryAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
             .AddQueryInterfaces("IMyQuery")
             .AddQueryValidFieldNames("AdditionalValidFieldName")
-            .AddQueryValidFieldNameStatements(@"return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));")
+            .AddQueryValidFieldNameStatements(@"    return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));")
 
             .WithRepositoryNamespace("Repositories")
             .WithRepositoryInterfaceNamespace("Contracts.Repositories")

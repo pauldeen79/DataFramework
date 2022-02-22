@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.1" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.2" />
     <PackageReference Include="pauldeen79.System.Data.Stub" Version="2.7.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
