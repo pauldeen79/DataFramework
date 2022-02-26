@@ -1,22 +1,33 @@
 ﻿using CrossCutting.Data.Abstractions;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
+using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
-using QueryFramework.Abstractions.Queries;
-using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders
 {
-    public class CatalogPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider
+    public class CatalogPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider, IDatabaseEntityRetrieverSettingsProvider
     {
-        public bool TryCreate(ISingleEntityQuery query, out IPagedDatabaseEntityRetrieverSettings result)
+        public bool TryGet<TSource>(out IPagedDatabaseEntityRetrieverSettings settings)
         {
-            if (query is CatalogQuery)
+            if (typeof(TSource) == typeof(CatalogIdentity) || typeof(TSource) == typeof(CatalogQuery))
             {
-                result = new CatalogPagedEntityRetrieverSettings();
+                settings = new CatalogPagedEntityRetrieverSettings();
                 return true;
             }
 
-            result = default;
+            settings = default;
+            return false;
+        }
+
+        public bool TryGet<TSource>(out IDatabaseEntityRetrieverSettings settings)
+        {
+            if (typeof(TSource) == typeof(Catalog) || typeof(TSource) == typeof(CatalogQuery))
+            {
+                settings = new CatalogPagedEntityRetrieverSettings();
+                return true;
+            }
+
+            settings = default;
             return false;
         }
     }

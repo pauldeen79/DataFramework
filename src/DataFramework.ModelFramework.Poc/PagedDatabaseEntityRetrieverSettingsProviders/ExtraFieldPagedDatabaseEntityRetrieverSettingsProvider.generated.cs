@@ -1,22 +1,32 @@
 ﻿using CrossCutting.Data.Abstractions;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
 using PDC.Net.Core.Queries;
-using QueryFramework.Abstractions.Queries;
-using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders
 {
-    public class ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider
+    public class ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider, IDatabaseEntityRetrieverSettingsProvider
     {
-        public bool TryCreate(ISingleEntityQuery query, out IPagedDatabaseEntityRetrieverSettings result)
+        public bool TryGet<TSource>(out IPagedDatabaseEntityRetrieverSettings settings)
         {
-            if (query is ExtraFieldQuery)
+            if (typeof(TSource) == typeof(ExtraFieldQuery))
             {
-                result = new ExtraFieldPagedEntityRetrieverSettings();
+                settings = new ExtraFieldPagedEntityRetrieverSettings();
                 return true;
             }
 
-            result = default;
+            settings = default;
+            return false;
+        }
+
+        public bool TryGet<TSource>(out IDatabaseEntityRetrieverSettings settings)
+        {
+            if (typeof(TSource) == typeof(ExtraFieldQuery))
+            {
+                settings = new ExtraFieldPagedEntityRetrieverSettings();
+                return true;
+            }
+
+            settings = default;
             return false;
         }
     }
