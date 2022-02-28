@@ -16,9 +16,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.5" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.4" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.4" />
+    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.6" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.6" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.6" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 

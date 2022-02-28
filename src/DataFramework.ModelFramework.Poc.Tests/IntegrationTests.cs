@@ -15,8 +15,7 @@ public sealed partial class IntegrationTests : IDisposable
                                           () => new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
 
         ServiceProvider = new ServiceCollection()
-            .AddExpressionFramework()
-            .AddQueryFrameworkSqlServer(x => x.AddPdcNet())
+            .AddPdcNet()
             .AddSingleton<IDbConnection>(Connection)
             .BuildServiceProvider();
         Repository = ServiceProvider.GetRequiredService<ICatalogRepository>();

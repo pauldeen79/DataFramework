@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.5" />
-    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.3.24" />
-    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.3.24" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.4" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.4" />
+    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.6" />
+    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.3.25" />
+    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.3.25" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.6" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.6" />
   </ItemGroup>
 
   <ItemGroup>
