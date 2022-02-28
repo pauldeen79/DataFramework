@@ -4,7 +4,7 @@ public sealed partial class IntegrationTests : IDisposable
 {
     private ICatalogRepository Repository { get; }
     private IDatabaseEntityRetriever<Catalog> Retriever { get; }
-    private IQueryProcessor<CatalogQuery, Catalog> QueryProcessor { get; }
+    private IQueryProcessor QueryProcessor { get; }
     private DbConnection Connection { get; }
     private ServiceProvider ServiceProvider { get; }
 
@@ -15,13 +15,12 @@ public sealed partial class IntegrationTests : IDisposable
                                           () => new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
 
         ServiceProvider = new ServiceCollection()
-            .AddQueryFrameworkSqlServer<ISingleEntityQuery>()
             .AddPdcNet()
             .AddSingleton<IDbConnection>(Connection)
             .BuildServiceProvider();
         Repository = ServiceProvider.GetRequiredService<ICatalogRepository>();
         Retriever = ServiceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>();
-        QueryProcessor = ServiceProvider.GetRequiredService<IQueryProcessor<CatalogQuery, Catalog>>();
+        QueryProcessor = ServiceProvider.GetRequiredService<IQueryProcessor>();
     }
 
     public void Dispose()

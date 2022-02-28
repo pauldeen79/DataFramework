@@ -1,20 +1,17 @@
 ﻿using System.CodeDom.Compiler;
 using CrossCutting.Data.Abstractions;
-using CrossCutting.Data.Core.CommandProviders;
 using CrossCutting.Data.Sql;
-using CrossCutting.Data.Sql.CommandProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
+using DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
-using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
+using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders;
 using DataFramework.ModelFramework.Poc.QueryFieldProviders;
 using DataFramework.ModelFramework.Poc.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using PDC.Net.Core.Entities;
-using PDC.Net.Core.Queries;
-using QueryFramework.Abstractions;
-using QueryFramework.SqlServer;
 using QueryFramework.SqlServer.Abstractions;
+using QueryFramework.SqlServer.Extensions;
 
 namespace DataFramework.ModelFramework.Poc.DependencyInjection
 {
@@ -23,72 +20,54 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
         [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
         public static IServiceCollection AddPdcNet(this IServiceCollection instance)
         {
-            //findall/findallpaged:
-            instance.AddSingleton<IDatabaseEntityRetriever<Catalog>, DatabaseEntityRetriever<Catalog>>();
-            
-            //add/update/delete:
-            instance.AddSingleton<IDatabaseCommandProcessor<Catalog>, DatabaseCommandProcessor<Catalog, CatalogBuilder>>();
-            instance.AddSingleton<IDatabaseCommandEntityProvider<Catalog, CatalogBuilder>, CatalogDatabaseCommandEntityProvider>();
-            instance.AddSingleton<IDatabaseCommandProvider<Catalog>, CatalogCommandProvider>();
+            return instance.AddQueryFrameworkSqlServer(x =>
+            {
+                //findall/findallpaged:
+                x.AddScoped<IDatabaseEntityRetriever<Catalog>, DatabaseEntityRetriever<Catalog>>();
 
-            //find:
-            instance.AddSingleton<IDatabaseCommandProvider<CatalogIdentity>, CatalogIdentityCommandProvider>();
+                //add/update/delete:
+                x.AddScoped<IDatabaseCommandProcessor<Catalog>, DatabaseCommandProcessor<Catalog, CatalogBuilder>>();
+                x.AddScoped<IDatabaseCommandEntityProvider<Catalog, CatalogBuilder>, CatalogDatabaseCommandEntityProvider>();
+                x.AddSingleton<IDatabaseCommandProvider<Catalog>, CatalogCommandProvider>();
 
-            //query (custom c'tor argument for QueryFieldProvider, needs to be injectable through code generation):
-            instance.AddSingleton<IPagedDatabaseCommandProvider<CatalogQuery>>(serviceProvider =>
-                new QueryPagedDatabaseCommandProvider<CatalogQuery>(new CatalogQueryFieldProvider(serviceProvider.GetRequiredService<IExtraFieldRepository>().FindExtraFieldsByEntityName("Catalog")),
-                                                                    new CatalogPagedEntityRetrieverSettings(),
-                                                                    serviceProvider.GetRequiredService<IQueryExpressionEvaluator>()));
-            instance.AddSingleton<IQueryProcessor<CatalogQuery, Catalog>>(serviceProvider =>
-                new QueryProcessor<CatalogQuery, Catalog>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
-                                                          serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<CatalogQuery>>()));
+                //find:
+                x.AddSingleton<IDatabaseCommandProvider<CatalogIdentity>, CatalogIdentityCommandProvider>();
 
-            //find/query:
-            instance.AddSingleton<IDatabaseEntityMapper<Catalog>, CatalogEntityMapper>();
+                //query:
+                x.AddSingleton<IQueryFieldInfoProvider, CatalogQueryFieldInfoProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverProvider, CatalogDatabaseEntityRetrieverProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, CatalogPagedDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<IPagedDatabaseEntityRetrieverSettingsProvider, CatalogPagedDatabaseEntityRetrieverSettingsProvider>();
 
-            //repository:
-            instance.AddSingleton<ICatalogRepository>(serviceProvider
-                => new CatalogRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<Catalog>>(),
-                                         serviceProvider.GetRequiredService<IDatabaseEntityRetriever<Catalog>>(),
-                                         serviceProvider.GetRequiredService<IDatabaseCommandProvider<CatalogIdentity>>(),
-                                         new PagedSelectDatabaseCommandProvider(new CatalogPagedEntityRetrieverSettings()),
-                                         new SelectDatabaseCommandProvider(new CatalogPagedEntityRetrieverSettings()),
-                                         serviceProvider.GetRequiredService<IDatabaseCommandProvider<Catalog>>()));
+                //find/query:
+                x.AddSingleton<IDatabaseEntityMapper<Catalog>, CatalogEntityMapper>();
 
-            //findall/findallpaged:
-            instance.AddSingleton<IDatabaseEntityRetriever<ExtraField>, DatabaseEntityRetriever<ExtraField>>();
+                //repository:
+                x.AddScoped<ICatalogRepository, CatalogRepository>();
 
-            //add/update/delete:
-            instance.AddSingleton<IDatabaseCommandProcessor<ExtraField>, DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>>();
-            instance.AddSingleton<IDatabaseCommandEntityProvider<ExtraField, ExtraFieldBuilder>, ExtraFieldDatabaseCommandEntityProvider>();
-            instance.AddSingleton<IDatabaseCommandProvider<ExtraField>, ExtraFieldCommandProvider>();
+                //findall/findallpaged:
+                x.AddScoped<IDatabaseEntityRetriever<ExtraField>, DatabaseEntityRetriever<ExtraField>>();
 
-            //find:
-            instance.AddSingleton<IDatabaseCommandProvider<ExtraFieldIdentity>, ExtraFieldIdentityCommandProvider>();
-            
-            //find/query:
-            instance.AddSingleton<IDatabaseEntityMapper<ExtraField>, ExtraFieldEntityMapper>();
+                //add/update/delete:
+                x.AddScoped<IDatabaseCommandProcessor<ExtraField>, DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>>();
+                x.AddScoped<IDatabaseCommandEntityProvider<ExtraField, ExtraFieldBuilder>, ExtraFieldDatabaseCommandEntityProvider>();
+                x.AddSingleton<IDatabaseCommandProvider<ExtraField>, ExtraFieldCommandProvider>();
 
-            //repository:
-            instance.AddSingleton<IExtraFieldRepository>(serviceProvider =>
-                new ExtraFieldRepository(serviceProvider.GetRequiredService<IDatabaseCommandProcessor<ExtraField>>(),
-                                         serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
-                                         serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraFieldIdentity>>(),
-                                         new PagedSelectDatabaseCommandProvider(new ExtraFieldPagedEntityRetrieverSettings()),
-                                         new SelectDatabaseCommandProvider(new ExtraFieldPagedEntityRetrieverSettings()),
-                                         serviceProvider.GetRequiredService<IDatabaseCommandProvider<ExtraField>>()));
+                //find:
+                x.AddSingleton<IDatabaseCommandProvider<ExtraFieldIdentity>, ExtraFieldIdentityCommandProvider>();
 
-            //query (default implementation):
-            instance.AddSingleton<IPagedDatabaseCommandProvider<ExtraFieldQuery>>(serviceProvider =>
-                new QueryPagedDatabaseCommandProvider<ExtraFieldQuery>(new ExtraFieldQueryFieldProvider(),
-                                                                       new ExtraFieldPagedEntityRetrieverSettings(),
-                                                                       serviceProvider.GetRequiredService<IQueryExpressionEvaluator>()));
-            instance.AddSingleton<IQueryProcessor<ExtraFieldQuery, ExtraField>>(serviceProvider =>
-                new QueryProcessor<ExtraFieldQuery, ExtraField>(serviceProvider.GetRequiredService<IDatabaseEntityRetriever<ExtraField>>(),
-                                                                serviceProvider.GetRequiredService<IPagedDatabaseCommandProvider<ExtraFieldQuery>>()));
+                //query:
+                x.AddSingleton<IQueryFieldInfoProvider, ExtraFieldQueryFieldInfoProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverProvider, ExtraFieldDatabaseEntityRetrieverProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<IPagedDatabaseEntityRetrieverSettingsProvider, ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider>();
 
+                //find/query:
+                x.AddSingleton<IDatabaseEntityMapper<ExtraField>, ExtraFieldEntityMapper>();
 
-            return instance;
+                //repository:
+                x.AddScoped<IExtraFieldRepository, ExtraFieldRepository>();
+            });
         }
     }
 }
