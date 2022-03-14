@@ -12,18 +12,15 @@ public class IntegrationTests
     [Fact]
     public void CanGenerateAll()
     {
-        Verify(GenerateCode.For<Builders>(Settings));
-        Verify(GenerateCode.For<Records>(Settings));
-    }
+        // Arrange
+        var multipleContentBuilder = new MultipleContentBuilder { BasePath = Settings.BasePath };
 
-    private void Verify(GenerateCode generatedCode)
-    {
-        if (Settings.DryRun)
-        {
-            var actual = generatedCode.GenerationEnvironment.ToString();
+        // Act
+        GenerateCode.For<Builders>(Settings, multipleContentBuilder);
+        GenerateCode.For<Records>(Settings, multipleContentBuilder);
+        var actual = multipleContentBuilder.ToString();
 
-            // Assert
-            actual.NormalizeLineEndings().Should().NotBeNullOrEmpty().And.NotStartWith("Error:");
-        }
+        // Assert
+        actual.NormalizeLineEndings().Should().NotBeNullOrEmpty().And.NotStartWith("Error:");
     }
 }
