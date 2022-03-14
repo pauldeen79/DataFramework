@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.6" />
-    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.3.29" />
-    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.3.29" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.10" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.10" />
+    <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.3.34" />
+    <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.3.34" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.13" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.13" />
   </ItemGroup>
 
   <ItemGroup>
