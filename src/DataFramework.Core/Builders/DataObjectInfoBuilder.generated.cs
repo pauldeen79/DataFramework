@@ -158,7 +158,7 @@ namespace DataFramework.Core.Builders
             return new DataFramework.Core.DataObjectInfo(Fields.Select(x => x.Build()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
         }
 
-        public DataObjectInfoBuilder WithAssemblyName(System.Func<string>? assemblyNameDelegate)
+        public DataObjectInfoBuilder WithAssemblyName(System.Func<string?> assemblyNameDelegate)
         {
             _assemblyNameDelegate = new (assemblyNameDelegate);
             return this;
@@ -170,7 +170,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public DataObjectInfoBuilder WithDescription(System.Func<string>? descriptionDelegate)
+        public DataObjectInfoBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -182,7 +182,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public DataObjectInfoBuilder WithDisplayName(System.Func<string>? displayNameDelegate)
+        public DataObjectInfoBuilder WithDisplayName(System.Func<string?> displayNameDelegate)
         {
             _displayNameDelegate = new (displayNameDelegate);
             return this;
@@ -248,7 +248,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public DataObjectInfoBuilder WithTypeName(System.Func<string>? typeNameDelegate)
+        public DataObjectInfoBuilder WithTypeName(System.Func<string?> typeNameDelegate)
         {
             _typeNameDelegate = new (typeNameDelegate);
             return this;

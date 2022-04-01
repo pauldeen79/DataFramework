@@ -124,7 +124,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        public TestEntityBuilder WithId(System.Func<int> idDelegate)
         {
             _idDelegate = new (idDelegate);
             return this;
@@ -136,7 +136,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        public TestEntityBuilder WithName(System.Func<string> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
@@ -148,7 +148,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        public TestEntityBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -160,7 +160,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        public TestEntityBuilder WithIdOriginal(System.Func<int?> idOriginalDelegate)
         {
             _idOriginalDelegate = new (idOriginalDelegate);
             return this;
@@ -172,7 +172,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        public TestEntityBuilder WithNameOriginal(System.Func<string?> nameOriginalDelegate)
         {
             _nameOriginalDelegate = new (nameOriginalDelegate);
             return this;
@@ -184,7 +184,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string?> descriptionOriginalDelegate)
         {
             _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
             return this;
@@ -346,7 +346,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        public TestEntityBuilder WithId(System.Func<int> idDelegate)
         {
             _idDelegate = new (idDelegate);
             return this;
@@ -358,7 +358,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        public TestEntityBuilder WithName(System.Func<string> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
@@ -370,7 +370,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        public TestEntityBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -382,7 +382,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        public TestEntityBuilder WithIdOriginal(System.Func<int?> idOriginalDelegate)
         {
             _idOriginalDelegate = new (idOriginalDelegate);
             return this;
@@ -394,7 +394,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        public TestEntityBuilder WithNameOriginal(System.Func<string?> nameOriginalDelegate)
         {
             _nameOriginalDelegate = new (nameOriginalDelegate);
             return this;
@@ -406,7 +406,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string?> descriptionOriginalDelegate)
         {
             _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
             return this;
@@ -568,7 +568,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        public TestEntityBuilder WithId(System.Func<int> idDelegate)
         {
             _idDelegate = new (idDelegate);
             return this;
@@ -580,7 +580,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        public TestEntityBuilder WithName(System.Func<string> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
@@ -592,7 +592,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        public TestEntityBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -604,7 +604,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        public TestEntityBuilder WithIdOriginal(System.Func<int?> idOriginalDelegate)
         {
             _idOriginalDelegate = new (idOriginalDelegate);
             return this;
@@ -616,7 +616,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        public TestEntityBuilder WithNameOriginal(System.Func<string?> nameOriginalDelegate)
         {
             _nameOriginalDelegate = new (nameOriginalDelegate);
             return this;
@@ -628,7 +628,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string?> descriptionOriginalDelegate)
         {
             _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
             return this;
@@ -793,7 +793,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        public TestEntityBuilder WithId(System.Func<int> idDelegate)
         {
             _idDelegate = new (idDelegate);
             return this;
@@ -805,7 +805,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        public TestEntityBuilder WithName(System.Func<string> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
@@ -817,7 +817,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        public TestEntityBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -829,7 +829,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        public TestEntityBuilder WithIdOriginal(System.Func<int?> idOriginalDelegate)
         {
             _idOriginalDelegate = new (idOriginalDelegate);
             return this;
@@ -841,7 +841,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        public TestEntityBuilder WithNameOriginal(System.Func<string?> nameOriginalDelegate)
         {
             _nameOriginalDelegate = new (nameOriginalDelegate);
             return this;
@@ -853,7 +853,7 @@ namespace EntityBuilders
             return this;
         }
 
-        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string?> descriptionOriginalDelegate)
         {
             _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
             return this;

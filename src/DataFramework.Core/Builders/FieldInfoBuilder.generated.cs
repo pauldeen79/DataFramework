@@ -237,7 +237,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public FieldInfoBuilder WithDefaultValue(System.Func<object>? defaultValueDelegate)
+        public FieldInfoBuilder WithDefaultValue(System.Func<object?> defaultValueDelegate)
         {
             _defaultValueDelegate = new (defaultValueDelegate);
             return this;
@@ -249,7 +249,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public FieldInfoBuilder WithDescription(System.Func<string>? descriptionDelegate)
+        public FieldInfoBuilder WithDescription(System.Func<string?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
@@ -261,7 +261,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public FieldInfoBuilder WithDisplayName(System.Func<string>? displayNameDelegate)
+        public FieldInfoBuilder WithDisplayName(System.Func<string?> displayNameDelegate)
         {
             _displayNameDelegate = new (displayNameDelegate);
             return this;
@@ -363,7 +363,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public FieldInfoBuilder WithTypeName(System.Func<string>? typeNameDelegate)
+        public FieldInfoBuilder WithTypeName(System.Func<string?> typeNameDelegate)
         {
             _typeNameDelegate = new (typeNameDelegate);
             return this;

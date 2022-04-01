@@ -58,7 +58,7 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public MetadataBuilder WithValue(System.Func<object>? valueDelegate)
+        public MetadataBuilder WithValue(System.Func<object?> valueDelegate)
         {
             _valueDelegate = new (valueDelegate);
             return this;
