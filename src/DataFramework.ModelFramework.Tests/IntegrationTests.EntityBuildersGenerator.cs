@@ -38,43 +38,79 @@ namespace EntityBuilders
         [System.ComponentModel.DataAnnotations.Required]
         public int Id
         {
-            get;
-            set;
+            get
+            {
+                return _idDelegate.Value;
+            }
+            set
+            {
+                _idDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.Required]
         public string Name
         {
-            get;
-            set;
+            get
+            {
+                return _nameDelegate.Value;
+            }
+            set
+            {
+                _nameDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.StringLength(255)]
         public string? Description
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionDelegate.Value;
+            }
+            set
+            {
+                _descriptionDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.ReadOnly(true)]
         public int? IdOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _idOriginalDelegate.Value;
+            }
+            set
+            {
+                _idOriginalDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.ReadOnly(true)]
         public string? NameOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _nameOriginalDelegate.Value;
+            }
+            set
+            {
+                _nameOriginalDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.ReadOnly(true)]
         public string? DescriptionOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionOriginalDelegate.Value;
+            }
+            set
+            {
+                _descriptionOriginalDelegate = new (() => value);
+            }
         }
 
         public Entities.TestEntity Build()
@@ -88,9 +124,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        {
+            _idDelegate = new (idDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithName(string name)
         {
             Name = name;
+            return this;
+        }
+
+        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        {
+            _nameDelegate = new (nameDelegate);
             return this;
         }
 
@@ -100,9 +148,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        {
+            _descriptionDelegate = new (descriptionDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
+            return this;
+        }
+
+        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        {
+            _idOriginalDelegate = new (idOriginalDelegate);
             return this;
         }
 
@@ -112,27 +172,55 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        {
+            _nameOriginalDelegate = new (nameOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithDescriptionOriginal(string? descriptionOriginal)
         {
             DescriptionOriginal = descriptionOriginal;
             return this;
         }
 
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        {
+            _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder()
         {
-            Id = default;
-            Name = string.Empty;
+            _idDelegate = new (() => default);
+            _nameDelegate = new (() => string.Empty);
+            _descriptionDelegate = new (() => default);
+            _idOriginalDelegate = new (() => default);
+            _nameOriginalDelegate = new (() => default);
+            _descriptionOriginalDelegate = new (() => default);
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
         {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
+            _idDelegate = new (() => source.Id);
+            _nameDelegate = new (() => source.Name);
+            _descriptionDelegate = new (() => source.Description);
+            _idOriginalDelegate = new (() => source.IdOriginal);
+            _nameOriginalDelegate = new (() => source.NameOriginal);
+            _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
+
+        private System.Lazy<int> _idDelegate;
+
+        private System.Lazy<string> _nameDelegate;
+
+        private System.Lazy<string?> _descriptionDelegate;
+
+        private System.Lazy<int?> _idOriginalDelegate;
+
+        private System.Lazy<string?> _nameOriginalDelegate;
+
+        private System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -175,40 +263,76 @@ namespace EntityBuilders
         [System.ComponentModel.DataAnnotations.Required]
         public int Id
         {
-            get;
-            set;
+            get
+            {
+                return _idDelegate.Value;
+            }
+            set
+            {
+                _idDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.Required]
         public string Name
         {
-            get;
-            set;
+            get
+            {
+                return _nameDelegate.Value;
+            }
+            set
+            {
+                _nameDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.StringLength(255)]
         public string? Description
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionDelegate.Value;
+            }
+            set
+            {
+                _descriptionDelegate = new (() => value);
+            }
         }
 
         public int? IdOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _idOriginalDelegate.Value;
+            }
+            set
+            {
+                _idOriginalDelegate = new (() => value);
+            }
         }
 
         public string? NameOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _nameOriginalDelegate.Value;
+            }
+            set
+            {
+                _nameOriginalDelegate = new (() => value);
+            }
         }
 
         public string? DescriptionOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionOriginalDelegate.Value;
+            }
+            set
+            {
+                _descriptionOriginalDelegate = new (() => value);
+            }
         }
 
         public Entities.TestEntity Build()
@@ -222,9 +346,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        {
+            _idDelegate = new (idDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithName(string name)
         {
             Name = name;
+            return this;
+        }
+
+        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        {
+            _nameDelegate = new (nameDelegate);
             return this;
         }
 
@@ -234,9 +370,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        {
+            _descriptionDelegate = new (descriptionDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
+            return this;
+        }
+
+        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        {
+            _idOriginalDelegate = new (idOriginalDelegate);
             return this;
         }
 
@@ -246,27 +394,55 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        {
+            _nameOriginalDelegate = new (nameOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithDescriptionOriginal(string? descriptionOriginal)
         {
             DescriptionOriginal = descriptionOriginal;
             return this;
         }
 
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        {
+            _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder()
         {
-            Id = default;
-            Name = string.Empty;
+            _idDelegate = new (() => default);
+            _nameDelegate = new (() => string.Empty);
+            _descriptionDelegate = new (() => default);
+            _idOriginalDelegate = new (() => default);
+            _nameOriginalDelegate = new (() => default);
+            _descriptionOriginalDelegate = new (() => default);
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
         {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
+            _idDelegate = new (() => source.Id);
+            _nameDelegate = new (() => source.Name);
+            _descriptionDelegate = new (() => source.Description);
+            _idOriginalDelegate = new (() => source.IdOriginal);
+            _nameOriginalDelegate = new (() => source.NameOriginal);
+            _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
+
+        private System.Lazy<int> _idDelegate;
+
+        private System.Lazy<string> _nameDelegate;
+
+        private System.Lazy<string?> _descriptionDelegate;
+
+        private System.Lazy<int?> _idOriginalDelegate;
+
+        private System.Lazy<string?> _nameOriginalDelegate;
+
+        private System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -309,40 +485,76 @@ namespace EntityBuilders
         [System.ComponentModel.DataAnnotations.Required]
         public int Id
         {
-            get;
-            set;
+            get
+            {
+                return _idDelegate.Value;
+            }
+            set
+            {
+                _idDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.Required]
         public string Name
         {
-            get;
-            set;
+            get
+            {
+                return _nameDelegate.Value;
+            }
+            set
+            {
+                _nameDelegate = new (() => value);
+            }
         }
 
         [System.ComponentModel.DataAnnotations.StringLength(255)]
         public string? Description
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionDelegate.Value;
+            }
+            set
+            {
+                _descriptionDelegate = new (() => value);
+            }
         }
 
         public int? IdOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _idOriginalDelegate.Value;
+            }
+            set
+            {
+                _idOriginalDelegate = new (() => value);
+            }
         }
 
         public string? NameOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _nameOriginalDelegate.Value;
+            }
+            set
+            {
+                _nameOriginalDelegate = new (() => value);
+            }
         }
 
         public string? DescriptionOriginal
         {
-            get;
-            set;
+            get
+            {
+                return _descriptionOriginalDelegate.Value;
+            }
+            set
+            {
+                _descriptionOriginalDelegate = new (() => value);
+            }
         }
 
         public Entities.TestEntity Build()
@@ -356,9 +568,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        {
+            _idDelegate = new (idDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithName(string name)
         {
             Name = name;
+            return this;
+        }
+
+        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        {
+            _nameDelegate = new (nameDelegate);
             return this;
         }
 
@@ -368,9 +592,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        {
+            _descriptionDelegate = new (descriptionDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
+            return this;
+        }
+
+        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        {
+            _idOriginalDelegate = new (idOriginalDelegate);
             return this;
         }
 
@@ -380,27 +616,55 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        {
+            _nameOriginalDelegate = new (nameOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithDescriptionOriginal(string? descriptionOriginal)
         {
             DescriptionOriginal = descriptionOriginal;
             return this;
         }
 
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        {
+            _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder()
         {
-            Id = default;
-            Name = string.Empty;
+            _idDelegate = new (() => default);
+            _nameDelegate = new (() => string.Empty);
+            _descriptionDelegate = new (() => default);
+            _idOriginalDelegate = new (() => default);
+            _nameOriginalDelegate = new (() => default);
+            _descriptionOriginalDelegate = new (() => default);
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
         {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
+            _idDelegate = new (() => source.Id);
+            _nameDelegate = new (() => source.Name);
+            _descriptionDelegate = new (() => source.Description);
+            _idOriginalDelegate = new (() => source.IdOriginal);
+            _nameOriginalDelegate = new (() => source.NameOriginal);
+            _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
+
+        private System.Lazy<int> _idDelegate;
+
+        private System.Lazy<string> _nameDelegate;
+
+        private System.Lazy<string?> _descriptionDelegate;
+
+        private System.Lazy<int?> _idOriginalDelegate;
+
+        private System.Lazy<string?> _nameOriginalDelegate;
+
+        private System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -445,12 +709,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _id;
+                return _idDelegate.Value;
             }
             set
             {
-                _id = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Id""));
+                _idDelegate = new (() => value);
             }
         }
 
@@ -459,12 +722,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _name;
+                return _nameDelegate.Value;
             }
             set
             {
-                _name = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Name""));
+                _nameDelegate = new (() => value);
             }
         }
 
@@ -473,12 +735,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _description;
+                return _descriptionDelegate.Value;
             }
             set
             {
-                _description = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Description""));
+                _descriptionDelegate = new (() => value);
             }
         }
 
@@ -487,12 +748,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _idOriginal;
+                return _idOriginalDelegate.Value;
             }
             set
             {
-                _idOriginal = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Id""));
+                _idOriginalDelegate = new (() => value);
             }
         }
 
@@ -501,12 +761,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _nameOriginal;
+                return _nameOriginalDelegate.Value;
             }
             set
             {
-                _nameOriginal = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Name""));
+                _nameOriginalDelegate = new (() => value);
             }
         }
 
@@ -515,12 +774,11 @@ namespace EntityBuilders
         {
             get
             {
-                return _descriptionOriginal;
+                return _descriptionOriginalDelegate.Value;
             }
             set
             {
-                _descriptionOriginal = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(""Description""));
+                _descriptionOriginalDelegate = new (() => value);
             }
         }
 
@@ -535,9 +793,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithId(System.Func<int idDelegate)
+        {
+            _idDelegate = new (idDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithName(string name)
         {
             Name = name;
+            return this;
+        }
+
+        public TestEntityBuilder WithName(System.Func<string nameDelegate)
+        {
+            _nameDelegate = new (nameDelegate);
             return this;
         }
 
@@ -547,9 +817,21 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithDescription(System.Func<string? descriptionDelegate)
+        {
+            _descriptionDelegate = new (descriptionDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithIdOriginal(int? idOriginal)
         {
             IdOriginal = idOriginal;
+            return this;
+        }
+
+        public TestEntityBuilder WithIdOriginal(System.Func<int? idOriginalDelegate)
+        {
+            _idOriginalDelegate = new (idOriginalDelegate);
             return this;
         }
 
@@ -559,26 +841,42 @@ namespace EntityBuilders
             return this;
         }
 
+        public TestEntityBuilder WithNameOriginal(System.Func<string? nameOriginalDelegate)
+        {
+            _nameOriginalDelegate = new (nameOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder WithDescriptionOriginal(string? descriptionOriginal)
         {
             DescriptionOriginal = descriptionOriginal;
             return this;
         }
 
+        public TestEntityBuilder WithDescriptionOriginal(System.Func<string? descriptionOriginalDelegate)
+        {
+            _descriptionOriginalDelegate = new (descriptionOriginalDelegate);
+            return this;
+        }
+
         public TestEntityBuilder()
         {
-            Id = default;
-            Name = string.Empty;
+            _idDelegate = new (() => default);
+            _nameDelegate = new (() => string.Empty);
+            _descriptionDelegate = new (() => default);
+            _idOriginalDelegate = new (() => default);
+            _nameOriginalDelegate = new (() => default);
+            _descriptionOriginalDelegate = new (() => default);
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
         {
-            Id = source.Id;
-            Name = source.Name;
-            Description = source.Description;
-            IdOriginal = source.IdOriginal;
-            NameOriginal = source.NameOriginal;
-            DescriptionOriginal = source.DescriptionOriginal;
+            _idDelegate = new (() => source.Id);
+            _nameDelegate = new (() => source.Name);
+            _descriptionDelegate = new (() => source.Description);
+            _idOriginalDelegate = new (() => source.IdOriginal);
+            _nameOriginalDelegate = new (() => source.NameOriginal);
+            _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
 
         private int _id;
@@ -598,6 +896,18 @@ namespace EntityBuilders
         private bool? _isExistingEntityOriginal;
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        private System.Lazy<int> _idDelegate;
+
+        private System.Lazy<string> _nameDelegate;
+
+        private System.Lazy<string?> _descriptionDelegate;
+
+        private System.Lazy<int?> _idOriginalDelegate;
+
+        private System.Lazy<string?> _nameOriginalDelegate;
+
+        private System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -639,8 +949,14 @@ namespace GeneratedNamespace
         [System.ComponentModel.DataAnnotations.Required]
         public long Id
         {
-            get;
-            set;
+            get
+            {
+                return _idDelegate.Value;
+            }
+            set
+            {
+                _idDelegate = new (() => value);
+            }
         }
 
         public System.Collections.Generic.List<string> Tags
@@ -660,6 +976,12 @@ namespace GeneratedNamespace
             return this;
         }
 
+        public TestEntityBuilder WithId(System.Func<long> idDelegate)
+        {
+            _idDelegate = new (idDelegate);
+            return this;
+        }
+
         public TestEntityBuilder AddTags(System.Collections.Generic.IEnumerable<string> tags)
         {
             return AddTags(tags.ToArray());
@@ -674,15 +996,17 @@ namespace GeneratedNamespace
         public TestEntityBuilder()
         {
             Tags = new System.Collections.Generic.List<string>();
-            Id = default;
+            _idDelegate = new (() => default);
         }
 
         public TestEntityBuilder(TestEntity source)
         {
             Tags = new System.Collections.Generic.List<string>();
-            Id = source.Id;
+            _idDelegate = new (() => source.Id);
             Tags.AddRange(source.Tags);
         }
+
+        private System.Lazy<long> _idDelegate;
     }
 #nullable restore
 }

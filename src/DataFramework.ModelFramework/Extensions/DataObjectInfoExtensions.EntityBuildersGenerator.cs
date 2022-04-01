@@ -7,7 +7,6 @@ public static partial class DataObjectInfoExtensions
 
     public static ClassBuilder ToEntityBuilderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
     {
-        var entityClassType = instance.GetEntityClassType(settings.DefaultEntityClassType);
         var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(settings.DefaultRenderMetadataAsAttributes);
 
         return instance
@@ -25,9 +24,9 @@ public static partial class DataObjectInfoExtensions
                 .ToList()
                 .ForEach(y => x.Properties.Remove(y.Property));
             })
-            .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true),
-                                                                              poco: entityClassType.HasPropertySetter(),
-                                                                              addNullChecks: !settings.EnableNullableContext))
+            .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true, addNullChecks: !settings.EnableNullableContext),
+                                                                              enableNullableReferenceTypes: settings.EnableNullableContext,
+                                                                              useLazyInitialization: true))
             .WithNamespace(instance.GetEntityBuildersNamespace())
             .Chain(x => x.Attributes.Clear())
             .AddAttributes(instance.GetEntityBuilderClassAttributes(renderMetadataAsAttributes));
