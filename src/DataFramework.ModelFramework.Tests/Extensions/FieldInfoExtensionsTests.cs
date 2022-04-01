@@ -570,7 +570,10 @@ public class FieldInfoExtensionsTests
     public void GetSqlFieldType_Returns_Empty_Result_For_Null_Type()
     {
         // Arrange
-        var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(null).Build();
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        string? val = null;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(val).Build();
 
         // Act
         var actual = sut.GetSqlFieldType();

@@ -537,9 +537,12 @@ namespace GeneratedNamespace
     {
         // Arrange
         var settings = GeneratorSettings.Default;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        string? val = null;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         var sut = new DataObjectInfoBuilder()
             .WithName("Test")
-            .AddFields(new FieldInfoBuilder().WithName("Test").WithDisplayName(null))
+            .AddFields(new FieldInfoBuilder().WithName("Test").WithDisplayName(val))
             .Build()
             .ToEntityClass(settings);
 

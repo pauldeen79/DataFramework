@@ -280,7 +280,10 @@ public class EnumerableOfMetadataExtensionsTests
     public void GetStringValue_Returns_String_When_Found_Value_Is_Null()
     {
         // Arrange
-        var sut = new[] { new MetadataBuilder().WithName("Name").WithValue(null).Build() };
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        object? val = null;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+        var sut = new[] { new MetadataBuilder().WithName("Name").WithValue(val).Build() };
 
         // Act
         var actual = sut.GetStringValue("Name", "DefaultValue");
