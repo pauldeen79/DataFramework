@@ -39,7 +39,7 @@ namespace DatabaseCommandProviders
             yield return new IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
         }
 
-        public TestEntityIdentityCommandProvider(): base(new EntityRetrieverSettings.TestEntityPagedEntityRetrieverSettings())
+        public TestEntityIdentityCommandProvider(): base(new PagedEntityRetrieverSettings.TestEntityPagedEntityRetrieverSettings())
         {
         }
     }

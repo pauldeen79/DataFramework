@@ -67,9 +67,9 @@ public partial class IntegrationTests
             .WithQueryFieldProviderVisibility(Visibility.Internal)
             .AddQueryFieldProviderAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
 
-            .WithEntityRetrieverSettingsNamespace("EntityRetrieverSettings")
-            .WithEntityRetrieverSettingsVisibility(Visibility.Internal)
-            .AddEntityRetrieverSettingsAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
+            .WithPagedEntityRetrieverSettingsNamespace("PagedEntityRetrieverSettings")
+            .WithPagedEntityRetrieverSettingsVisibility(Visibility.Internal)
+            .AddPagedEntityRetrieverSettingsAttributes(new AttributeBuilder().WithName(typeof(ExcludeFromCodeCoverageAttribute).FullName))
 
             .WithCommandEntityProviderNamespace("CommandEntityProviders")
             .WithCommandEntityProviderVisibility(Visibility.Internal)

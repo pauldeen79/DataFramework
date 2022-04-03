@@ -58,8 +58,8 @@ public static partial class DataObjectInfoExtensions
         => instance.Metadata.GetStringValue(QueryFieldInfos.Namespace)
             .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
-    internal static string GetEntityRetrieverSettingsNamespace(this IDataObjectInfo instance)
-        => instance.Metadata.GetStringValue(EntityRetrieverSettings.Namespace)
+    internal static string GetPagedEntityRetrieverSettingsNamespace(this IDataObjectInfo instance)
+        => instance.Metadata.GetStringValue(PagedEntityRetrieverSettings.Namespace)
             .WhenNullOrEmpty(() => instance.GetEntitiesNamespace());
 
     internal static string GetEntityMapperNamespace(this IDataObjectInfo instance)
@@ -92,7 +92,7 @@ public static partial class DataObjectInfoExtensions
 
     internal static string GetEntityRetrieverFullName(this IDataObjectInfo instance)
     {
-        var ns = instance.GetEntityRetrieverSettingsNamespace();
+        var ns = instance.GetPagedEntityRetrieverSettingsNamespace();
         return string.IsNullOrEmpty(ns)
             ? $"{instance.Name}PagedEntityRetrieverSettings"
             : $"{ns}.{instance.Name}PagedEntityRetrieverSettings";

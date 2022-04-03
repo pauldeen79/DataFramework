@@ -1,8 +1,8 @@
 ﻿namespace DataFramework.ModelFramework.MetadataNames;
 
-internal static class EntityRetrieverSettings
+internal static class PagedEntityRetrieverSettings
 {
-    internal const string Root = Base.Root + ".EntityRetrieverSettings";
+    internal const string Root = Base.Root + ".PagedEntityRetrieverSettings";
 
     internal const string Namespace = Root + ".Namespace";
     internal const string Visibility = Root + ".Visibility";

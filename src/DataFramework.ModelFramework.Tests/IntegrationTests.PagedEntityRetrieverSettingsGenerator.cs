@@ -3,11 +3,11 @@
 public partial class IntegrationTests
 {
     [Fact]
-    public void Can_Generate_EntityRetrieverSettings()
+    public void Can_Generate_PagedEntityRetrieverSettings()
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToEntityRetrieverSettingsClass(settings);
+        var input = CreateDataObjectInfo(default(EntityClassType)).ToPagedEntityRetrieverSettingsClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -27,10 +27,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EntityRetrieverSettings
+namespace PagedEntityRetrieverSettings
 {
 #nullable enable
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.PagedEntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityPagedEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
     {
