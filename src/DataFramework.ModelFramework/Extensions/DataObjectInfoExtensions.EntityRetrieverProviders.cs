@@ -48,7 +48,8 @@ public static partial class DataObjectInfoExtensions
                 new ParameterBuilder()
                     .WithName("result")
                     .WithIsNullable()
-                    .WithTypeName($"out {typeof(IDatabaseEntityRetriever<>).CreateGenericTypeName("TResult")}")
+                    .WithTypeName(typeof(IDatabaseEntityRetriever<>).CreateGenericTypeName("TResult"))
+                    .WithIsOut()
             )
             .AddLiteralCodeStatements
             (
