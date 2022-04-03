@@ -4,6 +4,7 @@ using CrossCutting.Data.Sql;
 using DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders;
 using DataFramework.ModelFramework.Poc.DatabaseCommandProviders;
 using DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverProviders;
+using DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverSettingsProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders;
 using DataFramework.ModelFramework.Poc.QueryFieldProviders;
@@ -36,7 +37,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 //query:
                 x.AddSingleton<IQueryFieldInfoProvider, CatalogQueryFieldInfoProvider>();
                 x.AddSingleton<IDatabaseEntityRetrieverProvider, CatalogDatabaseEntityRetrieverProvider>();
-                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, CatalogPagedDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, CatalogDatabaseEntityRetrieverSettingsProvider>();
                 x.AddSingleton<IPagedDatabaseEntityRetrieverSettingsProvider, CatalogPagedDatabaseEntityRetrieverSettingsProvider>();
 
                 //find/query:
@@ -59,7 +60,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 //query:
                 x.AddSingleton<IQueryFieldInfoProvider, ExtraFieldQueryFieldInfoProvider>();
                 x.AddSingleton<IDatabaseEntityRetrieverProvider, ExtraFieldDatabaseEntityRetrieverProvider>();
-                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<IDatabaseEntityRetrieverSettingsProvider, ExtraFieldDatabaseEntityRetrieverSettingsProvider>();
                 x.AddSingleton<IPagedDatabaseEntityRetrieverSettingsProvider, ExtraFieldPagedDatabaseEntityRetrieverSettingsProvider>();
 
                 //find/query:

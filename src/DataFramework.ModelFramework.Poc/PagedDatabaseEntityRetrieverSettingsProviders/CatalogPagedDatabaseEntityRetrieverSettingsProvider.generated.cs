@@ -5,23 +5,11 @@ using PDC.Net.Core.Queries;
 
 namespace DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders
 {
-    public class CatalogPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider, IDatabaseEntityRetrieverSettingsProvider
+    public class CatalogPagedDatabaseEntityRetrieverSettingsProvider : IPagedDatabaseEntityRetrieverSettingsProvider
     {
         public bool TryGet<TSource>(out IPagedDatabaseEntityRetrieverSettings settings)
         {
             if (typeof(TSource) == typeof(CatalogIdentity) || typeof(TSource) == typeof(CatalogQuery))
-            {
-                settings = new CatalogPagedEntityRetrieverSettings();
-                return true;
-            }
-
-            settings = default;
-            return false;
-        }
-
-        public bool TryGet<TSource>(out IDatabaseEntityRetrieverSettings settings)
-        {
-            if (typeof(TSource) == typeof(Catalog) || typeof(TSource) == typeof(CatalogQuery))
             {
                 settings = new CatalogPagedEntityRetrieverSettings();
                 return true;
