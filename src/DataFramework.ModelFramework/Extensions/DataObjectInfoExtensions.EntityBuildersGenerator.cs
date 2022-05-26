@@ -22,7 +22,7 @@ public static partial class DataObjectInfoExtensions
                 )
                 .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
                 .ToList()
-                .ForEach(y => x.Properties.Remove(y.Property));
+                .ForEach(y => ((ICollection<IClassProperty>)x.Properties).Remove(y.Property));
             })
             .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true, addNullChecks: !settings.EnableNullableContext),
                                                                               enableNullableReferenceTypes: settings.EnableNullableContext,
