@@ -20,13 +20,11 @@ namespace DataFramework.Core
         public string Name
         {
             get;
-            private set;
         }
 
         public object? Value
         {
             get;
-            private set;
         }
 
         public MetadataBase(string name, object? value)

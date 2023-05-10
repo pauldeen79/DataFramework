@@ -20,91 +20,76 @@ namespace DataFramework.Core
         public string Name
         {
             get;
-            private set;
         }
 
         public string? Description
         {
             get;
-            private set;
         }
 
         public string? DisplayName
         {
             get;
-            private set;
         }
 
         public string? TypeName
         {
             get;
-            private set;
         }
 
         public bool IsNullable
         {
             get;
-            private set;
         }
 
         public bool IsVisible
         {
             get;
-            private set;
         }
 
         public bool IsReadOnly
         {
             get;
-            private set;
         }
 
         public bool IsIdentityField
         {
             get;
-            private set;
         }
 
         public bool IsComputed
         {
             get;
-            private set;
         }
 
         public bool IsPersistable
         {
             get;
-            private set;
         }
 
         public bool CanGet
         {
             get;
-            private set;
         }
 
         public bool CanSet
         {
             get;
-            private set;
         }
 
         public bool UseForConcurrencyCheck
         {
             get;
-            private set;
         }
 
         public object? DefaultValue
         {
             get;
-            private set;
         }
 
         public System.Collections.Generic.IReadOnlyCollection<DataFramework.Abstractions.IMetadata> Metadata
         {
             get;
-            private set;
         }
 
         public FieldInfoBase(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isReadOnly, bool isIdentityField, bool isComputed, bool isPersistable, bool canGet, bool canSet, bool useForConcurrencyCheck, object? defaultValue, System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IMetadata> metadata)

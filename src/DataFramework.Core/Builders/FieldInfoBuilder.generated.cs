@@ -17,7 +17,7 @@ namespace DataFramework.Core.Builders
 #nullable enable
     public partial class FieldInfoBuilder
     {
-        public string Name
+        public System.Text.StringBuilder Name
         {
             get
             {
@@ -29,7 +29,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? Description
+        public System.Text.StringBuilder? Description
         {
             get
             {
@@ -41,7 +41,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? DisplayName
+        public System.Text.StringBuilder? DisplayName
         {
             get
             {
@@ -53,7 +53,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? TypeName
+        public System.Text.StringBuilder? TypeName
         {
             get
             {
@@ -195,7 +195,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            return new DataFramework.Core.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
+            return new DataFramework.Core.FieldInfo(Name?.ToString(), Description?.ToString(), DisplayName?.ToString(), TypeName?.ToString(), IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
@@ -204,7 +204,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            var instance = new DataFramework.Core.FieldInfoBase(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
+            var instance = new DataFramework.Core.FieldInfoBase(Name?.ToString(), Description?.ToString(), DisplayName?.ToString(), TypeName?.ToString(), IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.Build()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -212,57 +212,153 @@ namespace DataFramework.Core.Builders
             return results;
         }
 
-        public FieldInfoBuilder WithName(string name)
+        public FieldInfoBuilder WithName(System.Text.StringBuilder name)
         {
             Name = name;
             return this;
         }
 
-        public FieldInfoBuilder WithName(System.Func<string> nameDelegate)
+        public FieldInfoBuilder WithName(System.Func<System.Text.StringBuilder> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
         }
 
-        public FieldInfoBuilder WithDescription(string? description)
+        public FieldInfoBuilder WithName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Clear().Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendLineToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.AppendLine(value);
+            return this;
+        }
+
+        public FieldInfoBuilder WithDescription(System.Text.StringBuilder? description)
         {
             Description = description;
             return this;
         }
 
-        public FieldInfoBuilder WithDescription(System.Func<string?> descriptionDelegate)
+        public FieldInfoBuilder WithDescription(System.Func<System.Text.StringBuilder?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
         }
 
-        public FieldInfoBuilder WithDisplayName(string? displayName)
+        public FieldInfoBuilder WithDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.Clear().Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendToDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendLineToDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.AppendLine(value);
+            return this;
+        }
+
+        public FieldInfoBuilder WithDisplayName(System.Text.StringBuilder? displayName)
         {
             DisplayName = displayName;
             return this;
         }
 
-        public FieldInfoBuilder WithDisplayName(System.Func<string?> displayNameDelegate)
+        public FieldInfoBuilder WithDisplayName(System.Func<System.Text.StringBuilder?> displayNameDelegate)
         {
             _displayNameDelegate = new (displayNameDelegate);
             return this;
         }
 
-        public FieldInfoBuilder WithTypeName(string? typeName)
+        public FieldInfoBuilder WithDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.Clear().Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendToDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendLineToDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.AppendLine(value);
+            return this;
+        }
+
+        public FieldInfoBuilder WithTypeName(System.Text.StringBuilder? typeName)
         {
             TypeName = typeName;
             return this;
         }
 
-        public FieldInfoBuilder WithTypeName(System.Func<string?> typeNameDelegate)
+        public FieldInfoBuilder WithTypeName(System.Func<System.Text.StringBuilder?> typeNameDelegate)
         {
             _typeNameDelegate = new (typeNameDelegate);
             return this;
         }
 
+        public FieldInfoBuilder WithTypeName(string value)
+        {
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.Clear().Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendToTypeName(string value)
+        {
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.Append(value);
+            return this;
+        }
+
+        public FieldInfoBuilder AppendLineToTypeName(string value)
+        {
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.AppendLine(value);
+            return this;
+        }
+
         public FieldInfoBuilder WithType(System.Type type)
         {
-            TypeName = type?.AssemblyQualifiedName;
+            WithTypeName(type?.AssemblyQualifiedName!);
             return this;
         }
 
@@ -397,14 +493,20 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
+        public FieldInfoBuilder AddMetadata(string name, object? value)
+        {
+            AddMetadata(new MetadataBuilder().WithName(name).WithValue(value));
+            return this;
+        }
+
         public FieldInfoBuilder()
         {
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
             #pragma warning disable CS8603 // Possible null reference return.
-            _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default(string?));
-            _displayNameDelegate = new (() => default(string?));
-            _typeNameDelegate = new (() => default(string?));
+            _nameDelegate = new (() => new System.Text.StringBuilder());
+            _descriptionDelegate = new (() => default);
+            _displayNameDelegate = new (() => default);
+            _typeNameDelegate = new (() => default);
             _isNullableDelegate = new (() => default(bool));
             _isVisibleDelegate = new (() => true);
             _isReadOnlyDelegate = new (() => default(bool));
@@ -421,10 +523,10 @@ namespace DataFramework.Core.Builders
         public FieldInfoBuilder(DataFramework.Abstractions.IFieldInfo source)
         {
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
-            _nameDelegate = new (() => source.Name);
-            _descriptionDelegate = new (() => source.Description);
-            _displayNameDelegate = new (() => source.DisplayName);
-            _typeNameDelegate = new (() => source.TypeName);
+            _nameDelegate = new (() => new System.Text.StringBuilder(source.Name));
+            _descriptionDelegate = new (() => new System.Text.StringBuilder(source.Description));
+            _displayNameDelegate = new (() => new System.Text.StringBuilder(source.DisplayName));
+            _typeNameDelegate = new (() => new System.Text.StringBuilder(source.TypeName));
             _isNullableDelegate = new (() => source.IsNullable);
             _isVisibleDelegate = new (() => source.IsVisible);
             _isReadOnlyDelegate = new (() => source.IsReadOnly);
@@ -438,13 +540,13 @@ namespace DataFramework.Core.Builders
             Metadata.AddRange(source.Metadata.Select(x => new DataFramework.Core.Builders.MetadataBuilder(x)));
         }
 
-        protected System.Lazy<string> _nameDelegate;
+        protected System.Lazy<System.Text.StringBuilder> _nameDelegate;
 
-        protected System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _descriptionDelegate;
 
-        protected System.Lazy<string?> _displayNameDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _displayNameDelegate;
 
-        protected System.Lazy<string?> _typeNameDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _typeNameDelegate;
 
         protected System.Lazy<bool> _isNullableDelegate;
 

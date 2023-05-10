@@ -17,7 +17,7 @@ namespace DataFramework.Core.Builders
 #nullable enable
     public partial class MetadataBuilder
     {
-        public string Name
+        public System.Text.StringBuilder Name
         {
             get
             {
@@ -45,7 +45,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            return new DataFramework.Core.Metadata(Name, Value);
+            return new DataFramework.Core.Metadata(Name?.ToString(), Value);
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
@@ -54,7 +54,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            var instance = new DataFramework.Core.MetadataBase(Name, Value);
+            var instance = new DataFramework.Core.MetadataBase(Name?.ToString(), Value);
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -62,15 +62,39 @@ namespace DataFramework.Core.Builders
             return results;
         }
 
-        public MetadataBuilder WithName(string name)
+        public MetadataBuilder WithName(System.Text.StringBuilder name)
         {
             Name = name;
             return this;
         }
 
-        public MetadataBuilder WithName(System.Func<string> nameDelegate)
+        public MetadataBuilder WithName(System.Func<System.Text.StringBuilder> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
+            return this;
+        }
+
+        public MetadataBuilder WithName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Clear().Append(value);
+            return this;
+        }
+
+        public MetadataBuilder AppendToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Append(value);
+            return this;
+        }
+
+        public MetadataBuilder AppendLineToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.AppendLine(value);
             return this;
         }
 
@@ -89,18 +113,18 @@ namespace DataFramework.Core.Builders
         public MetadataBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _nameDelegate = new (() => string.Empty);
+            _nameDelegate = new (() => new System.Text.StringBuilder());
             _valueDelegate = new (() => default(object?));
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public MetadataBuilder(DataFramework.Abstractions.IMetadata source)
         {
-            _nameDelegate = new (() => source.Name);
+            _nameDelegate = new (() => new System.Text.StringBuilder(source.Name));
             _valueDelegate = new (() => source.Value);
         }
 
-        protected System.Lazy<string> _nameDelegate;
+        protected System.Lazy<System.Text.StringBuilder> _nameDelegate;
 
         protected System.Lazy<object?> _valueDelegate;
     }

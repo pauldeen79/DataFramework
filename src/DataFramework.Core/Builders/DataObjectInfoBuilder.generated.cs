@@ -23,7 +23,7 @@ namespace DataFramework.Core.Builders
             set;
         }
 
-        public string? AssemblyName
+        public System.Text.StringBuilder? AssemblyName
         {
             get
             {
@@ -35,7 +35,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? TypeName
+        public System.Text.StringBuilder? TypeName
         {
             get
             {
@@ -47,7 +47,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string Name
+        public System.Text.StringBuilder Name
         {
             get
             {
@@ -59,7 +59,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? Description
+        public System.Text.StringBuilder? Description
         {
             get
             {
@@ -71,7 +71,7 @@ namespace DataFramework.Core.Builders
             }
         }
 
-        public string? DisplayName
+        public System.Text.StringBuilder? DisplayName
         {
             get
             {
@@ -129,7 +129,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            return new DataFramework.Core.DataObjectInfo(Fields.Select(x => x.Build()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
+            return new DataFramework.Core.DataObjectInfo(Fields.Select(x => x.Build()), AssemblyName?.ToString(), TypeName?.ToString(), Name?.ToString(), Description?.ToString(), DisplayName?.ToString(), IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
@@ -138,7 +138,7 @@ namespace DataFramework.Core.Builders
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            var instance = new DataFramework.Core.DataObjectInfoBase(Fields.Select(x => x.Build()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
+            var instance = new DataFramework.Core.DataObjectInfoBase(Fields.Select(x => x.Build()), AssemblyName?.ToString(), TypeName?.ToString(), Name?.ToString(), Description?.ToString(), DisplayName?.ToString(), IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.Build()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -157,69 +157,189 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
-        public DataObjectInfoBuilder WithAssemblyName(string? assemblyName)
+        public DataObjectInfoBuilder WithAssemblyName(System.Text.StringBuilder? assemblyName)
         {
             AssemblyName = assemblyName;
             return this;
         }
 
-        public DataObjectInfoBuilder WithAssemblyName(System.Func<string?> assemblyNameDelegate)
+        public DataObjectInfoBuilder WithAssemblyName(System.Func<System.Text.StringBuilder?> assemblyNameDelegate)
         {
             _assemblyNameDelegate = new (assemblyNameDelegate);
             return this;
         }
 
-        public DataObjectInfoBuilder WithTypeName(string? typeName)
+        public DataObjectInfoBuilder WithAssemblyName(string value)
+        {
+            if (AssemblyName == null)
+                AssemblyName = new System.Text.StringBuilder();
+            AssemblyName.Clear().Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendToAssemblyName(string value)
+        {
+            if (AssemblyName == null)
+                AssemblyName = new System.Text.StringBuilder();
+            AssemblyName.Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendLineToAssemblyName(string value)
+        {
+            if (AssemblyName == null)
+                AssemblyName = new System.Text.StringBuilder();
+            AssemblyName.AppendLine(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithTypeName(System.Text.StringBuilder? typeName)
         {
             TypeName = typeName;
             return this;
         }
 
-        public DataObjectInfoBuilder WithTypeName(System.Func<string?> typeNameDelegate)
+        public DataObjectInfoBuilder WithTypeName(System.Func<System.Text.StringBuilder?> typeNameDelegate)
         {
             _typeNameDelegate = new (typeNameDelegate);
             return this;
         }
 
-        public DataObjectInfoBuilder WithType(System.Type type)
+        public DataObjectInfoBuilder WithTypeName(string value)
         {
-            TypeName = type?.AssemblyQualifiedName;
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.Clear().Append(value);
             return this;
         }
 
-        public DataObjectInfoBuilder WithName(string name)
+        public DataObjectInfoBuilder AppendToTypeName(string value)
+        {
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendLineToTypeName(string value)
+        {
+            if (TypeName == null)
+                TypeName = new System.Text.StringBuilder();
+            TypeName.AppendLine(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithType(System.Type type)
+        {
+            WithTypeName(type?.AssemblyQualifiedName!);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithName(System.Text.StringBuilder name)
         {
             Name = name;
             return this;
         }
 
-        public DataObjectInfoBuilder WithName(System.Func<string> nameDelegate)
+        public DataObjectInfoBuilder WithName(System.Func<System.Text.StringBuilder> nameDelegate)
         {
             _nameDelegate = new (nameDelegate);
             return this;
         }
 
-        public DataObjectInfoBuilder WithDescription(string? description)
+        public DataObjectInfoBuilder WithName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Clear().Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendLineToName(string value)
+        {
+            if (Name == null)
+                Name = new System.Text.StringBuilder();
+            Name.AppendLine(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithDescription(System.Text.StringBuilder? description)
         {
             Description = description;
             return this;
         }
 
-        public DataObjectInfoBuilder WithDescription(System.Func<string?> descriptionDelegate)
+        public DataObjectInfoBuilder WithDescription(System.Func<System.Text.StringBuilder?> descriptionDelegate)
         {
             _descriptionDelegate = new (descriptionDelegate);
             return this;
         }
 
-        public DataObjectInfoBuilder WithDisplayName(string? displayName)
+        public DataObjectInfoBuilder WithDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.Clear().Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendToDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendLineToDescription(string value)
+        {
+            if (Description == null)
+                Description = new System.Text.StringBuilder();
+            Description.AppendLine(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithDisplayName(System.Text.StringBuilder? displayName)
         {
             DisplayName = displayName;
             return this;
         }
 
-        public DataObjectInfoBuilder WithDisplayName(System.Func<string?> displayNameDelegate)
+        public DataObjectInfoBuilder WithDisplayName(System.Func<System.Text.StringBuilder?> displayNameDelegate)
         {
             _displayNameDelegate = new (displayNameDelegate);
+            return this;
+        }
+
+        public DataObjectInfoBuilder WithDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.Clear().Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendToDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.Append(value);
+            return this;
+        }
+
+        public DataObjectInfoBuilder AppendLineToDisplayName(string value)
+        {
+            if (DisplayName == null)
+                DisplayName = new System.Text.StringBuilder();
+            DisplayName.AppendLine(value);
             return this;
         }
 
@@ -270,16 +390,22 @@ namespace DataFramework.Core.Builders
             return this;
         }
 
+        public DataObjectInfoBuilder AddMetadata(string name, object? value)
+        {
+            AddMetadata(new MetadataBuilder().WithName(name).WithValue(value));
+            return this;
+        }
+
         public DataObjectInfoBuilder()
         {
             Fields = new System.Collections.Generic.List<DataFramework.Core.Builders.FieldInfoBuilder>();
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
             #pragma warning disable CS8603 // Possible null reference return.
-            _assemblyNameDelegate = new (() => default(string?));
-            _typeNameDelegate = new (() => default(string?));
-            _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default(string?));
-            _displayNameDelegate = new (() => default(string?));
+            _assemblyNameDelegate = new (() => default);
+            _typeNameDelegate = new (() => default);
+            _nameDelegate = new (() => new System.Text.StringBuilder());
+            _descriptionDelegate = new (() => default);
+            _displayNameDelegate = new (() => default);
             _isVisibleDelegate = new (() => true);
             _isReadOnlyDelegate = new (() => default(bool));
             _isQueryableDelegate = new (() => true);
@@ -291,26 +417,26 @@ namespace DataFramework.Core.Builders
             Fields = new System.Collections.Generic.List<DataFramework.Core.Builders.FieldInfoBuilder>();
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
             Fields.AddRange(source.Fields.Select(x => new DataFramework.Core.Builders.FieldInfoBuilder(x)));
-            _assemblyNameDelegate = new (() => source.AssemblyName);
-            _typeNameDelegate = new (() => source.TypeName);
-            _nameDelegate = new (() => source.Name);
-            _descriptionDelegate = new (() => source.Description);
-            _displayNameDelegate = new (() => source.DisplayName);
+            _assemblyNameDelegate = new (() => new System.Text.StringBuilder(source.AssemblyName));
+            _typeNameDelegate = new (() => new System.Text.StringBuilder(source.TypeName));
+            _nameDelegate = new (() => new System.Text.StringBuilder(source.Name));
+            _descriptionDelegate = new (() => new System.Text.StringBuilder(source.Description));
+            _displayNameDelegate = new (() => new System.Text.StringBuilder(source.DisplayName));
             _isVisibleDelegate = new (() => source.IsVisible);
             _isReadOnlyDelegate = new (() => source.IsReadOnly);
             _isQueryableDelegate = new (() => source.IsQueryable);
             Metadata.AddRange(source.Metadata.Select(x => new DataFramework.Core.Builders.MetadataBuilder(x)));
         }
 
-        protected System.Lazy<string?> _assemblyNameDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _assemblyNameDelegate;
 
-        protected System.Lazy<string?> _typeNameDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _typeNameDelegate;
 
-        protected System.Lazy<string> _nameDelegate;
+        protected System.Lazy<System.Text.StringBuilder> _nameDelegate;
 
-        protected System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _descriptionDelegate;
 
-        protected System.Lazy<string?> _displayNameDelegate;
+        protected System.Lazy<System.Text.StringBuilder?> _displayNameDelegate;
 
         protected System.Lazy<bool> _isVisibleDelegate;
 

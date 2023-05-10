@@ -10,8 +10,8 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
     protected override Type RecordCollectionType => typeof(IReadOnlyCollection<>);
     protected override Type RecordConcreteCollectionType => typeof(ReadOnlyValueCollection<>);
     protected override string ProjectName => "DataFramework";
-    protected override bool AddBackingFieldsForCollectionProperties => true;
-    protected override bool AddPrivateSetters => true;
+    protected override bool AddBackingFieldsForCollectionProperties => false; // I might want to set this to true, but this gives compilation errors in generated code of base class :(
+    protected override bool AddPrivateSetters => false;
     protected override ArgumentValidationType ValidateArgumentsInConstructor => ArgumentValidationType.Shared;
     protected override string FileNameSuffix => ".generated";
     protected override bool InheritFromInterfaces => true;
@@ -40,6 +40,8 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
 
     protected override void FixImmutableBuilderProperty(ClassPropertyBuilder property, string typeName)
     {
+        var propertyName = property.Name.ToString();
+
         if (typeName.StartsWith("DataFramework.Abstractions.I", StringComparison.InvariantCulture))
         {
             property.ConvertSinglePropertyToBuilderOnBuilder
@@ -60,21 +62,27 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
         else if (typeName.IsBooleanTypeName() || typeName.IsNullableBooleanTypeName())
         {
             property.SetDefaultArgumentValueForWithMethod(true);
-            if (_propertiesWithDefaultValueTrue.Contains(property.Name.ToString()))
+            if (_propertiesWithDefaultValueTrue.Contains(propertyName))
             {
                 property.SetDefaultValueForBuilderClassConstructor(new ModelFramework.Common.Literal("true"));
             }
         }
-        else if (property.Name.ToString() == "TypeName" && typeName.IsStringTypeName())
+        else if (typeName.IsStringTypeName())
         {
-            property.AddBuilderOverload(new Overload("WithType", "{2} = type?.AssemblyQualifiedName;", new[] { new Parameter(false, false, false, typeof(Type).FullName, false, false, Enumerable.Empty<IAttribute>(), Enumerable.Empty<ModelFramework.Common.Contracts.IMetadata>(), "type", null) }));
+            property.ConvertStringPropertyToStringBuilderPropertyOnBuilder(UseLazyInitialization);
         }
-        else if (property.Name.ToString() == nameof(IMetadataContainer.Metadata) && typeName.GetGenericArguments().GetClassName() == nameof(ModelFramework.Common.Contracts.IMetadata))
+
+        if (propertyName == nameof(ITypeContainer.TypeName) && typeName.IsStringTypeName())
+        {
+            property.AddBuilderOverload(new Overload("WithType", "With{2}(type?.AssemblyQualifiedName!);", new[] { new Parameter(false, false, false, typeof(Type).FullName, false, false, Enumerable.Empty<IAttribute>(), Enumerable.Empty<ModelFramework.Common.Contracts.IMetadata>(), "type", null) }));
+        }
+
+        if (propertyName == nameof(IMetadataContainer.Metadata) && typeName.GetGenericArguments().GetClassName() == nameof(Abstractions.IMetadata))
         {
             property.AddBuilderOverload(new OverloadBuilder()
                 .AddParameter("name", typeof(string))
                 .AddParameter("value", typeof(object), true)
-                .WithInitializeExpression("Add{4}(new ModelFramework.Common.Builders.MetadataBuilder().WithName(name).WithValue(value));")
+                .WithInitializeExpression("Add{4}(new MetadataBuilder().WithName(name).WithValue(value));")
                 .Build());
         }
     }

@@ -20,61 +20,51 @@ namespace DataFramework.Core
         public System.Collections.Generic.IReadOnlyCollection<DataFramework.Abstractions.IFieldInfo> Fields
         {
             get;
-            private set;
         }
 
         public string? AssemblyName
         {
             get;
-            private set;
         }
 
         public string? TypeName
         {
             get;
-            private set;
         }
 
         public string Name
         {
             get;
-            private set;
         }
 
         public string? Description
         {
             get;
-            private set;
         }
 
         public string? DisplayName
         {
             get;
-            private set;
         }
 
         public bool IsVisible
         {
             get;
-            private set;
         }
 
         public bool IsReadOnly
         {
             get;
-            private set;
         }
 
         public bool IsQueryable
         {
             get;
-            private set;
         }
 
         public System.Collections.Generic.IReadOnlyCollection<DataFramework.Abstractions.IMetadata> Metadata
         {
             get;
-            private set;
         }
 
         public DataObjectInfoBase(System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IFieldInfo> fields, string? assemblyName, string? typeName, string name, string? description, string? displayName, bool isVisible, bool isReadOnly, bool isQueryable, System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IMetadata> metadata)
