@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToCommandProviderClass(settings);
+        var input = CreateDataObjectInfo(default).ToCommandProviderClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -90,7 +90,7 @@ namespace DatabaseCommandProviders
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfoWithoutStoredProcedures(default(EntityClassType)).ToCommandProviderClass(settings);
+        var input = CreateDataObjectInfoWithoutStoredProcedures(default).ToCommandProviderClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -229,7 +229,7 @@ namespace DatabaseCommandProviders
     public void Can_Generate_Insert_CommandText()
     {
         // Arrange
-        var input = CreateDataObjectInfo(default(EntityClassType));
+        var input = CreateDataObjectInfo(default);
 
         // Act
         var actual = input.CreateDatabaseInsertCommandText();
@@ -242,7 +242,7 @@ namespace DatabaseCommandProviders
     public void Can_Generate_Update_CommandText()
     {
         // Arrange
-        var input = CreateDataObjectInfo(default(EntityClassType));
+        var input = CreateDataObjectInfo(default);
 
         // Act
         var actual = input.CreateDatabaseUpdateCommandText();
@@ -255,7 +255,7 @@ namespace DatabaseCommandProviders
     public void Can_Generate_Delete_CommandText()
     {
         // Arrange
-        var input = CreateDataObjectInfo(default(EntityClassType));
+        var input = CreateDataObjectInfo(default);
 
         // Act
         var actual = input.CreateDatabaseDeleteCommandText();

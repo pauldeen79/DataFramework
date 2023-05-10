@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToQueryFieldInfoClass(settings);
+        var input = CreateDataObjectInfo(default).ToQueryFieldInfoClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);

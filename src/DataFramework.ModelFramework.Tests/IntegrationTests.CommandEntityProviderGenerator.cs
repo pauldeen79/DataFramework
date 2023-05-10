@@ -34,7 +34,7 @@ namespace CommandEntityProviders
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
-        public Func<EntityBuilders.TestEntityBuilder? ResultEntityDelegate
+        public Func<EntityBuilders.TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, EntityBuilders.TestEntityBuilder>? ResultEntityDelegate
         {
             get
             {
@@ -55,7 +55,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? AfterReadDelegate
+        public Func<EntityBuilders.TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, EntityBuilders.TestEntityBuilder>? AfterReadDelegate
         {
             get
             {
@@ -76,7 +76,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? CreateBuilderDelegate
+        public Func<EntityBuilders.TestEntityBuilder, Entities.TestEntity>? CreateBuilderDelegate
         {
             get
             {
@@ -84,7 +84,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? CreateEntityDelegate
+        public Func<EntityBuilders.TestEntityBuilder, Entities.TestEntity>? CreateEntityDelegate
         {
             get
             {
@@ -180,7 +180,7 @@ namespace CommandEntityProviders
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<Entities.TestEntity,EntityBuilders.TestEntityBuilder>
     {
-        public Func<EntityBuilders.TestEntityBuilder? ResultEntityDelegate
+        public Func<EntityBuilders.TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, EntityBuilders.TestEntityBuilder>? ResultEntityDelegate
         {
             get
             {
@@ -201,7 +201,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? AfterReadDelegate
+        public Func<EntityBuilders.TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, EntityBuilders.TestEntityBuilder>? AfterReadDelegate
         {
             get
             {
@@ -222,7 +222,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? CreateBuilderDelegate
+        public Func<EntityBuilders.TestEntityBuilder, Entities.TestEntity>? CreateBuilderDelegate
         {
             get
             {
@@ -230,7 +230,7 @@ namespace CommandEntityProviders
             }
         }
 
-        public Func<EntityBuilders.TestEntityBuilder? CreateEntityDelegate
+        public Func<EntityBuilders.TestEntityBuilder, Entities.TestEntity>? CreateEntityDelegate
         {
             get
             {
@@ -325,7 +325,7 @@ namespace GeneratedNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityCommandProviderGenerator"", @""1.0.0.0"")]
     public partial class TestEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<TestEntity,TestEntityBuilder>
     {
-        public Func<TestEntityBuilder? ResultEntityDelegate
+        public Func<TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, TestEntityBuilder>? ResultEntityDelegate
         {
             get
             {
@@ -342,7 +342,7 @@ namespace GeneratedNamespace
             }
         }
 
-        public Func<TestEntityBuilder? AfterReadDelegate
+        public Func<TestEntityBuilder, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, TestEntityBuilder>? AfterReadDelegate
         {
             get
             {
@@ -359,7 +359,7 @@ namespace GeneratedNamespace
             }
         }
 
-        public Func<TestEntityBuilder? CreateBuilderDelegate
+        public Func<TestEntityBuilder, TestEntity>? CreateBuilderDelegate
         {
             get
             {
@@ -367,7 +367,7 @@ namespace GeneratedNamespace
             }
         }
 
-        public Func<TestEntityBuilder? CreateEntityDelegate
+        public Func<TestEntityBuilder, TestEntity>? CreateEntityDelegate
         {
             get
             {

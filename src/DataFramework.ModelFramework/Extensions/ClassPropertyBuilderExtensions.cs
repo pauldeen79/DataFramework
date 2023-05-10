@@ -4,7 +4,7 @@ internal static class ClassPropertyBuilderExtensions
 {
     internal static ClassPropertyBuilder Fill(this ClassPropertyBuilder instance, IFieldInfo field)
         => instance
-            .WithTypeName(field.GetPropertyTypeName())
+            .WithTypeName(field.GetPropertyTypeName().FixTypeName())
             .WithIsNullable(field.IsNullable)
             .WithVisibility(field.Metadata.GetValue(Entities.Visibility, () => field.IsVisible.ToVisibility()))
             .WithGetterVisibility(field.Metadata.GetValue(global::ModelFramework.Objects.MetadataNames.PropertyGetterModifiers, () => field.IsVisible.ToVisibility()))

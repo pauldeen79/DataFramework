@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToRepositoryClass(settings);
+        var input = CreateDataObjectInfo(default).ToRepositoryClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -34,7 +34,7 @@ namespace Repositories
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     internal partial class TestEntityRepository : CrossCutting.Data.Core.Repository<Entities.TestEntity,EntityIdentities.TestEntityIdentity>, IMyRepository, Contracts.Repositories.ITestEntityRepository
     {
-        public TestEntityRepository(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<Entities.TestEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<Entities.TestEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<Entities.TestEntity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<Entities.TestEntity> entityCommandProvider): base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
+        public TestEntityRepository(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<Entities.TestEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<Entities.TestEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<Entities.TestEntity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<Entities.TestEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
         }
     }

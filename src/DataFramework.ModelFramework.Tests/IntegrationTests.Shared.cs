@@ -9,7 +9,7 @@ public partial class IntegrationTests
                                                   new[] { input },
                                                   additionalParameters: new
                                                   {
-                                                      EnableNullableContext = settings.EnableNullableContext,
+                                                      settings.EnableNullableContext,
                                                       CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders,
                                                       EnvironmentVersion = "1.0.0"
                                                   });

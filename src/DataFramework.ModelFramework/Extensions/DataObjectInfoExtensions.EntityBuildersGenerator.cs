@@ -10,20 +10,21 @@ public static partial class DataObjectInfoExtensions
         var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(settings.DefaultRenderMetadataAsAttributes);
 
         return instance
-            .ToEntityClass(settings)
+            .ToEntityClassBuilder(settings)
             .Chain(x =>
             {
                 x.Properties.Select
                 (p => new
                 {
                     Property = p,
-                    FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name || $"{f.Name}Original" == p.Name)
+                    FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name.ToString() || $"{f.Name}Original" == p.Name.ToString())
                 }
                 )
                 .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
                 .ToList()
-                .ForEach(y => ((ICollection<IClassProperty>)x.Properties).Remove(y.Property));
+                .ForEach(y => x.Properties.Remove(y.Property));
             })
+            .BuildTyped()
             .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true, addNullChecks: !settings.EnableNullableContext),
                                                                               typeSettings: new(enableNullableReferenceTypes: settings.EnableNullableContext),
                                                                               generationSettings: new(useLazyInitialization: true)))
