@@ -1,0 +1,85 @@
+<#@ template language="C#" #>
+<#@ skipInitializationCode #>
+<#@ addChildTemplateCode override="true" #>
+<#@ baseClassInheritsFrom type="ModelFramework.Generators.Shared.ModelFrameworkGeneratorBase" #>
+<#@ BasePath Value="C:\Temp\" #>
+<#@ assembly HintPath="C:\Project\Prive\PDC.Net\ExternalReferences" #>
+<#@ assembly HintPath="C:\Project\Prive\PDC.Net\DataFramework.ModelFramework.Generators\bin\Debug\netstandard2.0" #>
+<#@ assembly HintPath="C:\Project\Prive\PDC.Net\DataFramework.Transformation\bin\Debug\netstandard2.0" #>
+<#@ assembly HintPath="$(NuGetDir)" Recursive="true" FrameworkFilter=".NETCoreApp" #>
+<#@ assembly Name="ModelFramework.dll" #>
+<#@ assembly Name="ModelFramework.Generators.dll" #>
+<#@ assembly Name="DataFramework.Base.dll" #>
+<#@ assembly Name="DataFramework.Common.dll" #>
+<#@ assembly Name="DataFramework.DataAccess.dll" #>
+<#@ assembly Name="DataFramework.DataAccess.SqlServer.dll" #>
+<#@ assembly Name="DataFramework.DataAccess.SqlServer.Base.dll" #>
+<#@ assembly Name="DataFramework.ModelFramework.dll" PreLoad="true" #>
+<#@ assembly Name="DataFramework.ModelFramework.Generators.dll" #>
+<#@ assembly Name="DataFramework.Transformation.dll" PreLoad="true" #>
+<#@ assembly Name="System.Data.dll" FrameworkFilter=".NETFramework" #>
+<#@ assembly Name="$(NuGetDir)system.data.sqlclient\4.7.0\runtimes\win\lib\net461\System.Data.SqlClient.dll" FrameworkFilter=".NETFramework" #>
+<#@ assembly Name="C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.1.6\System.Data.Common.dll" FrameworkFilter=".NETCoreApp" #>
+<#@ assembly Name="$(NuGetDir)system.data.sqlclient\4.7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll" FrameworkFilter=".NETCoreApp" #>
+<#@ assembly name="Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly Name="Utilities.ObjectDumper.dll" #>
+<#@ import Namespace="DataFramework.Base" #>
+<#@ import Namespace="DataFramework.Common.Contracts" #>
+<#@ import Namespace="DataFramework.Common.Default" #>
+<#@ import Namespace="DataFramework.DataAccess.SqlServer.Extensions" #>
+<#@ import Namespace="DataFramework.DataAccess.SqlServer.Base.Extensions" #>
+<#@ import Namespace="DataFramework.ModelFramework.Extensions" #>
+<#@ import Namespace="DataFramework.ModelFramework.Generators.Database" #>
+<#@ import Namespace="DataFramework.ModelFramework.Generators.Entities" #>
+<#@ import Namespace="DataFramework.ModelFramework.Generators.Repositories" #>
+<#@ import Namespace="DataFramework.Transformation.Extensions" #>
+<#@ import Namespace="ModelFramework.Generators" #>
+<#@ import Namespace="ModelFramework.Generators.Shared" #>
+<#@ import Namespace="Utilities.Extensions" #>
+<#@ import Namespace="Utilities.ObjectDumper.Extensions" #>
+<#@ import Namespace="TextTemplateTransformationFramework.Runtime" #>
+<#@ ViewModel File="$(BasePath)RepositoryGenerator v19.ViewModel.template" viewModelType="RepositoryGeneratorViewModel" #>
+<#@ Includes Path="$(BasePath)" SearchPattern="RepositoryGenerator v19.*.ttinclude" #>
+<#
+var templateFileManager = new ModelFramework.Generators.Shared.ModelFrameworkGeneratorBase.TemplateFileManager(this, ViewModel.BasePath);
+var dataObjectInfos = ViewModel.DataObjectInfos;
+var templateDictionary = new[]
+{
+    new TemplateInfo { Prefix = "Repositories", Template = new RepositoriesGenerator(), Model = dataObjectInfos.Select(doi => doi.ToRepositoryClass()), Enabled = ViewModel.GenerateRepositories },
+    new TemplateInfo { Prefix = "Entities", Template = new EntitiesGenerator(), Model = dataObjectInfos.Select(doi => doi.ToEntityClass()), Enabled = ViewModel.GenerateEntities },
+    new TemplateInfo { Prefix = "Queries", Template = new EntitiesGenerator(), Model = dataObjectInfos.Select(doi => doi.ToQueryClass()), Enabled = ViewModel.GenerateQueries },
+    new TemplateInfo { Prefix = "DataObjectInfoProviders", Template = new EntitiesGenerator(), Model = dataObjectInfos.Select(doi => doi.ToDataObjectInfoProviderClass()), Enabled = ViewModel.GenerateDataObjectInfoProviders },
+};
+
+templateDictionary.Where(t => t.Enabled).ForEach(t =>
+{
+    if (!ViewModel.GenerateMultipleFiles)
+    {
+        TemplateRenderHelper.RenderTemplate(t.Template, templateFileManager.StartNewFile(t.Prefix + ".cs"), Session, additionalParameters: new { Model = t.Model });
+    }
+    else
+    {
+        TemplateRenderHelper.RenderTemplate(t.Template, templateFileManager, Session, t.Prefix + "\\", t.Prefix + ".cs", additionalParameters: new { Model = t.Model });
+    }
+});
+
+if (ViewModel.GenerateDatabaseSchema) TemplateRenderHelper.RenderTemplate(new SqlServerDatabaseSchemaGenerator(), templateFileManager.StartNewFile("Database\\DatabaseSchema.sql"), Session, additionalParameters: new { Model = dataObjectInfos.ToSchemas() });
+
+if (ViewModel.GenerateModelDump)
+{
+    templateFileManager.StartNewFile("ModelDump.txt");
+    Write(dataObjectInfos.Dump());
+}
+
+templateFileManager.Process(ViewModel.GenerateMultipleFiles, ViewModel.ShouldSave);
+
+if (ViewModel.ShouldSave)
+{
+    if (ViewModel.ShouldUseLastGeneratedFiles)
+    {
+        templateFileManager.DeleteLastGeneratedFiles(ViewModel.LastGeneratedFilesFileName);
+        templateFileManager.SaveLastGeneratedFiles(ViewModel.LastGeneratedFilesFileName);
+    }
+    templateFileManager.SaveAll();
+}
+#>
