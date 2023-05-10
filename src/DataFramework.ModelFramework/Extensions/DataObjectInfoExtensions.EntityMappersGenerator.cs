@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToEntityMapperClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToEntityMapperClassBuilder(settings).Build();
+        => instance.ToEntityMapperClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToEntityMapperClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         => new ClassBuilder()

@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToPagedEntityRetrieverSettingsClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToPagedEntityRetrieverSettingsClassBuilder(settings).Build();
+        => instance.ToPagedEntityRetrieverSettingsClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToPagedEntityRetrieverSettingsClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         => new ClassBuilder()

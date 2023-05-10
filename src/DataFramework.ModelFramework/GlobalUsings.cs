@@ -15,6 +15,8 @@ global using CrossCutting.Data.Core.Commands;
 global using DataFramework.Abstractions;
 global using DataFramework.Core.Builders;
 global using DataFramework.ModelFramework.MetadataNames;
+global using ExpressionFramework.Domain;
+global using ExpressionFramework.Domain.Evaluatables;
 global using ModelFramework.Common.Extensions;
 global using ModelFramework.Database.Builders;
 global using ModelFramework.Database.Contracts;

@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToQueryFieldInfoClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToQueryFieldInfoClassBuilder(settings).Build();
+        => instance.ToQueryFieldInfoClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToQueryFieldInfoClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
     {
