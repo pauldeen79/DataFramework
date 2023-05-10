@@ -16,5 +16,5 @@ public interface IFieldInfo
     bool CanSet { get; }
     bool UseForConcurrencyCheck { get; }
     object? DefaultValue { get; }
-    ValueCollection<IMetadata> Metadata { get; }
+    IReadOnlyCollection<IMetadata> Metadata { get; }
 }

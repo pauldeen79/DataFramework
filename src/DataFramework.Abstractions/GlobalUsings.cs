@@ -1,1 +1,1 @@
-﻿global using CrossCutting.Common;
+﻿global using System.Collections.Generic;
