@@ -18,6 +18,7 @@ public static partial class DataObjectInfoExtensions
             .AddInterfaces(instance.Metadata
                 .Where(md => md.Name == Queries.Interface)
                 .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName())))
+            .AddInterfaces(typeof(IValidatableObject).FullName)
             .WithRecord()
             .AddFields(GetQueryClassFields(instance))
             .AddMethods(GetQueryClassMethods(instance))
@@ -93,9 +94,9 @@ public static partial class DataObjectInfoExtensions
                 @"}",
                 @"foreach (var querySortOrder in OrderByFields)",
                 @"{",
-                @"    if (!IsValidExpression(querySortOrder.Field))",
+                @"    if (!IsValidExpression(querySortOrder.FieldNameExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid expression in order by fields: "" + querySortOrder.Field, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
+                $@"        yield return new {validationResultType}(""Invalid expression in order by fields: "" + querySortOrder.FieldNameExpression, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
                 @"    }",
                 @"}"
             );
@@ -138,7 +139,6 @@ public static partial class DataObjectInfoExtensions
 
     private static IEnumerable<ClassConstructorBuilder> GetQueryClassConstructors()
     {
-        //new ComposedEvaluatable(Enumerable.Empty<ComposableEvaluatable>()),
         yield return new ClassConstructorBuilder()
             .WithChainCall($"this(null, null, new {typeof(ComposedEvaluatable).FullName}({nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(ComposableEvaluatable).FullName}>()), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
 

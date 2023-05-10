@@ -7,6 +7,7 @@ global using CrossCutting.Data.Abstractions;
 global using CrossCutting.Data.Core.Builders;
 global using DataFramework.ModelFramework.Poc.DependencyInjection;
 global using DataFramework.ModelFramework.Poc.Repositories;
+global using ExpressionFramework.Domain.Builders;
 global using FluentAssertions;
 global using Microsoft.Extensions.DependencyInjection;
 global using PDC.Net.Core.Entities;

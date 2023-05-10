@@ -32,7 +32,7 @@ namespace Queries
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery
+    public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery, System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         {
@@ -53,9 +53,9 @@ namespace Queries
             }
             foreach (var querySortOrder in OrderByFields)
             {
-                if (!IsValidExpression(querySortOrder.Field))
+                if (!IsValidExpression(querySortOrder.FieldNameExpression))
                 {
-                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid expression in order by fields: "" + querySortOrder.Field, new[] { nameof(OrderByFields), nameof(OrderByFields) });
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid expression in order by fields: "" + querySortOrder.FieldNameExpression, new[] { nameof(OrderByFields), nameof(OrderByFields) });
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace Queries
             {
                 return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
             }
-            return true;
+            return true; // Paul was here
         }
 
         public TestEntityQuery() : this(null, null, new ExpressionFramework.Domain.Evaluatables.ComposedEvaluatable(Enumerable.Empty<ExpressionFramework.Domain.Evaluatables.ComposableEvaluatable>()), Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>())

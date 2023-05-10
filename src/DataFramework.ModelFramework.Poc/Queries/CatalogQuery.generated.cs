@@ -14,7 +14,7 @@ using QueryFramework.Core.Queries;
 namespace PDC.Net.Core.Queries
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryGenerator", @"1.0.0.0")]
-    public partial record CatalogQuery : SingleEntityQuery
+    public partial record CatalogQuery : SingleEntityQuery, IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -58,24 +58,24 @@ namespace PDC.Net.Core.Queries
             }
 
             // You might want to validate the expression to prevent sql injection (unless you can only create query expressions in code)
-            return true;
+            return expression.GetType().Assembly.FullName.StartsWith("ExpressionFramework.Domain.Specialized");
         }
 
-        public CatalogQuery() : this(null, null, Enumerable.Empty<ComposableEvaluatable>(), Enumerable.Empty<IQuerySortOrder>())
+        public CatalogQuery() : this(null, null, new ComposedEvaluatable(Enumerable.Empty<ComposableEvaluatable>()), Enumerable.Empty<IQuerySortOrder>())
         {
         }
 
         public CatalogQuery(int? limit,
                             int? offset,
-                            IEnumerable<ComposableEvaluatable> conditions,
+                            ComposedEvaluatable filter,
                             IEnumerable<IQuerySortOrder> orderByFields)
-            : base(limit, offset, new ComposedEvaluatable(conditions), orderByFields)
+            : base(limit, offset, filter, orderByFields)
         {
         }
 
         public CatalogQuery(ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Limit,
                                                                         simpleEntityQuery.Offset,
-                                                                        simpleEntityQuery.Filter.Conditions,
+                                                                        simpleEntityQuery.Filter,
                                                                         simpleEntityQuery.OrderByFields)
         {
         }
