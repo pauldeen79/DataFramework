@@ -19,7 +19,6 @@
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.7.6" />
     <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.6.19" />
     <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.6.19" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
