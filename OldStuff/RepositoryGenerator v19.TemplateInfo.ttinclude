@@ -1,0 +1,8 @@
+<#^ class TemplateInfo
+{
+    public string Prefix { get; set ; }
+    public object Template { get; set; }
+    public object Model { get; set; }
+    public bool Enabled { get; set; }
+}
+#>
