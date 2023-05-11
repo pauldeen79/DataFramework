@@ -17,6 +17,7 @@ public class IntegrationTests
 
         // Act
         GenerateCode.For<Builders>(Settings, multipleContentBuilder);
+        GenerateCode.For<Models>(Settings, multipleContentBuilder);
         GenerateCode.For<Records>(Settings, multipleContentBuilder);
         var actual = multipleContentBuilder.ToString();
 
