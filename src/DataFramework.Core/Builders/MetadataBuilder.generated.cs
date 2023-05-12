@@ -15,7 +15,7 @@ using System.Text;
 namespace DataFramework.Core.Builders
 {
 #nullable enable
-    public partial class MetadataBuilder
+    public partial class MetadataBuilder : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public System.Text.StringBuilder Name
         {

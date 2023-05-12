@@ -15,7 +15,7 @@ using System.Text;
 namespace DataFramework.Core.Models
 {
 #nullable enable
-    public partial class FieldInfoModel
+    public partial class FieldInfoModel : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public string Name
         {
@@ -101,17 +101,17 @@ namespace DataFramework.Core.Models
             set;
         }
 
-        public System.Collections.Generic.List<DataFramework.Abstractions.IMetadata> Metadata
+        public System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel> Metadata
         {
             get;
             set;
         }
 
-        public DataFramework.Abstractions.IFieldInfo Build()
+        public DataFramework.Abstractions.IFieldInfo ToEntity()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            return new DataFramework.Core.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata);
+            return new DataFramework.Core.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.ToEntity()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
@@ -120,7 +120,7 @@ namespace DataFramework.Core.Models
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            var instance = new DataFramework.Core.FieldInfoBase(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata);
+            var instance = new DataFramework.Core.FieldInfoBase(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsReadOnly, IsIdentityField, IsComputed, IsPersistable, CanGet, CanSet, UseForConcurrencyCheck, DefaultValue, Metadata.Select(x => x.ToEntity()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -130,7 +130,7 @@ namespace DataFramework.Core.Models
 
         public FieldInfoModel()
         {
-            Metadata = new System.Collections.Generic.List<DataFramework.Abstractions.IMetadata>();
+            Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
             #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
             IsNullable = default(System.Boolean);
@@ -147,7 +147,7 @@ namespace DataFramework.Core.Models
 
         public FieldInfoModel(DataFramework.Abstractions.IFieldInfo source)
         {
-            Metadata = new System.Collections.Generic.List<DataFramework.Abstractions.IMetadata>();
+            Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
             Name = source.Name;
             Description = source.Description;
             DisplayName = source.DisplayName;
@@ -162,7 +162,7 @@ namespace DataFramework.Core.Models
             CanSet = source.CanSet;
             UseForConcurrencyCheck = source.UseForConcurrencyCheck;
             DefaultValue = source.DefaultValue;
-            Metadata.AddRange(source.Metadata);
+            Metadata.AddRange(source.Metadata.Select(x => new DataFramework.Core.Models.MetadataModel(x)));
         }
     }
 #nullable restore

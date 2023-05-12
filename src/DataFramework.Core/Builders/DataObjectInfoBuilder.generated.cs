@@ -15,7 +15,7 @@ using System.Text;
 namespace DataFramework.Core.Builders
 {
 #nullable enable
-    public partial class DataObjectInfoBuilder
+    public partial class DataObjectInfoBuilder : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public System.Collections.Generic.List<DataFramework.Core.Builders.FieldInfoBuilder> Fields
         {

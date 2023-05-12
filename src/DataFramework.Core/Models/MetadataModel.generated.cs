@@ -15,7 +15,7 @@ using System.Text;
 namespace DataFramework.Core.Models
 {
 #nullable enable
-    public partial class MetadataModel
+    public partial class MetadataModel : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public string Name
         {
@@ -29,7 +29,7 @@ namespace DataFramework.Core.Models
             set;
         }
 
-        public DataFramework.Abstractions.IMetadata Build()
+        public DataFramework.Abstractions.IMetadata ToEntity()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.

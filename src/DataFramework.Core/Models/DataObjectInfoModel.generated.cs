@@ -15,9 +15,9 @@ using System.Text;
 namespace DataFramework.Core.Models
 {
 #nullable enable
-    public partial class DataObjectInfoModel
+    public partial class DataObjectInfoModel : System.ComponentModel.DataAnnotations.IValidatableObject
     {
-        public System.Collections.Generic.List<DataFramework.Abstractions.IFieldInfo> Fields
+        public System.Collections.Generic.List<DataFramework.Core.Models.FieldInfoModel> Fields
         {
             get;
             set;
@@ -71,17 +71,17 @@ namespace DataFramework.Core.Models
             set;
         }
 
-        public System.Collections.Generic.List<DataFramework.Abstractions.IMetadata> Metadata
+        public System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel> Metadata
         {
             get;
             set;
         }
 
-        public DataFramework.Abstractions.IDataObjectInfo Build()
+        public DataFramework.Abstractions.IDataObjectInfo ToEntity()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            return new DataFramework.Core.DataObjectInfo(Fields, AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata);
+            return new DataFramework.Core.DataObjectInfo(Fields.Select(x => x.ToEntity()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.ToEntity()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
@@ -90,7 +90,7 @@ namespace DataFramework.Core.Models
         {
             #pragma warning disable CS8604 // Possible null reference argument.
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-            var instance = new DataFramework.Core.DataObjectInfoBase(Fields, AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata);
+            var instance = new DataFramework.Core.DataObjectInfoBase(Fields.Select(x => x.ToEntity()), AssemblyName, TypeName, Name, Description, DisplayName, IsVisible, IsReadOnly, IsQueryable, Metadata.Select(x => x.ToEntity()));
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
             var results = new System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -100,8 +100,8 @@ namespace DataFramework.Core.Models
 
         public DataObjectInfoModel()
         {
-            Fields = new System.Collections.Generic.List<DataFramework.Abstractions.IFieldInfo>();
-            Metadata = new System.Collections.Generic.List<DataFramework.Abstractions.IMetadata>();
+            Fields = new System.Collections.Generic.List<DataFramework.Core.Models.FieldInfoModel>();
+            Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
             #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
             IsVisible = default(System.Boolean);
@@ -112,9 +112,9 @@ namespace DataFramework.Core.Models
 
         public DataObjectInfoModel(DataFramework.Abstractions.IDataObjectInfo source)
         {
-            Fields = new System.Collections.Generic.List<DataFramework.Abstractions.IFieldInfo>();
-            Metadata = new System.Collections.Generic.List<DataFramework.Abstractions.IMetadata>();
-            Fields.AddRange(source.Fields);
+            Fields = new System.Collections.Generic.List<DataFramework.Core.Models.FieldInfoModel>();
+            Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
+            Fields.AddRange(source.Fields.Select(x => new DataFramework.Core.Models.FieldInfoModel(x)));
             AssemblyName = source.AssemblyName;
             TypeName = source.TypeName;
             Name = source.Name;
@@ -123,7 +123,7 @@ namespace DataFramework.Core.Models
             IsVisible = source.IsVisible;
             IsReadOnly = source.IsReadOnly;
             IsQueryable = source.IsQueryable;
-            Metadata.AddRange(source.Metadata);
+            Metadata.AddRange(source.Metadata.Select(x => new DataFramework.Core.Models.MetadataModel(x)));
         }
     }
 #nullable restore
