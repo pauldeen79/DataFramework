@@ -74,7 +74,7 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
 
         if (propertyName == nameof(ITypeContainer.TypeName) && typeName.IsStringTypeName())
         {
-            property.AddBuilderOverload(new Overload("WithType", "With{2}(type?.AssemblyQualifiedName!);", new[] { new Parameter(false, false, false, typeof(Type).FullName, false, false, Enumerable.Empty<IAttribute>(), Enumerable.Empty<ModelFramework.Common.Contracts.IMetadata>(), "type", null) }));
+            property.AddBuilderOverload(new Overload("WithType", "With{2}(type?.AssemblyQualifiedName!);", new[] { new Parameter(false, false, false, typeof(Type).FullName!, false, false, Enumerable.Empty<IAttribute>(), Enumerable.Empty<ModelFramework.Common.Contracts.IMetadata>(), "type", null) }));
         }
 
         if (propertyName == nameof(IMetadataContainer.Metadata) && typeName.GetGenericArguments().GetClassName() == nameof(Abstractions.IMetadata))
