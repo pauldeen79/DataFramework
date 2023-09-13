@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToQueryClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToQueryClassBuilder(settings).Build();
+        => instance.ToQueryClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToQueryClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
     {
@@ -18,6 +18,7 @@ public static partial class DataObjectInfoExtensions
             .AddInterfaces(instance.Metadata
                 .Where(md => md.Name == Queries.Interface)
                 .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName())))
+            .AddInterfaces(typeof(IValidatableObject).FullName)
             .WithRecord()
             .AddFields(GetQueryClassFields(instance))
             .AddMethods(GetQueryClassMethods(instance))
@@ -80,22 +81,22 @@ public static partial class DataObjectInfoExtensions
                 @"{",
                 $@"    yield return new {validationResultType}(""Limit exceeds the maximum of "" + MaxLimit, new[] {{ nameof(Limit), nameof(Limit) }});",
                 @"}",
-                @"foreach (var condition in Conditions)",
+                @"foreach (var condition in Filter.Conditions)",
                 @"{",
                 @"    if (!IsValidExpression(condition.LeftExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] {{ nameof(Conditions), nameof(Conditions) }});",
+                $@"        yield return new {validationResultType}(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] {{ nameof(Filter), nameof(Filter) }});",
                 @"    }",
                 @"    if (!IsValidExpression(condition.RightExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid right expression in conditions: "" + condition.RightExpression, new[] {{ nameof(Conditions), nameof(Conditions) }});",
+                $@"        yield return new {validationResultType}(""Invalid right expression in conditions: "" + condition.RightExpression, new[] {{ nameof(Filter), nameof(Filter) }});",
                 @"    }",
                 @"}",
                 @"foreach (var querySortOrder in OrderByFields)",
                 @"{",
-                @"    if (!IsValidExpression(querySortOrder.Field))",
+                @"    if (!IsValidExpression(querySortOrder.FieldNameExpression))",
                 @"    {",
-                $@"        yield return new {validationResultType}(""Invalid expression in order by fields: "" + querySortOrder.Field, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
+                $@"        yield return new {validationResultType}(""Invalid expression in order by fields: "" + querySortOrder.FieldNameExpression, new[] {{ nameof(OrderByFields), nameof(OrderByFields) }});",
                 @"    }",
                 @"}"
             );
@@ -122,7 +123,7 @@ public static partial class DataObjectInfoExtensions
             .WithName("IsValidExpression")
             .WithVisibility(Visibility.Private)
             .WithType(typeof(bool))
-            .AddParameter("expression", typeof(IExpression))
+            .AddParameter("expression", typeof(Expression))
             .AddLiteralCodeStatements
             (
                 "if (expression is IFieldExpression fieldExpression)",
@@ -139,18 +140,18 @@ public static partial class DataObjectInfoExtensions
     private static IEnumerable<ClassConstructorBuilder> GetQueryClassConstructors()
     {
         yield return new ClassConstructorBuilder()
-            .WithChainCall($"this(null, null, {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(ICondition).FullName}>(), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
+            .WithChainCall($"this(null, null, new {typeof(ComposedEvaluatable).FullName}({nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(ComposableEvaluatable).FullName}>()), {nameof(Enumerable)}.{nameof(Enumerable.Empty)}<{typeof(IQuerySortOrder).FullName}>())");
 
         yield return new ClassConstructorBuilder()
             .AddParameter("limit", typeof(int?))
             .AddParameter("offset", typeof(int?))
-            .AddParameter("conditions", typeof(IEnumerable<ICondition>))
+            .AddParameter("filter", typeof(ComposedEvaluatable))
             .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>))
             .ChainCallToBaseUsingParameters();
 
         yield return new ClassConstructorBuilder()
             .AddParameter("simpleEntityQuery", typeof(ISingleEntityQuery))
-            .WithChainCall("this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Conditions, simpleEntityQuery.OrderByFields");
+            .WithChainCall("this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Filter, simpleEntityQuery.OrderByFields");
     }
 
     private static IEnumerable<AttributeBuilder> GetQueryClassAttributes(IDataObjectInfo instance, RenderMetadataAsAttributesTypes renderMetadataAsAttributes)

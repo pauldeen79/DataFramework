@@ -9,7 +9,7 @@ public partial class IntegrationTests
                                                   new[] { input },
                                                   additionalParameters: new
                                                   {
-                                                      EnableNullableContext = settings.EnableNullableContext,
+                                                      settings.EnableNullableContext,
                                                       CreateCodeGenerationHeader = settings.CreateCodeGenerationHeaders,
                                                       EnvironmentVersion = "1.0.0"
                                                   });
@@ -52,6 +52,7 @@ public partial class IntegrationTests
             .AddQueryInterfaces("IMyQuery")
             .AddQueryValidFieldNames("AdditionalValidFieldName")
             .AddQueryValidFieldNameStatements(@"    return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));")
+            .AddQueryValidExpressionStatements("return true; // Paul was here") // example how to add validation to expressions
 
             .WithRepositoryNamespace("Repositories")
             .WithRepositoryInterfaceNamespace("Contracts.Repositories")

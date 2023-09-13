@@ -10,7 +10,7 @@ public class AttributeBuilderExtensionsTests
 
         // Act
         sut.AddAttributes(new AttributeBuilder().ForCodeGenerator("MyCodeGenerator"));
-        var code = GenerateCode(sut.Build());
+        var code = GenerateCode(sut.BuildTyped());
 
         // Assert
         code.Should().Contain(@"[System.CodeDom.Compiler.GeneratedCodeAttribute(@""MyCodeGenerator"", @""1.0.0.0"")]");

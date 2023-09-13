@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToDatabaseEntityRetrieverProviderClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToDatabaseEntityRetrieverProviderClassBuilder(settings).Build();
+        => instance.ToDatabaseEntityRetrieverProviderClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToDatabaseEntityRetrieverProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         => new ClassBuilder()

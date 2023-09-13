@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToRepositoryInterface(settings);
+        var input = CreateDataObjectInfo(default).ToRepositoryInterface(settings);
 
         // Act
         var actual = GenerateCode(input, settings);

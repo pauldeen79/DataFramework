@@ -56,4 +56,22 @@ public sealed partial class IntegrationTests
         actual.Should().ContainSingle();
         actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
     }
+
+    [Fact]
+    public void Can_Use_Internal_Expression_From_ExpressionFramework()
+    {
+        // Arrange
+        Connection.AddResultForDataReader(cmd => cmd.CommandText.StartsWith("SELECT") && cmd.CommandText.Contains("WHERE LEN([Name] + ' ' + [StartDirectory] + ' ' + COALESCE([ExtraField1], '') + ' ' + COALESCE([ExtraField2], '') + ' ' + COALESCE([ExtraField3], '') + ' ' + COALESCE([ExtraField4], '') + ' ' + COALESCE([ExtraField5], '') + ' ' + COALESCE([ExtraField6], '') + ' ' + COALESCE([ExtraField7], '') + ' ' + COALESCE([ExtraField8], '') + ' ' + COALESCE([ExtraField9], '') + ' ' + COALESCE([ExtraField10], '') + ' ' + COALESCE([ExtraField11], '') + ' ' + COALESCE([ExtraField12], '') + ' ' + COALESCE([ExtraField13], '') + ' ' + COALESCE([ExtraField14], '') + ' ' + COALESCE([ExtraField15], '') + ' ' + COALESCE([ExtraField16], '')) > @p0"),
+                                          () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+        var query = new CatalogQuery(new SingleEntityQueryBuilder()
+            .Where(((ExpressionBuilder)"AllFields".Len()).IsGreaterThan(4)) // note that this is a little bit quirky... we have to explicitly cast ITypedExpressionBuilder<T> to ExpressionBuilder...
+            .Build());
+
+        // Act
+        var actual = QueryProcessor.FindMany<Catalog>(query);
+
+        // Assert
+        actual.Should().ContainSingle();
+        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+    }
 }

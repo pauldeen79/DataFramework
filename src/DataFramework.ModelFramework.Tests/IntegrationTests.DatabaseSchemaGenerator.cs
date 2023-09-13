@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = new[] { CreateDataObjectInfo(default(EntityClassType)) }.ToSchemas(settings);
+        var input = new[] { CreateDataObjectInfo(default) }.ToSchemas(settings);
 
         // Act
         var actual = GenerateCode(input, settings);

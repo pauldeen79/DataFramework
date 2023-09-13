@@ -116,7 +116,9 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             return new Entities.TestEntity { Id = Id, Name = Name, Description = Description, IdOriginal = IdOriginal, NameOriginal = NameOriginal, DescriptionOriginal = DescriptionOriginal };
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
 
@@ -195,12 +197,12 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default);
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default);
-            _idOriginalDelegate = new (() => default);
-            _nameOriginalDelegate = new (() => default);
-            _descriptionOriginalDelegate = new (() => default);
+            _descriptionDelegate = new (() => default(string?));
+            _idOriginalDelegate = new (() => default(int?));
+            _nameOriginalDelegate = new (() => default(string?));
+            _descriptionOriginalDelegate = new (() => default(string?));
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -214,17 +216,17 @@ namespace EntityBuilders
             _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
 
-        private System.Lazy<int> _idDelegate;
+        protected System.Lazy<int> _idDelegate;
 
-        private System.Lazy<string> _nameDelegate;
+        protected System.Lazy<string> _nameDelegate;
 
-        private System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<string?> _descriptionDelegate;
 
-        private System.Lazy<int?> _idOriginalDelegate;
+        protected System.Lazy<int?> _idOriginalDelegate;
 
-        private System.Lazy<string?> _nameOriginalDelegate;
+        protected System.Lazy<string?> _nameOriginalDelegate;
 
-        private System.Lazy<string?> _descriptionOriginalDelegate;
+        protected System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -342,7 +344,9 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             return new Entities.TestEntity(Id, Name, Description, IdOriginal, NameOriginal, DescriptionOriginal);
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
 
@@ -421,12 +425,12 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default);
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default);
-            _idOriginalDelegate = new (() => default);
-            _nameOriginalDelegate = new (() => default);
-            _descriptionOriginalDelegate = new (() => default);
+            _descriptionDelegate = new (() => default(string?));
+            _idOriginalDelegate = new (() => default(int?));
+            _nameOriginalDelegate = new (() => default(string?));
+            _descriptionOriginalDelegate = new (() => default(string?));
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -440,17 +444,17 @@ namespace EntityBuilders
             _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
 
-        private System.Lazy<int> _idDelegate;
+        protected System.Lazy<int> _idDelegate;
 
-        private System.Lazy<string> _nameDelegate;
+        protected System.Lazy<string> _nameDelegate;
 
-        private System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<string?> _descriptionDelegate;
 
-        private System.Lazy<int?> _idOriginalDelegate;
+        protected System.Lazy<int?> _idOriginalDelegate;
 
-        private System.Lazy<string?> _nameOriginalDelegate;
+        protected System.Lazy<string?> _nameOriginalDelegate;
 
-        private System.Lazy<string?> _descriptionOriginalDelegate;
+        protected System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -568,7 +572,9 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             return new Entities.TestEntity(Id, Name, Description, IdOriginal, NameOriginal, DescriptionOriginal);
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
 
@@ -647,12 +653,12 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default);
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default);
-            _idOriginalDelegate = new (() => default);
-            _nameOriginalDelegate = new (() => default);
-            _descriptionOriginalDelegate = new (() => default);
+            _descriptionDelegate = new (() => default(string?));
+            _idOriginalDelegate = new (() => default(int?));
+            _nameOriginalDelegate = new (() => default(string?));
+            _descriptionOriginalDelegate = new (() => default(string?));
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -666,17 +672,17 @@ namespace EntityBuilders
             _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
 
-        private System.Lazy<int> _idDelegate;
+        protected System.Lazy<int> _idDelegate;
 
-        private System.Lazy<string> _nameDelegate;
+        protected System.Lazy<string> _nameDelegate;
 
-        private System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<string?> _descriptionDelegate;
 
-        private System.Lazy<int?> _idOriginalDelegate;
+        protected System.Lazy<int?> _idOriginalDelegate;
 
-        private System.Lazy<string?> _nameOriginalDelegate;
+        protected System.Lazy<string?> _nameOriginalDelegate;
 
-        private System.Lazy<string?> _descriptionOriginalDelegate;
+        protected System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -797,7 +803,9 @@ namespace EntityBuilders
         public Entities.TestEntity Build()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             return new Entities.TestEntity { Id = Id, Name = Name, Description = Description, IdOriginal = IdOriginal, NameOriginal = NameOriginal, DescriptionOriginal = DescriptionOriginal };
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
 
@@ -876,12 +884,12 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default);
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
-            _descriptionDelegate = new (() => default);
-            _idOriginalDelegate = new (() => default);
-            _nameOriginalDelegate = new (() => default);
-            _descriptionOriginalDelegate = new (() => default);
+            _descriptionDelegate = new (() => default(string?));
+            _idOriginalDelegate = new (() => default(int?));
+            _nameOriginalDelegate = new (() => default(string?));
+            _descriptionOriginalDelegate = new (() => default(string?));
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -895,35 +903,35 @@ namespace EntityBuilders
             _descriptionOriginalDelegate = new (() => source.DescriptionOriginal);
         }
 
-        private int _id;
+        protected int _id;
 
-        private string _name;
+        protected string _name;
 
-        private string? _description;
+        protected string? _description;
 
-        private bool _isExistingEntity;
+        protected bool _isExistingEntity;
 
-        private int? _idOriginal;
+        protected int? _idOriginal;
 
-        private string? _nameOriginal;
+        protected string? _nameOriginal;
 
-        private string? _descriptionOriginal;
+        protected string? _descriptionOriginal;
 
-        private bool? _isExistingEntityOriginal;
+        protected bool? _isExistingEntityOriginal;
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        protected event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
-        private System.Lazy<int> _idDelegate;
+        protected System.Lazy<int> _idDelegate;
 
-        private System.Lazy<string> _nameDelegate;
+        protected System.Lazy<string> _nameDelegate;
 
-        private System.Lazy<string?> _descriptionDelegate;
+        protected System.Lazy<string?> _descriptionDelegate;
 
-        private System.Lazy<int?> _idOriginalDelegate;
+        protected System.Lazy<int?> _idOriginalDelegate;
 
-        private System.Lazy<string?> _nameOriginalDelegate;
+        protected System.Lazy<string?> _nameOriginalDelegate;
 
-        private System.Lazy<string?> _descriptionOriginalDelegate;
+        protected System.Lazy<string?> _descriptionOriginalDelegate;
     }
 #nullable restore
 }
@@ -984,7 +992,9 @@ namespace GeneratedNamespace
         public TestEntity Build()
         {
             #pragma warning disable CS8604 // Possible null reference argument.
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             return new TestEntity { Id = Id, Tags = Tags };
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             #pragma warning restore CS8604 // Possible null reference argument.
         }
 
@@ -1015,7 +1025,7 @@ namespace GeneratedNamespace
         {
             Tags = new System.Collections.Generic.List<string>();
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default);
+            _idDelegate = new (() => default(long)!);
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -1026,7 +1036,7 @@ namespace GeneratedNamespace
             Tags.AddRange(source.Tags);
         }
 
-        private System.Lazy<long> _idDelegate;
+        protected System.Lazy<long> _idDelegate;
     }
 #nullable restore
 }

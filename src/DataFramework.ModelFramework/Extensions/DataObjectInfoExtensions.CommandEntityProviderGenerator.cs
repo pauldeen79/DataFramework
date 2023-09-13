@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToCommandEntityProviderClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToCommandEntityProviderClassBuilder(settings).Build();
+        => instance.ToCommandEntityProviderClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToCommandEntityProviderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         => new ClassBuilder()

@@ -15,15 +15,22 @@ using System.Text;
 namespace DataFramework.Core
 {
 #nullable enable
-    public partial record Metadata : MetadataBase
+    public partial record MetadataBase : DataFramework.Abstractions.IMetadata
     {
-        public Metadata(Metadata original) : base((MetadataBase)original)
+        public string Name
         {
+            get;
         }
 
-        public Metadata(string name, object? value) : base(name, value)
+        public object? Value
         {
-            System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
+            get;
+        }
+
+        public MetadataBase(string name, object? value)
+        {
+            this.Name = name;
+            this.Value = value;
         }
     }
 #nullable restore

@@ -3,30 +3,31 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToEntityBuilderClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToEntityBuilderClassBuilder(settings).Build();
+        => instance.ToEntityBuilderClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToEntityBuilderClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
     {
         var renderMetadataAsAttributes = instance.GetRenderMetadataAsAttributesType(settings.DefaultRenderMetadataAsAttributes);
 
         return instance
-            .ToEntityClass(settings)
+            .ToEntityClassBuilder(settings)
             .Chain(x =>
             {
                 x.Properties.Select
                 (p => new
                 {
                     Property = p,
-                    FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name || $"{f.Name}Original" == p.Name)
+                    FieldInfo = instance.Fields.FirstOrDefault(f => f.Name == p.Name.ToString() || $"{f.Name}Original" == p.Name.ToString())
                 }
                 )
                 .Where(x => x.FieldInfo != null && (x.FieldInfo.IsComputed || !x.FieldInfo.CanSet))
                 .ToList()
-                .ForEach(y => ((ICollection<IClassProperty>)x.Properties).Remove(y.Property));
+                .ForEach(y => x.Properties.Remove(y.Property));
             })
+            .BuildTyped()
             .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true, addNullChecks: !settings.EnableNullableContext),
-                                                                              enableNullableReferenceTypes: settings.EnableNullableContext,
-                                                                              useLazyInitialization: true))
+                                                                              typeSettings: new(enableNullableReferenceTypes: settings.EnableNullableContext),
+                                                                              generationSettings: new(useLazyInitialization: true)))
             .WithNamespace(instance.GetEntityBuildersNamespace())
             .Chain(x => x.Attributes.Clear())
             .AddAttributes(instance.GetEntityBuilderClassAttributes(renderMetadataAsAttributes));

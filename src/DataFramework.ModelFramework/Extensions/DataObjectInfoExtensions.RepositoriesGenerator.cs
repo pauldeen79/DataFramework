@@ -3,7 +3,7 @@
 public static partial class DataObjectInfoExtensions
 {
     public static IClass ToRepositoryClass(this IDataObjectInfo instance, GeneratorSettings settings)
-        => instance.ToRepositoryClassBuilder(settings).Build();
+        => instance.ToRepositoryClassBuilder(settings).BuildTyped();
 
     public static ClassBuilder ToRepositoryClassBuilder(this IDataObjectInfo instance, GeneratorSettings settings)
         => new ClassBuilder()

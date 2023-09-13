@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToQueryClass(settings);
+        var input = CreateDataObjectInfo(default).ToQueryClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);
@@ -32,7 +32,7 @@ namespace Queries
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery
+    public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery, System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         {
@@ -40,44 +40,44 @@ namespace Queries
             {
                 yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Limit exceeds the maximum of "" + MaxLimit, new[] { nameof(Limit), nameof(Limit) });
             }
-            foreach (var condition in Conditions)
+            foreach (var condition in Filter.Conditions)
             {
                 if (!IsValidExpression(condition.LeftExpression))
                 {
-                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] { nameof(Conditions), nameof(Conditions) });
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] { nameof(Filter), nameof(Filter) });
                 }
                 if (!IsValidExpression(condition.RightExpression))
                 {
-                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid right expression in conditions: "" + condition.RightExpression, new[] { nameof(Conditions), nameof(Conditions) });
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid right expression in conditions: "" + condition.RightExpression, new[] { nameof(Filter), nameof(Filter) });
                 }
             }
             foreach (var querySortOrder in OrderByFields)
             {
-                if (!IsValidExpression(querySortOrder.Field))
+                if (!IsValidExpression(querySortOrder.FieldNameExpression))
                 {
-                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid expression in order by fields: "" + querySortOrder.Field, new[] { nameof(OrderByFields), nameof(OrderByFields) });
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid expression in order by fields: "" + querySortOrder.FieldNameExpression, new[] { nameof(OrderByFields), nameof(OrderByFields) });
                 }
             }
         }
 
-        private bool IsValidExpression(ExpressionFramework.Abstractions.DomainModel.IExpression expression)
+        private bool IsValidExpression(ExpressionFramework.Domain.Expression expression)
         {
             if (expression is IFieldExpression fieldExpression)
             {
                 return expression.FieldName.StartsWith(""ExtraField"") || ValidFieldNames.Any(s => s.Equals(expression.FieldName, StringComparison.OrdinalIgnoreCase));
             }
-            return true;
+            return true; // Paul was here
         }
 
-        public TestEntityQuery(): this(null, null, Enumerable.Empty<ExpressionFramework.Abstractions.DomainModel.ICondition>(), Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>())
+        public TestEntityQuery() : this(null, null, new ExpressionFramework.Domain.Evaluatables.ComposedEvaluatable(Enumerable.Empty<ExpressionFramework.Domain.Evaluatables.ComposableEvaluatable>()), Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>())
         {
         }
 
-        public TestEntityQuery(System.Nullable<int> limit, System.Nullable<int> offset, System.Collections.Generic.IEnumerable<ExpressionFramework.Abstractions.DomainModel.ICondition> conditions, System.Collections.Generic.IEnumerable<QueryFramework.Abstractions.IQuerySortOrder> orderByFields): base(limit, offset, conditions, orderByFields)
+        public TestEntityQuery(System.Nullable<int> limit, System.Nullable<int> offset, ExpressionFramework.Domain.Evaluatables.ComposedEvaluatable filter, System.Collections.Generic.IEnumerable<QueryFramework.Abstractions.IQuerySortOrder> orderByFields) : base(limit, offset, filter, orderByFields)
         {
         }
 
-        public TestEntityQuery(QueryFramework.Abstractions.Queries.ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Conditions, simpleEntityQuery.OrderByFields
+        public TestEntityQuery(QueryFramework.Abstractions.Queries.ISingleEntityQuery simpleEntityQuery) : this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Filter, simpleEntityQuery.OrderByFields
         {
         }
 

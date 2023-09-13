@@ -10,7 +10,7 @@ public static class FieldInfoExtensions
             : instance.Name.Sanitize();
 
     public static string GetPropertyTypeName(this IFieldInfo instance)
-        => instance.Metadata.GetStringValue(Entities.PropertyType, instance.TypeName ?? "System.Object");
+        => instance.Metadata.GetStringValue(Entities.PropertyType, () => instance.TypeName ?? "System.Object");
 
     public static bool IsRequired(this IFieldInfo instance)
         => instance.Metadata.GetValues<IAttribute>(Entities.FieldAttribute).Any(a => a.Name == "System.ComponentModel.DataAnnotations.Required");
@@ -52,7 +52,7 @@ public static class FieldInfoExtensions
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public static bool UseOnInsert(this IFieldInfo instance)
-        => instance.Metadata.GetBooleanValue(Database.UseOnInsert, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
+        => instance.Metadata.GetBooleanValue(Database.UseOnInsert, () => instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
     /// <summary>
     /// Determines whether the specified field should be used on Update in database
@@ -60,7 +60,7 @@ public static class FieldInfoExtensions
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public static bool UseOnUpdate(this IFieldInfo instance)
-        => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
+        => instance.Metadata.GetBooleanValue(Database.UseOnUpdate, () => instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
     /// <summary>
     /// Determines whether the specified field should be used on Delete in database
@@ -68,7 +68,7 @@ public static class FieldInfoExtensions
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public static bool UseOnDelete(this IFieldInfo instance)
-        => instance.Metadata.GetBooleanValue(Database.UseOnDelete, instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
+        => instance.Metadata.GetBooleanValue(Database.UseOnDelete, () => instance.IsPersistable && !instance.IsIdentityField && !instance.IsSqlIdentity() && !instance.IsComputed && instance.GetPropertyTypeName().IsSupportedByMap());
 
     /// <summary>
     /// Determines whether the specified field should always be used on Select in database
@@ -76,11 +76,11 @@ public static class FieldInfoExtensions
     /// <remarks>Metadata value overrides IsPersistable, both True and False</remarks>
     /// <param name="instance"></param>
     public static bool UseOnSelect(this IFieldInfo instance)
-        => instance.Metadata.GetBooleanValue(Database.UseOnSelect, instance.IsPersistable && instance.GetPropertyTypeName().IsSupportedByMap());
+        => instance.Metadata.GetBooleanValue(Database.UseOnSelect, () => instance.IsPersistable && instance.GetPropertyTypeName().IsSupportedByMap());
 
     internal static ParameterBuilder ToParameterBuilder(this IFieldInfo instance)
         => new ParameterBuilder().WithName(instance.Name.Sanitize().ToPascalCase())
-                                 .WithTypeName(instance.GetPropertyTypeName())
+                                 .WithTypeName(instance.GetPropertyTypeName().FixTypeName())
                                  .WithDefaultValue(instance.DefaultValue)
                                  .WithIsNullable(instance.IsNullable);
 

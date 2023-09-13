@@ -7,7 +7,7 @@ public partial class IntegrationTests
     {
         // Arrange
         var settings = GeneratorSettings.Default;
-        var input = CreateDataObjectInfo(default(EntityClassType)).ToPagedEntityRetrieverSettingsClass(settings);
+        var input = CreateDataObjectInfo(default).ToPagedEntityRetrieverSettingsClass(settings);
 
         // Act
         var actual = GenerateCode(input, settings);

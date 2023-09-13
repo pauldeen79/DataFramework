@@ -2,7 +2,7 @@
 
 public interface IDataObjectInfo
 {
-    ValueCollection<IFieldInfo> Fields { get; }
+    IReadOnlyCollection<IFieldInfo> Fields { get; }
     string? AssemblyName { get; }
     string? TypeName { get; }
     string Name { get; }
@@ -11,5 +11,5 @@ public interface IDataObjectInfo
     bool IsVisible { get; }
     bool IsReadOnly { get; }
     bool IsQueryable { get; }
-    ValueCollection<IMetadata> Metadata { get; }
+    IReadOnlyCollection<IMetadata> Metadata { get; }
 }
