@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
-public class Records : DataFrameworkCSharpClassBase, ICodeGenerationProvider
+public class Entities : DataFrameworkCSharpClassBase, ICodeGenerationProvider
 {
     public override string Path => "DataFramework.Core";
     public override string DefaultFileName => "Entities.generated.cs";
