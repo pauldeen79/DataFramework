@@ -16,16 +16,6 @@ public abstract class DataFrameworkCSharpClassBase : CSharpClassBase
     protected override string FileNameSuffix => ".generated";
     protected override bool InheritFromInterfaces => true;
 
-    protected IClass[] GetCodeStatementBuilderClasses(Type codeStatementType, Type codeStatementInterfaceType, Type codeStatementBuilderInterfaceType, string buildersNamespace)
-        => GetClassesFromSameNamespace(codeStatementType)
-            .Select
-            (
-                c => CreateBuilder(c, buildersNamespace)
-                    .AddInterfaces(codeStatementBuilderInterfaceType)
-                    .Chain(x => x.Methods.First(x => x.Name.ToString() == "Build").WithType(codeStatementInterfaceType))
-                    .BuildTyped()
-            ).ToArray();
-
     protected override string FormatInstanceTypeName(ITypeBase instance, bool forCreate)
     {
         if (instance.Namespace == "DataFramework.Core")
