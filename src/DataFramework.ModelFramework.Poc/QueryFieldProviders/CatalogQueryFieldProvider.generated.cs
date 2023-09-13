@@ -5,7 +5,7 @@ using System.Linq;
 using DataFramework.ModelFramework.Poc.Repositories;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
-using QueryFramework.Abstractions.Queries;
+using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
@@ -19,7 +19,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
         public CatalogQueryFieldInfoProvider(IExtraFieldRepository extraFieldRepository)
             => _extraFieldRepository = extraFieldRepository;
 
-        public bool TryCreate(ISingleEntityQuery query, out IQueryFieldInfo? result)
+        public bool TryCreate(IQuery query, out IQueryFieldInfo? result)
         {
             if (query is CatalogQuery)
             {

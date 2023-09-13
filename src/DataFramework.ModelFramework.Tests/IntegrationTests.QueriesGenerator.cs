@@ -32,7 +32,7 @@ namespace Queries
 #nullable enable
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Queries.QueryGenerator"", @""1.0.0.0"")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public partial record TestEntityQuery : QueryFramework.Core.Queries.SingleEntityQuery, IMyQuery, System.ComponentModel.DataAnnotations.IValidatableObject
+    public partial record TestEntityQuery : QueryFramework.Core.Query, IMyQuery, System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
         {
@@ -77,7 +77,7 @@ namespace Queries
         {
         }
 
-        public TestEntityQuery(QueryFramework.Abstractions.Queries.ISingleEntityQuery simpleEntityQuery) : this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Filter, simpleEntityQuery.OrderByFields
+        public TestEntityQuery(QueryFramework.Abstractions.IQuery query) : this(query.Limit, query.Offset, query.Filter, query.OrderByFields
         {
         }
 

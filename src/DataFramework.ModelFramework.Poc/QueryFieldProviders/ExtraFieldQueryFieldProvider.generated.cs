@@ -3,7 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
 using PDC.Net.Core.Queries;
-using QueryFramework.Abstractions.Queries;
+using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
@@ -12,7 +12,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldQueryFieldInfoProvider : IQueryFieldInfoProvider
     {
-        public bool TryCreate(ISingleEntityQuery query, out IQueryFieldInfo? result)
+        public bool TryCreate(IQuery query, out IQueryFieldInfo? result)
         {
             if (query is ExtraFieldQuery)
             {

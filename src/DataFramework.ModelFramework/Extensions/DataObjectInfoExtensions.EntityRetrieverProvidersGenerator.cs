@@ -44,7 +44,7 @@ public static partial class DataObjectInfoExtensions
             (
                 new ParameterBuilder()
                     .WithName("query")
-                    .WithType(typeof(ISingleEntityQuery)),
+                    .WithType(typeof(IQuery)),
                 new ParameterBuilder()
                     .WithName("result")
                     .WithIsNullable()

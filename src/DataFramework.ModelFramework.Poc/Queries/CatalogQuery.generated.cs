@@ -8,13 +8,12 @@ using ExpressionFramework.Domain.Evaluatables;
 using ExpressionFramework.Domain.Expressions;
 using QueryFramework.Abstractions;
 using QueryFramework.Abstractions.Extensions;
-using QueryFramework.Abstractions.Queries;
-using QueryFramework.Core.Queries;
+using QueryFramework.Core;
 
 namespace PDC.Net.Core.Queries
 {
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryGenerator", @"1.0.0.0")]
-    public partial record CatalogQuery : SingleEntityQuery, IValidatableObject
+    public partial record CatalogQuery : Query, IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -73,10 +72,10 @@ namespace PDC.Net.Core.Queries
         {
         }
 
-        public CatalogQuery(ISingleEntityQuery simpleEntityQuery): this(simpleEntityQuery.Limit,
-                                                                        simpleEntityQuery.Offset,
-                                                                        simpleEntityQuery.Filter,
-                                                                        simpleEntityQuery.OrderByFields)
+        public CatalogQuery(IQuery query): this(query.Limit,
+                                                query.Offset,
+                                                query.Filter,
+                                                query.OrderByFields)
         {
         }
 

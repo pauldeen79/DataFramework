@@ -14,7 +14,7 @@ public static partial class DataObjectInfoExtensions
             .WithNamespace(instance.GetQueriesNamespace())
             .FillFrom(instance)
             .WithVisibility(instance.Metadata.GetValue(Queries.Visibility, () => instance.IsVisible.ToVisibility()))
-            .WithBaseClass(typeof(SingleEntityQuery))
+            .WithBaseClass(typeof(Query))
             .AddInterfaces(instance.Metadata
                 .Where(md => md.Name == Queries.Interface)
                 .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName())))
@@ -150,8 +150,8 @@ public static partial class DataObjectInfoExtensions
             .ChainCallToBaseUsingParameters();
 
         yield return new ClassConstructorBuilder()
-            .AddParameter("simpleEntityQuery", typeof(ISingleEntityQuery))
-            .WithChainCall("this(simpleEntityQuery.Limit, simpleEntityQuery.Offset, simpleEntityQuery.Filter, simpleEntityQuery.OrderByFields");
+            .AddParameter("query", typeof(IQuery))
+            .WithChainCall("this(query.Limit, query.Offset, query.Filter, query.OrderByFields");
     }
 
     private static IEnumerable<AttributeBuilder> GetQueryClassAttributes(IDataObjectInfo instance, RenderMetadataAsAttributesTypes renderMetadataAsAttributes)

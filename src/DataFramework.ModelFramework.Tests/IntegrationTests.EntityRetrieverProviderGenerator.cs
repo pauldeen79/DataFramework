@@ -33,7 +33,7 @@ namespace CommandEntityProviders
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.EntityRetrieverProviderGenerator"", @""1.0.0.0"")]
     public partial class TestEntityEntityRetrieverProvider : QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider
     {
-        public bool TryCreate<TResult>(QueryFramework.Abstractions.Queries.ISingleEntityQuery query, out CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult>? result)
+        public bool TryCreate<TResult>(QueryFramework.Abstractions.IQuery query, out CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult>? result)
             where TResult : class
         {
             if (typeof(TResult) == typeof(Entities.TestEntity)

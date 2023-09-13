@@ -1,6 +1,6 @@
 ﻿using CrossCutting.Data.Abstractions;
 using PDC.Net.Core.Entities;
-using QueryFramework.Abstractions.Queries;
+using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
 namespace DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverProviders
@@ -12,7 +12,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverProviders
         public ExtraFieldDatabaseEntityRetrieverProvider(IDatabaseEntityRetriever<ExtraField> databaseEntityRetriever)
             => _databaseEntityRetriever = databaseEntityRetriever;
 
-        public bool TryCreate<TResult>(ISingleEntityQuery query, out IDatabaseEntityRetriever<TResult> result) where TResult : class
+        public bool TryCreate<TResult>(IQuery query, out IDatabaseEntityRetriever<TResult> result) where TResult : class
         {
             if (typeof(TResult) == typeof(ExtraField))
             {
