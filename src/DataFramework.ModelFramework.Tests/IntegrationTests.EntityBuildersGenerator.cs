@@ -197,7 +197,7 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default(int));
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
@@ -425,7 +425,7 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default(int));
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
@@ -653,7 +653,7 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default(int));
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
@@ -884,7 +884,7 @@ namespace EntityBuilders
         public TestEntityBuilder()
         {
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default(int));
+            _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
@@ -1025,7 +1025,7 @@ namespace GeneratedNamespace
         {
             Tags = new System.Collections.Generic.List<string>();
             #pragma warning disable CS8603 // Possible null reference return.
-            _idDelegate = new (() => default(long));
+            _idDelegate = new (() => default(long)!);
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
