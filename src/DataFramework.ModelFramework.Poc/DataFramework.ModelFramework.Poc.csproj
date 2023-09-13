@@ -12,8 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="2.10.0" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.7.4" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.7.4" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.7.5" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.7.5" />
   </ItemGroup>
 
 </Project>
