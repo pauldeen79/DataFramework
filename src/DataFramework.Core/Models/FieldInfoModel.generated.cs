@@ -133,15 +133,15 @@ namespace DataFramework.Core.Models
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
             #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
-            IsNullable = default(System.Boolean)!;
-            IsVisible = default(System.Boolean)!;
-            IsReadOnly = default(System.Boolean)!;
-            IsIdentityField = default(System.Boolean)!;
-            IsComputed = default(System.Boolean)!;
-            IsPersistable = default(System.Boolean)!;
-            CanGet = default(System.Boolean)!;
-            CanSet = default(System.Boolean)!;
-            UseForConcurrencyCheck = default(System.Boolean)!;
+            IsNullable = default(System.Boolean);
+            IsVisible = default(System.Boolean);
+            IsReadOnly = default(System.Boolean);
+            IsIdentityField = default(System.Boolean);
+            IsComputed = default(System.Boolean);
+            IsPersistable = default(System.Boolean);
+            CanGet = default(System.Boolean);
+            CanSet = default(System.Boolean);
+            UseForConcurrencyCheck = default(System.Boolean);
             #pragma warning restore CS8603 // Possible null reference return.
         }
 

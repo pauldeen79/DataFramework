@@ -104,9 +104,9 @@ namespace DataFramework.Core.Models
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
             #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
-            IsVisible = default(System.Boolean)!;
-            IsReadOnly = default(System.Boolean)!;
-            IsQueryable = default(System.Boolean)!;
+            IsVisible = default(System.Boolean);
+            IsReadOnly = default(System.Boolean);
+            IsQueryable = default(System.Boolean);
             #pragma warning restore CS8603 // Possible null reference return.
         }
 
