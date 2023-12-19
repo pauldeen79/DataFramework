@@ -102,12 +102,7 @@ namespace DataFramework.Core.Models
         {
             Fields = new System.Collections.Generic.List<DataFramework.Core.Models.FieldInfoModel>();
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Models.MetadataModel>();
-            #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
-            IsVisible = default(System.Boolean);
-            IsReadOnly = default(System.Boolean);
-            IsQueryable = default(System.Boolean);
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public DataObjectInfoModel(DataFramework.Abstractions.IDataObjectInfo source)

@@ -196,14 +196,12 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
             _nameOriginalDelegate = new (() => default(string?));
             _descriptionOriginalDelegate = new (() => default(string?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -424,14 +422,12 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
             _nameOriginalDelegate = new (() => default(string?));
             _descriptionOriginalDelegate = new (() => default(string?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -652,14 +648,12 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
             _nameOriginalDelegate = new (() => default(string?));
             _descriptionOriginalDelegate = new (() => default(string?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -883,14 +877,12 @@ namespace EntityBuilders
 
         public TestEntityBuilder()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             _idDelegate = new (() => default(int)!);
             _nameDelegate = new (() => string.Empty);
             _descriptionDelegate = new (() => default(string?));
             _idOriginalDelegate = new (() => default(int?));
             _nameOriginalDelegate = new (() => default(string?));
             _descriptionOriginalDelegate = new (() => default(string?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public TestEntityBuilder(Entities.TestEntity source)
@@ -1024,9 +1016,7 @@ namespace GeneratedNamespace
         public TestEntityBuilder()
         {
             Tags = new System.Collections.Generic.List<string>();
-            #pragma warning disable CS8603 // Possible null reference return.
             _idDelegate = new (() => default(long)!);
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public TestEntityBuilder(TestEntity source)

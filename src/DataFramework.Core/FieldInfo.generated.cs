@@ -23,6 +23,8 @@ namespace DataFramework.Core
 
         public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isReadOnly, bool isIdentityField, bool isComputed, bool isPersistable, bool canGet, bool canSet, bool useForConcurrencyCheck, object? defaultValue, System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IMetadata> metadata) : base(name, description, displayName, typeName, isNullable, isVisible, isReadOnly, isIdentityField, isComputed, isPersistable, canGet, canSet, useForConcurrencyCheck, defaultValue, metadata)
         {
+            if (name == null) throw new System.ArgumentNullException("name");
+            if (metadata == null) throw new System.ArgumentNullException("metadata");
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
     }

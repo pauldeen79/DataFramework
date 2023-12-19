@@ -502,22 +502,20 @@ namespace DataFramework.Core.Builders
         public FieldInfoBuilder()
         {
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
-            #pragma warning disable CS8603 // Possible null reference return.
             _nameDelegate = new (() => new System.Text.StringBuilder());
             _descriptionDelegate = new (() => default);
             _displayNameDelegate = new (() => default);
             _typeNameDelegate = new (() => default);
-            _isNullableDelegate = new (() => default(bool)!);
+            _isNullableDelegate = new (() => default(bool));
             _isVisibleDelegate = new (() => true);
-            _isReadOnlyDelegate = new (() => default(bool)!);
-            _isIdentityFieldDelegate = new (() => default(bool)!);
-            _isComputedDelegate = new (() => default(bool)!);
+            _isReadOnlyDelegate = new (() => default(bool));
+            _isIdentityFieldDelegate = new (() => default(bool));
+            _isComputedDelegate = new (() => default(bool));
             _isPersistableDelegate = new (() => true);
             _canGetDelegate = new (() => true);
             _canSetDelegate = new (() => true);
-            _useForConcurrencyCheckDelegate = new (() => default(bool)!);
+            _useForConcurrencyCheckDelegate = new (() => default(bool));
             _defaultValueDelegate = new (() => default(object?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public FieldInfoBuilder(DataFramework.Abstractions.IFieldInfo source)

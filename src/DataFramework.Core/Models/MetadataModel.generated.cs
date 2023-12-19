@@ -52,9 +52,7 @@ namespace DataFramework.Core.Models
 
         public MetadataModel()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             Name = string.Empty;
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public MetadataModel(DataFramework.Abstractions.IMetadata source)

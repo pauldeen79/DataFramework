@@ -23,6 +23,9 @@ namespace DataFramework.Core
 
         public DataObjectInfo(System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IFieldInfo> fields, string? assemblyName, string? typeName, string name, string? description, string? displayName, bool isVisible, bool isReadOnly, bool isQueryable, System.Collections.Generic.IEnumerable<DataFramework.Abstractions.IMetadata> metadata) : base(fields, assemblyName, typeName, name, description, displayName, isVisible, isReadOnly, isQueryable, metadata)
         {
+            if (fields == null) throw new System.ArgumentNullException("fields");
+            if (name == null) throw new System.ArgumentNullException("name");
+            if (metadata == null) throw new System.ArgumentNullException("metadata");
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
     }
