@@ -400,16 +400,14 @@ namespace DataFramework.Core.Builders
         {
             Fields = new System.Collections.Generic.List<DataFramework.Core.Builders.FieldInfoBuilder>();
             Metadata = new System.Collections.Generic.List<DataFramework.Core.Builders.MetadataBuilder>();
-            #pragma warning disable CS8603 // Possible null reference return.
             _assemblyNameDelegate = new (() => default);
             _typeNameDelegate = new (() => default);
             _nameDelegate = new (() => new System.Text.StringBuilder());
             _descriptionDelegate = new (() => default);
             _displayNameDelegate = new (() => default);
             _isVisibleDelegate = new (() => true);
-            _isReadOnlyDelegate = new (() => default(bool)!);
+            _isReadOnlyDelegate = new (() => default(bool));
             _isQueryableDelegate = new (() => true);
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public DataObjectInfoBuilder(DataFramework.Abstractions.IDataObjectInfo source)

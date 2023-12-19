@@ -16,8 +16,8 @@
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="pauldeen79.ModelFramework.Generators.Database" Version="0.7.1" />
-    <PackageReference Include="pauldeen79.ModelFramework.Generators.Objects" Version="0.7.1" />
+    <PackageReference Include="pauldeen79.ModelFramework.Generators.Database" Version="0.8.2" />
+    <PackageReference Include="pauldeen79.ModelFramework.Generators.Objects" Version="0.8.2" />
     <PackageReference Include="xunit" Version="2.6.3" />
     <PackageReference Include="xunit.runner.console" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>

@@ -23,6 +23,7 @@ namespace DataFramework.Core
 
         public Metadata(string name, object? value) : base(name, value)
         {
+            if (name == null) throw new System.ArgumentNullException("name");
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
     }

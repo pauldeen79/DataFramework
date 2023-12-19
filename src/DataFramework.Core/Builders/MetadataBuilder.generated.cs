@@ -112,10 +112,8 @@ namespace DataFramework.Core.Builders
 
         public MetadataBuilder()
         {
-            #pragma warning disable CS8603 // Possible null reference return.
             _nameDelegate = new (() => new System.Text.StringBuilder());
             _valueDelegate = new (() => default(object?));
-            #pragma warning restore CS8603 // Possible null reference return.
         }
 
         public MetadataBuilder(DataFramework.Abstractions.IMetadata source)
