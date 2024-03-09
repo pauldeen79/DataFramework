@@ -7,6 +7,7 @@ using ExpressionFramework.Domain;
 using ExpressionFramework.Domain.Evaluatables;
 using ExpressionFramework.Domain.Expressions;
 using QueryFramework.Abstractions;
+using QueryFramework.Abstractions.Builders;
 using QueryFramework.Abstractions.Extensions;
 using QueryFramework.Core;
 
@@ -58,21 +59,26 @@ namespace PDC.Net.Core.Queries
             return true;
         }
 
-        public ExtraFieldQuery() : this(null, null, Enumerable.Empty<ComposableEvaluatable>(), Enumerable.Empty<IQuerySortOrder>())
+        public override IQueryBuilder ToBuilder()
+        {
+            return new ExtraFieldQueryBuilder(this);
+        }
+
+        public ExtraFieldQuery() : this(null, null, new ComposedEvaluatable(Enumerable.Empty<ComposableEvaluatable>()), Enumerable.Empty<IQuerySortOrder>())
         {
         }
 
         public ExtraFieldQuery(int? limit,
                                int? offset,
-                               IEnumerable<ComposableEvaluatable> conditions,
+                               ComposedEvaluatable filter,
                                IEnumerable<IQuerySortOrder> orderByFields)
-            : base(limit, offset, new ComposedEvaluatable(conditions), orderByFields)
+            : base(limit, offset, filter, orderByFields)
         {
         }
 
         public ExtraFieldQuery(IQuery query): this(query.Limit,
                                                    query.Offset,
-                                                   query.Filter.Conditions,
+                                                   query.Filter,
                                                    query.OrderByFields)
         {
         }
