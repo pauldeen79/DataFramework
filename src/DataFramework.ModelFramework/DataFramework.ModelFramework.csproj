@@ -12,8 +12,8 @@
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="3.3.0" />
     <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.8.3" />
     <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.8.3" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.9.2" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.9.2" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.10.1" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.10.1" />
   </ItemGroup>
 
   <ItemGroup>

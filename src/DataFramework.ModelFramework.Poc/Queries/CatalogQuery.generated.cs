@@ -7,6 +7,7 @@ using ExpressionFramework.Domain;
 using ExpressionFramework.Domain.Evaluatables;
 using ExpressionFramework.Domain.Expressions;
 using QueryFramework.Abstractions;
+using QueryFramework.Abstractions.Builders;
 using QueryFramework.Abstractions.Extensions;
 using QueryFramework.Core;
 
@@ -58,6 +59,11 @@ namespace PDC.Net.Core.Queries
 
             // You might want to validate the expression to prevent sql injection (unless you can only create query expressions in code)
             return expression.GetType().Assembly.FullName.StartsWith("ExpressionFramework.Domain.Specialized");
+        }
+
+        public override IQueryBuilder ToBuilder()
+        {
+            return new CatalogQueryBuilder(this);
         }
 
         public CatalogQuery() : this(null, null, new ComposedEvaluatable(Enumerable.Empty<ComposableEvaluatable>()), Enumerable.Empty<IQuerySortOrder>())
