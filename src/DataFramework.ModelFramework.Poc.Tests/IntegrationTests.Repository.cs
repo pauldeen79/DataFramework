@@ -54,7 +54,7 @@ public sealed partial class IntegrationTests
                                           () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
         Connection.AddResultForDataReader(cmd => cmd.CommandText == "[UpdateCatalog]",
                                           () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Today, DateTime.Today, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
-        var input = new CatalogBuilder(Repository.Find(new CatalogIdentity(1))).SetExtraField1("value").Build();
+        var input = new CatalogBuilder(Repository.Find(new CatalogIdentity(1))).WithExtraField1("value").Build();
 
         // Act
         var actual = Repository.Update(input);
@@ -75,7 +75,7 @@ public sealed partial class IntegrationTests
                                           () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
         Connection.AddResultForDataReader(cmd => cmd.CommandText == "[DeleteCatalog]",
                                           () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Today, DateTime.Today, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
-        var input = new CatalogBuilder(Repository.Find(new CatalogIdentity(1))).SetExtraField1("value").Build();
+        var input = new CatalogBuilder(Repository.Find(new CatalogIdentity(1))).WithExtraField1("value").Build();
 
         // Act
         var actual = Repository.Delete(input);

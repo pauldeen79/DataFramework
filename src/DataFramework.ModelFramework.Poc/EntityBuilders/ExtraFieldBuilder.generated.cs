@@ -86,67 +86,67 @@ namespace PDC.Net.Core.Entities
             set;
         }
 
-        public ExtraFieldBuilder SetEntityName(string value)
+        public ExtraFieldBuilder WithEntityName(string value)
         {
             this.EntityName = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetName(string value)
+        public ExtraFieldBuilder WithName(string value)
         {
             this.Name = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetDescription(string? value)
+        public ExtraFieldBuilder WithDescription(string? value)
         {
             this.Description = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetFieldNumber(byte value)
+        public ExtraFieldBuilder WithFieldNumber(byte value)
         {
             this.FieldNumber = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetFieldType(string value)
+        public ExtraFieldBuilder WithFieldType(string value)
         {
             this.FieldType = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetIsExistingEntity(bool value)
+        public ExtraFieldBuilder WithIsExistingEntity(bool value = true)
         {
             this.IsExistingEntity = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetEntityNameOriginal(string? value)
+        public ExtraFieldBuilder WithEntityNameOriginal(string? value)
         {
             this.EntityNameOriginal = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetNameOriginal(string? value)
+        public ExtraFieldBuilder WithNameOriginal(string? value)
         {
             this.NameOriginal = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetDescriptionOriginal(string? value)
+        public ExtraFieldBuilder WithDescriptionOriginal(string? value)
         {
             this.DescriptionOriginal = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetFieldNumberOriginal(byte? value)
+        public ExtraFieldBuilder WithFieldNumberOriginal(byte? value)
         {
             this.FieldNumberOriginal = value;
             return this;
         }
 
-        public ExtraFieldBuilder SetFieldTypeOriginal(string? value)
+        public ExtraFieldBuilder WithFieldTypeOriginal(string? value)
         {
             this.FieldTypeOriginal = value;
             return this;
@@ -155,22 +155,6 @@ namespace PDC.Net.Core.Entities
         public ExtraField Build()
         {
             return new ExtraField(EntityName, Name, Description, FieldNumber, FieldType, IsExistingEntity, EntityNameOriginal, NameOriginal, DescriptionOriginal, FieldNumberOriginal, FieldTypeOriginal);
-        }
-
-        public ExtraFieldBuilder Update(ExtraField instance)
-        {
-            this.EntityName = instance.EntityName;
-            this.Name = instance.Name;
-            this.Description = instance.Description;
-            this.FieldNumber = instance.FieldNumber;
-            this.FieldType = instance.FieldType;
-            this.IsExistingEntity = instance.IsExistingEntity;
-            this.EntityNameOriginal = instance.EntityNameOriginal;
-            this.NameOriginal = instance.NameOriginal;
-            this.DescriptionOriginal = instance.DescriptionOriginal;
-            this.FieldNumberOriginal = instance.FieldNumberOriginal;
-            this.FieldTypeOriginal = instance.FieldTypeOriginal;
-            return this;
         }
 
         public ExtraFieldBuilder()
@@ -193,31 +177,6 @@ namespace PDC.Net.Core.Entities
             DescriptionOriginal = instance.DescriptionOriginal;
             FieldNumberOriginal = instance.FieldNumberOriginal;
             FieldTypeOriginal = instance.FieldTypeOriginal;
-        }
-
-        public ExtraFieldBuilder(string entityName,
-                                 string name,
-                                 string? description,
-                                 byte fieldNumber,
-                                 string fieldType,
-                                 bool isExistingEntity = false,
-                                 string? entityNameOriginal = default,
-                                 string? nameOriginal = default,
-                                 string? descriptionOriginal = default,
-                                 byte? fieldNumberOriginal = default,
-                                 string? fieldTypeOriginal = default)
-        {
-            this.EntityName = entityName;
-            this.Name = name;
-            this.Description = description;
-            this.FieldNumber = fieldNumber;
-            this.FieldType = fieldType;
-            this.IsExistingEntity = isExistingEntity;
-            this.EntityNameOriginal = entityNameOriginal;
-            this.NameOriginal = nameOriginal;
-            this.DescriptionOriginal = descriptionOriginal;
-            this.FieldNumberOriginal = fieldNumberOriginal;
-            this.FieldTypeOriginal = fieldTypeOriginal;
         }
     }
 #nullable restore

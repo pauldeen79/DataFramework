@@ -50,23 +50,23 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
         private ExtraFieldBuilder AddResultEntity(ExtraFieldBuilder resultEntity)
         {
             // Moved from Finalize
-            resultEntity = resultEntity.SetIsExistingEntity(true);
+            resultEntity = resultEntity.WithIsExistingEntity(true);
 
             return resultEntity;
         }
 
         private ExtraFieldBuilder AddAfterRead(ExtraFieldBuilder resultEntity, IDataReader reader)
         {
-            resultEntity = resultEntity.SetEntityName(reader.GetString("EntityName"));
-            resultEntity = resultEntity.SetName(reader.GetString("Name"));
-            resultEntity = resultEntity.SetDescription(reader.GetNullableString("Description"));
-            resultEntity = resultEntity.SetFieldNumber(reader.GetByte("FieldNumber"));
-            resultEntity = resultEntity.SetFieldType(reader.GetString("FieldType"));
-            resultEntity = resultEntity.SetEntityNameOriginal(reader.GetString("EntityName"));
-            resultEntity = resultEntity.SetNameOriginal(reader.GetString("Name"));
-            resultEntity = resultEntity.SetDescriptionOriginal(reader.GetString("Description"));
-            resultEntity = resultEntity.SetFieldNumberOriginal(reader.GetByte("FieldNumber"));
-            resultEntity = resultEntity.SetFieldTypeOriginal(reader.GetString("FieldType"));
+            resultEntity = resultEntity.WithEntityName(reader.GetString("EntityName"));
+            resultEntity = resultEntity.WithName(reader.GetString("Name"));
+            resultEntity = resultEntity.WithDescription(reader.GetNullableString("Description"));
+            resultEntity = resultEntity.WithFieldNumber(reader.GetByte("FieldNumber"));
+            resultEntity = resultEntity.WithFieldType(reader.GetString("FieldType"));
+            resultEntity = resultEntity.WithEntityNameOriginal(reader.GetString("EntityName"));
+            resultEntity = resultEntity.WithNameOriginal(reader.GetString("Name"));
+            resultEntity = resultEntity.WithDescriptionOriginal(reader.GetString("Description"));
+            resultEntity = resultEntity.WithFieldNumberOriginal(reader.GetByte("FieldNumber"));
+            resultEntity = resultEntity.WithFieldTypeOriginal(reader.GetString("FieldType"));
 
             return resultEntity;
         }
@@ -79,16 +79,16 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
 
         private ExtraFieldBuilder UpdateAfterRead(ExtraFieldBuilder resultEntity, IDataReader reader)
         {
-            resultEntity = resultEntity.SetEntityName(reader.GetString("EntityName"));
-            resultEntity = resultEntity.SetName(reader.GetString("Name"));
-            resultEntity = resultEntity.SetDescription(reader.GetNullableString("Description"));
-            resultEntity = resultEntity.SetFieldNumber(reader.GetByte("FieldNumber"));
-            resultEntity = resultEntity.SetFieldType(reader.GetString("FieldType"));
-            resultEntity = resultEntity.SetEntityNameOriginal(reader.GetString("EntityName"));
-            resultEntity = resultEntity.SetNameOriginal(reader.GetString("Name"));
-            resultEntity = resultEntity.SetDescriptionOriginal(reader.GetNullableString("Description"));
-            resultEntity = resultEntity.SetFieldNumberOriginal(reader.GetByte("FieldNumber"));
-            resultEntity = resultEntity.SetFieldTypeOriginal(reader.GetString("FieldType"));
+            resultEntity = resultEntity.WithEntityName(reader.GetString("EntityName"));
+            resultEntity = resultEntity.WithName(reader.GetString("Name"));
+            resultEntity = resultEntity.WithDescription(reader.GetNullableString("Description"));
+            resultEntity = resultEntity.WithFieldNumber(reader.GetByte("FieldNumber"));
+            resultEntity = resultEntity.WithFieldType(reader.GetString("FieldType"));
+            resultEntity = resultEntity.WithEntityNameOriginal(reader.GetString("EntityName"));
+            resultEntity = resultEntity.WithNameOriginal(reader.GetString("Name"));
+            resultEntity = resultEntity.WithDescriptionOriginal(reader.GetNullableString("Description"));
+            resultEntity = resultEntity.WithFieldNumberOriginal(reader.GetByte("FieldNumber"));
+            resultEntity = resultEntity.WithFieldTypeOriginal(reader.GetString("FieldType"));
 
             return resultEntity;
         }

@@ -58,43 +58,43 @@ namespace PDC.Net.Core.Entities
             set;
         }
 
-        public CodeBuilder SetCode(string value)
+        public CodeBuilder WithCode(string value)
         {
             this.Code = value;
             return this;
         }
 
-        public CodeBuilder SetCodeType(string value)
+        public CodeBuilder WithCodeType(string value)
         {
             this.CodeType = value;
             return this;
         }
 
-        public CodeBuilder SetDescription(string value)
+        public CodeBuilder WithDescription(string value)
         {
             this.Description = value;
             return this;
         }
 
-        public CodeBuilder SetIsExistingEntity(bool value)
+        public CodeBuilder WithIsExistingEntity(bool value = true)
         {
             this.IsExistingEntity = value;
             return this;
         }
 
-        public CodeBuilder SetCodeOriginal(string? value)
+        public CodeBuilder WithCodeOriginal(string? value)
         {
             this.CodeOriginal = value;
             return this;
         }
 
-        public CodeBuilder SetCodeTypeOriginal(string? value)
+        public CodeBuilder WithCodeTypeOriginal(string? value)
         {
             this.CodeTypeOriginal = value;
             return this;
         }
 
-        public CodeBuilder SetDescriptionOriginal(string? value)
+        public CodeBuilder WithDescriptionOriginal(string? value)
         {
             this.DescriptionOriginal = value;
             return this;
@@ -103,18 +103,6 @@ namespace PDC.Net.Core.Entities
         public Code Build()
         {
             return new Code(Code, CodeType, Description, IsExistingEntity, CodeOriginal, CodeTypeOriginal, DescriptionOriginal);
-        }
-
-        public CodeBuilder Update(Code instance)
-        {
-            this.Code = instance.CodeProperty;
-            this.CodeType = instance.CodeType;
-            this.Description = instance.Description;
-            this.IsExistingEntity = instance.IsExistingEntity;
-            this.CodeOriginal = instance.CodeOriginal;
-            this.CodeTypeOriginal = instance.CodeTypeOriginal;
-            this.DescriptionOriginal = instance.DescriptionOriginal;
-            return this;
         }
 
         public CodeBuilder()
@@ -132,23 +120,6 @@ namespace PDC.Net.Core.Entities
             CodeOriginal = instance.CodeOriginal;
             CodeTypeOriginal = instance.CodeTypeOriginal;
             DescriptionOriginal = instance.DescriptionOriginal;
-        }
-
-        public CodeBuilder(string code,
-                           string codeType,
-                           string? description,
-                           bool isExistingEntity = false,
-                           string? codeOriginal = default,
-                           string? codeTypeOriginal = default,
-                           string? descriptionOriginal = default)
-        {
-            this.Code = code;
-            this.CodeType = codeType;
-            this.Description = description;
-            this.IsExistingEntity = isExistingEntity;
-            this.CodeOriginal = codeOriginal;
-            this.CodeTypeOriginal = codeTypeOriginal;
-            this.DescriptionOriginal = descriptionOriginal;
         }
     }
 #nullable restore
