@@ -26,8 +26,7 @@ public static partial class DataObjectInfoExtensions
             })
             .BuildTyped()
             .ToImmutableBuilderClassBuilder(new ImmutableBuilderClassSettings(constructorSettings: new ImmutableBuilderClassConstructorSettings(addCopyConstructor: true, addNullChecks: !settings.EnableNullableContext),
-                                                                              typeSettings: new(enableNullableReferenceTypes: settings.EnableNullableContext),
-                                                                              generationSettings: new(useLazyInitialization: true)))
+                                                                              typeSettings: new(enableNullableReferenceTypes: settings.EnableNullableContext)))
             .WithNamespace(instance.GetEntityBuildersNamespace())
             .Chain(x => x.Attributes.Clear())
             .AddAttributes(instance.GetEntityBuilderClassAttributes(renderMetadataAsAttributes));
