@@ -84,4 +84,21 @@ public sealed partial class IntegrationTests
         actual.Should().NotBeNull();
         actual.ExtraField1.Should().Be("value"); //CatalogDatabaseCommandEntityProvider does not change value, this is a 'hard' delete
     }
+
+    [Fact]
+    public void Can_Use_QueryProcessor_In_Repository()
+    {
+        // Arrange
+        Connection.AddResultForDataReader(cmd => cmd.CommandText.StartsWith("SELECT") && cmd.CommandText.Contains(" FROM [Catalog]"),
+                                          () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", "Value", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+        Connection.AddResultForDataReader(cmd => cmd.CommandText.StartsWith("SELECT") && cmd.CommandText.Contains(" FROM [ExtraField]"),
+                                          () => new[] { new ExtraField("Catalog", "MyField", null, 1, typeof(string).FullName, true) });
+
+        // Act
+        var actual = Repository.FindSomething();
+
+        // Assert
+        actual.Should().ContainSingle();
+        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+    }
 }
