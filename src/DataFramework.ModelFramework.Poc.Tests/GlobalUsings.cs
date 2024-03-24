@@ -13,6 +13,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using PDC.Net.Core.Entities;
 global using PDC.Net.Core.Queries;
 global using QueryFramework.Abstractions;
+global using QueryFramework.Abstractions.Extensions;
 global using QueryFramework.Core.Builders.Queries;
-global using QueryFramework.Core.Extensions;
 global using Xunit;
