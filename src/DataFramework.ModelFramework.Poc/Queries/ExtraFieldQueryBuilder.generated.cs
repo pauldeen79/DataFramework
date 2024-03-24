@@ -18,6 +18,11 @@ namespace PDC.Net.Core.Queries
 
         public override IQuery Build()
         {
+            return BuildTyped();
+        }
+
+        public IQuery BuildTyped()
+        {
             return new ExtraFieldQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
         }
     }
