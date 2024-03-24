@@ -7,7 +7,7 @@ using DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverProviders;
 using DataFramework.ModelFramework.Poc.DatabaseEntityRetrieverSettingsProviders;
 using DataFramework.ModelFramework.Poc.EntityMappers;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettingsProviders;
-using DataFramework.ModelFramework.Poc.QueryFieldProviders;
+using DataFramework.ModelFramework.Poc.QueryFieldInfoProviders;
 using DataFramework.ModelFramework.Poc.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using PDC.Net.Core.Entities;
@@ -24,7 +24,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
             return instance.AddQueryFrameworkSqlServer(x =>
             {
                 //findall/findallpaged:
-                x.AddScoped<IDatabaseEntityRetriever<Catalog>, DatabaseEntityRetriever<Catalog>>();
+                x.AddSingleton<IDatabaseEntityRetriever<Catalog>, DatabaseEntityRetriever<Catalog>>();
 
                 //add/update/delete:
                 x.AddScoped<IDatabaseCommandProcessor<Catalog>, DatabaseCommandProcessor<Catalog, CatalogBuilder>>();
@@ -47,7 +47,7 @@ namespace DataFramework.ModelFramework.Poc.DependencyInjection
                 x.AddScoped<ICatalogRepository, CatalogRepository>();
 
                 //findall/findallpaged:
-                x.AddScoped<IDatabaseEntityRetriever<ExtraField>, DatabaseEntityRetriever<ExtraField>>();
+                x.AddSingleton<IDatabaseEntityRetriever<ExtraField>, DatabaseEntityRetriever<ExtraField>>();
 
                 //add/update/delete:
                 x.AddScoped<IDatabaseCommandProcessor<ExtraField>, DatabaseCommandProcessor<ExtraField, ExtraFieldBuilder>>();

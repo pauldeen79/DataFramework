@@ -8,22 +8,22 @@ using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
-namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
+namespace DataFramework.ModelFramework.Poc.QueryFieldInfoProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogQueryFieldInfoProvider : IQueryFieldInfoProvider
     {
-        private readonly IExtraFieldRepository _extraFieldRepository;
+        //private readonly IExtraFieldRepository _extraFieldRepository;
 
-        public CatalogQueryFieldInfoProvider(IExtraFieldRepository extraFieldRepository)
-            => _extraFieldRepository = extraFieldRepository;
+        //public CatalogQueryFieldInfoProvider(IExtraFieldRepository extraFieldRepository)
+        //    => _extraFieldRepository = extraFieldRepository;
 
         public bool TryCreate(IQuery query, out IQueryFieldInfo? result)
         {
             if (query is CatalogQuery)
             {
-                result = new CatalogQueryFieldInfo(_extraFieldRepository.FindExtraFieldsByEntityName(nameof(Catalog)));
+                result = new CatalogQueryFieldInfo(new[] { new ExtraFieldBuilder().WithName("MyField").WithEntityName("Catalog").WithFieldType("varchar(512)").WithFieldNumber(1).Build() }/*_extraFieldRepository.FindExtraFieldsByEntityName(nameof(Catalog))*/);
                 return true;
             }
 

@@ -6,7 +6,7 @@ using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions;
 using QueryFramework.SqlServer.Abstractions;
 
-namespace DataFramework.ModelFramework.Poc.QueryFieldProviders
+namespace DataFramework.ModelFramework.Poc.QueryFieldInfoProviders
 {
 #nullable enable
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
