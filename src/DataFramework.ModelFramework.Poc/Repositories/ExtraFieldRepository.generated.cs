@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core;
-using CrossCutting.Data.Core.Builders;
 using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
 using PDC.Net.Core.Entities;
+using PDC.Net.Core.Queries;
+using QueryFramework.Abstractions;
+using QueryFramework.Abstractions.Extensions;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
 {
@@ -16,21 +18,29 @@ namespace DataFramework.ModelFramework.Poc.Repositories
                                     IDatabaseCommandProvider<ExtraFieldIdentity> identitySelectCommandProvider,
                                     IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider,
                                     IDatabaseCommandProvider entitySelectCommandProvider,
-                                    IDatabaseCommandProvider<ExtraField> entityCommandProvider)
+                                    IDatabaseCommandProvider<ExtraField> entityCommandProvider,
+                                    IQueryProcessor queryProcessor)
             : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
+            QueryProcessor = queryProcessor;
         }
+
+        public IQueryProcessor QueryProcessor { get; }
 
         public IReadOnlyCollection<ExtraField> FindExtraFieldsByEntityName(string entityName)
         {
             var settings = new ExtraFieldPagedEntityRetrieverSettings();
-            return EntityRetriever.FindMany(new SelectCommandBuilder()
-                .Select(settings.Fields)
-                .From(settings.TableName)
-                .Where("EntityName = @entityName")
-                .AppendParameter(nameof(entityName), entityName)
-                .OrderBy(settings.DefaultOrderBy)
-                .Build());
+
+            //return EntityRetriever.FindMany(new SelectCommandBuilder()
+            //    .Select("*")
+            //    .From(settings.TableName)
+            //    .Where("EntityName = @entityName")
+            //    .AppendParameter(nameof(entityName), entityName)
+            //    .OrderBy(settings.DefaultOrderBy)
+            //    .Build());
+
+            var query = new ExtraFieldQueryBuilder().Where(nameof(ExtraField.EntityName)).IsEqualTo(entityName).OrderBy(settings.DefaultOrderBy).Build();
+            return QueryProcessor.FindMany<ExtraField>(query);
         }
     }
 }
