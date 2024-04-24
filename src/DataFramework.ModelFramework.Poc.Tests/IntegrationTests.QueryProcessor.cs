@@ -21,6 +21,24 @@ public sealed partial class IntegrationTests
     }
 
     [Fact]
+    public async Task Can_Query_Database_Using_Basic_Query_Async()
+    {
+        // Arrange
+        Connection.AddResultForDataReader(cmd => cmd.CommandText.StartsWith("SELECT") && cmd.CommandText.Contains(" FROM [Catalog]"),
+                                          () => new[] { new Catalog(1, "Diversen cd 1", DateTime.Today, DateTime.Now, DateTime.Now, "0000-0000", "CDT", "CDR", "CD-ROM", 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null) });
+        var query = new CatalogQuery(new SingleEntityQueryBuilder()
+            .Where(nameof(Catalog.Name)).StartsWith("Diversen cd")
+            .Build());
+
+        // Act
+        var actual = await QueryProcessor.FindManyAsync<Catalog>(query);
+
+        // Assert
+        actual.Should().ContainSingle();
+        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
+    }
+
+    [Fact]
     public void Can_Query_Database_Using_ExtraFieldNames()
     {
         // Arrange

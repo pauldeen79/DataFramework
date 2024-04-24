@@ -1,5 +1,7 @@
 ﻿using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using CrossCutting.Data.Abstractions;
 using CrossCutting.Data.Core;
 using PDC.Net.Core.Entities;
@@ -29,6 +31,11 @@ namespace DataFramework.ModelFramework.Poc.Repositories
         public IReadOnlyCollection<Catalog> FindSomething()
         {
             return QueryProcessor.FindMany<Catalog>(new CatalogQueryBuilder().Where(nameof(Catalog.Name)).IsEqualTo("Something").Build());
+        }
+
+        public Task<IReadOnlyCollection<Catalog>> FindSomethingAsync(CancellationToken cancellationToken)
+        {
+            return QueryProcessor.FindManyAsync<Catalog>(new CatalogQueryBuilder().Where(nameof(Catalog.Name)).IsEqualTo("Something").Build());
         }
     }
 }

@@ -58,7 +58,7 @@ namespace PDC.Net.Core.Queries
             }
 
             // You might want to validate the expression to prevent sql injection (unless you can only create query expressions in code)
-            return expression.GetType().Assembly.FullName.StartsWith("ExpressionFramework.Domain.Specialized");
+            return expression.GetType().Assembly.FullName.StartsWith("ExpressionFramework.Domain");
         }
 
         public override IQueryBuilder ToBuilder()
