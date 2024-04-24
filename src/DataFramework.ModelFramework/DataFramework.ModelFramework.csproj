@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="3.7.0" />
+    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="5.0.0" />
     <PackageReference Include="pauldeen79.ModelFramework.Database" Version="0.8.4" />
     <PackageReference Include="pauldeen79.ModelFramework.Objects" Version="0.8.4" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.11.0" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.11.0" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.0" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.12.0" />
   </ItemGroup>
 
   <ItemGroup>

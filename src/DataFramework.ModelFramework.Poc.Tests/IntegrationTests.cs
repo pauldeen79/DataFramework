@@ -17,7 +17,7 @@ public sealed partial class IntegrationTests : IDisposable
 
         ServiceProvider = new ServiceCollection()
             .AddPdcNet()
-            .AddSingleton<IDbConnection>(Connection)
+            .AddSingleton(Connection)
             .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
         Scope = ServiceProvider.CreateScope();
         Repository = Scope.ServiceProvider.GetRequiredService<ICatalogRepository>();
