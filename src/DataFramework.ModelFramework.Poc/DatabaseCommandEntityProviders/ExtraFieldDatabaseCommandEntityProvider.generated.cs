@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class ExtraFieldDatabaseCommandEntityProvider : IDatabaseCommandEntityProvider<ExtraField, ExtraFieldBuilder>
     {
-        public Func<ExtraFieldBuilder, DatabaseOperation, ExtraFieldBuilder>? ResultEntityDelegate
+        public CreateResultEntityHandler<ExtraFieldBuilder>? CreateResultEntity
             => (entity, operation) =>
             {
                 switch (operation)
@@ -27,7 +27,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
                 }
             };
 
-        public Func<ExtraFieldBuilder, DatabaseOperation, IDataReader, ExtraFieldBuilder>? AfterReadDelegate
+        public AfterReadHandler<ExtraFieldBuilder>? AfterRead
             => (entity, operation, reader) =>
             {
                 switch (operation)
@@ -43,9 +43,9 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
                 }
             };
 
-        public Func<ExtraField, ExtraFieldBuilder>? CreateBuilderDelegate => entity => new ExtraFieldBuilder(entity);
+        public CreateBuilderHandler<ExtraField, ExtraFieldBuilder>? CreateBuilder => entity => new ExtraFieldBuilder(entity);
 
-        public Func<ExtraFieldBuilder, ExtraField>? CreateEntityDelegate => builder => builder.Build();
+        public CreateEntityHandler<ExtraFieldBuilder, ExtraField>? CreateEntity => builder => builder.Build();
 
         private ExtraFieldBuilder AddResultEntity(ExtraFieldBuilder resultEntity)
         {

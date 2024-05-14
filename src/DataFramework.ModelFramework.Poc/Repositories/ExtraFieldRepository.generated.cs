@@ -6,7 +6,7 @@ using DataFramework.ModelFramework.Poc.PagedDatabaseEntityRetrieverSettings;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions;
-using QueryFramework.Abstractions.Extensions;
+using QueryFramework.Abstractions.Builders.Extensions;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
 {

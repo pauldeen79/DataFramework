@@ -29,7 +29,7 @@ public static partial class DataObjectInfoExtensions
     private static IEnumerable<ClassPropertyBuilder> GetEntityCommandProviderClassProperties(IDataObjectInfo instance)
     {
         yield return new ClassPropertyBuilder()
-            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.ResultEntityDelegate)}")
+            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateResultEntity)}")
             .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {typeof(DatabaseOperation).FullName}, {instance.GetEntityBuilderFullName()}>")
             .WithIsNullable()
             .WithHasSetter(false)
@@ -52,7 +52,7 @@ public static partial class DataObjectInfoExtensions
             );
 
         yield return new ClassPropertyBuilder()
-            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.AfterReadDelegate)}")
+            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.AfterRead)}")
             .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {typeof(DatabaseOperation).FullName}, {typeof(IDataReader).FullName}, {instance.GetEntityBuilderFullName()}>")
             .WithIsNullable()
             .WithHasSetter(false)
@@ -75,14 +75,14 @@ public static partial class DataObjectInfoExtensions
             );
 
         yield return new ClassPropertyBuilder()
-            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateBuilderDelegate)}")
+            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateBuilder)}")
             .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {instance.GetEntityFullName()}>")
             .WithIsNullable()
             .WithHasSetter(false)
             .AddGetterLiteralCodeStatements($"return entity => new {instance.GetEntityBuilderFullName()}(entity);");
 
         yield return new ClassPropertyBuilder()
-            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateEntityDelegate)}")
+            .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateEntity)}")
             .WithTypeName($"Func<{instance.GetEntityBuilderFullName()}, {instance.GetEntityFullName()}>")
             .WithIsNullable()
             .WithHasSetter(false)

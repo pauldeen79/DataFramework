@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Repositories.RepositoryGenerator", @"1.0.0.0")]
     public partial class CatalogDatabaseCommandEntityProvider : IDatabaseCommandEntityProvider<Catalog, CatalogBuilder>
     {
-        public Func<CatalogBuilder, DatabaseOperation, CatalogBuilder>? ResultEntityDelegate
+        public CreateResultEntityHandler<CatalogBuilder>? CreateResultEntity
         {
             get
             {
@@ -32,7 +32,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
             }
         }
 
-        public Func<CatalogBuilder, DatabaseOperation, IDataReader, CatalogBuilder>? AfterReadDelegate
+        public AfterReadHandler<CatalogBuilder>? AfterRead
         {
             get
             {
@@ -53,7 +53,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
             }
         }
 
-        public Func<Catalog, CatalogBuilder>? CreateBuilderDelegate
+        public CreateBuilderHandler<Catalog, CatalogBuilder>? CreateBuilder
         {
             get
             {
@@ -61,7 +61,7 @@ namespace DataFramework.ModelFramework.Poc.DatabaseCommandEntityProviders
             }
         }
 
-        public Func<CatalogBuilder, Catalog>? CreateEntityDelegate
+        public CreateEntityHandler<CatalogBuilder, Catalog>? CreateEntity
         {
             get
             {

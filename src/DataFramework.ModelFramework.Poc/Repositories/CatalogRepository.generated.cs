@@ -7,6 +7,7 @@ using CrossCutting.Data.Core;
 using PDC.Net.Core.Entities;
 using PDC.Net.Core.Queries;
 using QueryFramework.Abstractions;
+using QueryFramework.Abstractions.Builders.Extensions;
 using QueryFramework.Abstractions.Extensions;
 
 namespace DataFramework.ModelFramework.Poc.Repositories
