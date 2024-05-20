@@ -1,5 +1,6 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
+[ExcludeFromCodeCoverage]
 public class Entities : DataFrameworkCSharpClassBase
 {
     public Entities(IPipelineService pipelineService, ICsharpExpressionDumper csharpExpressionDumper) : base(pipelineService, csharpExpressionDumper)

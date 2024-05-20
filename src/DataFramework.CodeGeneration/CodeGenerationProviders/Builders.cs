@@ -1,5 +1,6 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
+[ExcludeFromCodeCoverage]
 public class Builders : DataFrameworkCSharpClassBase
 {
     public Builders(IPipelineService pipelineService, ICsharpExpressionDumper csharpExpressionDumper) : base(pipelineService, csharpExpressionDumper)
