@@ -10,4 +10,6 @@ global using CrossCutting.Common.Results;
 global using CrossCutting.ProcessingPipeline;
 global using DataFramework.Domain;
 global using DataFramework.Pipelines.Domains;
+global using DataFramework.Pipelines.Entity;
 global using DataFramework.Pipelines.Entity.Components.Abstractions;
+global using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,4 @@
-﻿namespace ClassFramework.Pipelines.Entity;
+﻿namespace DataFramework.Pipelines.Entity;
 
 public class PipelineBuilder : PipelineBuilder<DataFramework.Pipelines.Entity.EntityContext>
 {
