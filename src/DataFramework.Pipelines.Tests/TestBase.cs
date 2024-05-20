@@ -1,8 +1,12 @@
 ﻿namespace DataFramework.Pipelines.Tests;
 
-public abstract class TestBase
+public abstract class TestBase : IDisposable
 {
     protected IFixture Fixture { get; }
+
+    protected ServiceProvider? Provider { get; set; }
+    protected IServiceScope? Scope { get; set; }
+    private bool disposedValue;
 
     protected TestBase()
     {
@@ -10,6 +14,30 @@ public abstract class TestBase
 
         Fixture.Customizations.Add(new BuilderOmitter());
     }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                Scope?.Dispose();
+                Provider?.Dispose();
+            }
+
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected DataObjectInfoBuilder CreateModel()
+        => new DataObjectInfoBuilder().WithName("MyEntity");
 }
 
 public abstract class TestBase<T> : TestBase

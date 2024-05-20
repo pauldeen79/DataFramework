@@ -1,9 +1,11 @@
 ﻿global using System.ComponentModel;
-global using System.Globalization;
 global using AutoFixture;
 global using AutoFixture.AutoNSubstitute;
 global using AutoFixture.Kernel;
+global using ClassFramework.Domain.Builders.Types;
+global using CrossCutting.Common.Results;
 global using CrossCutting.ProcessingPipeline;
+global using DataFramework.Domain;
 global using DataFramework.Domain.Builders;
 global using DataFramework.Pipelines.Builders;
 global using DataFramework.Pipelines.Domains;
