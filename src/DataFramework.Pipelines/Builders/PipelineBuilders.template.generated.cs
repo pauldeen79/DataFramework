@@ -21,6 +21,8 @@ namespace DataFramework.Pipelines.Builders
 
         private DataFramework.Pipelines.Domains.EntityClassType _entityClassType;
 
+        private string _defaultEntityNamespace;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
@@ -49,21 +51,37 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DefaultEntityNamespace
+        {
+            get
+            {
+                return _defaultEntityNamespace;
+            }
+            set
+            {
+                _defaultEntityNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DefaultEntityNamespace));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
+            _defaultEntityNamespace = source.DefaultEntityNamespace;
         }
 
         public PipelineSettingsBuilder()
         {
+            _defaultEntityNamespace = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace);
         }
 
         partial void SetDefaultValues();
@@ -77,6 +95,13 @@ namespace DataFramework.Pipelines.Builders
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityClassType(DataFramework.Pipelines.Domains.EntityClassType entityClassType)
         {
             EntityClassType = entityClassType;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDefaultEntityNamespace(string defaultEntityNamespace)
+        {
+            if (defaultEntityNamespace is null) throw new System.ArgumentNullException(nameof(defaultEntityNamespace));
+            DefaultEntityNamespace = defaultEntityNamespace;
             return this;
         }
 

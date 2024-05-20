@@ -27,10 +27,17 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DefaultEntityNamespace
+        {
+            get;
+        }
+
+        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace)
         {
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
             this.EntityClassType = entityClassType;
+            this.DefaultEntityNamespace = defaultEntityNamespace;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

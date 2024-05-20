@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
         => services
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityContext>>().Build())
             .AddScoped<IPipelineBuilder<EntityContext>, Entity.PipelineBuilder>()
-            .AddScoped<IEntityComponentBuilder, Entity.Components.ObservableComponentBuilder>();
+            .AddScoped<IEntityComponentBuilder, Entity.Components.ObservableComponentBuilder>()
+            .AddScoped<IEntityComponentBuilder, Entity.Components.SetNameComponentBuilder>();
 }

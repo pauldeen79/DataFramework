@@ -4,6 +4,7 @@ global using ClassFramework.Domain.Builders;
 global using ClassFramework.Domain.Builders.Extensions;
 global using ClassFramework.Domain.Builders.Types;
 global using ClassFramework.Domain.Domains;
+global using ClassFramework.Domain.Extensions;
 global using ClassFramework.Pipelines;
 global using CrossCutting.Common;
 global using CrossCutting.Common.Results;
