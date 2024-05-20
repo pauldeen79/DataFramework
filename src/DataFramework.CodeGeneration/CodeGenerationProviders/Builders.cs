@@ -3,7 +3,7 @@
 [ExcludeFromCodeCoverage]
 public class Builders : DataFrameworkCSharpClassBase
 {
-    public Builders(IPipelineService pipelineService, ICsharpExpressionDumper csharpExpressionDumper) : base(pipelineService, csharpExpressionDumper)
+    public Builders(IPipelineService pipelineService) : base(pipelineService)
     {
     }
 

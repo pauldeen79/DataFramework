@@ -3,9 +3,8 @@
 [ExcludeFromCodeCoverage]
 public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelineCodeGenerationProviderBase
 {
-    protected DataFrameworkCSharpClassBase(IPipelineService pipelineService, ICsharpExpressionDumper csharpExpressionDumper) : base(pipelineService)
+    protected DataFrameworkCSharpClassBase(IPipelineService pipelineService) : base(pipelineService)
     {
-        CsharpExpressionDumper = csharpExpressionDumper;
     }
 
     public override bool RecurseOnDeleteGeneratedFiles => false;
@@ -21,8 +20,6 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
     protected override bool CopyAttributes => true;
     protected override bool CopyInterfaces => true;
     protected override bool GenerateMultipleFiles => false;
-
-    protected ICsharpExpressionDumper CsharpExpressionDumper { get; }
 
     protected async Task<TypeBase[]> GetPipelineModels()
     => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);

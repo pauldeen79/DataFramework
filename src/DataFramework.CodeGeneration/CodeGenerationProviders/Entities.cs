@@ -3,7 +3,7 @@
 [ExcludeFromCodeCoverage]
 public class Entities : DataFrameworkCSharpClassBase
 {
-    public Entities(IPipelineService pipelineService, ICsharpExpressionDumper csharpExpressionDumper) : base(pipelineService, csharpExpressionDumper)
+    public Entities(IPipelineService pipelineService) : base(pipelineService)
     {
     }
 
