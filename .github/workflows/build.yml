@@ -31,6 +31,8 @@ jobs:
           dotnet-version: 8.0.x
       - name: Restore
         run: dotnet restore
+      - name: Run code generation
+        run: dotnet run --project src/DataFramework.CodeGeneration/DataFramework.CodeGeneration.csproj
       - name: Build
         run: dotnet build -c Release --no-restore
       - name: Test
@@ -83,6 +85,8 @@ jobs:
           echo Version: $VERSION
           VERSION="${VERSION//v}"
           echo Clean Version: $VERSION
+          dotnet restore
+          dotnet run --project src/DataFramework.CodeGeneration/DataFramework.CodeGeneration.csproj
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -p:Version=$VERSION -o nupkg
       - name: Push to GitHub Feed
         run: |

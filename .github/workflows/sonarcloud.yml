@@ -32,6 +32,9 @@ jobs:
       - name: Install SonarCloud scanners
         run: |
           dotnet tool install --global dotnet-sonarscanner
+      - name: Run code generation
+        run: |
+          dotnet run --project src/DataFramework.CodeGeneration/DataFramework.CodeGeneration.csproj
       - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
