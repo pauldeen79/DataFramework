@@ -17,11 +17,43 @@ namespace DataFramework.Pipelines.Builders
 {
     public partial class PipelineSettingsBuilder : System.ComponentModel.INotifyPropertyChanged
     {
+        private DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior _concurrencyCheckBehavior;
+
+        private DataFramework.Pipelines.Domains.EntityClassType _entityClassType;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+        public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
+        {
+            get
+            {
+                return _concurrencyCheckBehavior;
+            }
+            set
+            {
+                _concurrencyCheckBehavior = value;
+                HandlePropertyChanged(nameof(ConcurrencyCheckBehavior));
+            }
+        }
+
+        public DataFramework.Pipelines.Domains.EntityClassType EntityClassType
+        {
+            get
+            {
+                return _entityClassType;
+            }
+            set
+            {
+                _entityClassType = value;
+                HandlePropertyChanged(nameof(EntityClassType));
+            }
+        }
 
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
+            _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
+            _entityClassType = source.EntityClassType;
         }
 
         public PipelineSettingsBuilder()
@@ -31,10 +63,22 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings();
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType);
         }
 
         partial void SetDefaultValues();
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithConcurrencyCheckBehavior(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior)
+        {
+            ConcurrencyCheckBehavior = concurrencyCheckBehavior;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityClassType(DataFramework.Pipelines.Domains.EntityClassType entityClassType)
+        {
+            EntityClassType = entityClassType;
+            return this;
+        }
 
         protected void HandlePropertyChanged(string propertyName)
         {

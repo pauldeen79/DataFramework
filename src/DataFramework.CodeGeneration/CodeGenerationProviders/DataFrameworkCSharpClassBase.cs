@@ -35,7 +35,6 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
             [
                 new TypenameMappingBuilder().WithSourceType(typeof(ConcurrencyCheckBehavior)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(ConcurrencyCheckBehavior)}"),
                 new TypenameMappingBuilder().WithSourceType(typeof(EntityClassType)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(EntityClassType)}"),
-                new TypenameMappingBuilder().WithSourceType(typeof(RenderMetadataAsAttributesTypes)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(RenderMetadataAsAttributesTypes)}"),
             ]);
 
     private IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string builderNamespace) =>

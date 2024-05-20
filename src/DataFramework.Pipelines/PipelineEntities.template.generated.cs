@@ -17,8 +17,20 @@ namespace DataFramework.Pipelines
 {
     public partial class PipelineSettings
     {
-        public PipelineSettings()
+        public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
         {
+            get;
+        }
+
+        public DataFramework.Pipelines.Domains.EntityClassType EntityClassType
+        {
+            get;
+        }
+
+        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType)
+        {
+            this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
+            this.EntityClassType = entityClassType;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
