@@ -1,1 +1,9 @@
-﻿global using CrossCutting.Common;
+﻿global using ClassFramework.Domain;
+global using ClassFramework.Domain.Abstractions;
+global using ClassFramework.Domain.Builders.Types;
+global using ClassFramework.Domain.Types;
+global using CrossCutting.Common;
+global using CrossCutting.ProcessingPipeline;
+global using DataFramework.Domain;
+global using DataFramework.Pipelines.Entity;
+global using DataFramework.Pipelines.Entity.Components.Abstractions;
