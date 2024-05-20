@@ -31,11 +31,12 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
         => GetType().Assembly.GetTypes()
             .Where(x => x.IsInterface && x.Namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines" && !GetCustomBuilderTypes().Contains(x.GetEntityClassName()))
             .SelectMany(x => CreateCustomTypenameMappings(x, "DataFramework.Pipelines", "DataFramework.Pipelines.Builders"))
-            //TODO: Replace with domains from our own project
-            /*.Concat(
+            .Concat(
             [
-                new TypenameMappingBuilder().WithSourceType(typeof(ArgumentValidationType)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(ArgumentValidationType)}"),
-            ])*/;
+                new TypenameMappingBuilder().WithSourceType(typeof(ConcurrencyCheckBehavior)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(ConcurrencyCheckBehavior)}"),
+                new TypenameMappingBuilder().WithSourceType(typeof(EntityClassType)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(EntityClassType)}"),
+                new TypenameMappingBuilder().WithSourceType(typeof(RenderMetadataAsAttributesTypes)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(RenderMetadataAsAttributesTypes)}"),
+            ]);
 
     private IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string builderNamespace) =>
         [

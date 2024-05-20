@@ -16,6 +16,7 @@ global using CrossCutting.Common.DataAnnotations;
 global using CrossCutting.Utilities.Parsers.Extensions;
 global using CsharpExpressionDumper.Core.Extensions;
 global using DataFramework.CodeGeneration.CodeGenerationProviders;
+global using DataFramework.CodeGeneration.Model.Domains;
 global using Microsoft.Extensions.DependencyInjection;
 global using TemplateFramework.Abstractions.CodeGeneration;
 global using TemplateFramework.Abstractions.Extensions;
