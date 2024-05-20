@@ -10,6 +10,6 @@ Note that currently, only MS SQL Server is supported ;-)
 
 # Code generation
 
-I am currently not storing generated files in the code repository.
-To generate, simply run the console project from either Visual Studio (hit F5) or a command prompt.
-This will replace almost all generated code.
+I am currently storing generated files in the code repository.
+To update the generated stuff (entities and builders), simply run the console project from either Visual Studio (hit F5) or a command prompt.
+This will replace all generated code.
