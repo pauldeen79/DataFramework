@@ -12,7 +12,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(entityClassType).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -30,7 +30,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
