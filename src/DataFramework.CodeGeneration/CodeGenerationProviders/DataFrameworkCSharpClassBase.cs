@@ -23,4 +23,37 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
     protected override bool GenerateMultipleFiles => false;
 
     protected ICsharpExpressionDumper CsharpExpressionDumper { get; }
+
+    protected async Task<TypeBase[]> GetPipelineModels()
+    => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);
+
+    protected override bool SkipNamespaceOnTypenameMappings(string @namespace)
+        => @namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines";
+
+    protected override IEnumerable<TypenameMappingBuilder> CreateAdditionalTypenameMappings()
+        => GetType().Assembly.GetTypes()
+            .Where(x => x.IsInterface && x.Namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines" && !GetCustomBuilderTypes().Contains(x.GetEntityClassName()))
+            .SelectMany(x => CreateCustomTypenameMappings(x, "DataFramework.Pipelines", "DataFramework.Pipelines.Builders"))
+            //TODO: Replace with domains from our own project
+            /*.Concat(
+            [
+                new TypenameMappingBuilder().WithSourceType(typeof(ArgumentValidationType)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(ArgumentValidationType)}"),
+            ])*/;
+
+    private IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string builderNamespace) =>
+        [
+            new TypenameMappingBuilder()
+                .WithSourceType(modelType)
+                .WithTargetTypeName($"{entityNamespace}.{modelType.GetEntityClassName()}"),
+            new TypenameMappingBuilder()
+                .WithSourceTypeName($"{entityNamespace}.{modelType.GetEntityClassName()}")
+                .WithTargetTypeName($"{entityNamespace}.{modelType.GetEntityClassName()}")
+                .AddMetadata
+                (
+                    new MetadataBuilder().WithValue(builderNamespace).WithName(MetadataNames.CustomBuilderNamespace),
+                    new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
+                    new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
+                    new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
+                ),
+        ];
 }
