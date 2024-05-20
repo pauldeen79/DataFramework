@@ -13,10 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsharpExpressionDumper.Abstractions" Version="1.5.3" />
-    <PackageReference Include="pauldeen79.ClassFramework.Domain" Version="0.13.1" />
-    <PackageReference Include="pauldeen79.CrossCutting.ProcessingPipeline" Version="8.1.3" />
-    <PackageReference Include="pauldeen79.CrossCutting.Utilities.Parsers" Version="5.2.1" />
+    <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.13.2" />
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.1" />
     <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.5" />
     <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.5" />

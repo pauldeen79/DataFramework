@@ -1,6 +1,6 @@
 ﻿namespace ClassFramework.Pipelines.Entity;
 
-public class PipelineBuilder : PipelineBuilder<EntityContext>
+public class PipelineBuilder : PipelineBuilder<DataFramework.Pipelines.Entity.EntityContext>
 {
     public PipelineBuilder(IEnumerable<IEntityComponentBuilder> entityComponentBuilders)
     {
