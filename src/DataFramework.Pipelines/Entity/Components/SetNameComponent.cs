@@ -12,11 +12,6 @@ public class SetNameComponent : IPipelineComponent<EntityContext>
     {
         context = context.IsNotNull(nameof(context));
 
-        if (context.Request.Settings.EntityClassType != EntityClassType.ObservablePoco)
-        {
-            return Task.FromResult(Result.Continue());
-        }
-
         context.Request.Builder
             .WithName(context.Request.SourceModel.Name)
             .WithNamespace(context.Request.SourceModel.TypeName.GetNamespaceWithDefault(context.Request.Settings.DefaultEntityNamespace));

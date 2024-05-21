@@ -7,7 +7,7 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<EntityC
         private EntityContext CreateContext() => new EntityContext
         (
             CreateModel().Build(),
-            new PipelineSettingsBuilder().Build()
+            new PipelineSettingsBuilder().WithDefaultEntityNamespace("MyNamespace").Build()
         );
 
         [Fact]
@@ -37,7 +37,7 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<EntityC
 
             // Assert
             result.Status.Should().Be(ResultStatus.Ok);
-            context.Builder.Name.Should().Be("MyClass");
+            context.Builder.Name.Should().Be("MyEntity");
             context.Builder.Namespace.Should().Be("MyNamespace");
         }
     }
