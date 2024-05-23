@@ -12,5 +12,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPipelineBuilder<EntityContext>, Entity.PipelineBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.ObservableComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetNameComponentBuilder>()
-            .AddScoped<IEntityComponentBuilder, Entity.Components.SetPartialComponentBuilder>();
+            .AddScoped<IEntityComponentBuilder, Entity.Components.SetPartialComponentBuilder>()
+            .AddScoped<IEntityComponentBuilder, Entity.Components.SetRecordComponentBuilder>();
 }

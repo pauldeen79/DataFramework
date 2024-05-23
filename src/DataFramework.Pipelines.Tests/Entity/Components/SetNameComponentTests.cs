@@ -50,6 +50,7 @@ public class SetNameComponentTests : TestBase<Pipelines.Entity.Components.SetNam
         // Assert
         context.Request.Builder.Namespace.Should().Be("MyDefaultNamespace");
     }
+
     [Fact]
     public async Task Sets_Namespace_Correctly_When_TypeName_Is_Available()
     {
