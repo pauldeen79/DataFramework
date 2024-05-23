@@ -283,9 +283,41 @@ namespace DataFramework.Domain.Builders
 
         private bool _isComputed;
 
+        private bool _isRowVersion;
+
         private bool _useForConcurrencyCheck;
 
         private object? _defaultValue;
+
+        private System.Nullable<int> _stringMaxLength;
+
+        private string? _stringCollation;
+
+        private System.Nullable<bool> _isMaxLengthString;
+
+        private System.Nullable<byte> _databaseNumericPrecision;
+
+        private System.Nullable<byte> _databaseNumericScale;
+
+        private bool _skipFieldOnFind;
+
+        private string? _databaseFieldName;
+
+        private string? _databaseFieldType;
+
+        private System.Nullable<bool> _overrideUseOnInsert;
+
+        private System.Nullable<bool> _overrideUseOnUpdate;
+
+        private System.Nullable<bool> _overrideUseOnDelete;
+
+        private System.Nullable<bool> _overrideUseOnSelect;
+
+        private System.Nullable<bool> _isRequiredInDatabase;
+
+        private bool _isIdentityFieldInDatabase;
+
+        private string? _databaseCheckConstraintExpression;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -450,6 +482,19 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        public bool IsRowVersion
+        {
+            get
+            {
+                return _isRowVersion;
+            }
+            set
+            {
+                _isRowVersion = value;
+                HandlePropertyChanged(nameof(IsRowVersion));
+            }
+        }
+
         public bool UseForConcurrencyCheck
         {
             get
@@ -476,6 +521,201 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        public System.Nullable<int> StringMaxLength
+        {
+            get
+            {
+                return _stringMaxLength;
+            }
+            set
+            {
+                _stringMaxLength = value;
+                HandlePropertyChanged(nameof(StringMaxLength));
+            }
+        }
+
+        public string? StringCollation
+        {
+            get
+            {
+                return _stringCollation;
+            }
+            set
+            {
+                _stringCollation = value;
+                HandlePropertyChanged(nameof(StringCollation));
+            }
+        }
+
+        public System.Nullable<bool> IsMaxLengthString
+        {
+            get
+            {
+                return _isMaxLengthString;
+            }
+            set
+            {
+                _isMaxLengthString = value;
+                HandlePropertyChanged(nameof(IsMaxLengthString));
+            }
+        }
+
+        public System.Nullable<byte> DatabaseNumericPrecision
+        {
+            get
+            {
+                return _databaseNumericPrecision;
+            }
+            set
+            {
+                _databaseNumericPrecision = value;
+                HandlePropertyChanged(nameof(DatabaseNumericPrecision));
+            }
+        }
+
+        public System.Nullable<byte> DatabaseNumericScale
+        {
+            get
+            {
+                return _databaseNumericScale;
+            }
+            set
+            {
+                _databaseNumericScale = value;
+                HandlePropertyChanged(nameof(DatabaseNumericScale));
+            }
+        }
+
+        public bool SkipFieldOnFind
+        {
+            get
+            {
+                return _skipFieldOnFind;
+            }
+            set
+            {
+                _skipFieldOnFind = value;
+                HandlePropertyChanged(nameof(SkipFieldOnFind));
+            }
+        }
+
+        public string? DatabaseFieldName
+        {
+            get
+            {
+                return _databaseFieldName;
+            }
+            set
+            {
+                _databaseFieldName = value;
+                HandlePropertyChanged(nameof(DatabaseFieldName));
+            }
+        }
+
+        public string? DatabaseFieldType
+        {
+            get
+            {
+                return _databaseFieldType;
+            }
+            set
+            {
+                _databaseFieldType = value;
+                HandlePropertyChanged(nameof(DatabaseFieldType));
+            }
+        }
+
+        public System.Nullable<bool> OverrideUseOnInsert
+        {
+            get
+            {
+                return _overrideUseOnInsert;
+            }
+            set
+            {
+                _overrideUseOnInsert = value;
+                HandlePropertyChanged(nameof(OverrideUseOnInsert));
+            }
+        }
+
+        public System.Nullable<bool> OverrideUseOnUpdate
+        {
+            get
+            {
+                return _overrideUseOnUpdate;
+            }
+            set
+            {
+                _overrideUseOnUpdate = value;
+                HandlePropertyChanged(nameof(OverrideUseOnUpdate));
+            }
+        }
+
+        public System.Nullable<bool> OverrideUseOnDelete
+        {
+            get
+            {
+                return _overrideUseOnDelete;
+            }
+            set
+            {
+                _overrideUseOnDelete = value;
+                HandlePropertyChanged(nameof(OverrideUseOnDelete));
+            }
+        }
+
+        public System.Nullable<bool> OverrideUseOnSelect
+        {
+            get
+            {
+                return _overrideUseOnSelect;
+            }
+            set
+            {
+                _overrideUseOnSelect = value;
+                HandlePropertyChanged(nameof(OverrideUseOnSelect));
+            }
+        }
+
+        public System.Nullable<bool> IsRequiredInDatabase
+        {
+            get
+            {
+                return _isRequiredInDatabase;
+            }
+            set
+            {
+                _isRequiredInDatabase = value;
+                HandlePropertyChanged(nameof(IsRequiredInDatabase));
+            }
+        }
+
+        public bool IsIdentityFieldInDatabase
+        {
+            get
+            {
+                return _isIdentityFieldInDatabase;
+            }
+            set
+            {
+                _isIdentityFieldInDatabase = value;
+                HandlePropertyChanged(nameof(IsIdentityFieldInDatabase));
+            }
+        }
+
+        public string? DatabaseCheckConstraintExpression
+        {
+            get
+            {
+                return _databaseCheckConstraintExpression;
+            }
+            set
+            {
+                _databaseCheckConstraintExpression = value;
+                HandlePropertyChanged(nameof(DatabaseCheckConstraintExpression));
+            }
+        }
+
         public FieldInfoBuilder(DataFramework.Domain.FieldInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -491,8 +731,24 @@ namespace DataFramework.Domain.Builders
             _isReadOnly = source.IsReadOnly;
             _isIdentityField = source.IsIdentityField;
             _isComputed = source.IsComputed;
+            _isRowVersion = source.IsRowVersion;
             _useForConcurrencyCheck = source.UseForConcurrencyCheck;
             _defaultValue = source.DefaultValue;
+            _stringMaxLength = source.StringMaxLength;
+            _stringCollation = source.StringCollation;
+            _isMaxLengthString = source.IsMaxLengthString;
+            _databaseNumericPrecision = source.DatabaseNumericPrecision;
+            _databaseNumericScale = source.DatabaseNumericScale;
+            _skipFieldOnFind = source.SkipFieldOnFind;
+            _databaseFieldName = source.DatabaseFieldName;
+            _databaseFieldType = source.DatabaseFieldType;
+            _overrideUseOnInsert = source.OverrideUseOnInsert;
+            _overrideUseOnUpdate = source.OverrideUseOnUpdate;
+            _overrideUseOnDelete = source.OverrideUseOnDelete;
+            _overrideUseOnSelect = source.OverrideUseOnSelect;
+            _isRequiredInDatabase = source.IsRequiredInDatabase;
+            _isIdentityFieldInDatabase = source.IsIdentityFieldInDatabase;
+            _databaseCheckConstraintExpression = source.DatabaseCheckConstraintExpression;
         }
 
         public FieldInfoBuilder()
@@ -507,7 +763,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.FieldInfo Build()
         {
-            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, UseForConcurrencyCheck, DefaultValue);
+            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, StringCollation, IsMaxLengthString, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsIdentityFieldInDatabase, DatabaseCheckConstraintExpression);
         }
 
         partial void SetDefaultValues();
@@ -585,6 +841,12 @@ namespace DataFramework.Domain.Builders
             return this;
         }
 
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsRowVersion(bool isRowVersion = true)
+        {
+            IsRowVersion = isRowVersion;
+            return this;
+        }
+
         public DataFramework.Domain.Builders.FieldInfoBuilder WithUseForConcurrencyCheck(bool useForConcurrencyCheck = true)
         {
             UseForConcurrencyCheck = useForConcurrencyCheck;
@@ -594,6 +856,96 @@ namespace DataFramework.Domain.Builders
         public DataFramework.Domain.Builders.FieldInfoBuilder WithDefaultValue(object? defaultValue)
         {
             DefaultValue = defaultValue;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithStringMaxLength(System.Nullable<int> stringMaxLength)
+        {
+            StringMaxLength = stringMaxLength;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithStringCollation(string? stringCollation)
+        {
+            StringCollation = stringCollation;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsMaxLengthString(System.Nullable<bool> isMaxLengthString)
+        {
+            IsMaxLengthString = isMaxLengthString;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseNumericPrecision(System.Nullable<byte> databaseNumericPrecision)
+        {
+            DatabaseNumericPrecision = databaseNumericPrecision;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseNumericScale(System.Nullable<byte> databaseNumericScale)
+        {
+            DatabaseNumericScale = databaseNumericScale;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithSkipFieldOnFind(bool skipFieldOnFind = true)
+        {
+            SkipFieldOnFind = skipFieldOnFind;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseFieldName(string? databaseFieldName)
+        {
+            DatabaseFieldName = databaseFieldName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseFieldType(string? databaseFieldType)
+        {
+            DatabaseFieldType = databaseFieldType;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithOverrideUseOnInsert(System.Nullable<bool> overrideUseOnInsert)
+        {
+            OverrideUseOnInsert = overrideUseOnInsert;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithOverrideUseOnUpdate(System.Nullable<bool> overrideUseOnUpdate)
+        {
+            OverrideUseOnUpdate = overrideUseOnUpdate;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithOverrideUseOnDelete(System.Nullable<bool> overrideUseOnDelete)
+        {
+            OverrideUseOnDelete = overrideUseOnDelete;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithOverrideUseOnSelect(System.Nullable<bool> overrideUseOnSelect)
+        {
+            OverrideUseOnSelect = overrideUseOnSelect;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsRequiredInDatabase(System.Nullable<bool> isRequiredInDatabase)
+        {
+            IsRequiredInDatabase = isRequiredInDatabase;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsIdentityFieldInDatabase(bool isIdentityFieldInDatabase = true)
+        {
+            IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseCheckConstraintExpression(string? databaseCheckConstraintExpression)
+        {
+            DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
             return this;
         }
 

@@ -5,7 +5,7 @@ public class SetVisibilityComponentTests : TestBase<Pipelines.Entity.Components.
     [Theory]
     [InlineData(true, Visibility.Public)]
     [InlineData(false, Visibility.Internal)]
-    public async Task Sets_VisibilityCorrectly(bool isVisible, Visibility expectedResult)
+    public async Task Sets_Visibility_Correctly(bool isVisible, Visibility expectedResult)
     {
         // Arrange
         var sut = CreateSut();

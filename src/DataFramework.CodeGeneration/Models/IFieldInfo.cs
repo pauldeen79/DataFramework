@@ -14,6 +14,23 @@ public interface IFieldInfo
     bool IsReadOnly { get; }
     bool IsIdentityField { get; }
     bool IsComputed { get; }
+    bool IsRowVersion { get; }
     bool UseForConcurrencyCheck { get; }
     object? DefaultValue { get; }
+
+    int? StringMaxLength { get; }
+    string? StringCollation { get; }
+    bool? IsMaxLengthString { get; }
+    byte? DatabaseNumericPrecision { get; }
+    byte? DatabaseNumericScale { get; }
+    bool SkipFieldOnFind { get; }
+    string? DatabaseFieldName { get; }
+    string? DatabaseFieldType { get; }
+    bool? OverrideUseOnInsert { get; }
+    bool? OverrideUseOnUpdate { get; }
+    bool? OverrideUseOnDelete { get; }
+    bool? OverrideUseOnSelect { get; }
+    bool? IsRequiredInDatabase { get; }
+    bool IsIdentityFieldInDatabase { get; }
+    string? DatabaseCheckConstraintExpression { get; }
 }

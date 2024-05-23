@@ -153,6 +153,11 @@ namespace DataFramework.Domain
             get;
         }
 
+        public bool IsRowVersion
+        {
+            get;
+        }
+
         public bool UseForConcurrencyCheck
         {
             get;
@@ -163,7 +168,82 @@ namespace DataFramework.Domain
             get;
         }
 
-        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool useForConcurrencyCheck, object? defaultValue)
+        public System.Nullable<int> StringMaxLength
+        {
+            get;
+        }
+
+        public string? StringCollation
+        {
+            get;
+        }
+
+        public System.Nullable<bool> IsMaxLengthString
+        {
+            get;
+        }
+
+        public System.Nullable<byte> DatabaseNumericPrecision
+        {
+            get;
+        }
+
+        public System.Nullable<byte> DatabaseNumericScale
+        {
+            get;
+        }
+
+        public bool SkipFieldOnFind
+        {
+            get;
+        }
+
+        public string? DatabaseFieldName
+        {
+            get;
+        }
+
+        public string? DatabaseFieldType
+        {
+            get;
+        }
+
+        public System.Nullable<bool> OverrideUseOnInsert
+        {
+            get;
+        }
+
+        public System.Nullable<bool> OverrideUseOnUpdate
+        {
+            get;
+        }
+
+        public System.Nullable<bool> OverrideUseOnDelete
+        {
+            get;
+        }
+
+        public System.Nullable<bool> OverrideUseOnSelect
+        {
+            get;
+        }
+
+        public System.Nullable<bool> IsRequiredInDatabase
+        {
+            get;
+        }
+
+        public bool IsIdentityFieldInDatabase
+        {
+            get;
+        }
+
+        public string? DatabaseCheckConstraintExpression
+        {
+            get;
+        }
+
+        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, string? stringCollation, System.Nullable<bool> isMaxLengthString, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isIdentityFieldInDatabase, string? databaseCheckConstraintExpression)
         {
             this.Name = name;
             this.Description = description;
@@ -177,8 +257,24 @@ namespace DataFramework.Domain
             this.IsReadOnly = isReadOnly;
             this.IsIdentityField = isIdentityField;
             this.IsComputed = isComputed;
+            this.IsRowVersion = isRowVersion;
             this.UseForConcurrencyCheck = useForConcurrencyCheck;
             this.DefaultValue = defaultValue;
+            this.StringMaxLength = stringMaxLength;
+            this.StringCollation = stringCollation;
+            this.IsMaxLengthString = isMaxLengthString;
+            this.DatabaseNumericPrecision = databaseNumericPrecision;
+            this.DatabaseNumericScale = databaseNumericScale;
+            this.SkipFieldOnFind = skipFieldOnFind;
+            this.DatabaseFieldName = databaseFieldName;
+            this.DatabaseFieldType = databaseFieldType;
+            this.OverrideUseOnInsert = overrideUseOnInsert;
+            this.OverrideUseOnUpdate = overrideUseOnUpdate;
+            this.OverrideUseOnDelete = overrideUseOnDelete;
+            this.OverrideUseOnSelect = overrideUseOnSelect;
+            this.IsRequiredInDatabase = isRequiredInDatabase;
+            this.IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
+            this.DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
