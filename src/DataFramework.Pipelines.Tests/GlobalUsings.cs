@@ -3,6 +3,7 @@ global using AutoFixture;
 global using AutoFixture.AutoNSubstitute;
 global using AutoFixture.Kernel;
 global using ClassFramework.Domain.Builders.Types;
+global using ClassFramework.Domain.Domains;
 global using CrossCutting.Common.Results;
 global using CrossCutting.ProcessingPipeline;
 global using DataFramework.Domain;
