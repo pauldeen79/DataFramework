@@ -48,12 +48,7 @@ internal static class StringExtensions
         return name;
     }
 
-    internal static string ReplaceProperties(this string sqlType, string abstractSqlType)
-        => sqlType.StartsWith(abstractSqlType, StringComparison.OrdinalIgnoreCase) && !sqlType.Equals(abstractSqlType, StringComparison.OrdinalIgnoreCase)
-            ? abstractSqlType
-            : sqlType;
-
-    private static Dictionary<Type, string> _readerMethodNames = new Dictionary<Type, string>
+    private static readonly Dictionary<Type, string> _readerMethodNames = new Dictionary<Type, string>
     {
         { typeof(string), "GetString" },
         { typeof(int), "GetInt32" },
