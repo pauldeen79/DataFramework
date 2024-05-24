@@ -10,7 +10,7 @@ internal static class StringExtensions
         }
 
         var type = Type.GetType(instance);
-        return type != null && _readerMethodNames.ContainsKey(type);
+        return type != null && TypeMappings.ReaderMethodNames.ContainsKey(type);
     }
 
     internal static string GetSqlReaderMethodName(this string instance, bool isNullable)
@@ -32,7 +32,7 @@ internal static class StringExtensions
         {
             return "GetValue";
         }
-        if (!_readerMethodNames.TryGetValue(type, out var name))
+        if (!TypeMappings.ReaderMethodNames.TryGetValue(type, out var name))
         {
             return "GetValue";
         }
@@ -44,30 +44,4 @@ internal static class StringExtensions
 
         return name;
     }
-
-    private static readonly Dictionary<Type, string> _readerMethodNames = new Dictionary<Type, string>
-    {
-        { typeof(string), "GetString" },
-        { typeof(int), "GetInt32" },
-        { typeof(int?), "GetNullableInt32" },
-        { typeof(short), "GetInt16" },
-        { typeof(short?), "GetNullableInt16" },
-        { typeof(long), "GetInt64" },
-        { typeof(long?), "GetNullableInt64" },
-        { typeof(byte), "GetByte" },
-        { typeof(byte?), "GetNullableByte" },
-        { typeof(bool), "GetBoolean" },
-        { typeof(bool?), "GetNullableBoolean" },
-        { typeof(Guid), "GetGuid" },
-        { typeof(Guid?), "GetNullableGuid" },
-        { typeof(double), "GetDouble" },
-        { typeof(double?), "GetNullableDouble" },
-        { typeof(float), "GetFloat" },
-        { typeof(float?), "GetNullableFloat" },
-        { typeof(decimal), "GetDecimal" },
-        { typeof(decimal?), "GetNullableDecimal" },
-        { typeof(DateTime), "GetDateTime" },
-        { typeof(DateTime?), "GetNullableDateTime" },
-        { typeof(byte[]), "GetByteArray" },
-    };
 }

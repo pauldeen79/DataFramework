@@ -107,7 +107,7 @@ public partial class FieldInfo
         }
 
         var type = Type.GetType(typeName);
-        if (type != null && _sqlTypeNameMappings.TryGetValue(type, out var sqlType))
+        if (type != null && TypeMappings.SqlTypeNameMappings.TryGetValue(type, out var sqlType))
         {
             return sqlType;
         }
@@ -142,27 +142,4 @@ public partial class FieldInfo
         => sqlType.IndexOf("(") > -1
             ? sqlType.Substring(0, sqlType.IndexOf("("))
             : sqlType;
-
-    private static Dictionary<Type, string> _sqlTypeNameMappings = new Dictionary<Type, string>
-    {
-        { typeof(int), "int" },
-        { typeof(int?), "int" },
-        { typeof(short), "smallint" },
-        { typeof(short?), "smallint" },
-        { typeof(long), "bigint" },
-        { typeof(long?), "bigint" },
-        { typeof(byte), "tinyint" },
-        { typeof(byte?), "tinyint" },
-        { typeof(bool), "bit" },
-        { typeof(bool?), "bit" },
-        { typeof(Guid), "uniqueidentifier" },
-        { typeof(Guid?), "uniqueidentifier" },
-        { typeof(double), "float" },
-        { typeof(double?), "float" },
-        { typeof(float), "real" },
-        { typeof(float?), "real" },
-        { typeof(DateTime), "datetime" },
-        { typeof(DateTime?), "datetime" },
-        { typeof(byte[]), "varbinary" },
-    };
 }
