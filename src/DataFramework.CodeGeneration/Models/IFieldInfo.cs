@@ -19,8 +19,8 @@ public interface IFieldInfo
     object? DefaultValue { get; }
 
     int? StringMaxLength { get; }
-    string? StringCollation { get; }
     bool? IsMaxLengthString { get; }
+    string? DatabaseStringCollation { get; }
     byte? DatabaseNumericPrecision { get; }
     byte? DatabaseNumericScale { get; }
     bool SkipFieldOnFind { get; }
@@ -33,5 +33,5 @@ public interface IFieldInfo
     bool? OverrideUseOnDelete { get; }
     bool? OverrideUseOnSelect { get; }
     bool? IsRequiredInDatabase { get; }
-    bool IsIdentityFieldInDatabase { get; }
+    bool IsDatabaseIdentityField { get; }
 }

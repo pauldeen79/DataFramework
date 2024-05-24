@@ -173,12 +173,12 @@ namespace DataFramework.Domain
             get;
         }
 
-        public string? StringCollation
+        public System.Nullable<bool> IsMaxLengthString
         {
             get;
         }
 
-        public System.Nullable<bool> IsMaxLengthString
+        public string? DatabaseStringCollation
         {
             get;
         }
@@ -243,12 +243,12 @@ namespace DataFramework.Domain
             get;
         }
 
-        public bool IsIdentityFieldInDatabase
+        public bool IsDatabaseIdentityField
         {
             get;
         }
 
-        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, string? stringCollation, System.Nullable<bool> isMaxLengthString, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isIdentityFieldInDatabase)
+        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, System.Nullable<bool> isMaxLengthString, string? databaseStringCollation, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isDatabaseIdentityField)
         {
             this.Name = name;
             this.Description = description;
@@ -266,8 +266,8 @@ namespace DataFramework.Domain
             this.UseForConcurrencyCheck = useForConcurrencyCheck;
             this.DefaultValue = defaultValue;
             this.StringMaxLength = stringMaxLength;
-            this.StringCollation = stringCollation;
             this.IsMaxLengthString = isMaxLengthString;
+            this.DatabaseStringCollation = databaseStringCollation;
             this.DatabaseNumericPrecision = databaseNumericPrecision;
             this.DatabaseNumericScale = databaseNumericScale;
             this.SkipFieldOnFind = skipFieldOnFind;
@@ -280,7 +280,7 @@ namespace DataFramework.Domain
             this.OverrideUseOnDelete = overrideUseOnDelete;
             this.OverrideUseOnSelect = overrideUseOnSelect;
             this.IsRequiredInDatabase = isRequiredInDatabase;
-            this.IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
+            this.IsDatabaseIdentityField = isDatabaseIdentityField;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

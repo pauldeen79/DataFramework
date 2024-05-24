@@ -21,7 +21,7 @@ public partial class FieldInfo
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public bool UseOnInsert
-        => OverrideUseOnInsert ?? IsPersistable && !IsIdentityField && !IsIdentityFieldInDatabase && !IsComputed && PropertyTypeName.IsSupportedByMap();
+        => OverrideUseOnInsert ?? IsPersistable && !IsIdentityField && !IsDatabaseIdentityField && !IsComputed && PropertyTypeName.IsSupportedByMap();
 
     /// <summary>
     /// Determines whether the specified field should be used on Update in database
@@ -29,7 +29,7 @@ public partial class FieldInfo
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public bool UseOnUpdate
-        => OverrideUseOnUpdate ?? IsPersistable && !IsIdentityField && !IsIdentityFieldInDatabase && !IsComputed && PropertyTypeName.IsSupportedByMap();
+        => OverrideUseOnUpdate ?? IsPersistable && !IsIdentityField && !IsDatabaseIdentityField && !IsComputed && PropertyTypeName.IsSupportedByMap();
 
     /// <summary>
     /// Determines whether the specified field should be used on Delete in database
@@ -37,7 +37,7 @@ public partial class FieldInfo
     /// <param name="instance"></param>
     /// <remarks>Metadata value overrides IsPersistable/IsIdentityField/IsComputableField, both True and False</remarks>
     public bool UseOnDelete
-        => OverrideUseOnDelete ?? IsPersistable && !IsIdentityField && !IsIdentityFieldInDatabase && !IsComputed && PropertyTypeName.IsSupportedByMap();
+        => OverrideUseOnDelete ?? IsPersistable && !IsIdentityField && !IsDatabaseIdentityField && !IsComputed && PropertyTypeName.IsSupportedByMap();
 
     /// <summary>
     /// Determines whether the specified field should always be used on Select in database

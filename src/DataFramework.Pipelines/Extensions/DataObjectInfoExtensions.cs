@@ -17,7 +17,7 @@ public static class DataObjectInfoExtensions
                 (
                     !fieldInfo.IsComputed
                     && fieldInfo.IsPersistable
-                    && (fieldInfo.IsIdentityField || fieldInfo.IsIdentityFieldInDatabase)
+                    && (fieldInfo.IsIdentityField || fieldInfo.IsDatabaseIdentityField)
                 )
             );
 }

@@ -291,9 +291,9 @@ namespace DataFramework.Domain.Builders
 
         private System.Nullable<int> _stringMaxLength;
 
-        private string? _stringCollation;
-
         private System.Nullable<bool> _isMaxLengthString;
+
+        private string? _databaseStringCollation;
 
         private System.Nullable<byte> _databaseNumericPrecision;
 
@@ -319,7 +319,7 @@ namespace DataFramework.Domain.Builders
 
         private System.Nullable<bool> _isRequiredInDatabase;
 
-        private bool _isIdentityFieldInDatabase;
+        private bool _isDatabaseIdentityField;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -536,19 +536,6 @@ namespace DataFramework.Domain.Builders
             }
         }
 
-        public string? StringCollation
-        {
-            get
-            {
-                return _stringCollation;
-            }
-            set
-            {
-                _stringCollation = value;
-                HandlePropertyChanged(nameof(StringCollation));
-            }
-        }
-
         public System.Nullable<bool> IsMaxLengthString
         {
             get
@@ -559,6 +546,19 @@ namespace DataFramework.Domain.Builders
             {
                 _isMaxLengthString = value;
                 HandlePropertyChanged(nameof(IsMaxLengthString));
+            }
+        }
+
+        public string? DatabaseStringCollation
+        {
+            get
+            {
+                return _databaseStringCollation;
+            }
+            set
+            {
+                _databaseStringCollation = value;
+                HandlePropertyChanged(nameof(DatabaseStringCollation));
             }
         }
 
@@ -718,16 +718,16 @@ namespace DataFramework.Domain.Builders
             }
         }
 
-        public bool IsIdentityFieldInDatabase
+        public bool IsDatabaseIdentityField
         {
             get
             {
-                return _isIdentityFieldInDatabase;
+                return _isDatabaseIdentityField;
             }
             set
             {
-                _isIdentityFieldInDatabase = value;
-                HandlePropertyChanged(nameof(IsIdentityFieldInDatabase));
+                _isDatabaseIdentityField = value;
+                HandlePropertyChanged(nameof(IsDatabaseIdentityField));
             }
         }
 
@@ -750,8 +750,8 @@ namespace DataFramework.Domain.Builders
             _useForConcurrencyCheck = source.UseForConcurrencyCheck;
             _defaultValue = source.DefaultValue;
             _stringMaxLength = source.StringMaxLength;
-            _stringCollation = source.StringCollation;
             _isMaxLengthString = source.IsMaxLengthString;
+            _databaseStringCollation = source.DatabaseStringCollation;
             _databaseNumericPrecision = source.DatabaseNumericPrecision;
             _databaseNumericScale = source.DatabaseNumericScale;
             _skipFieldOnFind = source.SkipFieldOnFind;
@@ -764,7 +764,7 @@ namespace DataFramework.Domain.Builders
             _overrideUseOnDelete = source.OverrideUseOnDelete;
             _overrideUseOnSelect = source.OverrideUseOnSelect;
             _isRequiredInDatabase = source.IsRequiredInDatabase;
-            _isIdentityFieldInDatabase = source.IsIdentityFieldInDatabase;
+            _isDatabaseIdentityField = source.IsDatabaseIdentityField;
         }
 
         public FieldInfoBuilder()
@@ -779,7 +779,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.FieldInfo Build()
         {
-            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, StringCollation, IsMaxLengthString, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsIdentityFieldInDatabase);
+            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, IsMaxLengthString, DatabaseStringCollation, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsDatabaseIdentityField);
         }
 
         partial void SetDefaultValues();
@@ -881,15 +881,15 @@ namespace DataFramework.Domain.Builders
             return this;
         }
 
-        public DataFramework.Domain.Builders.FieldInfoBuilder WithStringCollation(string? stringCollation)
-        {
-            StringCollation = stringCollation;
-            return this;
-        }
-
         public DataFramework.Domain.Builders.FieldInfoBuilder WithIsMaxLengthString(System.Nullable<bool> isMaxLengthString)
         {
             IsMaxLengthString = isMaxLengthString;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseStringCollation(string? databaseStringCollation)
+        {
+            DatabaseStringCollation = databaseStringCollation;
             return this;
         }
 
@@ -965,9 +965,9 @@ namespace DataFramework.Domain.Builders
             return this;
         }
 
-        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsIdentityFieldInDatabase(bool isIdentityFieldInDatabase = true)
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsDatabaseIdentityField(bool isDatabaseIdentityField = true)
         {
-            IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
+            IsDatabaseIdentityField = isDatabaseIdentityField;
             return this;
         }
 
