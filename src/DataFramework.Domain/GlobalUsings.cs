@@ -1,3 +1,3 @@
 ﻿global using System.Globalization;
-global using System.Text.RegularExpressions;
+global using ClassFramework.Domain.Extensions;
 global using DataFramework.Domain.Extensions;
