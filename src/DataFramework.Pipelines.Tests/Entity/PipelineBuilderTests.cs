@@ -7,7 +7,8 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<EntityC
         private EntityContext CreateContext() => new EntityContext
         (
             CreateModel().Build(),
-            new PipelineSettingsBuilder().WithDefaultEntityNamespace("MyNamespace").Build()
+            new PipelineSettingsBuilder().WithDefaultEntityNamespace("MyNamespace").Build(),
+            CultureInfo.InvariantCulture
         );
 
         [Fact]
@@ -194,6 +195,6 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<EntityC
         }
         
         private static EntityContext CreateContext(DataObjectInfo model, PipelineSettingsBuilder settings)
-            => new(model, settings.Build());
+            => new(model, settings.Build(), CultureInfo.InvariantCulture);
     }
 }

@@ -12,7 +12,7 @@ public class EquatableComponentTests : TestBase<Pipelines.Entity.Components.Equa
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(entityClassType).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -28,7 +28,7 @@ public class EquatableComponentTests : TestBase<Pipelines.Entity.Components.Equa
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ImmutableClass).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);

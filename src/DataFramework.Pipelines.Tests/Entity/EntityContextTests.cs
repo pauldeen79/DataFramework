@@ -8,7 +8,7 @@ public class EntityContextTests : TestBase
         public void Throws_On_Null_SourceModel()
         {
             // Act & Assert
-            this.Invoking(_ => new EntityContext(sourceModel: null!, new PipelineSettingsBuilder().Build()))
+            this.Invoking(_ => new EntityContext(sourceModel: null!, new PipelineSettingsBuilder().Build(), CultureInfo.InvariantCulture))
                 .Should().Throw<ArgumentNullException>().WithParameterName("sourceModel");
         }
 
@@ -16,7 +16,7 @@ public class EntityContextTests : TestBase
         public void Throws_On_Null_Settings()
         {
             // Act & Assert
-            this.Invoking(_ => new EntityContext(sourceModel: CreateModel().Build(), settings: null!))
+            this.Invoking(_ => new EntityContext(sourceModel: CreateModel().Build(), settings: null!, CultureInfo.InvariantCulture))
                 .Should().Throw<ArgumentNullException>().WithParameterName("settings");
         }
     }

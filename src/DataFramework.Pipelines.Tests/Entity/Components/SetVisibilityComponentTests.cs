@@ -11,7 +11,7 @@ public class SetVisibilityComponentTests : TestBase<Pipelines.Entity.Components.
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").WithIsVisible(isVisible).Build();
         var settings = new PipelineSettingsBuilder().Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);

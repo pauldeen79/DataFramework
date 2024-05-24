@@ -9,7 +9,7 @@ public class SetNameComponentTests : TestBase<Pipelines.Entity.Components.SetNam
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -25,7 +25,7 @@ public class SetNameComponentTests : TestBase<Pipelines.Entity.Components.SetNam
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -42,7 +42,7 @@ public class SetNameComponentTests : TestBase<Pipelines.Entity.Components.SetNam
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).WithDefaultEntityNamespace("MyDefaultNamespace").Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -58,7 +58,7 @@ public class SetNameComponentTests : TestBase<Pipelines.Entity.Components.SetNam
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").WithTypeName("MyNamespace.MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);

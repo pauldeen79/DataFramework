@@ -1,4 +1,5 @@
 ﻿global using System.ComponentModel;
+global using System.Globalization;
 global using AutoFixture;
 global using AutoFixture.AutoNSubstitute;
 global using AutoFixture.Kernel;

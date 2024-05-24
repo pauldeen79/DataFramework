@@ -3,16 +3,18 @@
 public abstract class ContextBase
 {
     public PipelineSettings Settings { get; }
+    public IFormatProvider FormatProvider { get; }
 
-    protected ContextBase(PipelineSettings settings)
+    protected ContextBase(PipelineSettings settings, IFormatProvider formatProvider)
     {
         Settings = settings.IsNotNull(nameof(settings));
+        FormatProvider = formatProvider.IsNotNull(nameof(formatProvider));
     }
 }
 
 public abstract class ContextBase<TSourceModel> : ContextBase
 {
-    protected ContextBase(TSourceModel sourceModel, PipelineSettings settings) : base(settings)
+    protected ContextBase(TSourceModel sourceModel, PipelineSettings settings, IFormatProvider formatProvider) : base(settings, formatProvider)
     {
         SourceModel = sourceModel.IsNotNull(nameof(sourceModel));
     }
@@ -22,7 +24,7 @@ public abstract class ContextBase<TSourceModel> : ContextBase
 
 public abstract class ContextBase<TSourceModel, TResponse> : ContextBase<TSourceModel>
 {
-    protected ContextBase(TSourceModel sourceModel, PipelineSettings settings) : base(sourceModel, settings)
+    protected ContextBase(TSourceModel sourceModel, PipelineSettings settings, IFormatProvider formatProvider) : base(sourceModel, settings, formatProvider)
     {
     }
 

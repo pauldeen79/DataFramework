@@ -12,7 +12,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(entityClassType).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);
@@ -30,7 +30,25 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
         var sut = CreateSut();
         var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
-        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings));
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
+
+        // Act
+        _ = await sut.Process(context, CancellationToken.None);
+
+        // Assert
+        context.Request.Builder.Interfaces.Should().ContainSingle(typeof(INotifyPropertyChanged).FullName!);
+        context.Request.Builder.Fields.Should().ContainSingle(x => x.Name == "PropertyChanged");
+        context.Request.Builder.Methods.Should().ContainSingle(x => x.Name == "HandlePropertyChanged");
+    }
+
+    [Fact]
+    public async Task Adds_Observable_Members_With_ConcurrencyCheckFields_When_EntityType_Is_ObservablePoco()
+    {
+        // Arrange
+        var sut = CreateSut();
+        var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
+        var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
+        PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
         _ = await sut.Process(context, CancellationToken.None);

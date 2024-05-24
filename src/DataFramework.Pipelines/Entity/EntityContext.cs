@@ -2,8 +2,8 @@
 
 public class EntityContext : ContextBase<DataObjectInfo, TypeBase>
 {
-    public EntityContext(DataObjectInfo sourceModel, PipelineSettings settings)
-        : base(sourceModel, settings)
+    public EntityContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
+        : base(sourceModel, settings, formatProvider)
     {
     }
 

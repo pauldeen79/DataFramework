@@ -17,6 +17,8 @@ public class ObservableComponent : IPipelineComponent<EntityContext>
             return Task.FromResult(Result.Continue());
         }
 
+        var cultureInfo = context.Request.FormatProvider.ToCultureInfo();
+
         context.Request.Builder
             .AddInterfaces(typeof(INotifyPropertyChanged))
             .AddFields(new FieldBuilder()
@@ -26,6 +28,12 @@ public class ObservableComponent : IPipelineComponent<EntityContext>
                 .WithIsNullable()
                 .WithVisibility(Visibility.Public)
             )
+            .AddFields(context.Request.SourceModel.Fields.Select(field => new FieldBuilder().FillFrom(field, cultureInfo)))
+            .AddFields(context.Request.SourceModel.GetUpdateConcurrencyCheckFields(context.Request.Settings.ConcurrencyCheckBehavior).Select(field =>
+                new FieldBuilder()
+                    .FillFrom(field, cultureInfo)
+                    .WithName($"_{field.Name.ToPascalCase(cultureInfo)}Original")
+                    .WithIsNullable(true)))
             .AddMethods(new MethodBuilder()
                 .WithName("HandlePropertyChanged")
                 .AddParameter("propertyName", typeof(string))
