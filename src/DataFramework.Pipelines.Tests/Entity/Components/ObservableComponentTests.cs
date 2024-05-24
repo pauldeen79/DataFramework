@@ -28,7 +28,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
     {
         // Arrange
         var sut = CreateSut();
-        var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
+        var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").AddFields(new FieldInfoBuilder().WithName("MyField").WithTypeName(typeof(int).FullName!)).Build();
         var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
         PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
@@ -37,7 +37,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
 
         // Assert
         context.Request.Builder.Interfaces.Should().ContainSingle(typeof(INotifyPropertyChanged).FullName!);
-        context.Request.Builder.Fields.Should().ContainSingle(x => x.Name == "PropertyChanged");
+        context.Request.Builder.Fields.Select(x => x.Name).Should().BeEquivalentTo("PropertyChanged", "_myField");
         context.Request.Builder.Methods.Should().ContainSingle(x => x.Name == "HandlePropertyChanged");
     }
 
@@ -46,8 +46,8 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
     {
         // Arrange
         var sut = CreateSut();
-        var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").Build();
-        var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).Build();
+        var sourceModel = new DataObjectInfoBuilder().WithName("MyEntity").AddFields(new FieldInfoBuilder().WithName("MyField").WithTypeName(typeof(int).FullName!)).Build();
+        var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields).Build();
         PipelineContext<EntityContext> context = new PipelineContext<EntityContext>(new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture));
 
         // Act
@@ -56,6 +56,7 @@ public class ObservableComponentTests : TestBase<Pipelines.Entity.Components.Obs
         // Assert
         context.Request.Builder.Interfaces.Should().ContainSingle(typeof(INotifyPropertyChanged).FullName!);
         context.Request.Builder.Fields.Should().ContainSingle(x => x.Name == "PropertyChanged");
+        context.Request.Builder.Fields.Select(x => x.Name).Should().BeEquivalentTo("PropertyChanged", "_myField", "_myFieldOriginal");
         context.Request.Builder.Methods.Should().ContainSingle(x => x.Name == "HandlePropertyChanged");
     }
 }
