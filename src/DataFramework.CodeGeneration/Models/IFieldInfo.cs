@@ -26,11 +26,12 @@ public interface IFieldInfo
     bool SkipFieldOnFind { get; }
     string? DatabaseFieldName { get; }
     string? DatabaseFieldType { get; }
+    string? DatabaseReaderMethodName { get; }
+    string? DatabaseCheckConstraintExpression { get; }
     bool? OverrideUseOnInsert { get; }
     bool? OverrideUseOnUpdate { get; }
     bool? OverrideUseOnDelete { get; }
     bool? OverrideUseOnSelect { get; }
     bool? IsRequiredInDatabase { get; }
     bool IsIdentityFieldInDatabase { get; }
-    string? DatabaseCheckConstraintExpression { get; }
 }

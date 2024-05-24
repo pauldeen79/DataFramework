@@ -208,6 +208,16 @@ namespace DataFramework.Domain
             get;
         }
 
+        public string? DatabaseReaderMethodName
+        {
+            get;
+        }
+
+        public string? DatabaseCheckConstraintExpression
+        {
+            get;
+        }
+
         public System.Nullable<bool> OverrideUseOnInsert
         {
             get;
@@ -238,12 +248,7 @@ namespace DataFramework.Domain
             get;
         }
 
-        public string? DatabaseCheckConstraintExpression
-        {
-            get;
-        }
-
-        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, string? stringCollation, System.Nullable<bool> isMaxLengthString, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isIdentityFieldInDatabase, string? databaseCheckConstraintExpression)
+        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, string? stringCollation, System.Nullable<bool> isMaxLengthString, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isIdentityFieldInDatabase)
         {
             this.Name = name;
             this.Description = description;
@@ -268,13 +273,14 @@ namespace DataFramework.Domain
             this.SkipFieldOnFind = skipFieldOnFind;
             this.DatabaseFieldName = databaseFieldName;
             this.DatabaseFieldType = databaseFieldType;
+            this.DatabaseReaderMethodName = databaseReaderMethodName;
+            this.DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
             this.OverrideUseOnInsert = overrideUseOnInsert;
             this.OverrideUseOnUpdate = overrideUseOnUpdate;
             this.OverrideUseOnDelete = overrideUseOnDelete;
             this.OverrideUseOnSelect = overrideUseOnSelect;
             this.IsRequiredInDatabase = isRequiredInDatabase;
             this.IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
-            this.DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

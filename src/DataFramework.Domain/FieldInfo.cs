@@ -47,34 +47,33 @@ public partial class FieldInfo
     public bool UseOnSelect
         => OverrideUseOnSelect ?? IsPersistable && PropertyTypeName.IsSupportedByMap();
 
-    //internal static ParameterBuilder ToParameterBuilder()
-    //    => new ParameterBuilder().WithName(instance.Name.Sanitize().ToPascalCase())
-    //                             .WithTypeName(instance.PropertyTypeName.FixTypeName())
-    //                             .WithDefaultValue(instance.DefaultValue)
-    //                             .WithIsNullable(instance.IsNullable);
+    public ParameterBuilder ToParameterBuilder(CultureInfo cultureInfo)
+        => new ParameterBuilder().WithName(Name.Sanitize().ToPascalCase(cultureInfo))
+                                 .WithTypeName(PropertyTypeName.FixTypeName())
+                                 .WithDefaultValue(DefaultValue)
+                                 .WithIsNullable(IsNullable);
 
-    internal bool GetIsSqlRequired()
+    public bool IsSqlRequired()
         => IsRequiredInDatabase ?? IsNullable || IsRequired();
 
-    //internal static string GetSqlReaderMethodName()
-    //{
-    //    var metadataValue = instance.Metadata.GetStringValue(Database.SqlReaderMethodName);
-    //    if (!string.IsNullOrEmpty(metadataValue))
-    //    {
-    //        return metadataValue;
-    //    }
+    public string GetSqlReaderMethodName()
+    {
+        if (DatabaseReaderMethodName is not null && !string.IsNullOrEmpty(DatabaseReaderMethodName))
+        {
+            return DatabaseReaderMethodName;
+        }
 
-    //    var typeName = instance.PropertyTypeName;
-    //    if (typeName.Length == 0)
-    //    {
-    //        //assume object
-    //        return "GetValue";
-    //    }
+        var typeName = PropertyTypeName;
+        if (typeName.Length == 0)
+        {
+            //assume object
+            return "GetValue";
+        }
 
-    //    return typeName.GetSqlReaderMethodName(instance.IsNullable);
-    //}
+        return typeName.GetSqlReaderMethodName(IsNullable);
+    }
 
-    internal string GetSqlFieldType(bool includeSpecificProperties = false)
+    public string GetSqlFieldType(bool includeSpecificProperties = false)
     {
         if (DatabaseFieldType is not null && !string.IsNullOrEmpty(DatabaseFieldType))
         {
@@ -116,7 +115,7 @@ public partial class FieldInfo
         return string.Empty;
     }
 
-    internal bool IsSqlStringMaxLength()
+    public bool IsSqlStringMaxLength()
         => IsMaxLengthString ?? false;
 
     private string GetSqlDecimalType(bool includeSpecificProperties)
@@ -143,26 +142,6 @@ public partial class FieldInfo
         => sqlType.IndexOf("(") > -1
             ? sqlType.Substring(0, sqlType.IndexOf("("))
             : sqlType;
-
-    //private static int? AttributeParameterFirstValue(IAttribute attribute)
-    //{
-    //    if (attribute == null)
-    //    {
-    //        return null;
-    //    }
-
-    //    if (attribute.Parameters.Count == 0)
-    //    {
-    //        return null;
-    //    }
-
-    //    if (attribute.Parameters.First().Value is int i)
-    //    {
-    //        return i;
-    //    }
-
-    //    return null;
-    //}
 
     private static Dictionary<Type, string> _sqlTypeNameMappings = new Dictionary<Type, string>
     {

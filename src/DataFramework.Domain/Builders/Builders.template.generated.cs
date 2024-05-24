@@ -305,6 +305,10 @@ namespace DataFramework.Domain.Builders
 
         private string? _databaseFieldType;
 
+        private string? _databaseReaderMethodName;
+
+        private string? _databaseCheckConstraintExpression;
+
         private System.Nullable<bool> _overrideUseOnInsert;
 
         private System.Nullable<bool> _overrideUseOnUpdate;
@@ -316,8 +320,6 @@ namespace DataFramework.Domain.Builders
         private System.Nullable<bool> _isRequiredInDatabase;
 
         private bool _isIdentityFieldInDatabase;
-
-        private string? _databaseCheckConstraintExpression;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -625,6 +627,32 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        public string? DatabaseReaderMethodName
+        {
+            get
+            {
+                return _databaseReaderMethodName;
+            }
+            set
+            {
+                _databaseReaderMethodName = value;
+                HandlePropertyChanged(nameof(DatabaseReaderMethodName));
+            }
+        }
+
+        public string? DatabaseCheckConstraintExpression
+        {
+            get
+            {
+                return _databaseCheckConstraintExpression;
+            }
+            set
+            {
+                _databaseCheckConstraintExpression = value;
+                HandlePropertyChanged(nameof(DatabaseCheckConstraintExpression));
+            }
+        }
+
         public System.Nullable<bool> OverrideUseOnInsert
         {
             get
@@ -703,19 +731,6 @@ namespace DataFramework.Domain.Builders
             }
         }
 
-        public string? DatabaseCheckConstraintExpression
-        {
-            get
-            {
-                return _databaseCheckConstraintExpression;
-            }
-            set
-            {
-                _databaseCheckConstraintExpression = value;
-                HandlePropertyChanged(nameof(DatabaseCheckConstraintExpression));
-            }
-        }
-
         public FieldInfoBuilder(DataFramework.Domain.FieldInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -742,13 +757,14 @@ namespace DataFramework.Domain.Builders
             _skipFieldOnFind = source.SkipFieldOnFind;
             _databaseFieldName = source.DatabaseFieldName;
             _databaseFieldType = source.DatabaseFieldType;
+            _databaseReaderMethodName = source.DatabaseReaderMethodName;
+            _databaseCheckConstraintExpression = source.DatabaseCheckConstraintExpression;
             _overrideUseOnInsert = source.OverrideUseOnInsert;
             _overrideUseOnUpdate = source.OverrideUseOnUpdate;
             _overrideUseOnDelete = source.OverrideUseOnDelete;
             _overrideUseOnSelect = source.OverrideUseOnSelect;
             _isRequiredInDatabase = source.IsRequiredInDatabase;
             _isIdentityFieldInDatabase = source.IsIdentityFieldInDatabase;
-            _databaseCheckConstraintExpression = source.DatabaseCheckConstraintExpression;
         }
 
         public FieldInfoBuilder()
@@ -763,7 +779,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.FieldInfo Build()
         {
-            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, StringCollation, IsMaxLengthString, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsIdentityFieldInDatabase, DatabaseCheckConstraintExpression);
+            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, StringCollation, IsMaxLengthString, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsIdentityFieldInDatabase);
         }
 
         partial void SetDefaultValues();
@@ -907,6 +923,18 @@ namespace DataFramework.Domain.Builders
             return this;
         }
 
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseReaderMethodName(string? databaseReaderMethodName)
+        {
+            DatabaseReaderMethodName = databaseReaderMethodName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseCheckConstraintExpression(string? databaseCheckConstraintExpression)
+        {
+            DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
+            return this;
+        }
+
         public DataFramework.Domain.Builders.FieldInfoBuilder WithOverrideUseOnInsert(System.Nullable<bool> overrideUseOnInsert)
         {
             OverrideUseOnInsert = overrideUseOnInsert;
@@ -940,12 +968,6 @@ namespace DataFramework.Domain.Builders
         public DataFramework.Domain.Builders.FieldInfoBuilder WithIsIdentityFieldInDatabase(bool isIdentityFieldInDatabase = true)
         {
             IsIdentityFieldInDatabase = isIdentityFieldInDatabase;
-            return this;
-        }
-
-        public DataFramework.Domain.Builders.FieldInfoBuilder WithDatabaseCheckConstraintExpression(string? databaseCheckConstraintExpression)
-        {
-            DatabaseCheckConstraintExpression = databaseCheckConstraintExpression;
             return this;
         }
 
