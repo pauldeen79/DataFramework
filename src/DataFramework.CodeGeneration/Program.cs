@@ -12,13 +12,13 @@ internal static class Program
             : Path.Combine(currentDirectory, @"../../../../");
         var services = new ServiceCollection()
             .AddParsers()
-            .AddPipelines()
             .AddTemplateFramework()
             .AddTemplateFrameworkChildTemplateProvider()
             .AddTemplateFrameworkCodeGeneration()
             .AddTemplateFrameworkRuntime()
             .AddCsharpExpressionDumper()
             .AddClassFrameworkTemplates()
+            .AddClassFrameworkPipelines()
             .AddScoped<IAssemblyInfoContextService, MyAssemblyInfoContextService>();
 
         var generators = typeof(Program).Assembly.GetExportedTypes()

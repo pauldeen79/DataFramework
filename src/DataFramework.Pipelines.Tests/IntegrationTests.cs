@@ -11,9 +11,9 @@ public sealed class IntegrationTests : TestBase
             .AddTemplateFrameworkCodeGeneration()
             .AddTemplateFrameworkRuntime()
             .AddCsharpExpressionDumper()
-            .AddClassFrameworkTemplates()
             .AddParsers()
-            .AddPipelines()
+            .AddClassFrameworkTemplates()
+            .AddClassFrameworkPipelines()
             .AddDataFrameworkPipelines()
             .AddScoped(_ => assemblyInfoContextService)
             .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
