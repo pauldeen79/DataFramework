@@ -25,6 +25,8 @@ namespace DataFramework.Pipelines.Builders
 
         private bool _addComponentModelAttributes;
 
+        private bool _addValidationCodeInConstructor;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
@@ -81,6 +83,20 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool AddValidationCodeInConstructor
+        {
+            get
+            {
+                return _addValidationCodeInConstructor;
+            }
+            set
+            {
+                _addValidationCodeInConstructor = value;
+                HandlePropertyChanged(nameof(AddValidationCodeInConstructor));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -88,18 +104,20 @@ namespace DataFramework.Pipelines.Builders
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
             _addComponentModelAttributes = source.AddComponentModelAttributes;
+            _addValidationCodeInConstructor = source.AddValidationCodeInConstructor;
         }
 
         public PipelineSettingsBuilder()
         {
             _defaultEntityNamespace = string.Empty;
             _addComponentModelAttributes = true;
+            _addValidationCodeInConstructor = true;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, AddComponentModelAttributes);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, AddComponentModelAttributes, AddValidationCodeInConstructor);
         }
 
         partial void SetDefaultValues();
@@ -126,6 +144,12 @@ namespace DataFramework.Pipelines.Builders
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddComponentModelAttributes(bool addComponentModelAttributes = true)
         {
             AddComponentModelAttributes = addComponentModelAttributes;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddValidationCodeInConstructor(bool addValidationCodeInConstructor = true)
+        {
+            AddValidationCodeInConstructor = addValidationCodeInConstructor;
             return this;
         }
 

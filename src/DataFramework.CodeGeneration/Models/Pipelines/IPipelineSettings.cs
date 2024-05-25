@@ -6,4 +6,5 @@ internal interface IPipelineSettings
     EntityClassType EntityClassType { get; }
     [Required(AllowEmptyStrings = true)] string DefaultEntityNamespace { get; }
     [DefaultValue(true)] bool AddComponentModelAttributes { get; }
+    [DefaultValue(true)] bool AddValidationCodeInConstructor { get; }
 }
