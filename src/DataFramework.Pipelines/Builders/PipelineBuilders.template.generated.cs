@@ -23,6 +23,8 @@ namespace DataFramework.Pipelines.Builders
 
         private string _defaultEntityNamespace;
 
+        private bool _addComponentModelAttributes;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
@@ -65,23 +67,39 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool AddComponentModelAttributes
+        {
+            get
+            {
+                return _addComponentModelAttributes;
+            }
+            set
+            {
+                _addComponentModelAttributes = value;
+                HandlePropertyChanged(nameof(AddComponentModelAttributes));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
+            _addComponentModelAttributes = source.AddComponentModelAttributes;
         }
 
         public PipelineSettingsBuilder()
         {
             _defaultEntityNamespace = string.Empty;
+            _addComponentModelAttributes = true;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, AddComponentModelAttributes);
         }
 
         partial void SetDefaultValues();
@@ -102,6 +120,12 @@ namespace DataFramework.Pipelines.Builders
         {
             if (defaultEntityNamespace is null) throw new System.ArgumentNullException(nameof(defaultEntityNamespace));
             DefaultEntityNamespace = defaultEntityNamespace;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddComponentModelAttributes(bool addComponentModelAttributes = true)
+        {
+            AddComponentModelAttributes = addComponentModelAttributes;
             return this;
         }
 

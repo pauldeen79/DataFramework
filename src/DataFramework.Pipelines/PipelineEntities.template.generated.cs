@@ -33,11 +33,18 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace)
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool AddComponentModelAttributes
+        {
+            get;
+        }
+
+        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, bool addComponentModelAttributes)
         {
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
             this.EntityClassType = entityClassType;
             this.DefaultEntityNamespace = defaultEntityNamespace;
+            this.AddComponentModelAttributes = addComponentModelAttributes;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

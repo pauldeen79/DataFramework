@@ -20,7 +20,7 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
                     .WithName(field.CreatePropertyName(context.Request.SourceModel))
                     .Fill(field)
                     .WithHasSetter(!field.IsComputed && field.CanSet && context.Request.Settings.EntityClassType.HasPropertySetter())
-                    .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name))
+                    .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name, context.Request.Settings))
                     .AddGetterCodeStatements(GetGetterCodeStatements(field, context.Request.Settings.EntityClassType, cultureInfo))
                     .AddSetterStringCodeStatements(GetSetterCodeStatements(field, context.Request.Settings.EntityClassType, cultureInfo))))
             .AddProperties(context.Request.SourceModel.GetUpdateConcurrencyCheckFields(context.Request.Settings.ConcurrencyCheckBehavior).Select(field =>
@@ -38,9 +38,9 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
         return Task.FromResult(Result.Continue());
     }
 
-    private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(FieldInfo field, string instanceName)
+    private static IEnumerable<AttributeBuilder> GetEntityClassPropertyAttributes(FieldInfo field, string instanceName, PipelineSettings settings)
     {
-        if (string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
+        if (settings.AddComponentModelAttributes && string.IsNullOrEmpty(field.DisplayName) && field.Name == instanceName)
         {
             //if the field name is equal to the DataObjectInstance name, then the property will be renamed to keep the C# compiler happy.
             //in this case, we would like to add a DisplayName attribute, so the property looks right in the UI. (PropertyGrid etc.)
