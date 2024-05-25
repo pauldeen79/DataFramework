@@ -29,7 +29,7 @@ public class EquatableComponent : IPipelineComponent<EntityContext>
             new MethodBuilder().WithName(nameof(IEquatable<object>.Equals))
                                .WithReturnType(typeof(bool))
                                .AddParameter("other", context.Request.SourceModel.Name)
-                               .AddStringCodeStatements($"return other != null &&{Environment.NewLine}       {GetEntityEqualsProperties(context.Request.SourceModel)};"),
+                               .AddStringCodeStatements($"return other is not null &&{Environment.NewLine}       {GetEntityEqualsProperties(context.Request.SourceModel)};"),
 
             new MethodBuilder().WithName(nameof(GetHashCode))
                                .WithReturnType(typeof(int))

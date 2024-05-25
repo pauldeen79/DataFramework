@@ -82,7 +82,7 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
         if (entityClassType == EntityClassType.ObservablePoco)
         {
             yield return $"_{field.Name.Sanitize().ToPascalCase(cultureInfo)}Original = value;";
-            yield return $@"if (PropertyChanged != null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{field.Name.Sanitize()}""));";
+            yield return $@"if (PropertyChanged is not null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{field.Name.Sanitize()}""));";
         }
     }
 }
