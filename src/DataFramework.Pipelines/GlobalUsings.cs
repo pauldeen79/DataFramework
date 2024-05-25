@@ -1,4 +1,5 @@
 ﻿global using System.ComponentModel;
+global using System.ComponentModel.DataAnnotations;
 global using System.Globalization;
 global using ClassFramework.Domain;
 global using ClassFramework.Domain.Builders;
@@ -12,6 +13,7 @@ global using ClassFramework.Pipelines.Extensions;
 global using CrossCutting.Common;
 global using CrossCutting.Common.Results;
 global using CrossCutting.ProcessingPipeline;
+global using CsharpExpressionDumper.Abstractions;
 global using DataFramework.Domain;
 global using DataFramework.Domain.Builders;
 global using DataFramework.Pipelines.Domains;

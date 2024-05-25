@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DataFramework.Pipelines.Entity.Components;
+﻿namespace DataFramework.Pipelines.Entity.Components;
 
 public class AddConstructorComponentBuilder : IEntityComponentBuilder
 {
@@ -63,8 +61,14 @@ public class AddConstructorComponent : IPipelineComponent<EntityContext>
             yield return new FieldInfoBuilder(field)
                 .WithName($"{field.Name}Original")
                 .WithIsNullable()
-                .WithDefaultValue("default")
+                .WithDefaultValue(new StringLiteral("default"))
                 .Build();
         }
+    }
+
+    private sealed class StringLiteral : IStringLiteral
+    {
+        public StringLiteral(string value) => Value = value;
+        public string Value { get; }
     }
 }
