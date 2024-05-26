@@ -1,25 +1,7 @@
 ﻿namespace DataFramework.Pipelines.Tests;
 
-public sealed class IntegrationTests : TestBase
+public sealed class IntegrationTests : IntegrationTestBase
 {
-    public IntegrationTests()
-    {
-        var assemblyInfoContextService = Fixture.Freeze<IAssemblyInfoContextService>();
-        Provider = new ServiceCollection()
-            .AddTemplateFramework()
-            .AddTemplateFrameworkChildTemplateProvider()
-            .AddTemplateFrameworkCodeGeneration()
-            .AddTemplateFrameworkRuntime()
-            .AddCsharpExpressionDumper()
-            .AddParsers()
-            .AddClassFrameworkTemplates()
-            .AddClassFrameworkPipelines()
-            .AddDataFrameworkPipelines()
-            .AddScoped(_ => assemblyInfoContextService)
-            .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
-        Scope = Provider.CreateScope();
-    }
-
     [Fact]
     public async Task Can_Create_Code_For_Immutable_Class_Entity_With_ConcurrencyChecks()
     {
