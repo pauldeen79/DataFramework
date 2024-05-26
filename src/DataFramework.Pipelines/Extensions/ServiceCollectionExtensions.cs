@@ -18,5 +18,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetNameComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetPartialComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetRecordComponentBuilder>()
-            .AddScoped<IEntityComponentBuilder, Entity.Components.SetVisibilityComponentBuilder>();
+            .AddScoped<IEntityComponentBuilder, Entity.Components.SetVisibilityComponentBuilder>()
+            .AddScoped<IPipelineService, PipelineService>();
 }

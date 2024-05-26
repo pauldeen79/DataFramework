@@ -34,13 +34,13 @@ public sealed class IntegrationTests : TestBase
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var entityPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<EntityContext>>();
+        var pipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = await entityPipeline.Process(context);
+        var result = await pipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
         await codeGenerationEngine.Generate(new MyGenerator(context.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
@@ -112,17 +112,22 @@ namespace MyNamespace
 
         public override string Path
             => string.Empty;
+
         public override bool RecurseOnDeleteGeneratedFiles
             => false;
+
         public override string LastGeneratedFilesFilename
             => string.Empty;
+
         public override Encoding Encoding
             => Encoding.UTF8;
+
         public override CsharpClassGeneratorSettings Settings
             => new CsharpClassGeneratorSettingsBuilder()
                 .WithCultureInfo(CultureInfo.InvariantCulture)
                 .WithEncoding(Encoding)
                 .Build();
+
         public override Task<IEnumerable<TypeBase>> GetModel()
             => Task.FromResult<IEnumerable<TypeBase>>([_model]);
     }
