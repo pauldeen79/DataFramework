@@ -2,12 +2,12 @@
 
 public static class DataObjectInfoExtensions
 {
-    internal static IEnumerable<FieldInfo> GetUpdateConcurrencyCheckFields(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
+    public static IEnumerable<FieldInfo> GetUpdateConcurrencyCheckFields(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
         => instance.Fields.Where(fieldInfo => IsUpdateConcurrencyCheckField(instance, fieldInfo, concurrencyCheckBehavior));
 
-    internal static bool IsUpdateConcurrencyCheckField(this DataObjectInfo instance,
-                                                       FieldInfo fieldInfo,
-                                                       ConcurrencyCheckBehavior concurrencyCheckBehavior)
+    public static bool IsUpdateConcurrencyCheckField(this DataObjectInfo instance,
+                                                     FieldInfo fieldInfo,
+                                                     ConcurrencyCheckBehavior concurrencyCheckBehavior)
         => concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields
             &&
             (
@@ -20,4 +20,19 @@ public static class DataObjectInfoExtensions
                     && (fieldInfo.IsIdentityField || fieldInfo.IsDatabaseIdentityField)
                 )
             );
+
+    public static string GetBuilderTypeName(this DataObjectInfo instance, PipelineSettings settings)
+    {
+        var ns = settings.DefaultBuilderNamespace
+            .WhenNullOrEmpty(settings.DefaultEntityNamespace)
+            .WhenNullOrEmpty(instance.TypeName.GetNamespaceWithDefault());
+
+        var name = string.IsNullOrEmpty(instance.TypeName)
+            ? instance.Name
+            : instance.TypeName!.GetClassName().WhenNullOrEmpty(instance.Name);
+
+        return string.IsNullOrEmpty(ns)
+            ? $"{name}Builder"
+            : $"{ns}.{name}Builder";
+    }
 }

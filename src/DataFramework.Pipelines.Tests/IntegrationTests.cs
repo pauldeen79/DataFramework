@@ -53,6 +53,11 @@ namespace MyNamespace
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
+        public MyNamespace.MyEntityBuilder ToBuilder()
+        {
+            return new MyNamespace.MyEntityBuilder(this);
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as MyEntity);

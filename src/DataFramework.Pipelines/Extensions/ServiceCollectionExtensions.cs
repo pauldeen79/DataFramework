@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IEntityComponentBuilder, Entity.Components.AddAttributesComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.AddConstructorComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.AddPropertiesComponentBuilder>()
+            .AddScoped<IEntityComponentBuilder, Entity.Components.AddToBuilderMethodComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.EquatableComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.ObservableComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetNameComponentBuilder>()
