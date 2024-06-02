@@ -61,7 +61,7 @@ namespace MyNamespace
         public bool Equals(MyEntity other)
         {
             return other is not null &&
-       MyField == other.MyField;
+                MyField == other.MyField;
         }
 
         public override int GetHashCode()
