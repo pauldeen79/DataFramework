@@ -109,7 +109,7 @@ namespace MyNamespace
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
         var entity = context.Builder.Build();
-        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder().Build(), CultureInfo.InvariantCulture);
+        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder().WithAddFullConstructor(true).Build(), CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -132,6 +132,12 @@ namespace MyNamespace
         public int MyFieldOriginal
         {
             get;
+        }
+
+        public MyEntity(int myField, int myFieldOriginal)
+        {
+            this.MyField = myField;
+            this.MyFieldOriginal = myFieldOriginal;
         }
 
         public MyNamespace.Builders.MyEntityBuilder ToBuilder()
