@@ -5,6 +5,7 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Text;
 global using ClassFramework.Domain;
+global using ClassFramework.Domain.Builders;
 global using ClassFramework.Pipelines;
 global using ClassFramework.Pipelines.Abstractions;
 global using ClassFramework.Pipelines.Builders;

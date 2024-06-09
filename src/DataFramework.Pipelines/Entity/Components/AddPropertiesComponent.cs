@@ -21,7 +21,7 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
                     .Fill(field)
                     .WithHasSetter(!field.IsComputed && field.CanSet && context.Request.Settings.EntityClassType.HasPropertySetter())
                     .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name, context.Request.Settings))
-                    .AddGetterCodeStatements(GetGetterCodeStatements(field, context.Request.Settings.EntityClassType, cultureInfo))
+                    .AddGetterCodeStatements(GetGetterCodeStatements(context.Request.Settings, context.Request.SourceModel, field, context.Request.Settings.EntityClassType, cultureInfo))
                     .AddSetterStringCodeStatements(GetSetterCodeStatements(field, context.Request.Settings.EntityClassType, cultureInfo))))
             .AddProperties(context.Request.SourceModel.GetUpdateConcurrencyCheckFields(context.Request.Settings.ConcurrencyCheckBehavior).Select(field =>
                 new PropertyBuilder()
@@ -48,10 +48,9 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
         }
     }
 
-    private static List<CodeStatementBaseBuilder> GetGetterCodeStatements(FieldInfo field, EntityClassType entityClassType, CultureInfo cultureInfo)
+    private static List<CodeStatementBaseBuilder> GetGetterCodeStatements(PipelineSettings settings, DataObjectInfo dataObjectInfo, FieldInfo field, EntityClassType entityClassType, CultureInfo cultureInfo)
     {
-        //var statements = field.Metadata.GetValues<ICodeStatement>(Entities.ComputedFieldStatement).Select(x => x.CreateBuilder()).ToList();
-        var statements = new List<CodeStatementBaseBuilder>();
+        var statements = new List<CodeStatementBaseBuilder>(settings.CodeStatementMappings.Where(x => AreEqual(dataObjectInfo, x.SourceDataObjectInfo) && AreEqual(field, x.SourceFieldInfo)).SelectMany(x => x.CodeStatements));
 
         if (statements.Count == 0 && entityClassType == EntityClassType.ObservablePoco)
         {
@@ -60,6 +59,13 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
 
         return statements;
     }
+
+    private static bool AreEqual(FieldInfo field, FieldInfo sourceFieldInfo)
+        => field.Name == sourceFieldInfo.Name;
+
+    private static bool AreEqual(DataObjectInfo dataObjectInfo, DataObjectInfo sourceDataObjectInfo)
+        => dataObjectInfo.Name == sourceDataObjectInfo.Name
+            && dataObjectInfo.TypeName == sourceDataObjectInfo.TypeName;
 
     private static IEnumerable<string> GetSetterCodeStatements(FieldInfo field, EntityClassType entityClassType, CultureInfo cultureInfo)
     {

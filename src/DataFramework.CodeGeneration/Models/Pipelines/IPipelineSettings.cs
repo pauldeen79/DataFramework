@@ -9,4 +9,5 @@ internal interface IPipelineSettings
     [DefaultValue(true)] bool AddComponentModelAttributes { get; }
     [DefaultValue(true)] bool AddValidationCodeInConstructor { get; }
     [DefaultValue(true)] bool AddToBuilderMethod { get; }
+    [Required] IReadOnlyCollection<ICodeStatementsMapping> CodeStatementMappings { get; }
 }

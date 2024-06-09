@@ -15,6 +15,114 @@ using System.Text;
 #nullable enable
 namespace DataFramework.Pipelines.Builders
 {
+    public partial class CodeStatementsMappingBuilder : System.ComponentModel.INotifyPropertyChanged
+    {
+        private DataFramework.Domain.Builders.DataObjectInfoBuilder _sourceDataObjectInfo;
+
+        private DataFramework.Domain.Builders.FieldInfoBuilder _sourceFieldInfo;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _codeStatements;
+
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder SourceDataObjectInfo
+        {
+            get
+            {
+                return _sourceDataObjectInfo;
+            }
+            set
+            {
+                _sourceDataObjectInfo = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(SourceDataObjectInfo));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public DataFramework.Domain.Builders.FieldInfoBuilder SourceFieldInfo
+        {
+            get
+            {
+                return _sourceFieldInfo;
+            }
+            set
+            {
+                _sourceFieldInfo = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(SourceFieldInfo));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CodeStatements
+        {
+            get
+            {
+                return _codeStatements;
+            }
+            set
+            {
+                _codeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CodeStatements));
+            }
+        }
+
+        public CodeStatementsMappingBuilder(DataFramework.Pipelines.CodeStatementsMapping source)
+        {
+            if (source is null) throw new System.ArgumentNullException(nameof(source));
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _sourceDataObjectInfo = source.SourceDataObjectInfo.ToBuilder();
+            _sourceFieldInfo = source.SourceFieldInfo.ToBuilder();
+            if (source.CodeStatements is not null) foreach (var item in source.CodeStatements) _codeStatements.Add(item);
+        }
+
+        public CodeStatementsMappingBuilder()
+        {
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _sourceDataObjectInfo = new DataFramework.Domain.Builders.DataObjectInfoBuilder()!;
+            _sourceFieldInfo = new DataFramework.Domain.Builders.FieldInfoBuilder()!;
+            SetDefaultValues();
+        }
+
+        public DataFramework.Pipelines.CodeStatementsMapping Build()
+        {
+            return new DataFramework.Pipelines.CodeStatementsMapping(SourceDataObjectInfo.Build(), SourceFieldInfo.Build(), CodeStatements);
+        }
+
+        partial void SetDefaultValues();
+
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> codeStatements)
+        {
+            if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
+            return AddCodeStatements(codeStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] codeStatements)
+        {
+            if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
+            foreach (var item in codeStatements) CodeStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder WithSourceDataObjectInfo(DataFramework.Domain.Builders.DataObjectInfoBuilder sourceDataObjectInfo)
+        {
+            if (sourceDataObjectInfo is null) throw new System.ArgumentNullException(nameof(sourceDataObjectInfo));
+            SourceDataObjectInfo = sourceDataObjectInfo;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder WithSourceFieldInfo(DataFramework.Domain.Builders.FieldInfoBuilder sourceFieldInfo)
+        {
+            if (sourceFieldInfo is null) throw new System.ArgumentNullException(nameof(sourceFieldInfo));
+            SourceFieldInfo = sourceFieldInfo;
+            return this;
+        }
+
+        protected void HandlePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
     public partial class PipelineSettingsBuilder : System.ComponentModel.INotifyPropertyChanged
     {
         private DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior _concurrencyCheckBehavior;
@@ -30,6 +138,8 @@ namespace DataFramework.Pipelines.Builders
         private bool _addValidationCodeInConstructor;
 
         private bool _addToBuilderMethod;
+
+        private System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> _codeStatementMappings;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -129,9 +239,24 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> CodeStatementMappings
+        {
+            get
+            {
+                return _codeStatementMappings;
+            }
+            set
+            {
+                _codeStatementMappings = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CodeStatementMappings));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
+            _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
@@ -139,10 +264,12 @@ namespace DataFramework.Pipelines.Builders
             _addComponentModelAttributes = source.AddComponentModelAttributes;
             _addValidationCodeInConstructor = source.AddValidationCodeInConstructor;
             _addToBuilderMethod = source.AddToBuilderMethod;
+            if (source.CodeStatementMappings is not null) foreach (var item in source.CodeStatementMappings.Select(x => x.ToBuilder())) _codeStatementMappings.Add(item);
         }
 
         public PipelineSettingsBuilder()
         {
+            _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
             _defaultEntityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
             _addComponentModelAttributes = true;
@@ -153,10 +280,23 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, AddValidationCodeInConstructor, AddToBuilderMethod);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, AddValidationCodeInConstructor, AddToBuilderMethod, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCodeStatementMappings(System.Collections.Generic.IEnumerable<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> codeStatementMappings)
+        {
+            if (codeStatementMappings is null) throw new System.ArgumentNullException(nameof(codeStatementMappings));
+            return AddCodeStatementMappings(codeStatementMappings.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCodeStatementMappings(params DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder[] codeStatementMappings)
+        {
+            if (codeStatementMappings is null) throw new System.ArgumentNullException(nameof(codeStatementMappings));
+            foreach (var item in codeStatementMappings) CodeStatementMappings.Add(item);
+            return this;
+        }
 
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithConcurrencyCheckBehavior(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior)
         {
