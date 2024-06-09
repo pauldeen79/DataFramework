@@ -57,6 +57,7 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
         {
             statements.Add(new StringCodeStatementBuilder().WithStatement($"return _{field.Name.Sanitize().ToPascalCase(cultureInfo)};"));
         }
+
         return statements;
     }
 
@@ -64,9 +65,21 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
     {
         if (entityClassType == EntityClassType.ObservablePoco)
         {
+            yield return $"bool hasChanged = !EqualityComparer<{field.PropertyTypeName.FixTypeName()}{GetNullableSuffix(field)}>.Default.Equals(_{field.Name.Sanitize()}, value);";
             yield return $"_{field.Name.Sanitize().ToPascalCase(cultureInfo)} = value;";
-            yield return string.Format(@$"if (PropertyChanged is not null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{0}""));", field.Name.Sanitize());
+            yield return string.Format(@$"if (hasChanged && PropertyChanged is not null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{0}""));", field.Name.Sanitize());
         }
+    }
+
+    private static string GetNullableSuffix(FieldInfo field)
+    {
+        if (field.IsNullable
+            || field.TypeName?.StartsWith("System.Nullable") == true)
+        {
+            return "?";
+        }
+
+        return string.Empty;
     }
 
     private static IEnumerable<string> GetGetterCodeStatementsForOriginal(FieldInfo field, EntityClassType entityClassType, CultureInfo cultureInfo)
@@ -81,8 +94,9 @@ public class AddPropertiesComponent : IPipelineComponent<EntityContext>
     {
         if (entityClassType == EntityClassType.ObservablePoco)
         {
+            yield return $"bool hasChanged = !EqualityComparer<{field.PropertyTypeName.FixTypeName()}{GetNullableSuffix(field)}>.Default.Equals(_{field.Name.Sanitize()}Original, value);";
             yield return $"_{field.Name.Sanitize().ToPascalCase(cultureInfo)}Original = value;";
-            yield return $@"if (PropertyChanged is not null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{field.Name.Sanitize()}""));";
+            yield return $@"if (hasChanged && PropertyChanged is not null) PropertyChanged(this, new {typeof(PropertyChangedEventArgs).FullName}(""{field.Name.Sanitize()}""));";
         }
     }
 }
