@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{3B8913
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFramework.Pipelines", "src\DataFramework.Pipelines\DataFramework.Pipelines.csproj", "{96C88803-94A7-4E68-822E-5F3B75F7C092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFramework.Pipelines.Tests", "src\DataFramework.Pipelines.Tests\DataFramework.Pipelines.Tests.csproj", "{939A120C-A2EC-415A-B4BB-4C2D9AB22495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataFramework.Pipelines.Tests", "src\DataFramework.Pipelines.Tests\DataFramework.Pipelines.Tests.csproj", "{939A120C-A2EC-415A-B4BB-4C2D9AB22495}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataFramework.Domain.Tests", "src\DataFramework.Domain.Tests\DataFramework.Domain.Tests.csproj", "{7F2A5903-5C46-4769-B41D-E6EE668862B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,6 +177,18 @@ Global
 		{939A120C-A2EC-415A-B4BB-4C2D9AB22495}.Release|x64.Build.0 = Release|Any CPU
 		{939A120C-A2EC-415A-B4BB-4C2D9AB22495}.Release|x86.ActiveCfg = Release|Any CPU
 		{939A120C-A2EC-415A-B4BB-4C2D9AB22495}.Release|x86.Build.0 = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|x64.Build.0 = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|x64.Build.0 = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F2A5903-5C46-4769-B41D-E6EE668862B5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
