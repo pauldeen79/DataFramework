@@ -8,6 +8,8 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddEntityPipeline(this IServiceCollection services)
         => services
+            .AddScoped<IPipelineService, PipelineService>()
+            // Entity pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityContext>>().Build())
             .AddScoped<IPipelineBuilder<EntityContext>, Entity.PipelineBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.AddAttributesComponentBuilder>()
@@ -20,5 +22,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetPartialComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetRecordComponentBuilder>()
             .AddScoped<IEntityComponentBuilder, Entity.Components.SetVisibilityComponentBuilder>()
-            .AddScoped<IPipelineService, PipelineService>();
+            // Class pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<ClassContext>>().Build())
+            .AddScoped<IPipelineBuilder<ClassContext>, Class.PipelineBuilder>()
+            ;
 }

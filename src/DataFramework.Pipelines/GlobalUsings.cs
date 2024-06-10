@@ -18,6 +18,8 @@ global using CsharpExpressionDumper.Abstractions;
 global using DataFramework.Domain;
 global using DataFramework.Domain.Builders;
 global using DataFramework.Pipelines.Abstractions;
+global using DataFramework.Pipelines.Class;
+global using DataFramework.Pipelines.Class.Components.Abstractions;
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.Entity;
 global using DataFramework.Pipelines.Entity.Components.Abstractions;
