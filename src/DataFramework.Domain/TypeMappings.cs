@@ -1,5 +1,6 @@
 ﻿namespace DataFramework.Domain;
 
+[ExcludeFromCodeCoverage]
 internal static class TypeMappings
 {
     internal static readonly Dictionary<Type, string> ReaderMethodNames = new Dictionary<Type, string>
