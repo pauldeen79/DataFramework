@@ -103,7 +103,7 @@ namespace MyNamespace
             .WithDefaultEntityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
-        var context = new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
@@ -167,7 +167,7 @@ namespace MyNamespace
             .WithDefaultEntityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
-        var context = new EntityContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
@@ -177,8 +177,16 @@ namespace MyNamespace
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var entity = context.Builder.Build();
-        var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder().Build(), CultureInfo.InvariantCulture);
+        var cls = context.Builder.Build();
+        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
+            .WithAddFullConstructor()
+            .WithAddSetters(false)
+            .Build();
+        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
+        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var entity = entityContext.Builder.Build();
+        var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(builderContext, CancellationToken.None);
         result.ThrowIfInvalid();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(builderContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);

@@ -45,8 +45,6 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<EntityC
 
     public class IntegrationTests : PipelineBuilderTests
     {
-        private ClassBuilder Model { get; } = new();
-
         [Fact]
         public async Task Creates_Observable_Entity_With_NamespaceMapping()
         {
