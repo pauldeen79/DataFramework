@@ -2,22 +2,12 @@
 
 public class PipelineService : IPipelineService
 {
-    private readonly IPipeline<EntityContext> _entityPipeline;
     private readonly IPipeline<ClassContext> _classPipeline;
 
     public PipelineService(
-        IPipeline<EntityContext> entityPipeline,
         IPipeline<ClassContext> classPipeline)
     {
-        _entityPipeline = entityPipeline;
         _classPipeline = classPipeline;
-    }
-
-    public async Task<Result<TypeBase>> Process(EntityContext context, CancellationToken cancellationToken)
-    {
-        context = context.IsNotNull(nameof(context));
-        var result = await _entityPipeline.Process(context, cancellationToken).ConfigureAwait(false);
-        return ProcessResult(result, context.Builder, context.Builder.Build);
     }
 
     public async Task<Result<TypeBase>> Process(ClassContext context, CancellationToken cancellationToken)

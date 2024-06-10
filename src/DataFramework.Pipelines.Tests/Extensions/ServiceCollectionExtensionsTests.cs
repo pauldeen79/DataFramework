@@ -28,10 +28,10 @@ public class ServiceCollectionExtensionsTests : TestBase
             using var scope = provider.CreateScope();
 
             // Act
-            var builder = scope.ServiceProvider.GetRequiredService<IPipelineBuilder<EntityContext>>();
+            var builder = scope.ServiceProvider.GetRequiredService<IPipelineBuilder<ClassContext>>();
 
             // Assert
-            builder.Should().BeOfType<Pipelines.Entity.PipelineBuilder>();
+            builder.Should().BeOfType<Pipelines.Class.PipelineBuilder>();
         }
 
         [Fact]
@@ -44,10 +44,10 @@ public class ServiceCollectionExtensionsTests : TestBase
             using var scope = provider.CreateScope();
 
             // Act
-            var builder = scope.ServiceProvider.GetRequiredService<IPipeline<EntityContext>>();
+            var builder = scope.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
 
             // Assert
-            builder.Should().BeOfType<Pipeline<EntityContext>>();
+            builder.Should().BeOfType<Pipeline<ClassContext>>();
         }
     }
 }
