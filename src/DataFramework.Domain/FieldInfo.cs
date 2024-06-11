@@ -5,12 +5,12 @@ public partial class FieldInfo
     public const int DefaultStringLength = 32;
 
     public string CreatePropertyName(DataObjectInfo dataObjectInfo)
-        => Name == dataObjectInfo.Name
-            ? string.Format("{0}Property", Name).Sanitize()
+        => Name == dataObjectInfo.IsNotNull(nameof(dataObjectInfo)).Name
+            ? $"{Name}Property".Sanitize()
             : Name.Sanitize();
 
     public string PropertyTypeName
-        => TypeName ?? "System.Object";
+        => TypeName.WhenNullOrEmpty(() => typeof(object).FullName!);
 
     public bool IsRequired()
         => !IsNullable || IsIdentityField;

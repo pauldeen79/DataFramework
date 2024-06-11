@@ -4,6 +4,11 @@ internal static class StringExtensions
 {
     internal static bool IsSupportedByMap(this string instance)
     {
+        if (string.IsNullOrEmpty(instance))
+        {
+            return false;
+
+        }
         if (instance.IsRequiredEnum() || instance.IsOptionalEnum())
         {
             return true;
@@ -32,6 +37,7 @@ internal static class StringExtensions
         {
             return "GetValue";
         }
+
         if (!TypeMappings.ReaderMethodNames.TryGetValue(type, out var name))
         {
             return "GetValue";
