@@ -12,7 +12,7 @@ public partial class FieldInfo
     public string PropertyTypeName
         => TypeName.WhenNullOrEmpty(() => typeof(object).FullName!);
 
-    public bool IsRequired()
+    public bool IsRequired
         => !IsNullable || IsIdentityField;
 
     /// <summary>
@@ -53,24 +53,27 @@ public partial class FieldInfo
                                  .WithDefaultValue(DefaultValue)
                                  .WithIsNullable(IsNullable);
 
-    public bool IsSqlRequired()
-        => IsRequiredInDatabase ?? IsNullable || IsRequired();
+    public bool IsSqlRequired
+        => IsRequiredInDatabase ?? IsNullable || IsRequired;
 
-    public string GetSqlReaderMethodName()
+    public string SqlReaderMethodName
     {
-        if (DatabaseReaderMethodName is not null && !string.IsNullOrEmpty(DatabaseReaderMethodName))
+        get
         {
-            return DatabaseReaderMethodName;
-        }
+            if (DatabaseReaderMethodName is not null && !string.IsNullOrEmpty(DatabaseReaderMethodName))
+            {
+                return DatabaseReaderMethodName;
+            }
 
-        var typeName = PropertyTypeName;
-        if (typeName.Length == 0)
-        {
-            //assume object
-            return "GetValue";
-        }
+            var typeName = PropertyTypeName;
+            if (typeName.Length == 0)
+            {
+                //assume object
+                return "GetValue";
+            }
 
-        return typeName.GetSqlReaderMethodName(IsNullable);
+            return typeName.GetSqlReaderMethodName(IsNullable);
+        }
     }
 
     public string GetSqlFieldType(bool includeSpecificProperties = false)
@@ -115,7 +118,7 @@ public partial class FieldInfo
         return string.Empty;
     }
 
-    public bool IsSqlStringMaxLength()
+    public bool IsSqlStringMaxLength
         => IsMaxLengthString ?? false;
 
     private string GetSqlDecimalType(bool includeSpecificProperties)
@@ -129,7 +132,7 @@ public partial class FieldInfo
         {
             return "varchar";
         }
-        var length = IsSqlStringMaxLength()
+        var length = IsSqlStringMaxLength
             ? "max"
             : GetSqlStringLength(defaultLength).ToString(CultureInfo.InvariantCulture);
         return $"varchar({length})";

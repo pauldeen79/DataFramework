@@ -1,1 +1,2 @@
-﻿global using DataFramework.Domain.Extensions;
+﻿global using System.Globalization;
+global using DataFramework.Domain.Extensions;
