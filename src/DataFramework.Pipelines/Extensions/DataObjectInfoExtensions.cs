@@ -3,23 +3,7 @@
 public static class DataObjectInfoExtensions
 {
     public static IEnumerable<FieldInfo> GetUpdateConcurrencyCheckFields(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
-        => instance.Fields.Where(fieldInfo => IsUpdateConcurrencyCheckField(instance, fieldInfo, concurrencyCheckBehavior));
-
-    public static bool IsUpdateConcurrencyCheckField(this DataObjectInfo instance,
-                                                     FieldInfo fieldInfo,
-                                                     ConcurrencyCheckBehavior concurrencyCheckBehavior)
-        => concurrencyCheckBehavior != ConcurrencyCheckBehavior.NoFields
-            &&
-            (
-                concurrencyCheckBehavior == ConcurrencyCheckBehavior.AllFields
-                || fieldInfo.UseForConcurrencyCheck
-                ||
-                (
-                    !fieldInfo.IsComputed
-                    && fieldInfo.IsPersistable
-                    && (fieldInfo.IsIdentityField || fieldInfo.IsDatabaseIdentityField)
-                )
-            );
+        => instance.Fields.Where(fieldInfo => fieldInfo.IsUpdateConcurrencyCheckField(concurrencyCheckBehavior));
 
     public static string GetBuilderTypeName(this DataObjectInfo instance, PipelineSettings settings)
     {
