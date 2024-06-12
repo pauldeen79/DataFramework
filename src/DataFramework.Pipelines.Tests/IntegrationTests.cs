@@ -8,7 +8,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("MyField").WithTypeName(typeof(int).FullName!))
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.Poco) //default
@@ -72,7 +72,7 @@ namespace MyNamespace
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("MyField").WithTypeName(typeof(int).FullName!))
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.ImmutableClass)

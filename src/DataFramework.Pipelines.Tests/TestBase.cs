@@ -39,8 +39,8 @@ public abstract class TestBase : IDisposable
     protected DataObjectInfoBuilder CreateModel()
         => new DataObjectInfoBuilder()
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("Field1").WithTypeName(typeof(string).FullName!).WithStringMaxLength(8).WithIsNullable())
-            .AddFields(new FieldInfoBuilder().WithName("Field2").WithTypeName(typeof(int).FullName!));
+            .AddFields(new FieldInfoBuilder().WithName("Field1").WithType(typeof(string)).WithStringMaxLength(8).WithIsNullable())
+            .AddFields(new FieldInfoBuilder().WithName("Field2").WithType(typeof(int)));
 }
 
 public abstract class TestBase<T> : TestBase
