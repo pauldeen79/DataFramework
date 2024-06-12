@@ -189,6 +189,4 @@ public class StringExtensionsTests
             result.Should().Be("GetBoolean");
         }
     }
-
-    public enum MyEnumeration { Zero, One }
 }

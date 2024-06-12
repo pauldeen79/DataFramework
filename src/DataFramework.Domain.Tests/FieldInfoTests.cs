@@ -15,7 +15,8 @@ public class FieldInfoTests
         bool isPersistable = true,
         bool isDatabaseIdentityField = false,
         bool isComputed = false,
-        bool? isRequiredInDatabase = null) =>
+        bool? isRequiredInDatabase = null,
+        string? databaseReaderMethodName = null) =>
         new FieldInfoBuilder()
             .WithName("MyField")
             .WithTypeName(typeName ?? StringTypeName)
@@ -29,6 +30,7 @@ public class FieldInfoTests
             .WithIsDatabaseIdentityField(isDatabaseIdentityField)
             .WithIsComputed(isComputed)
             .WithIsRequiredInDatabase(isRequiredInDatabase)
+            .WithDatabaseReaderMethodName(databaseReaderMethodName)
             .Build();
 
     public class CreatePropertyName : FieldInfoTests
@@ -554,10 +556,6 @@ public class FieldInfoTests
         }
     }
 
-    /*    public bool IsSqlRequired()
-        => IsRequiredInDatabase ?? IsNullable || IsRequired();
-    */
-
     public class IsSqlRequired : FieldInfoTests
     {
         [Fact]
@@ -588,6 +586,247 @@ public class FieldInfoTests
 
             // Assert
             result.Should().Be(expectedResult);
+        }
+    }
+
+    public class SqlReaderMethodName : FieldInfoTests
+    {
+        [Fact]
+        public void Returns_DatabaseReaderMethodName_When_Filled()
+        {
+            // Arrange
+            var sut = CreateSut(databaseReaderMethodName: "GetMyStuff");
+
+            // Act
+            var result = sut.SqlReaderMethodName;
+
+            // Assert
+            result.Should().Be("GetMyStuff");
+        }
+        
+        [Fact]
+        public void Returns_SqlReaderMethodName_From_PropertyTypeName_When_DatabaseReaderMethodName_Is_Empty()
+        {
+            // Arrange
+            var sut = CreateSut(databaseReaderMethodName: string.Empty);
+
+            // Act
+            var result = sut.SqlReaderMethodName;
+
+            // Assert
+            result.Should().Be("GetString");
+        }
+    }
+
+    public class GetSqlFieldType : FieldInfoTests
+    {
+        [Fact]
+        public void Returns_Metadata_Value_With_Details_When_Available()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithDatabaseFieldType("varbinary(18)").Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varbinary(18)");
+        }
+
+        [Fact]
+        public void Returns_Metadata_Value_Without_Details_When_Available()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithDatabaseFieldType("varbinary(18)").Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
+
+            // Assert
+            actual.Should().Be("varbinary");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Varchar_With_Specific_Details_No_MaxLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).Build(); //this uses AssemblyQualifiedName underneaths
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(32)");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Varchar_With_Specific_Details_No_MaxLength_TypeNameOnly()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(typeof(string).FullName).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(32)");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Varchar_With_Specific_Details_MaxLength_From_Metadata_SqlStringLength()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).WithStringMaxLength(16).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("varchar(16)");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Varchar_Without_Specific_Details()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(string)).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
+
+            // Assert
+            actual.Should().Be("varchar");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Decimal_With_Specific_Details()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("decimal(4,2)");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Decimal_Without_Specific_Details()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
+
+            // Assert
+            actual.Should().Be("decimal");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Nullable_Decimal_With_Specific_Details()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
+
+            // Assert
+            actual.Should().Be("decimal(4,2)");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Nullable_Decimal_Without_Specific_Details()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
+
+            // Assert
+            actual.Should().Be("decimal");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Required_Enum()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(MyEnumeration)).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().Be("int");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Optional_Enum()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(MyEnumeration?)).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().Be("int");
+        }
+
+        [Fact]
+        public void Returns_Correct_Result_For_Known_Type()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(bool)).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().Be("bit");
+        }
+
+        [Fact]
+        public void Returns_Empty_Result_For_Unknown_Type()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName("UnknownType").Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Returns_Empty_Result_For_Empty_Type()
+        {
+            // Arrange
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(string.Empty).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Returns_Empty_Result_For_Null_Type()
+        {
+            // Arrange
+            string? val = null;
+            var sut = new FieldInfoBuilder().WithName("Name").WithTypeName(val).Build();
+
+            // Act
+            var actual = sut.GetSqlFieldType();
+
+            // Assert
+            actual.Should().BeEmpty();
         }
     }
 }

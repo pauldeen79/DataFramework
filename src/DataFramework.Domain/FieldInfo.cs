@@ -60,19 +60,12 @@ public partial class FieldInfo
     {
         get
         {
-            if (DatabaseReaderMethodName is not null && !string.IsNullOrEmpty(DatabaseReaderMethodName))
+            if (!string.IsNullOrEmpty(DatabaseReaderMethodName))
             {
-                return DatabaseReaderMethodName;
+                return DatabaseReaderMethodName!;
             }
 
-            var typeName = PropertyTypeName;
-            if (typeName.Length == 0)
-            {
-                //assume object
-                return "GetValue";
-            }
-
-            return typeName.GetSqlReaderMethodName(IsNullable);
+            return PropertyTypeName.GetSqlReaderMethodName(IsNullable);
         }
     }
 
@@ -86,11 +79,6 @@ public partial class FieldInfo
         }
 
         var typeName = PropertyTypeName;
-        if (string.IsNullOrEmpty(typeName))
-        {
-            return string.Empty;
-        }
-
         if (typeName == typeof(string).FullName || typeName == typeof(string).AssemblyQualifiedName)
         {
             return GetSqlVarcharType(includeSpecificProperties, DefaultStringLength);
