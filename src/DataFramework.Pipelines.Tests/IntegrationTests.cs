@@ -26,7 +26,11 @@ public sealed class IntegrationTests : IntegrationTestBase
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
         var entity = context.Builder.Build();
-        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder().WithAddFullConstructor(true).Build(), CultureInfo.InvariantCulture);
+        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
+            .WithAddFullConstructor(true)
+            .WithCopyAttributes()
+            .Build();
+        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -39,6 +43,7 @@ using System.Text;
 
 namespace MyNamespace
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntity
     {
         public int MyField
@@ -46,6 +51,7 @@ namespace MyNamespace
             get;
         }
 
+        [System.ComponentModel.ReadOnly(true)]
         public int MyFieldOriginal
         {
             get;
@@ -93,6 +99,7 @@ namespace MyNamespace
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor()
             .WithAddSetters(false)
+            .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
@@ -111,6 +118,7 @@ using System.Text;
 
 namespace MyNamespace.Builders
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntityBuilder
     {
         public int MyField

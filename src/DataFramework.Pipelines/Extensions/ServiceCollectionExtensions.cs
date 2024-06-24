@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
             // Class pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<ClassContext>>().Build())
             .AddScoped<IPipelineBuilder<ClassContext>, Class.PipelineBuilder>()
+            .AddScoped<IClassComponentBuilder, Class.Components.AddGeneratorAttributeComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.AddPropertiesComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetNameComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetPartialComponentBuilder>()
