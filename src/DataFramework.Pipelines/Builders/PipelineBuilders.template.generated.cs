@@ -135,11 +135,11 @@ namespace DataFramework.Pipelines.Builders
 
         private bool _addComponentModelAttributes;
 
-        private bool _addValidationCodeInConstructor;
-
-        private bool _addToBuilderMethod;
-
         private System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> _codeStatementMappings;
+
+        private ClassFramework.Domain.Domains.Visibility _commandEntityProviderVisibility;
+
+        private string _commandEntityProviderNamespace;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -211,34 +211,6 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
-        public bool AddValidationCodeInConstructor
-        {
-            get
-            {
-                return _addValidationCodeInConstructor;
-            }
-            set
-            {
-                _addValidationCodeInConstructor = value;
-                HandlePropertyChanged(nameof(AddValidationCodeInConstructor));
-            }
-        }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
-        public bool AddToBuilderMethod
-        {
-            get
-            {
-                return _addToBuilderMethod;
-            }
-            set
-            {
-                _addToBuilderMethod = value;
-                HandlePropertyChanged(nameof(AddToBuilderMethod));
-            }
-        }
-
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         public System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> CodeStatementMappings
         {
@@ -253,6 +225,33 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public ClassFramework.Domain.Domains.Visibility CommandEntityProviderVisibility
+        {
+            get
+            {
+                return _commandEntityProviderVisibility;
+            }
+            set
+            {
+                _commandEntityProviderVisibility = value;
+                HandlePropertyChanged(nameof(CommandEntityProviderVisibility));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CommandEntityProviderNamespace
+        {
+            get
+            {
+                return _commandEntityProviderNamespace;
+            }
+            set
+            {
+                _commandEntityProviderNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderNamespace));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -262,9 +261,9 @@ namespace DataFramework.Pipelines.Builders
             _defaultEntityNamespace = source.DefaultEntityNamespace;
             _defaultBuilderNamespace = source.DefaultBuilderNamespace;
             _addComponentModelAttributes = source.AddComponentModelAttributes;
-            _addValidationCodeInConstructor = source.AddValidationCodeInConstructor;
-            _addToBuilderMethod = source.AddToBuilderMethod;
             if (source.CodeStatementMappings is not null) foreach (var item in source.CodeStatementMappings.Select(x => x.ToBuilder())) _codeStatementMappings.Add(item);
+            _commandEntityProviderVisibility = source.CommandEntityProviderVisibility;
+            _commandEntityProviderNamespace = source.CommandEntityProviderNamespace;
         }
 
         public PipelineSettingsBuilder()
@@ -273,14 +272,13 @@ namespace DataFramework.Pipelines.Builders
             _defaultEntityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
             _addComponentModelAttributes = true;
-            _addValidationCodeInConstructor = true;
-            _addToBuilderMethod = true;
+            _commandEntityProviderNamespace = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, AddValidationCodeInConstructor, AddToBuilderMethod, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly());
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace);
         }
 
         partial void SetDefaultValues();
@@ -330,15 +328,16 @@ namespace DataFramework.Pipelines.Builders
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddValidationCodeInConstructor(bool addValidationCodeInConstructor = true)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandEntityProviderVisibility(ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility)
         {
-            AddValidationCodeInConstructor = addValidationCodeInConstructor;
+            CommandEntityProviderVisibility = commandEntityProviderVisibility;
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddToBuilderMethod(bool addToBuilderMethod = true)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandEntityProviderNamespace(string commandEntityProviderNamespace)
         {
-            AddToBuilderMethod = addToBuilderMethod;
+            if (commandEntityProviderNamespace is null) throw new System.ArgumentNullException(nameof(commandEntityProviderNamespace));
+            CommandEntityProviderNamespace = commandEntityProviderNamespace;
             return this;
         }
 

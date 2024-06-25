@@ -15,7 +15,7 @@ public class AddGeneratorAttributeComponent : IPipelineComponent<ClassContext>
         context.Request.Builder
             .AddAttributes(new AttributeBuilder()
                 .WithName(typeof(GeneratedCodeAttribute))
-                .ForCodeGenerator("DataFramework.ModelFramework.Generators.Entities.ClassGenerator", "1.0.0.0")
+                .ForCodeGenerator("DataFramework.ModelFramework.Generators.ClassGenerator", "1.0.0.0")
             );
 
         return Task.FromResult(Result.Continue());

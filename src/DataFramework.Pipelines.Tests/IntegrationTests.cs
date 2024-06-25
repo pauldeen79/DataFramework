@@ -43,7 +43,7 @@ using System.Text;
 
 namespace MyNamespace
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.ClassGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntity
     {
         public int MyField
@@ -118,7 +118,7 @@ using System.Text;
 
 namespace MyNamespace.Builders
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.Entities.ClassGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntityBuilder
     {
         public int MyField
@@ -163,6 +163,48 @@ namespace MyNamespace.Builders
             MyFieldOriginal = myFieldOriginal;
             return this;
         }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_CommandEntityProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandEntityProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new CommandEntityProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var commandEntityProvider = context.Builder.Build();
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.CommandEntityProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityCommandEntityProvider
+    {
     }
 }
 ");

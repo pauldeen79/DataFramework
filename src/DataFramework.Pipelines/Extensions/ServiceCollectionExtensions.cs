@@ -18,5 +18,12 @@ public static class ServiceCollectionExtensions
             .AddScoped<IClassComponentBuilder, Class.Components.SetPartialComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetRecordComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetVisibilityComponentBuilder>()
+            // CommandEntityProvider pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<CommandEntityProviderContext>>().Build())
+            .AddScoped<IPipelineBuilder<CommandEntityProviderContext>, CommandEntityProvider.PipelineBuilder>()
+            .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.SetNameComponentBuilder>()
+            .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.SetPartialComponentBuilder>()
+            .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.SetVisibilityComponentBuilder>()
             ;
 }

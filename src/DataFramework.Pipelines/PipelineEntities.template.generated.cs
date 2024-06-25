@@ -78,34 +78,33 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        [System.ComponentModel.DefaultValueAttribute(true)]
-        public bool AddValidationCodeInConstructor
-        {
-            get;
-        }
-
-        [System.ComponentModel.DefaultValueAttribute(true)]
-        public bool AddToBuilderMethod
-        {
-            get;
-        }
-
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         public System.Collections.Generic.IReadOnlyCollection<DataFramework.Pipelines.CodeStatementsMapping> CodeStatementMappings
         {
             get;
         }
 
-        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, bool addValidationCodeInConstructor, bool addToBuilderMethod, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings)
+        public ClassFramework.Domain.Domains.Visibility CommandEntityProviderVisibility
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CommandEntityProviderNamespace
+        {
+            get;
+        }
+
+        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace)
         {
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
             this.EntityClassType = entityClassType;
             this.DefaultEntityNamespace = defaultEntityNamespace;
             this.DefaultBuilderNamespace = defaultBuilderNamespace;
             this.AddComponentModelAttributes = addComponentModelAttributes;
-            this.AddValidationCodeInConstructor = addValidationCodeInConstructor;
-            this.AddToBuilderMethod = addToBuilderMethod;
             this.CodeStatementMappings = codeStatementMappings is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Pipelines.CodeStatementsMapping>(codeStatementMappings);
+            this.CommandEntityProviderVisibility = commandEntityProviderVisibility;
+            this.CommandEntityProviderNamespace = commandEntityProviderNamespace;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
