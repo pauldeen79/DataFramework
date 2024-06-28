@@ -131,6 +131,8 @@ namespace DataFramework.Pipelines.Builders
 
         private string _defaultEntityNamespace;
 
+        private string _defaultIdentityNamespace;
+
         private string _defaultBuilderNamespace;
 
         private bool _addComponentModelAttributes;
@@ -202,6 +204,20 @@ namespace DataFramework.Pipelines.Builders
             {
                 _defaultEntityNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
                 HandlePropertyChanged(nameof(DefaultEntityNamespace));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DefaultIdentityNamespace
+        {
+            get
+            {
+                return _defaultIdentityNamespace;
+            }
+            set
+            {
+                _defaultIdentityNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DefaultIdentityNamespace));
             }
         }
 
@@ -440,6 +456,7 @@ namespace DataFramework.Pipelines.Builders
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
+            _defaultIdentityNamespace = source.DefaultIdentityNamespace;
             _defaultBuilderNamespace = source.DefaultBuilderNamespace;
             _addComponentModelAttributes = source.AddComponentModelAttributes;
             if (source.CodeStatementMappings is not null) foreach (var item in source.CodeStatementMappings.Select(x => x.ToBuilder())) _codeStatementMappings.Add(item);
@@ -468,6 +485,7 @@ namespace DataFramework.Pipelines.Builders
             _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _defaultEntityNamespace = string.Empty;
+            _defaultIdentityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
             _addComponentModelAttributes = true;
             _commandEntityProviderNamespace = string.Empty;
@@ -480,7 +498,7 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace);
         }
 
         partial void SetDefaultValues();
@@ -592,6 +610,13 @@ namespace DataFramework.Pipelines.Builders
         {
             if (defaultEntityNamespace is null) throw new System.ArgumentNullException(nameof(defaultEntityNamespace));
             DefaultEntityNamespace = defaultEntityNamespace;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDefaultIdentityNamespace(string defaultIdentityNamespace)
+        {
+            if (defaultIdentityNamespace is null) throw new System.ArgumentNullException(nameof(defaultIdentityNamespace));
+            DefaultIdentityNamespace = defaultIdentityNamespace;
             return this;
         }
 

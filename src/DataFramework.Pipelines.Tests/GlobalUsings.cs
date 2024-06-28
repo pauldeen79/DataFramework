@@ -23,6 +23,7 @@ global using DataFramework.Pipelines.CommandEntityProvider;
 global using DataFramework.Pipelines.CommandProvider;
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.Extensions;
+global using DataFramework.Pipelines.IdentityClass;
 global using FluentAssertions;
 global using Microsoft.Extensions.DependencyInjection;
 global using NSubstitute;

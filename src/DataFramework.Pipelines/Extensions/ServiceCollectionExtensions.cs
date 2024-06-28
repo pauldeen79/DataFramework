@@ -18,6 +18,15 @@ public static class ServiceCollectionExtensions
             .AddScoped<IClassComponentBuilder, Class.Components.SetPartialComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetRecordComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetVisibilityComponentBuilder>()
+            // Identitylass pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<IdentityClassContext>>().Build())
+            .AddScoped<IPipelineBuilder<IdentityClassContext>, IdentityClass.PipelineBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddPropertiesComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetNameComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetPartialComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetRecordComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetVisibilityComponentBuilder>()
             // CommandEntityProvider pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<CommandEntityProviderContext>>().Build())
             .AddScoped<IPipelineBuilder<CommandEntityProviderContext>, CommandEntityProvider.PipelineBuilder>()

@@ -26,4 +26,6 @@ global using DataFramework.Pipelines.CommandProvider;
 global using DataFramework.Pipelines.CommandProvider.Components.Abstractions;
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.Extensions;
+global using DataFramework.Pipelines.IdentityClass;
+global using DataFramework.Pipelines.IdentityClass.Components.Abstractions;
 global using Microsoft.Extensions.DependencyInjection;
