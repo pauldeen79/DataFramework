@@ -19,7 +19,7 @@ public class AddPropertiesComponent : IPipelineComponent<ClassContext>
                     .Fill(field)
                     .WithHasSetter(!field.IsComputed && field.CanSet && context.Request.Settings.EntityClassType.HasPropertySetter())
                     .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name, context.Request.Settings))
-                    .AddGetterCodeStatements(GetGetterCodeStatements(context.Request.Settings, context.Request.SourceModel, field))))
+                    .AddGetterCodeStatements(context.Request.GetGetterCodeStatements(context.Request.SourceModel, field))))
             .AddProperties(context.Request.SourceModel.GetUpdateConcurrencyCheckFields(context.Request.Settings.ConcurrencyCheckBehavior).Select(field =>
                 new PropertyBuilder()
                     .WithName($"{field.Name}Original")
@@ -42,16 +42,4 @@ public class AddPropertiesComponent : IPipelineComponent<ClassContext>
             yield return new AttributeBuilder().AddNameAndParameter("System.ComponentModel.DataAnnotations.DisplayName", field.Name);
         }
     }
-
-    private static IEnumerable<CodeStatementBaseBuilder> GetGetterCodeStatements(PipelineSettings settings, DataObjectInfo dataObjectInfo, FieldInfo field)
-        => settings.CodeStatementMappings
-            .Where(x => AreEqual(dataObjectInfo, x.SourceDataObjectInfo) && AreEqual(field, x.SourceFieldInfo))
-            .SelectMany(x => x.CodeStatements);
-
-    private static bool AreEqual(FieldInfo field, FieldInfo sourceFieldInfo)
-        => field.Name == sourceFieldInfo.Name;
-
-    private static bool AreEqual(DataObjectInfo dataObjectInfo, DataObjectInfo sourceDataObjectInfo)
-        => dataObjectInfo.Name == sourceDataObjectInfo.Name
-            && dataObjectInfo.TypeName == sourceDataObjectInfo.TypeName;
 }
