@@ -2,8 +2,8 @@
 
 public class PipelineBuilder : PipelineBuilder<CommandEntityProviderContext>
 {
-    public PipelineBuilder(IEnumerable<ICommandEntityProviderComponentBuilder> entityComponentBuilders)
+    public PipelineBuilder(IEnumerable<ICommandEntityProviderComponentBuilder> commandEntityProviderComponentBuilders)
     {
-        AddComponents(entityComponentBuilders);
+        AddComponents(commandEntityProviderComponentBuilders);
     }
 }

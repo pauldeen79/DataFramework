@@ -4,13 +4,16 @@ public class PipelineService : IPipelineService
 {
     private readonly IPipeline<ClassContext> _classPipeline;
     private readonly IPipeline<CommandEntityProviderContext> _commandEntityProviderPipeline;
+    private readonly IPipeline<CommandProviderContext> _commandProviderPipeline;
 
     public PipelineService(
         IPipeline<ClassContext> classPipeline,
-        IPipeline<CommandEntityProviderContext> commandEntityProviderPipeline)
+        IPipeline<CommandEntityProviderContext> commandEntityProviderPipeline,
+        IPipeline<CommandProviderContext> commandProviderPipeline)
     {
-        _classPipeline = classPipeline;
-        _commandEntityProviderPipeline = commandEntityProviderPipeline;
+        _classPipeline = classPipeline.IsNotNull(nameof(classPipeline));
+        _commandEntityProviderPipeline = commandEntityProviderPipeline.IsNotNull(nameof(commandEntityProviderPipeline));
+        _commandProviderPipeline = commandProviderPipeline.IsNotNull(nameof(commandProviderPipeline));
     }
 
     public async Task<Result<TypeBase>> Process(ClassContext context, CancellationToken cancellationToken)
@@ -24,6 +27,13 @@ public class PipelineService : IPipelineService
     {
         context = context.IsNotNull(nameof(context));
         var result = await _commandEntityProviderPipeline.Process(context, cancellationToken).ConfigureAwait(false);
+        return ProcessResult(result, context.Builder, context.Builder.Build);
+    }
+
+    public async Task<Result<TypeBase>> Process(CommandProviderContext context, CancellationToken cancellationToken)
+    {
+        context = context.IsNotNull(nameof(context));
+        var result = await _commandProviderPipeline.Process(context, cancellationToken).ConfigureAwait(false);
         return ProcessResult(result, context.Builder, context.Builder.Build);
     }
 

@@ -43,7 +43,7 @@ using System.Text;
 
 namespace MyNamespace
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.ClassGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntity
     {
         public int MyField
@@ -118,7 +118,7 @@ using System.Text;
 
 namespace MyNamespace.Builders
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.ClassGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntityBuilder
     {
         public int MyField
@@ -202,7 +202,7 @@ using System.Text;
 
 namespace MyNamespace
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.CommandEntityProviderGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandEntityProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>
     {
         public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, MyNamespace.MyEntity> CreateResultEntity
@@ -298,6 +298,48 @@ namespace MyNamespace
             resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
             return resultEntity;
         }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_CommandProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new CommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var commandProvider = context.Builder.Build();
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityCommandProvider
+    {
     }
 }
 ");

@@ -159,6 +159,10 @@ namespace DataFramework.Pipelines.Builders
 
         private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderDeleteAfterReadStatements;
 
+        private ClassFramework.Domain.Domains.Visibility _commandProviderVisibility;
+
+        private string _commandProviderNamespace;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
@@ -396,6 +400,33 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public ClassFramework.Domain.Domains.Visibility CommandProviderVisibility
+        {
+            get
+            {
+                return _commandProviderVisibility;
+            }
+            set
+            {
+                _commandProviderVisibility = value;
+                HandlePropertyChanged(nameof(CommandProviderVisibility));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CommandProviderNamespace
+        {
+            get
+            {
+                return _commandProviderNamespace;
+            }
+            set
+            {
+                _commandProviderNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandProviderNamespace));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -423,6 +454,8 @@ namespace DataFramework.Pipelines.Builders
             if (source.CommandEntityProviderUpdateAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderUpdateAfterReadStatements) _commandEntityProviderUpdateAfterReadStatements.Add(item);
             if (source.CommandEntityProviderDeleteResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderDeleteResultEntityStatements) _commandEntityProviderDeleteResultEntityStatements.Add(item);
             if (source.CommandEntityProviderDeleteAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderDeleteAfterReadStatements) _commandEntityProviderDeleteAfterReadStatements.Add(item);
+            _commandProviderVisibility = source.CommandProviderVisibility;
+            _commandProviderNamespace = source.CommandProviderNamespace;
         }
 
         public PipelineSettingsBuilder()
@@ -441,12 +474,13 @@ namespace DataFramework.Pipelines.Builders
             _commandProviderEnableAdd = true;
             _commandProviderEnableUpdate = true;
             _commandProviderEnableDelete = true;
+            _commandProviderNamespace = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace);
         }
 
         partial void SetDefaultValues();
@@ -602,6 +636,19 @@ namespace DataFramework.Pipelines.Builders
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderEnableDelete(bool commandProviderEnableDelete = true)
         {
             CommandProviderEnableDelete = commandProviderEnableDelete;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderVisibility(ClassFramework.Domain.Domains.Visibility commandProviderVisibility)
+        {
+            CommandProviderVisibility = commandProviderVisibility;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderNamespace(string commandProviderNamespace)
+        {
+            if (commandProviderNamespace is null) throw new System.ArgumentNullException(nameof(commandProviderNamespace));
+            CommandProviderNamespace = commandProviderNamespace;
             return this;
         }
 

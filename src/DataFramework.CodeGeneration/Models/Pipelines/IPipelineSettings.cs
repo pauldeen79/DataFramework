@@ -8,6 +8,8 @@ internal interface IPipelineSettings
     [Required(AllowEmptyStrings = true)] string DefaultBuilderNamespace { get; }
     [DefaultValue(true)] bool AddComponentModelAttributes { get; }
     [Required] IReadOnlyCollection<ICodeStatementsMapping> CodeStatementMappings { get; }
+
+    // CommandEntityProvider settings
     Visibility CommandEntityProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string CommandEntityProviderNamespace { get; }
     [DefaultValue(true)] bool CommandProviderEnableAdd { get; }
@@ -19,4 +21,8 @@ internal interface IPipelineSettings
     [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements { get; }
     [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements { get; }
     [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements { get; }
+
+    // CommandProvider settings
+    Visibility CommandProviderVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string CommandProviderNamespace { get; }
 }
