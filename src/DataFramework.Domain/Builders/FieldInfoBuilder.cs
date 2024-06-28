@@ -3,5 +3,5 @@
 public partial class FieldInfoBuilder
 {
     public FieldInfoBuilder WithType(Type type)
-        => WithTypeName(type?.AssemblyQualifiedName!);
+        => WithTypeName(type.IsNotNull(nameof(type)).AssemblyQualifiedName);
 }
