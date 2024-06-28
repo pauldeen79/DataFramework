@@ -28,7 +28,7 @@ public class AddPropertiesComponent : IPipelineComponent<ClassContext>
                     .WithHasSetter(context.Request.Settings.EntityClassType.HasPropertySetter())
                     .AddAttributes(context.Request.Settings.EntityClassType.IsImmutable()
                         ? Enumerable.Empty<AttributeBuilder>()
-                        : [new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true)])));
+                        : [new AttributeBuilder().AddNameAndParameter(typeof(ReadOnlyAttribute).FullName.ReplaceSuffix(nameof(System.Attribute), string.Empty, StringComparison.Ordinal), true)])));
 
         return Task.FromResult(Result.Continue());
     }

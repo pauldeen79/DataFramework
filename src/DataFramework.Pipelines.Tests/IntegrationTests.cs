@@ -11,7 +11,7 @@ public sealed class IntegrationTests : IntegrationTestBase
             .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
         var settings = new PipelineSettingsBuilder()
-            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithEntityClassType(EntityClassType.ImmutableClass) //default
             .WithDefaultEntityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
@@ -28,6 +28,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         var entity = context.Builder.Build();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
+            .WithAddPublicParameterlessConstructor(false)
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
@@ -51,7 +52,6 @@ namespace MyNamespace
             get;
         }
 
-        [System.ComponentModel.ReadOnly(true)]
         public int MyFieldOriginal
         {
             get;
@@ -66,6 +66,76 @@ namespace MyNamespace
         public MyNamespace.Builders.MyEntityBuilder ToBuilder()
         {
             return new MyNamespace.Builders.MyEntityBuilder(this);
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_Poco_Class_Entity_With_ConcurrencyChecks_Using_ClassFramework_EntityPipeline()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var entity = context.Builder.Build();
+        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
+            .WithAddFullConstructor(false)
+            .WithAddPublicParameterlessConstructor(true) // note that you might want to omit this in case you don't have custom default values
+            .WithAddSetters()
+            .WithToBuilderFormatString(string.Empty) // no builder necessary
+            .WithCopyAttributes()
+            .Build();
+        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
+        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
+        result.ThrowIfInvalid();
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
+    public partial class MyEntity
+    {
+        public int MyField
+        {
+            get;
+            set;
+        }
+
+        [System.ComponentModel.ReadOnly(true)]
+        public int MyFieldOriginal
+        {
+            get;
+            set;
+        }
+
+        public MyEntity()
+        {
+            MyField = default(System.Int32);
+            MyFieldOriginal = default(System.Int32);
         }
     }
 }

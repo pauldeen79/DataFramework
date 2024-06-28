@@ -1,4 +1,5 @@
 ﻿global using System.CodeDom.Compiler;
+global using System.ComponentModel;
 global using System.ComponentModel.DataAnnotations;
 global using System.Data;
 global using ClassFramework.Domain;
