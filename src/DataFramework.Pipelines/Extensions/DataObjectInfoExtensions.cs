@@ -2,6 +2,9 @@
 
 public static class DataObjectInfoExtensions
 {
+    public static IEnumerable<FieldInfo> GetIdentityFields(this DataObjectInfo instance)
+        => instance.Fields.Where(x => (x.IsIdentityField || x.IsDatabaseIdentityField) && !x.SkipFieldOnFind);
+
     public static IEnumerable<FieldInfo> GetUpdateConcurrencyCheckFields(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
         => instance.Fields.Where(fieldInfo => fieldInfo.IsUpdateConcurrencyCheckField(concurrencyCheckBehavior));
 
