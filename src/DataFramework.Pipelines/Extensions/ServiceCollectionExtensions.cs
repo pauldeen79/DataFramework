@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
             // CommandEntityProvider pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<CommandEntityProviderContext>>().Build())
             .AddScoped<IPipelineBuilder<CommandEntityProviderContext>, CommandEntityProvider.PipelineBuilder>()
+            .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.AddEntityCommandProviderMembersComponentBuilder>()
             .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.AddGeneratorAttributeComponentBuilder>()
             .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.SetNameComponentBuilder>()
             .AddScoped<ICommandEntityProviderComponentBuilder, CommandEntityProvider.Components.SetPartialComponentBuilder>()

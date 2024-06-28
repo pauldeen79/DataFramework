@@ -203,8 +203,101 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.ModelFramework.Generators.CommandEntityProviderGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityCommandEntityProvider
+    public partial class MyEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>
     {
+        public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, MyNamespace.MyEntity> CreateResultEntity
+        {
+            get
+            {
+                return (entity, operation) =>
+                {
+                    switch (operation)
+                    {
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                            return AddResultEntity(entity);
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
+                            return UpdateResultEntity(entity);
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
+                            return DeleteResultEntity(entity);
+                         default:
+                             throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
+                    }
+                }
+            }
+        }
+
+        public CrossCutting.Data.Abstractions.AfterReadHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, MyNamespace.MyEntity> AfterRead
+        {
+            get
+            {
+                return (entity, operation, reader) =>
+                {
+                    switch (operation)
+                    {
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                            return AddAfterRead(entity);
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
+                            return UpdateAfterRead(entity);
+                        case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
+                            return DeleteAfterRead(entity);
+                         default:
+                             throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
+                    }
+                }
+            }
+        }
+
+        public CrossCutting.Data.Abstractions.CreateBuilderHandler<MyNamespace.MyEntity, MyNamespace.MyEntity> CreateBuilder
+        {
+            get
+            {
+                return entity;
+            }
+        }
+
+        public CrossCutting.Data.Abstractions.CreateEntityHandler<MyNamespace.MyEntity, MyNamespace.MyEntity> CreateEntity
+        {
+            get
+            {
+                return builder => builder.Build();
+            }
+        }
+
+        private MyNamespace.MyEntity AddResultEntity(MyNamespace.MyEntity resultEntity)
+        {
+            return resultEntity;
+        }
+
+        private MyNamespace.MyEntity AddAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
+        {
+            resultEntity.MyField = reader.GetInt32(@""MyField"");
+            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            return resultEntity;
+        }
+
+        private MyNamespace.MyEntity UpdateResultEntity(MyNamespace.MyEntity resultEntity)
+        {
+            return resultEntity;
+        }
+
+        private MyNamespace.MyEntity UpdateAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
+        {
+            resultEntity.MyField = reader.GetInt32(@""MyField"");
+            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            return resultEntity;
+        }
+
+        private MyNamespace.MyEntity DeleteResultEntity(MyNamespace.MyEntity resultEntity)
+        {
+            return resultEntity;
+        }
+
+        private MyNamespace.MyEntity DeleteAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
+        {
+            resultEntity.MyField = reader.GetInt32(@""MyField"");
+            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            return resultEntity;
+        }
     }
 }
 ");

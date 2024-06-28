@@ -95,7 +95,61 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace)
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableAdd
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableUpdate
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableDelete
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddResultEntityStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddAfterReadStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements
+        {
+            get;
+        }
+
+        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements)
         {
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
             this.EntityClassType = entityClassType;
@@ -105,6 +159,15 @@ namespace DataFramework.Pipelines
             this.CodeStatementMappings = codeStatementMappings is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Pipelines.CodeStatementsMapping>(codeStatementMappings);
             this.CommandEntityProviderVisibility = commandEntityProviderVisibility;
             this.CommandEntityProviderNamespace = commandEntityProviderNamespace;
+            this.CommandProviderEnableAdd = commandProviderEnableAdd;
+            this.CommandProviderEnableUpdate = commandProviderEnableUpdate;
+            this.CommandProviderEnableDelete = commandProviderEnableDelete;
+            this.CommandEntityProviderAddResultEntityStatements = commandEntityProviderAddResultEntityStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderAddResultEntityStatements);
+            this.CommandEntityProviderAddAfterReadStatements = commandEntityProviderAddAfterReadStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderAddAfterReadStatements);
+            this.CommandEntityProviderUpdateResultEntityStatements = commandEntityProviderUpdateResultEntityStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderUpdateResultEntityStatements);
+            this.CommandEntityProviderUpdateAfterReadStatements = commandEntityProviderUpdateAfterReadStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderUpdateAfterReadStatements);
+            this.CommandEntityProviderDeleteResultEntityStatements = commandEntityProviderDeleteResultEntityStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderDeleteResultEntityStatements);
+            this.CommandEntityProviderDeleteAfterReadStatements = commandEntityProviderDeleteAfterReadStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderDeleteAfterReadStatements);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

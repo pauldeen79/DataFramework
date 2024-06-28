@@ -141,6 +141,24 @@ namespace DataFramework.Pipelines.Builders
 
         private string _commandEntityProviderNamespace;
 
+        private bool _commandProviderEnableAdd;
+
+        private bool _commandProviderEnableUpdate;
+
+        private bool _commandProviderEnableDelete;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderAddResultEntityStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderAddAfterReadStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderUpdateResultEntityStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderUpdateAfterReadStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderDeleteResultEntityStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderDeleteAfterReadStatements;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
@@ -252,10 +270,142 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableAdd
+        {
+            get
+            {
+                return _commandProviderEnableAdd;
+            }
+            set
+            {
+                _commandProviderEnableAdd = value;
+                HandlePropertyChanged(nameof(CommandProviderEnableAdd));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableUpdate
+        {
+            get
+            {
+                return _commandProviderEnableUpdate;
+            }
+            set
+            {
+                _commandProviderEnableUpdate = value;
+                HandlePropertyChanged(nameof(CommandProviderEnableUpdate));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool CommandProviderEnableDelete
+        {
+            get
+            {
+                return _commandProviderEnableDelete;
+            }
+            set
+            {
+                _commandProviderEnableDelete = value;
+                HandlePropertyChanged(nameof(CommandProviderEnableDelete));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddResultEntityStatements
+        {
+            get
+            {
+                return _commandEntityProviderAddResultEntityStatements;
+            }
+            set
+            {
+                _commandEntityProviderAddResultEntityStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderAddResultEntityStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddAfterReadStatements
+        {
+            get
+            {
+                return _commandEntityProviderAddAfterReadStatements;
+            }
+            set
+            {
+                _commandEntityProviderAddAfterReadStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderAddAfterReadStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements
+        {
+            get
+            {
+                return _commandEntityProviderUpdateResultEntityStatements;
+            }
+            set
+            {
+                _commandEntityProviderUpdateResultEntityStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderUpdateResultEntityStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements
+        {
+            get
+            {
+                return _commandEntityProviderUpdateAfterReadStatements;
+            }
+            set
+            {
+                _commandEntityProviderUpdateAfterReadStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderUpdateAfterReadStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements
+        {
+            get
+            {
+                return _commandEntityProviderDeleteResultEntityStatements;
+            }
+            set
+            {
+                _commandEntityProviderDeleteResultEntityStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderDeleteResultEntityStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements
+        {
+            get
+            {
+                return _commandEntityProviderDeleteAfterReadStatements;
+            }
+            set
+            {
+                _commandEntityProviderDeleteAfterReadStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CommandEntityProviderDeleteAfterReadStatements));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
             _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
+            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
@@ -264,21 +414,39 @@ namespace DataFramework.Pipelines.Builders
             if (source.CodeStatementMappings is not null) foreach (var item in source.CodeStatementMappings.Select(x => x.ToBuilder())) _codeStatementMappings.Add(item);
             _commandEntityProviderVisibility = source.CommandEntityProviderVisibility;
             _commandEntityProviderNamespace = source.CommandEntityProviderNamespace;
+            _commandProviderEnableAdd = source.CommandProviderEnableAdd;
+            _commandProviderEnableUpdate = source.CommandProviderEnableUpdate;
+            _commandProviderEnableDelete = source.CommandProviderEnableDelete;
+            if (source.CommandEntityProviderAddResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderAddResultEntityStatements) _commandEntityProviderAddResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderAddAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderAddAfterReadStatements) _commandEntityProviderAddAfterReadStatements.Add(item);
+            if (source.CommandEntityProviderUpdateResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderUpdateResultEntityStatements) _commandEntityProviderUpdateResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderUpdateAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderUpdateAfterReadStatements) _commandEntityProviderUpdateAfterReadStatements.Add(item);
+            if (source.CommandEntityProviderDeleteResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderDeleteResultEntityStatements) _commandEntityProviderDeleteResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderDeleteAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderDeleteAfterReadStatements) _commandEntityProviderDeleteAfterReadStatements.Add(item);
         }
 
         public PipelineSettingsBuilder()
         {
             _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
+            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _defaultEntityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
             _addComponentModelAttributes = true;
             _commandEntityProviderNamespace = string.Empty;
+            _commandProviderEnableAdd = true;
+            _commandProviderEnableUpdate = true;
+            _commandProviderEnableDelete = true;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace);
+            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements);
         }
 
         partial void SetDefaultValues();
@@ -293,6 +461,84 @@ namespace DataFramework.Pipelines.Builders
         {
             if (codeStatementMappings is null) throw new System.ArgumentNullException(nameof(codeStatementMappings));
             foreach (var item in codeStatementMappings) CodeStatementMappings.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements)
+        {
+            if (commandEntityProviderAddResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddResultEntityStatements));
+            return AddCommandEntityProviderAddResultEntityStatements(commandEntityProviderAddResultEntityStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderAddResultEntityStatements)
+        {
+            if (commandEntityProviderAddResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddResultEntityStatements));
+            foreach (var item in commandEntityProviderAddResultEntityStatements) CommandEntityProviderAddResultEntityStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements)
+        {
+            if (commandEntityProviderAddAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddAfterReadStatements));
+            return AddCommandEntityProviderAddAfterReadStatements(commandEntityProviderAddAfterReadStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderAddAfterReadStatements)
+        {
+            if (commandEntityProviderAddAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddAfterReadStatements));
+            foreach (var item in commandEntityProviderAddAfterReadStatements) CommandEntityProviderAddAfterReadStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements)
+        {
+            if (commandEntityProviderUpdateResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateResultEntityStatements));
+            return AddCommandEntityProviderUpdateResultEntityStatements(commandEntityProviderUpdateResultEntityStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderUpdateResultEntityStatements)
+        {
+            if (commandEntityProviderUpdateResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateResultEntityStatements));
+            foreach (var item in commandEntityProviderUpdateResultEntityStatements) CommandEntityProviderUpdateResultEntityStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements)
+        {
+            if (commandEntityProviderUpdateAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateAfterReadStatements));
+            return AddCommandEntityProviderUpdateAfterReadStatements(commandEntityProviderUpdateAfterReadStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderUpdateAfterReadStatements)
+        {
+            if (commandEntityProviderUpdateAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateAfterReadStatements));
+            foreach (var item in commandEntityProviderUpdateAfterReadStatements) CommandEntityProviderUpdateAfterReadStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements)
+        {
+            if (commandEntityProviderDeleteResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteResultEntityStatements));
+            return AddCommandEntityProviderDeleteResultEntityStatements(commandEntityProviderDeleteResultEntityStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderDeleteResultEntityStatements)
+        {
+            if (commandEntityProviderDeleteResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteResultEntityStatements));
+            foreach (var item in commandEntityProviderDeleteResultEntityStatements) CommandEntityProviderDeleteResultEntityStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements)
+        {
+            if (commandEntityProviderDeleteAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteAfterReadStatements));
+            return AddCommandEntityProviderDeleteAfterReadStatements(commandEntityProviderDeleteAfterReadStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderDeleteAfterReadStatements)
+        {
+            if (commandEntityProviderDeleteAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteAfterReadStatements));
+            foreach (var item in commandEntityProviderDeleteAfterReadStatements) CommandEntityProviderDeleteAfterReadStatements.Add(item);
             return this;
         }
 
@@ -338,6 +584,24 @@ namespace DataFramework.Pipelines.Builders
         {
             if (commandEntityProviderNamespace is null) throw new System.ArgumentNullException(nameof(commandEntityProviderNamespace));
             CommandEntityProviderNamespace = commandEntityProviderNamespace;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderEnableAdd(bool commandProviderEnableAdd = true)
+        {
+            CommandProviderEnableAdd = commandProviderEnableAdd;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderEnableUpdate(bool commandProviderEnableUpdate = true)
+        {
+            CommandProviderEnableUpdate = commandProviderEnableUpdate;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCommandProviderEnableDelete(bool commandProviderEnableDelete = true)
+        {
+            CommandProviderEnableDelete = commandProviderEnableDelete;
             return this;
         }
 
