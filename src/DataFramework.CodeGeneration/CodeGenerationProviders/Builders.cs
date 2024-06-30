@@ -1,12 +1,16 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
-public class Builders : DataFrameworkCSharpClassBase, ICodeGenerationProvider
+[ExcludeFromCodeCoverage]
+public class Builders : DataFrameworkCSharpClassBase
 {
-    public override string Path => "DataFramework.Core/Builders";
-    public override string DefaultFileName => "Builders.generated.cs";
+    public Builders(IPipelineService pipelineService) : base(pipelineService)
+    {
+    }
 
-    public override object CreateModel()
-        => GetImmutableBuilderClasses(GetDataFrameworkModelTypes(),
-                                      "DataFramework.Core",
-                                      "DataFramework.Core.Builders");
+    public override string Path => "DataFramework.Domain/Builders";
+
+    public override async Task<IEnumerable<TypeBase>> GetModel()
+        => await GetBuilders(await GetCoreModels(), "DataFramework.Domain.Builders", "DataFramework.Domain");
+
+    protected override bool CreateAsObservable => true;
 }

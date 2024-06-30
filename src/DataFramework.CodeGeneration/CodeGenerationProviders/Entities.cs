@@ -1,10 +1,14 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
-public class Entities : DataFrameworkCSharpClassBase, ICodeGenerationProvider
+[ExcludeFromCodeCoverage]
+public class Entities : DataFrameworkCSharpClassBase
 {
-    public override string Path => "DataFramework.Core";
-    public override string DefaultFileName => "Entities.generated.cs";
+    public Entities(IPipelineService pipelineService) : base(pipelineService)
+    {
+    }
 
-    public override object CreateModel()
-        => GetImmutableClasses(GetDataFrameworkModelTypes(), "DataFramework.Core");
+    public override string Path => "DataFramework.Domain";
+
+    public override async Task<IEnumerable<TypeBase>> GetModel()
+        => await GetEntities(await GetCoreModels(), "DataFramework.Domain");
 }
