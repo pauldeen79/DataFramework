@@ -44,4 +44,68 @@ public static class DataObjectInfoExtensions
         => string.IsNullOrEmpty(entitiesNamespace)
             ? instance.Name
             : $"{entitiesNamespace}.{instance.Name}";
+
+    public static string GetEntityIdentityFullName(this DataObjectInfo instance, string entityIdentityNamespace)
+        => string.IsNullOrEmpty(entityIdentityNamespace)
+            ? $"{instance.Name}Identity"
+            : $"{entityIdentityNamespace}.{instance.Name}Identity";
+
+    public static string GetDatabaseTableName(this DataObjectInfo instance)
+        => instance.DatabaseTableName.WhenNullOrEmpty(instance.Name);
+
+    public static string CreateDatabaseInsertCommandText(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
+    {
+        var commandText = instance.CustomAddDatabaseCommandText;
+        if (!string.IsNullOrEmpty(commandText))
+        {
+            return commandText;
+        }
+
+        return new InsertCommandBuilder()
+            .Into($"[{instance.GetDatabaseTableName()}]")
+            .AddFieldNames(instance.Fields.Where(x => x.UseOnInsert).Select(x => $"[{x.GetDatabaseFieldName()}]"))
+            .AddFieldValues(instance.Fields.Where(x => x.UseOnInsert).Select(x => $"@{x.CreatePropertyName(instance)}"))
+            .AddOutputFields(instance.GetOutputFields(concurrencyCheckBehavior).Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
+            .Build()
+            .CommandText;
+    }
+
+    public static string CreateDatabaseUpdateCommandText(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
+    {
+        var commandText = instance.CustomUpdateDatabaseCommandText;
+        if (!string.IsNullOrEmpty(commandText))
+        {
+            return commandText;
+        }
+
+        return new UpdateCommandBuilder()
+            .WithTable($"[{instance.GetDatabaseTableName()}]")
+            .Where(instance.GetUpdateConcurrencyWhereStatement(concurrencyCheckBehavior, x => x.UseOnUpdate))
+            .AddFieldNames(instance.Fields.Where(x => x.UseOnUpdate).Select(x => $"[{x.GetDatabaseFieldName()}]"))
+            .AddFieldValues(instance.Fields.Where(x => x.UseOnUpdate).Select(x => $"@{x.CreatePropertyName(instance)}"))
+            .AddOutputFields(instance.GetOutputFields(concurrencyCheckBehavior).Select(x => $"INSERTED.[{x.GetDatabaseFieldName()}]"))
+            .Build()
+            .CommandText;
+    }
+
+    public static string CreateDatabaseDeleteCommandText(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
+    {
+        var commandText = instance.CustomUpdateDatabaseCommandText;
+        if (!string.IsNullOrEmpty(commandText))
+        {
+            return commandText;
+        }
+
+        return new DeleteCommandBuilder()
+            .From($"[{instance.GetDatabaseTableName()}]")
+            .Where(instance.GetUpdateConcurrencyWhereStatement(concurrencyCheckBehavior, x => x.UseOnDelete))
+            .AddOutputFields(instance.GetOutputFields(concurrencyCheckBehavior).Select(x => $"DELETED.[{x.GetDatabaseFieldName()}]"))
+            .Build()
+            .CommandText;
+    }
+
+    private static string GetUpdateConcurrencyWhereStatement(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior, Predicate<FieldInfo> predicate)
+        => string.Join(" AND ", instance.GetUpdateConcurrencyCheckFields(concurrencyCheckBehavior)
+            .Where(x => predicate(x) || x.IsIdentityField || x.IsDatabaseIdentityField)
+            .Select(x => $"[{x.CreatePropertyName(instance)}] = @{x.CreatePropertyName(instance)}Original"));
 }

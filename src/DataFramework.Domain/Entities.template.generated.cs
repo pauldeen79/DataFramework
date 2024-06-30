@@ -67,7 +67,31 @@ namespace DataFramework.Domain
             get;
         }
 
-        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseTableName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomAddDatabaseCommandText
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomUpdateDatabaseCommandText
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomDeleteDatabaseCommandText
+        {
+            get;
+        }
+
+        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText)
         {
             this.Name = name;
             this.AssemblyName = assemblyName;
@@ -78,6 +102,10 @@ namespace DataFramework.Domain
             this.IsQueryable = isQueryable;
             this.IsReadOnly = isReadOnly;
             this.Fields = fields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.FieldInfo>(fields);
+            this.DatabaseTableName = databaseTableName;
+            this.CustomAddDatabaseCommandText = customAddDatabaseCommandText;
+            this.CustomUpdateDatabaseCommandText = customUpdateDatabaseCommandText;
+            this.CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

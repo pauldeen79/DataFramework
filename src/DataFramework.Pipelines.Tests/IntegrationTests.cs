@@ -449,6 +449,7 @@ namespace MyNamespace
             .WithEntityClassType(EntityClassType.Poco) //default
             .WithDefaultEntityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .WithEnableNullableContext()
             .Build();
         var context = new CommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
@@ -471,8 +472,47 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandProviderGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityCommandProvider
+    public partial class MyEntityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>
     {
+        public CrossCutting.Data.Abstractions.IDatabaseCommand Create(MyNamespace.MyEntity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
+        {
+            switch (operation)
+            {
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<MyNamespace.MyEntity>(""INSERT INTO [MyEntity]([MyField]) OUTPUT INSERTED.[MyField] VALUES(@MyField)"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Insert, AddParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<MyNamespace.MyEntity>(""UPDATE [MyEntity] SET [MyField] = @MyField OUTPUT INSERTED.[MyField] WHERE [MyField] = @MyFieldOriginal"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Update, UpdateParameters);
+                case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
+                    return new CrossCutting.Data.Core.Commands.TextCommand<MyNamespace.MyEntity>(""DELETE FROM [MyEntity] OUTPUT DELETED.[MyField] WHERE [MyField] = @MyFieldOriginal"", source, CrossCutting.Data.Abstractions.DatabaseOperation.Delete, DeleteParameters);
+                default:
+                    throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
+            }
+        }
+
+        public object AddParameters(MyNamespace.MyEntity resultEntity)
+        {
+            return new[]
+            {
+                new System.Collections.Generic.KeyValuePair<System.String, System.Object?>(""@MyField"", resultEntity.MyField),
+            };
+        }
+
+        public object UpdateParameters(MyNamespace.MyEntity resultEntity)
+        {
+            return new[]
+            {
+                new System.Collections.Generic.KeyValuePair<System.String, System.Object?>(""@MyField"", resultEntity.MyField),
+                new System.Collections.Generic.KeyValuePair<System.String, System.Object?>(""@MyFieldOriginal"", resultEntity.MyFieldOriginal),
+            };
+        }
+
+        public object DeleteParameters(MyNamespace.MyEntity resultEntity)
+        {
+            return new[]
+            {
+                new System.Collections.Generic.KeyValuePair<System.String, System.Object?>(""@MyFieldOriginal"", resultEntity.MyFieldOriginal),
+            };
+        }
     }
 }
 ");

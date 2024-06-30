@@ -11,4 +11,9 @@ public interface IDataObjectInfo
     [DefaultValue(true)] bool IsQueryable { get; }
     bool IsReadOnly { get; }
     [Required][ValidateObject] IReadOnlyCollection<IFieldInfo> Fields { get; }
+
+    [Required(AllowEmptyStrings = true)] string DatabaseTableName { get; }
+    [Required(AllowEmptyStrings = true)] string CustomAddDatabaseCommandText { get; }
+    [Required(AllowEmptyStrings = true)] string CustomUpdateDatabaseCommandText { get; }
+    [Required(AllowEmptyStrings = true)] string CustomDeleteDatabaseCommandText { get; }
 }

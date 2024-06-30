@@ -35,6 +35,14 @@ namespace DataFramework.Domain.Builders
 
         private System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.FieldInfoBuilder> _fields;
 
+        private string _databaseTableName;
+
+        private string _customAddDatabaseCommandText;
+
+        private string _customUpdateDatabaseCommandText;
+
+        private string _customDeleteDatabaseCommandText;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
@@ -159,6 +167,62 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseTableName
+        {
+            get
+            {
+                return _databaseTableName;
+            }
+            set
+            {
+                _databaseTableName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DatabaseTableName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomAddDatabaseCommandText
+        {
+            get
+            {
+                return _customAddDatabaseCommandText;
+            }
+            set
+            {
+                _customAddDatabaseCommandText = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CustomAddDatabaseCommandText));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomUpdateDatabaseCommandText
+        {
+            get
+            {
+                return _customUpdateDatabaseCommandText;
+            }
+            set
+            {
+                _customUpdateDatabaseCommandText = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CustomUpdateDatabaseCommandText));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string CustomDeleteDatabaseCommandText
+        {
+            get
+            {
+                return _customDeleteDatabaseCommandText;
+            }
+            set
+            {
+                _customDeleteDatabaseCommandText = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CustomDeleteDatabaseCommandText));
+            }
+        }
+
         public DataObjectInfoBuilder(DataFramework.Domain.DataObjectInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -172,6 +236,10 @@ namespace DataFramework.Domain.Builders
             _isQueryable = source.IsQueryable;
             _isReadOnly = source.IsReadOnly;
             if (source.Fields is not null) foreach (var item in source.Fields.Select(x => x.ToBuilder())) _fields.Add(item);
+            _databaseTableName = source.DatabaseTableName;
+            _customAddDatabaseCommandText = source.CustomAddDatabaseCommandText;
+            _customUpdateDatabaseCommandText = source.CustomUpdateDatabaseCommandText;
+            _customDeleteDatabaseCommandText = source.CustomDeleteDatabaseCommandText;
         }
 
         public DataObjectInfoBuilder()
@@ -180,12 +248,16 @@ namespace DataFramework.Domain.Builders
             _name = string.Empty;
             _isVisible = true;
             _isQueryable = true;
+            _databaseTableName = string.Empty;
+            _customAddDatabaseCommandText = string.Empty;
+            _customUpdateDatabaseCommandText = string.Empty;
+            _customDeleteDatabaseCommandText = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly());
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText);
         }
 
         partial void SetDefaultValues();
@@ -249,6 +321,34 @@ namespace DataFramework.Domain.Builders
         public DataFramework.Domain.Builders.DataObjectInfoBuilder WithIsReadOnly(bool isReadOnly = true)
         {
             IsReadOnly = isReadOnly;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithDatabaseTableName(string databaseTableName)
+        {
+            if (databaseTableName is null) throw new System.ArgumentNullException(nameof(databaseTableName));
+            DatabaseTableName = databaseTableName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithCustomAddDatabaseCommandText(string customAddDatabaseCommandText)
+        {
+            if (customAddDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customAddDatabaseCommandText));
+            CustomAddDatabaseCommandText = customAddDatabaseCommandText;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithCustomUpdateDatabaseCommandText(string customUpdateDatabaseCommandText)
+        {
+            if (customUpdateDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customUpdateDatabaseCommandText));
+            CustomUpdateDatabaseCommandText = customUpdateDatabaseCommandText;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithCustomDeleteDatabaseCommandText(string customDeleteDatabaseCommandText)
+        {
+            if (customDeleteDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customDeleteDatabaseCommandText));
+            CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
             return this;
         }
 

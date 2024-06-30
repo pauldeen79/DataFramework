@@ -125,6 +125,8 @@ namespace DataFramework.Pipelines.Builders
     }
     public partial class PipelineSettingsBuilder : System.ComponentModel.INotifyPropertyChanged
     {
+        private bool _enableNullableContext;
+
         private DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior _concurrencyCheckBehavior;
 
         private DataFramework.Pipelines.Domains.EntityClassType _entityClassType;
@@ -165,7 +167,32 @@ namespace DataFramework.Pipelines.Builders
 
         private string _commandProviderNamespace;
 
+        private bool _useAddStoredProcedure;
+
+        private bool _useUpdateStoredProcedure;
+
+        private bool _useDeleteStoredProcedure;
+
+        private string _addStoredProcedureName;
+
+        private string _updateStoredProcedureName;
+
+        private string _deleteStoredProcedureName;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+        public bool EnableNullableContext
+        {
+            get
+            {
+                return _enableNullableContext;
+            }
+            set
+            {
+                _enableNullableContext = value;
+                HandlePropertyChanged(nameof(EnableNullableContext));
+            }
+        }
 
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
         {
@@ -443,6 +470,90 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public bool UseAddStoredProcedure
+        {
+            get
+            {
+                return _useAddStoredProcedure;
+            }
+            set
+            {
+                _useAddStoredProcedure = value;
+                HandlePropertyChanged(nameof(UseAddStoredProcedure));
+            }
+        }
+
+        public bool UseUpdateStoredProcedure
+        {
+            get
+            {
+                return _useUpdateStoredProcedure;
+            }
+            set
+            {
+                _useUpdateStoredProcedure = value;
+                HandlePropertyChanged(nameof(UseUpdateStoredProcedure));
+            }
+        }
+
+        public bool UseDeleteStoredProcedure
+        {
+            get
+            {
+                return _useDeleteStoredProcedure;
+            }
+            set
+            {
+                _useDeleteStoredProcedure = value;
+                HandlePropertyChanged(nameof(UseDeleteStoredProcedure));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Insert{0}")]
+        public string AddStoredProcedureName
+        {
+            get
+            {
+                return _addStoredProcedureName;
+            }
+            set
+            {
+                _addStoredProcedureName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(AddStoredProcedureName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Update{0}")]
+        public string UpdateStoredProcedureName
+        {
+            get
+            {
+                return _updateStoredProcedureName;
+            }
+            set
+            {
+                _updateStoredProcedureName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(UpdateStoredProcedureName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Delete{0}")]
+        public string DeleteStoredProcedureName
+        {
+            get
+            {
+                return _deleteStoredProcedureName;
+            }
+            set
+            {
+                _deleteStoredProcedureName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DeleteStoredProcedureName));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -453,6 +564,7 @@ namespace DataFramework.Pipelines.Builders
             _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _enableNullableContext = source.EnableNullableContext;
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
             _defaultEntityNamespace = source.DefaultEntityNamespace;
@@ -473,6 +585,12 @@ namespace DataFramework.Pipelines.Builders
             if (source.CommandEntityProviderDeleteAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderDeleteAfterReadStatements) _commandEntityProviderDeleteAfterReadStatements.Add(item);
             _commandProviderVisibility = source.CommandProviderVisibility;
             _commandProviderNamespace = source.CommandProviderNamespace;
+            _useAddStoredProcedure = source.UseAddStoredProcedure;
+            _useUpdateStoredProcedure = source.UseUpdateStoredProcedure;
+            _useDeleteStoredProcedure = source.UseDeleteStoredProcedure;
+            _addStoredProcedureName = source.AddStoredProcedureName;
+            _updateStoredProcedureName = source.UpdateStoredProcedureName;
+            _deleteStoredProcedureName = source.DeleteStoredProcedureName;
         }
 
         public PipelineSettingsBuilder()
@@ -493,12 +611,15 @@ namespace DataFramework.Pipelines.Builders
             _commandProviderEnableUpdate = true;
             _commandProviderEnableDelete = true;
             _commandProviderNamespace = string.Empty;
+            _addStoredProcedureName = @"Insert0"!;
+            _updateStoredProcedureName = @"Update0"!;
+            _deleteStoredProcedureName = @"Delete0"!;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName);
         }
 
         partial void SetDefaultValues();
@@ -594,6 +715,12 @@ namespace DataFramework.Pipelines.Builders
             return this;
         }
 
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEnableNullableContext(bool enableNullableContext = true)
+        {
+            EnableNullableContext = enableNullableContext;
+            return this;
+        }
+
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithConcurrencyCheckBehavior(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior)
         {
             ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -674,6 +801,45 @@ namespace DataFramework.Pipelines.Builders
         {
             if (commandProviderNamespace is null) throw new System.ArgumentNullException(nameof(commandProviderNamespace));
             CommandProviderNamespace = commandProviderNamespace;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithUseAddStoredProcedure(bool useAddStoredProcedure = true)
+        {
+            UseAddStoredProcedure = useAddStoredProcedure;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithUseUpdateStoredProcedure(bool useUpdateStoredProcedure = true)
+        {
+            UseUpdateStoredProcedure = useUpdateStoredProcedure;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithUseDeleteStoredProcedure(bool useDeleteStoredProcedure = true)
+        {
+            UseDeleteStoredProcedure = useDeleteStoredProcedure;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithAddStoredProcedureName(string addStoredProcedureName)
+        {
+            if (addStoredProcedureName is null) throw new System.ArgumentNullException(nameof(addStoredProcedureName));
+            AddStoredProcedureName = addStoredProcedureName;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithUpdateStoredProcedureName(string updateStoredProcedureName)
+        {
+            if (updateStoredProcedureName is null) throw new System.ArgumentNullException(nameof(updateStoredProcedureName));
+            UpdateStoredProcedureName = updateStoredProcedureName;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDeleteStoredProcedureName(string deleteStoredProcedureName)
+        {
+            if (deleteStoredProcedureName is null) throw new System.ArgumentNullException(nameof(deleteStoredProcedureName));
+            DeleteStoredProcedureName = deleteStoredProcedureName;
             return this;
         }
 

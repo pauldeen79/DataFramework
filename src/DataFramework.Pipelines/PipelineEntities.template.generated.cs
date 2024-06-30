@@ -50,6 +50,11 @@ namespace DataFramework.Pipelines
     }
     public partial class PipelineSettings
     {
+        public bool EnableNullableContext
+        {
+            get;
+        }
+
         public DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior ConcurrencyCheckBehavior
         {
             get;
@@ -166,8 +171,45 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace)
+        public bool UseAddStoredProcedure
         {
+            get;
+        }
+
+        public bool UseUpdateStoredProcedure
+        {
+            get;
+        }
+
+        public bool UseDeleteStoredProcedure
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Insert{0}")]
+        public string AddStoredProcedureName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Update{0}")]
+        public string UpdateStoredProcedureName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [System.ComponentModel.DefaultValueAttribute(@"Delete{0}")]
+        public string DeleteStoredProcedureName
+        {
+            get;
+        }
+
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName)
+        {
+            this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
             this.EntityClassType = entityClassType;
             this.DefaultEntityNamespace = defaultEntityNamespace;
@@ -188,6 +230,12 @@ namespace DataFramework.Pipelines
             this.CommandEntityProviderDeleteAfterReadStatements = commandEntityProviderDeleteAfterReadStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(commandEntityProviderDeleteAfterReadStatements);
             this.CommandProviderVisibility = commandProviderVisibility;
             this.CommandProviderNamespace = commandProviderNamespace;
+            this.UseAddStoredProcedure = useAddStoredProcedure;
+            this.UseUpdateStoredProcedure = useUpdateStoredProcedure;
+            this.UseDeleteStoredProcedure = useDeleteStoredProcedure;
+            this.AddStoredProcedureName = addStoredProcedureName;
+            this.UpdateStoredProcedureName = updateStoredProcedureName;
+            this.DeleteStoredProcedureName = deleteStoredProcedureName;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

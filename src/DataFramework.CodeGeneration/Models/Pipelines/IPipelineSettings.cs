@@ -2,6 +2,7 @@
 
 internal interface IPipelineSettings
 {
+    bool EnableNullableContext { get; }
     ConcurrencyCheckBehavior ConcurrencyCheckBehavior { get; }
     EntityClassType EntityClassType { get; }
     [Required(AllowEmptyStrings = true)] string DefaultEntityNamespace { get; }
@@ -26,4 +27,10 @@ internal interface IPipelineSettings
     // CommandProvider settings
     Visibility CommandProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string CommandProviderNamespace { get; }
+    bool UseAddStoredProcedure { get; }
+    bool UseUpdateStoredProcedure { get; }
+    bool UseDeleteStoredProcedure { get; }
+    [Required][DefaultValue("Insert{0}")] string AddStoredProcedureName { get; }
+    [Required][DefaultValue("Update{0}")] string UpdateStoredProcedureName { get; }
+    [Required][DefaultValue("Delete{0}")] string DeleteStoredProcedureName { get; }
 }

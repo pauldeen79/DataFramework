@@ -14,6 +14,8 @@ global using CrossCutting.Common;
 global using CrossCutting.Common.Extensions;
 global using CrossCutting.Common.Results;
 global using CrossCutting.Data.Abstractions;
+global using CrossCutting.Data.Core.Builders;
+global using CrossCutting.Data.Core.Commands;
 global using CrossCutting.ProcessingPipeline;
 global using CsharpExpressionDumper.Abstractions;
 global using DataFramework.Domain;
