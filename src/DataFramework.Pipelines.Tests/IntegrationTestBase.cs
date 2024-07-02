@@ -14,6 +14,7 @@ public abstract class IntegrationTestBase : TestBase
             .AddParsers()
             .AddClassFrameworkTemplates()
             .AddClassFrameworkPipelines()
+            .AddDatabaseFrameworkTemplates()
             .AddDataFrameworkPipelines()
             .AddScoped(_ => assemblyInfoContextService)
             .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });

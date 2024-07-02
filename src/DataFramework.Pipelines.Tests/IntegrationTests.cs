@@ -25,7 +25,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var entity = context.Builder.Build();
+        var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
             .WithAddPublicParameterlessConstructor(false)
@@ -34,7 +34,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -95,7 +95,7 @@ namespace MyNamespace
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var entity = context.Builder.Build();
+        var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(false)
             .WithAddPublicParameterlessConstructor(true) // note that you might want to omit this in case you don't have custom default values
@@ -106,7 +106,7 @@ namespace MyNamespace
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -167,7 +167,7 @@ namespace MyNamespace
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var entity = context.Builder.Build();
+        var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
             .WithAddPublicParameterlessConstructor(false)
@@ -176,7 +176,7 @@ namespace MyNamespace
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(entityContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -228,7 +228,7 @@ using System.Text;
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var cls = context.Builder.Build();
+        var cls = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor()
             .WithAddSetters(false)
@@ -237,11 +237,11 @@ using System.Text;
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
         result.ThrowIfInvalid();
-        var entity = entityContext.Builder.Build();
+        var entity = result.Value!;
         var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(builderContext, CancellationToken.None);
         result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(builderContext.Builder.Build()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -324,7 +324,7 @@ namespace MyNamespace.Builders
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var commandEntityProvider = context.Builder.Build();
+        var commandEntityProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -460,7 +460,7 @@ namespace MyNamespace
         // Act
         var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
         result.ThrowIfInvalid();
-        var commandProvider = context.Builder.Build();
+        var commandProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -518,24 +518,48 @@ namespace MyNamespace
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Code_For_DatabaseSchema()
+    {
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandEntityProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var databaseObjects = result.Value!;
+        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be("Database schema code goes here");
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;
 
-        public TestCodeGenerationProvider(TypeBase model)
-            => _model = model;
+        public TestCodeGenerationProvider(TypeBase model) => _model = model;
 
-        public override string Path
-            => string.Empty;
+        public override string Path => string.Empty;
 
-        public override bool RecurseOnDeleteGeneratedFiles
-            => false;
+        public override bool RecurseOnDeleteGeneratedFiles => false;
 
-        public override string LastGeneratedFilesFilename
-            => string.Empty;
+        public override string LastGeneratedFilesFilename => string.Empty;
 
-        public override Encoding Encoding
-            => Encoding.UTF8;
+        public override Encoding Encoding => Encoding.UTF8;
 
         public override CsharpClassGeneratorSettings Settings
             => new CsharpClassGeneratorSettingsBuilder()
@@ -545,5 +569,30 @@ namespace MyNamespace
 
         public override Task<IEnumerable<TypeBase>> GetModel()
             => Task.FromResult<IEnumerable<TypeBase>>([_model]);
+    }
+
+    private sealed class TestDatabaseSchemaGenerationProvider : DatabaseSchemaGeneratorCodeGenerationProviderBase
+    {
+        private readonly IEnumerable<IDatabaseObject> _model;
+
+        public TestDatabaseSchemaGenerationProvider(IEnumerable<IDatabaseObject> model)
+        {
+            _model = model;
+        }
+
+        public override string Path => string.Empty;
+
+        public override bool RecurseOnDeleteGeneratedFiles => false;
+
+        public override string LastGeneratedFilesFilename => string.Empty;
+
+        public override Encoding Encoding => Encoding.UTF8;
+
+        public override Task<IEnumerable<IDatabaseObject>> GetModel() => Task.FromResult(_model);
+
+        public override DatabaseSchemaGeneratorSettings Settings => new DatabaseSchemaGeneratorSettingsBuilder()
+            .WithCultureInfo(CultureInfo.InvariantCulture)
+            .WithEncoding(Encoding)
+            .Build();
     }
 }

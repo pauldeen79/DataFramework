@@ -43,5 +43,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetNameComponentBuilder>()
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetPartialComponentBuilder>()
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetVisibilityComponentBuilder>()
+            // DatabaseSchema pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<DatabaseSchemaContext>>().Build())
+            .AddScoped<IPipelineBuilder<DatabaseSchemaContext>, DatabaseSchema.PipelineBuilder>()
             ;
 }
