@@ -1,4 +1,6 @@
-﻿namespace DataFramework.Pipelines.Extensions;
+﻿using DatabaseFramework.Domain.Domains;
+
+namespace DataFramework.Pipelines.Extensions;
 
 public static class DataObjectInfoExtensions
 {
@@ -52,6 +54,76 @@ public static class DataObjectInfoExtensions
 
     public static string GetDatabaseTableName(this DataObjectInfo instance)
         => instance.DatabaseTableName.WhenNullOrEmpty(instance.Name);
+
+    public static string GetDatabaseSchemaName(this DataObjectInfo instance)
+        => instance.DatabaseSchemaName.WhenNullOrEmpty("dbo");
+
+    public static IEnumerable<TableFieldBuilder> GetTableFields(this DataObjectInfo instance)
+    => instance
+        .Fields
+        .Where(fi => fi.IsPersistable && fi.PropertyTypeName.IsSupportedByMap())
+        .Select(fi =>
+            new TableFieldBuilder()
+                .WithName(fi.GetDatabaseFieldName())
+                .WithType(Enum.TryParse<SqlFieldType>(fi.GetSqlFieldType(), true, out var sqlFieldType)
+                    ? sqlFieldType
+                    : throw new NotSupportedException($"Unsupported SqlFieldType: {fi.GetSqlFieldType()}"))
+                .WithIsRequired(fi.IsSqlRequired || fi.IsRequired)
+                .WithIsIdentity(fi.IsDatabaseIdentityField)
+                .WithNumericPrecision(fi.DatabaseNumericPrecision)
+                .WithNumericScale(fi.DatabaseNumericScale)
+                .WithStringLength(fi.GetSqlStringLength(FieldInfo.DefaultStringLength))
+                .WithStringCollation(fi.DatabaseStringCollation ?? string.Empty)
+                .WithIsStringMaxLength(fi.IsSqlStringMaxLength)
+                .AddCheckConstraints(CreateCheckConstraintExpressions(fi.DatabaseCheckConstraintExpression, fi, instance)));
+
+    private static IEnumerable<CheckConstraintBuilder> CreateCheckConstraintExpressions(
+        string? stringValue,
+        FieldInfo fi,
+        DataObjectInfo instance)
+    {
+        if (string.IsNullOrEmpty(stringValue))
+        {
+            yield break;
+        }
+
+        yield return new CheckConstraintBuilder()
+            .WithName($"CHK_{instance.GetDatabaseTableName()}_{fi.GetDatabaseFieldName()}")
+            .WithExpression(stringValue!);
+    }
+
+    public static IEnumerable<PrimaryKeyConstraintBuilder> GetTablePrimaryKeyConstraints(this DataObjectInfo instance)
+        => instance.PrimaryKeyConstraints.Select(x => x.ToBuilder());
+
+    public static IEnumerable<DefaultValueConstraintBuilder> GetTableDefaultValueConstraints(this DataObjectInfo instance)
+        => instance
+            .Fields
+            .Where(fi => fi.DefaultValue != null)
+            .Select
+                (fi => new DefaultValueConstraintBuilder()
+                    .WithFieldName(fi.GetDatabaseFieldName())
+                    .WithDefaultValue(GenerateDefaultValue(fi))
+                    .WithName("DF_" + fi.GetDatabaseFieldName())
+                );
+
+    private static string GenerateDefaultValue(FieldInfo fi)
+    {
+        //HACK: Encode sql string when necessary, because the property is of type string, and there is no encoding or conversion in the Sql schema generator :(
+        if (fi.GetSqlFieldType().IsDatabaseStringType())
+        {
+            return fi.DefaultValue.ToStringWithNullCheck().SqlEncode();
+        }
+        return fi.DefaultValue.ToStringWithNullCheck();
+    }
+
+    public static IEnumerable<ForeignKeyConstraintBuilder> GetTableForeignKeyConstraints(this DataObjectInfo instance)
+        => instance.ForeignKeyConstraints.Select(x => x.ToBuilder());
+
+    public static IEnumerable<IndexBuilder> GetTableIndexes(this DataObjectInfo instance)
+        => instance.Indexes.Select(x => x.ToBuilder());
+
+    public static IEnumerable<CheckConstraintBuilder> GetTableCheckConstraints(this DataObjectInfo instance)
+        => instance.CheckConstraints.Select(x => x.ToBuilder());
 
     public static string CreateDatabaseInsertCommandText(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior)
     {

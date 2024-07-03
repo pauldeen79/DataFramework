@@ -35,7 +35,18 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
             [
                 new TypenameMappingBuilder().WithSourceType(typeof(ConcurrencyCheckBehavior)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(ConcurrencyCheckBehavior)}"),
                 new TypenameMappingBuilder().WithSourceType(typeof(EntityClassType)).WithTargetTypeName($"DataFramework.Pipelines.Domains.{nameof(EntityClassType)}"),
-            ]);
+            ])
+            .Concat(typeof(CheckConstraint).Assembly.GetExportedTypes().Where(x => x.Namespace == "DatabaseFramework.Domain").Select(x => new TypenameMappingBuilder()
+                .WithSourceType(x)
+                .WithTargetType(x)
+                .AddMetadata
+                    (
+                        new MetadataBuilder().WithValue($"{x.FullName.GetNamespaceWithDefault()}.Builders").WithName(MetadataNames.CustomBuilderNamespace),
+                        new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
+                        new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
+                        new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
+                    )
+            ));
 
     private IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string builderNamespace) =>
         [

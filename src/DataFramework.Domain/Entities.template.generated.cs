@@ -74,6 +74,18 @@ namespace DataFramework.Domain
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseSchemaName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseFileGroupName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
         public string CustomAddDatabaseCommandText
         {
             get;
@@ -91,7 +103,35 @@ namespace DataFramework.Domain
             get;
         }
 
-        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.PrimaryKeyConstraint> PrimaryKeyConstraints
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.ForeignKeyConstraint> ForeignKeyConstraints
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.Index> Indexes
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.CheckConstraint> CheckConstraints
+        {
+            get;
+        }
+
+        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints)
         {
             this.Name = name;
             this.AssemblyName = assemblyName;
@@ -103,9 +143,15 @@ namespace DataFramework.Domain
             this.IsReadOnly = isReadOnly;
             this.Fields = fields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.FieldInfo>(fields);
             this.DatabaseTableName = databaseTableName;
+            this.DatabaseSchemaName = databaseSchemaName;
+            this.DatabaseFileGroupName = databaseFileGroupName;
             this.CustomAddDatabaseCommandText = customAddDatabaseCommandText;
             this.CustomUpdateDatabaseCommandText = customUpdateDatabaseCommandText;
             this.CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
+            this.PrimaryKeyConstraints = primaryKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.PrimaryKeyConstraint>(primaryKeyConstraints);
+            this.ForeignKeyConstraints = foreignKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.ForeignKeyConstraint>(foreignKeyConstraints);
+            this.Indexes = indexes is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.Index>(indexes);
+            this.CheckConstraints = checkConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.CheckConstraint>(checkConstraints);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

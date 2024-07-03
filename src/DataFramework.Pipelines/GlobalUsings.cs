@@ -23,6 +23,7 @@ global using DatabaseFramework.Domain.Abstractions;
 global using DatabaseFramework.Domain.Builders;
 global using DatabaseFramework.Domain.Builders.Abstractions;
 global using DataFramework.Domain;
+global using DataFramework.Domain.Extensions;
 global using DataFramework.Pipelines.Abstractions;
 global using DataFramework.Pipelines.Class;
 global using DataFramework.Pipelines.Class.Components.Abstractions;

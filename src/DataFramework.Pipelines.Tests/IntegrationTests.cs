@@ -544,7 +544,19 @@ namespace MyNamespace
         await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be("Database schema code goes here");
+        generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MyEntity](
+	[MyField] INT NOT NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+");
     }
 
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase

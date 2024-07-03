@@ -1,8 +1,8 @@
 ﻿namespace DataFramework.Domain.Extensions;
 
-internal static class StringExtensions
+public static class StringExtensions
 {
-    internal static bool IsSupportedByMap(this string instance)
+    public static bool IsSupportedByMap(this string instance)
     {
         if (string.IsNullOrEmpty(instance))
         {

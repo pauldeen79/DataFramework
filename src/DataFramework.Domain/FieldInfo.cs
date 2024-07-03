@@ -126,7 +126,7 @@ public partial class FieldInfo
         return $"varchar({length})";
     }
 
-    internal int GetSqlStringLength(int defaultLength)
+    public int GetSqlStringLength(int defaultLength)
         => StringMaxLength ?? defaultLength;
 
     private static string RemoveSpecificPropertiesFromSqlType(string sqlType)

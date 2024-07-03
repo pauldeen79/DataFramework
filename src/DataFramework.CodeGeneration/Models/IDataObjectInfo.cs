@@ -13,7 +13,14 @@ public interface IDataObjectInfo
     [Required][ValidateObject] IReadOnlyCollection<IFieldInfo> Fields { get; }
 
     [Required(AllowEmptyStrings = true)] string DatabaseTableName { get; }
+    [Required(AllowEmptyStrings = true)] string DatabaseSchemaName { get; }
+    [Required(AllowEmptyStrings = true)] string DatabaseFileGroupName { get; }
     [Required(AllowEmptyStrings = true)] string CustomAddDatabaseCommandText { get; }
     [Required(AllowEmptyStrings = true)] string CustomUpdateDatabaseCommandText { get; }
     [Required(AllowEmptyStrings = true)] string CustomDeleteDatabaseCommandText { get; }
+
+    [Required][ValidateObject] IReadOnlyCollection<PrimaryKeyConstraint> PrimaryKeyConstraints { get; }
+    [Required][ValidateObject] IReadOnlyCollection<ForeignKeyConstraint> ForeignKeyConstraints { get; }
+    [Required][ValidateObject] IReadOnlyCollection<DatabaseFramework.Domain.Index> Indexes { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CheckConstraint> CheckConstraints { get; }
 }

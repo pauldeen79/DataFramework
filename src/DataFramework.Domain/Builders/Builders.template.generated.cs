@@ -37,11 +37,23 @@ namespace DataFramework.Domain.Builders
 
         private string _databaseTableName;
 
+        private string _databaseSchemaName;
+
+        private string _databaseFileGroupName;
+
         private string _customAddDatabaseCommandText;
 
         private string _customUpdateDatabaseCommandText;
 
         private string _customDeleteDatabaseCommandText;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder> _primaryKeyConstraints;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder> _foreignKeyConstraints;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder> _indexes;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder> _checkConstraints;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -182,6 +194,34 @@ namespace DataFramework.Domain.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseSchemaName
+        {
+            get
+            {
+                return _databaseSchemaName;
+            }
+            set
+            {
+                _databaseSchemaName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DatabaseSchemaName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string DatabaseFileGroupName
+        {
+            get
+            {
+                return _databaseFileGroupName;
+            }
+            set
+            {
+                _databaseFileGroupName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DatabaseFileGroupName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
         public string CustomAddDatabaseCommandText
         {
             get
@@ -223,10 +263,74 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder> PrimaryKeyConstraints
+        {
+            get
+            {
+                return _primaryKeyConstraints;
+            }
+            set
+            {
+                _primaryKeyConstraints = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(PrimaryKeyConstraints));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder> ForeignKeyConstraints
+        {
+            get
+            {
+                return _foreignKeyConstraints;
+            }
+            set
+            {
+                _foreignKeyConstraints = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(ForeignKeyConstraints));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder> Indexes
+        {
+            get
+            {
+                return _indexes;
+            }
+            set
+            {
+                _indexes = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(Indexes));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder> CheckConstraints
+        {
+            get
+            {
+                return _checkConstraints;
+            }
+            set
+            {
+                _checkConstraints = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CheckConstraints));
+            }
+        }
+
         public DataObjectInfoBuilder(DataFramework.Domain.DataObjectInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
             _fields = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.FieldInfoBuilder>();
+            _primaryKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder>();
+            _foreignKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder>();
+            _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
+            _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
             _name = source.Name;
             _assemblyName = source.AssemblyName;
             _typeName = source.TypeName;
@@ -237,18 +341,30 @@ namespace DataFramework.Domain.Builders
             _isReadOnly = source.IsReadOnly;
             if (source.Fields is not null) foreach (var item in source.Fields.Select(x => x.ToBuilder())) _fields.Add(item);
             _databaseTableName = source.DatabaseTableName;
+            _databaseSchemaName = source.DatabaseSchemaName;
+            _databaseFileGroupName = source.DatabaseFileGroupName;
             _customAddDatabaseCommandText = source.CustomAddDatabaseCommandText;
             _customUpdateDatabaseCommandText = source.CustomUpdateDatabaseCommandText;
             _customDeleteDatabaseCommandText = source.CustomDeleteDatabaseCommandText;
+            if (source.PrimaryKeyConstraints is not null) foreach (var item in source.PrimaryKeyConstraints.Select(x => x.ToBuilder())) _primaryKeyConstraints.Add(item);
+            if (source.ForeignKeyConstraints is not null) foreach (var item in source.ForeignKeyConstraints.Select(x => x.ToBuilder())) _foreignKeyConstraints.Add(item);
+            if (source.Indexes is not null) foreach (var item in source.Indexes.Select(x => x.ToBuilder())) _indexes.Add(item);
+            if (source.CheckConstraints is not null) foreach (var item in source.CheckConstraints.Select(x => x.ToBuilder())) _checkConstraints.Add(item);
         }
 
         public DataObjectInfoBuilder()
         {
             _fields = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.FieldInfoBuilder>();
+            _primaryKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder>();
+            _foreignKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder>();
+            _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
+            _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
             _name = string.Empty;
             _isVisible = true;
             _isQueryable = true;
             _databaseTableName = string.Empty;
+            _databaseSchemaName = string.Empty;
+            _databaseFileGroupName = string.Empty;
             _customAddDatabaseCommandText = string.Empty;
             _customUpdateDatabaseCommandText = string.Empty;
             _customDeleteDatabaseCommandText = string.Empty;
@@ -257,7 +373,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText);
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
@@ -272,6 +388,58 @@ namespace DataFramework.Domain.Builders
         {
             if (fields is null) throw new System.ArgumentNullException(nameof(fields));
             foreach (var item in fields) Fields.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddPrimaryKeyConstraints(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder> primaryKeyConstraints)
+        {
+            if (primaryKeyConstraints is null) throw new System.ArgumentNullException(nameof(primaryKeyConstraints));
+            return AddPrimaryKeyConstraints(primaryKeyConstraints.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddPrimaryKeyConstraints(params DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder[] primaryKeyConstraints)
+        {
+            if (primaryKeyConstraints is null) throw new System.ArgumentNullException(nameof(primaryKeyConstraints));
+            foreach (var item in primaryKeyConstraints) PrimaryKeyConstraints.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddForeignKeyConstraints(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder> foreignKeyConstraints)
+        {
+            if (foreignKeyConstraints is null) throw new System.ArgumentNullException(nameof(foreignKeyConstraints));
+            return AddForeignKeyConstraints(foreignKeyConstraints.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddForeignKeyConstraints(params DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder[] foreignKeyConstraints)
+        {
+            if (foreignKeyConstraints is null) throw new System.ArgumentNullException(nameof(foreignKeyConstraints));
+            foreach (var item in foreignKeyConstraints) ForeignKeyConstraints.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddIndexes(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.IndexBuilder> indexes)
+        {
+            if (indexes is null) throw new System.ArgumentNullException(nameof(indexes));
+            return AddIndexes(indexes.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddIndexes(params DatabaseFramework.Domain.Builders.IndexBuilder[] indexes)
+        {
+            if (indexes is null) throw new System.ArgumentNullException(nameof(indexes));
+            foreach (var item in indexes) Indexes.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddCheckConstraints(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.CheckConstraintBuilder> checkConstraints)
+        {
+            if (checkConstraints is null) throw new System.ArgumentNullException(nameof(checkConstraints));
+            return AddCheckConstraints(checkConstraints.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddCheckConstraints(params DatabaseFramework.Domain.Builders.CheckConstraintBuilder[] checkConstraints)
+        {
+            if (checkConstraints is null) throw new System.ArgumentNullException(nameof(checkConstraints));
+            foreach (var item in checkConstraints) CheckConstraints.Add(item);
             return this;
         }
 
@@ -328,6 +496,20 @@ namespace DataFramework.Domain.Builders
         {
             if (databaseTableName is null) throw new System.ArgumentNullException(nameof(databaseTableName));
             DatabaseTableName = databaseTableName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithDatabaseSchemaName(string databaseSchemaName)
+        {
+            if (databaseSchemaName is null) throw new System.ArgumentNullException(nameof(databaseSchemaName));
+            DatabaseSchemaName = databaseSchemaName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithDatabaseFileGroupName(string databaseFileGroupName)
+        {
+            if (databaseFileGroupName is null) throw new System.ArgumentNullException(nameof(databaseFileGroupName));
+            DatabaseFileGroupName = databaseFileGroupName;
             return this;
         }
 

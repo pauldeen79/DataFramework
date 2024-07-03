@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DatabaseFramework.Domain" Version="0.1.5" />
     <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.13.6" />
     <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.1" />
     <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.5" />
