@@ -172,28 +172,37 @@ public static class DataObjectInfoExtensions
             .CommandText;
     }
 
-    public static IEnumerable<StoredProcedureBuilder> GetStoredProcedures(this DataObjectInfo instance, PipelineSettings settings)
+    public static IEnumerable<StoredProcedureBuilder> GetStoredProcedures(
+        this DataObjectInfo instance,
+        PipelineSettings settings,
+        IFormatProvider formatProvider,
+        IFormattableStringParser formattableStringParser)
     {
         if (settings.UseAddStoredProcedure && settings.CommandProviderEnableAdd)
         {
-            yield return GetStoredProcedure(instance, settings.AddStoredProcedureName, DatabaseOperation.Insert, settings);
+            yield return GetStoredProcedure(instance, settings.AddStoredProcedureName, DatabaseOperation.Insert, settings, formattableStringParser, formatProvider);
         }
 
         if (settings.UseUpdateStoredProcedure && settings.CommandProviderEnableUpdate)
         {
-            yield return GetStoredProcedure(instance, settings.UpdateStoredProcedureName, DatabaseOperation.Update, settings);
+            yield return GetStoredProcedure(instance, settings.UpdateStoredProcedureName, DatabaseOperation.Update, settings, formattableStringParser, formatProvider);
         }
 
         if (settings.UseDeleteStoredProcedure && settings.CommandProviderEnableDelete)
         {
-            yield return GetStoredProcedure(instance, settings.DeleteStoredProcedureName, DatabaseOperation.Delete, settings);
+            yield return GetStoredProcedure(instance, settings.DeleteStoredProcedureName, DatabaseOperation.Delete, settings, formattableStringParser, formatProvider);
         }
     }
 
-    private static StoredProcedureBuilder GetStoredProcedure(DataObjectInfo instance, string procedureName, DatabaseOperation operation, PipelineSettings settings)
+    private static StoredProcedureBuilder GetStoredProcedure(
+        DataObjectInfo instance,
+        string procedureName,
+        DatabaseOperation operation,
+        PipelineSettings settings,
+        IFormattableStringParser formattableStringParser,
+        IFormatProvider formatProvider)
         => new StoredProcedureBuilder()
-            //TODO: Add support for named format strings here
-            .WithName(string.Format(procedureName, instance.GetDatabaseTableName()))
+            .WithName(formattableStringParser.Parse(procedureName, formatProvider, instance).GetValueOrThrow())
             .AddParameters(GetStoredProcedureParameters(instance, operation, settings))
             .AddStatements(GetStoredProcedureStatements(instance, operation, settings));
 

@@ -9,6 +9,8 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddEntityPipeline(this IServiceCollection services)
         => services
             .AddScoped<IPipelineService, PipelineService>()
+            // Placeholder processors
+            .AddScoped<IPlaceholderProcessor, DataObjectInfoProcessor>()
             // Class pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<ClassContext>>().Build())
             .AddScoped<IPipelineBuilder<ClassContext>, Class.PipelineBuilder>()

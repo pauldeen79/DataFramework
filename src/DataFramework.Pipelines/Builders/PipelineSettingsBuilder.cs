@@ -9,9 +9,8 @@ public partial class PipelineSettingsBuilder
 
     partial void SetDefaultValues()
     {
-        //TODO: Add support for named format strings here
-        _addStoredProcedureName = @"Insert{0}";
-        _updateStoredProcedureName = @"Update{0}";
-        _deleteStoredProcedureName = @"Delete{0}";
+        _addStoredProcedureName = @"Insert{DatabaseTableName}";
+        _updateStoredProcedureName = @"Update{DatabaseTableName}";
+        _deleteStoredProcedureName = @"Delete{DatabaseTableName}";
     }
 }

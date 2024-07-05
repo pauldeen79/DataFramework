@@ -9,6 +9,7 @@ public class ServiceCollectionExtensionsTests : TestBase
         {
             // Arrange
             var serviceCollection = new ServiceCollection()
+                .AddParsers()
                 .AddCsharpExpressionDumper() // needed by AddEntityCommandProviderMembersComponent
                 .AddDataFrameworkPipelines();
 

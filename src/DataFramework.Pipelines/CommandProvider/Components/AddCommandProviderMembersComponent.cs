@@ -2,12 +2,26 @@
 
 public class AddCommandProviderMembersComponentBuilder : ICommandProviderComponentBuilder
 {
+    private readonly IFormattableStringParser _formattableStringParser;
+
+    public AddCommandProviderMembersComponentBuilder(IFormattableStringParser formattableStringParser)
+    {
+        _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
+    }
+
     public IPipelineComponent<CommandProviderContext> Build()
-        => new AddCommandProviderMembersComponent();
+        => new AddCommandProviderMembersComponent(_formattableStringParser);
 }
 
 public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProviderContext>
 {
+    private readonly IFormattableStringParser _formattableStringParser;
+
+    public AddCommandProviderMembersComponent(IFormattableStringParser formattableStringParser)
+    {
+        _formattableStringParser = formattableStringParser;
+    }
+
     public Task<Result> Process(PipelineContext<CommandProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
@@ -19,7 +33,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
         return Task.FromResult(Result.Continue());
     }
 
-    private static IEnumerable<MethodBuilder> GetCommandProviderClassMethods(PipelineContext<CommandProviderContext> context)
+    private IEnumerable<MethodBuilder> GetCommandProviderClassMethods(PipelineContext<CommandProviderContext> context)
     {
         yield return new MethodBuilder()
             .WithName(nameof(IDatabaseCommandProvider<object>.Create))
@@ -86,10 +100,9 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
             ? typeof(StoredProcedureCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace))
             : typeof(TextCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace));
 
-    private static string GetInsertCommand(PipelineContext<CommandProviderContext> context)
+    private string GetInsertCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseAddStoredProcedure
-            //TODO: Add support for named format strings here
-            ? $"[{string.Format(context.Request.Settings.AddStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.AddStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseInsertCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
     private static string GetUpdateCommandType(PipelineContext<CommandProviderContext> context)
@@ -97,10 +110,9 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
             ? typeof(StoredProcedureCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace))
             : typeof(TextCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace));
 
-    private static string GetUpdateCommand(PipelineContext<CommandProviderContext> context)
+    private string GetUpdateCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseUpdateStoredProcedure
-            //TODO: Add support for named format strings here
-            ? $"[{string.Format(context.Request.Settings.UpdateStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.UpdateStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseUpdateCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
     private static string GetDeleteCommandType(PipelineContext<CommandProviderContext> context)
@@ -108,9 +120,8 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
             ? typeof(StoredProcedureCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace))
             : typeof(TextCommand<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace));
 
-    private static string GetDeleteCommand(PipelineContext<CommandProviderContext> context)
+    private string GetDeleteCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseDeleteStoredProcedure
-            //TODO: Add support for named format strings here
-            ? $"[{string.Format(context.Request.Settings.DeleteStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.DeleteStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseDeleteCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 }
