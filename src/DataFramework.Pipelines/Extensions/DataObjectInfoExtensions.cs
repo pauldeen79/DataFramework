@@ -1,6 +1,4 @@
-﻿using DatabaseFramework.Domain.Domains;
-
-namespace DataFramework.Pipelines.Extensions;
+﻿namespace DataFramework.Pipelines.Extensions;
 
 public static class DataObjectInfoExtensions
 {
@@ -65,9 +63,7 @@ public static class DataObjectInfoExtensions
         .Select(fi =>
             new TableFieldBuilder()
                 .WithName(fi.GetDatabaseFieldName())
-                .WithType(Enum.TryParse<SqlFieldType>(fi.GetSqlFieldType(), true, out var sqlFieldType)
-                    ? sqlFieldType
-                    : throw new NotSupportedException($"Unsupported SqlFieldType: {fi.GetSqlFieldType()}"))
+                .WithType(fi.GetTypedSqlFieldType())
                 .WithIsRequired(fi.IsSqlRequired || fi.IsRequired)
                 .WithIsIdentity(fi.IsDatabaseIdentityField)
                 .WithNumericPrecision(fi.DatabaseNumericPrecision)
@@ -175,6 +171,98 @@ public static class DataObjectInfoExtensions
             .Build()
             .CommandText;
     }
+
+    public static IEnumerable<StoredProcedureBuilder> GetStoredProcedures(this DataObjectInfo instance, PipelineSettings settings)
+    {
+        if (settings.UseAddStoredProcedure && settings.CommandProviderEnableAdd)
+        {
+            yield return GetStoredProcedure(instance, settings.AddStoredProcedureName, DatabaseOperation.Insert, settings);
+        }
+
+        if (settings.UseUpdateStoredProcedure && settings.CommandProviderEnableUpdate)
+        {
+            yield return GetStoredProcedure(instance, settings.UpdateStoredProcedureName, DatabaseOperation.Update, settings);
+        }
+
+        if (settings.UseDeleteStoredProcedure && settings.CommandProviderEnableDelete)
+        {
+            yield return GetStoredProcedure(instance, settings.DeleteStoredProcedureName, DatabaseOperation.Delete, settings);
+        }
+    }
+
+    private static StoredProcedureBuilder GetStoredProcedure(DataObjectInfo instance, string procedureName, DatabaseOperation operation, PipelineSettings settings)
+        => new StoredProcedureBuilder()
+            //TODO: Add support for named format strings here
+            .WithName(string.Format(procedureName, instance.GetDatabaseTableName()))
+            .AddParameters(GetStoredProcedureParameters(instance, operation, settings))
+            .AddStatements(GetStoredProcedureStatements(instance, operation, settings));
+
+    private static IEnumerable<StoredProcedureParameterBuilder> GetStoredProcedureParameters(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
+    {
+        var derrivedOperation = GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings);
+
+        switch (derrivedOperation)
+        {
+            case DatabaseOperation.Insert:
+                return instance.Fields.Where(x => x.UseOnInsert).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
+            case DatabaseOperation.Update:
+                return instance.Fields.Where(x => x.UseOnUpdate).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
+            case DatabaseOperation.Delete:
+                return instance.Fields.Where(x => x.UseOnDelete).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}");
+        }
+    }
+
+    private static IEnumerable<SqlStatementBaseBuilder> GetStoredProcedureStatements(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
+    {
+        var derrivedOperation = GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings);
+
+        switch (derrivedOperation)
+        {
+            case DatabaseOperation.Insert:
+                return CreateStoredProcedureStatements(settings.AddStoredProcedureStatements, () => instance.CreateDatabaseInsertCommandText(settings.ConcurrencyCheckBehavior));
+            case DatabaseOperation.Update:
+                return CreateStoredProcedureStatements(settings.UpdateStoredProcedureStatements, () => instance.CreateDatabaseUpdateCommandText(settings.ConcurrencyCheckBehavior));
+            case DatabaseOperation.Delete:
+                return CreateStoredProcedureStatements(settings.DeleteStoredProcedureStatements, () => instance.CreateDatabaseDeleteCommandText(settings.ConcurrencyCheckBehavior));
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}");
+        }
+    }
+
+    private static IEnumerable<SqlStatementBaseBuilder> CreateStoredProcedureStatements(IEnumerable<SqlStatementBase> statements, Func<string> defaultStatementDelegate)
+    {
+        var any = false;
+        foreach (var statement in statements)
+        {
+            yield return statement.ToBuilder();
+            any = true;
+        }
+
+        // if there are no custom statements, then add the default statement
+        if (!any)
+        {
+            yield return new StringSqlStatementBuilder().WithStatement(defaultStatementDelegate());
+        }
+    }
+
+    private static DatabaseOperation GetCommandTypeMetadataNameForCommandType(DatabaseOperation operation, CommandTypePart commandTypePart, PipelineSettings settings)
+        => operation switch
+        {
+            DatabaseOperation.Insert => commandTypePart == CommandTypePart.Text
+                ? settings.DatabaseCommandTypeForInsertText
+                : settings.DatabaseCommandTypeForInsertParameters,
+            DatabaseOperation.Update => commandTypePart == CommandTypePart.Text
+                ? settings.DatabaseCommandTypeForUpdateText
+                : settings.DatabaseCommandTypeForUpdateParameters,
+            DatabaseOperation.Delete => commandTypePart == CommandTypePart.Text
+                ? settings.DatabaseCommandTypeForDeleteText
+                : settings.DatabaseCommandTypeForDeleteParameters,
+            _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}"),
+        };
+
+    private enum CommandTypePart { Parameters, Text }
 
     private static string GetUpdateConcurrencyWhereStatement(this DataObjectInfo instance, ConcurrencyCheckBehavior concurrencyCheckBehavior, Predicate<FieldInfo> predicate)
         => string.Join(" AND ", instance.GetUpdateConcurrencyCheckFields(concurrencyCheckBehavior)

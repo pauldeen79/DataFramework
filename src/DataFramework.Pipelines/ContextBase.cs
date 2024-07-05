@@ -11,7 +11,7 @@ public abstract class ContextBase
         FormatProvider = formatProvider.IsNotNull(nameof(formatProvider));
     }
 
-    public IEnumerable<CodeStatementBaseBuilder> GetGetterCodeStatements(DataObjectInfo dataObjectInfo, FieldInfo field)
+    public IEnumerable<CodeStatementBase> GetGetterCodeStatements(DataObjectInfo dataObjectInfo, FieldInfo field)
         => Settings.CodeStatementMappings
             .Where(x => AreEqual(dataObjectInfo, x.SourceDataObjectInfo) && AreEqual(field, x.SourceFieldInfo))
             .SelectMany(x => x.CodeStatements);

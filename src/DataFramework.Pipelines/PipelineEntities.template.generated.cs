@@ -30,16 +30,17 @@ namespace DataFramework.Pipelines
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CodeStatements
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CodeStatements
         {
             get;
         }
 
-        public CodeStatementsMapping(DataFramework.Domain.DataObjectInfo sourceDataObjectInfo, DataFramework.Domain.FieldInfo sourceFieldInfo, System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> codeStatements)
+        public CodeStatementsMapping(DataFramework.Domain.DataObjectInfo sourceDataObjectInfo, DataFramework.Domain.FieldInfo sourceFieldInfo, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> codeStatements)
         {
             this.SourceDataObjectInfo = sourceDataObjectInfo;
             this.SourceFieldInfo = sourceFieldInfo;
-            this.CodeStatements = codeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>(codeStatements);
+            this.CodeStatements = codeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(codeStatements);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
@@ -90,6 +91,7 @@ namespace DataFramework.Pipelines
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<DataFramework.Pipelines.CodeStatementsMapping> CodeStatementMappings
         {
             get;
@@ -125,36 +127,42 @@ namespace DataFramework.Pipelines
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddResultEntityStatements
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddAfterReadStatements
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements
         {
             get;
@@ -207,7 +215,64 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.SqlStatementBase> AddStoredProcedureStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.SqlStatementBase> UpdateStoredProcedureStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.SqlStatementBase> DeleteStoredProcedureStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Insert)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForInsertText
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Insert)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForInsertParameters
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Update)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForUpdateText
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Update)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForUpdateParameters
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Delete)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForDeleteText
+        {
+            get;
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Delete)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForDeleteParameters
+        {
+            get;
+        }
+
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
         {
             this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -236,6 +301,15 @@ namespace DataFramework.Pipelines
             this.AddStoredProcedureName = addStoredProcedureName;
             this.UpdateStoredProcedureName = updateStoredProcedureName;
             this.DeleteStoredProcedureName = deleteStoredProcedureName;
+            this.AddStoredProcedureStatements = addStoredProcedureStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.SqlStatementBase>(addStoredProcedureStatements);
+            this.UpdateStoredProcedureStatements = updateStoredProcedureStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.SqlStatementBase>(updateStoredProcedureStatements);
+            this.DeleteStoredProcedureStatements = deleteStoredProcedureStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.SqlStatementBase>(deleteStoredProcedureStatements);
+            this.DatabaseCommandTypeForInsertText = databaseCommandTypeForInsertText;
+            this.DatabaseCommandTypeForInsertParameters = databaseCommandTypeForInsertParameters;
+            this.DatabaseCommandTypeForUpdateText = databaseCommandTypeForUpdateText;
+            this.DatabaseCommandTypeForUpdateParameters = databaseCommandTypeForUpdateParameters;
+            this.DatabaseCommandTypeForDeleteText = databaseCommandTypeForDeleteText;
+            this.DatabaseCommandTypeForDeleteParameters = databaseCommandTypeForDeleteParameters;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

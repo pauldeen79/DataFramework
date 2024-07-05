@@ -47,5 +47,6 @@ public static class ServiceCollectionExtensions
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<DatabaseSchemaContext>>().Build())
             .AddScoped<IPipelineBuilder<DatabaseSchemaContext>, DatabaseSchema.PipelineBuilder>()
             .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddTableComponentBuilder>()
+            .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddInsertUpdateDeleteStoredProceduresComponentBuilder>()
             ;
 }

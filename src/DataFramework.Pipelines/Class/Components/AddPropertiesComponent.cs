@@ -19,7 +19,7 @@ public class AddPropertiesComponent : IPipelineComponent<ClassContext>
                     .Fill(field)
                     .WithHasSetter(!field.IsComputed && field.CanSet && context.Request.Settings.EntityClassType.HasPropertySetter())
                     .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name, context.Request.Settings))
-                    .AddGetterCodeStatements(context.Request.GetGetterCodeStatements(context.Request.SourceModel, field))))
+                    .AddGetterCodeStatements(context.Request.GetGetterCodeStatements(context.Request.SourceModel, field).Select(x => x.ToBuilder()))))
             .AddProperties(context.Request.SourceModel.GetUpdateConcurrencyCheckFields(context.Request.Settings.ConcurrencyCheckBehavior).Select(field =>
                 new PropertyBuilder()
                     .WithName($"{field.Name}Original")

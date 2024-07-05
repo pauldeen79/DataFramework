@@ -21,7 +21,7 @@ namespace DataFramework.Pipelines.Builders
 
         private DataFramework.Domain.Builders.FieldInfoBuilder _sourceFieldInfo;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _codeStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _codeStatements;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -54,7 +54,8 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CodeStatements
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CodeStatements
         {
             get
             {
@@ -70,7 +71,7 @@ namespace DataFramework.Pipelines.Builders
         public CodeStatementsMappingBuilder(DataFramework.Pipelines.CodeStatementsMapping source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _sourceDataObjectInfo = source.SourceDataObjectInfo.ToBuilder();
             _sourceFieldInfo = source.SourceFieldInfo.ToBuilder();
             if (source.CodeStatements is not null) foreach (var item in source.CodeStatements) _codeStatements.Add(item);
@@ -78,7 +79,7 @@ namespace DataFramework.Pipelines.Builders
 
         public CodeStatementsMappingBuilder()
         {
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _sourceDataObjectInfo = new DataFramework.Domain.Builders.DataObjectInfoBuilder()!;
             _sourceFieldInfo = new DataFramework.Domain.Builders.FieldInfoBuilder()!;
             SetDefaultValues();
@@ -91,13 +92,13 @@ namespace DataFramework.Pipelines.Builders
 
         partial void SetDefaultValues();
 
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> codeStatements)
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> codeStatements)
         {
             if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
             return AddCodeStatements(codeStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] codeStatements)
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.CodeStatementBase[] codeStatements)
         {
             if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
             foreach (var item in codeStatements) CodeStatements.Add(item);
@@ -178,6 +179,24 @@ namespace DataFramework.Pipelines.Builders
         private string _updateStoredProcedureName;
 
         private string _deleteStoredProcedureName;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> _addStoredProcedureStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> _updateStoredProcedureStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> _deleteStoredProcedureStatements;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForInsertText;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForInsertParameters;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForUpdateText;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForUpdateParameters;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForDeleteText;
+
+        private CrossCutting.Data.Abstractions.DatabaseOperation _databaseCommandTypeForDeleteParameters;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -277,6 +296,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> CodeStatementMappings
         {
             get
@@ -360,6 +380,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddResultEntityStatements
         {
             get
@@ -374,6 +395,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddAfterReadStatements
         {
             get
@@ -388,6 +410,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements
         {
             get
@@ -402,6 +425,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements
         {
             get
@@ -416,6 +440,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements
         {
             get
@@ -430,6 +455,7 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements
         {
             get
@@ -554,6 +580,135 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> AddStoredProcedureStatements
+        {
+            get
+            {
+                return _addStoredProcedureStatements;
+            }
+            set
+            {
+                _addStoredProcedureStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(AddStoredProcedureStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> UpdateStoredProcedureStatements
+        {
+            get
+            {
+                return _updateStoredProcedureStatements;
+            }
+            set
+            {
+                _updateStoredProcedureStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(UpdateStoredProcedureStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> DeleteStoredProcedureStatements
+        {
+            get
+            {
+                return _deleteStoredProcedureStatements;
+            }
+            set
+            {
+                _deleteStoredProcedureStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(DeleteStoredProcedureStatements));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Insert)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForInsertText
+        {
+            get
+            {
+                return _databaseCommandTypeForInsertText;
+            }
+            set
+            {
+                _databaseCommandTypeForInsertText = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForInsertText));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Insert)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForInsertParameters
+        {
+            get
+            {
+                return _databaseCommandTypeForInsertParameters;
+            }
+            set
+            {
+                _databaseCommandTypeForInsertParameters = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForInsertParameters));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Update)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForUpdateText
+        {
+            get
+            {
+                return _databaseCommandTypeForUpdateText;
+            }
+            set
+            {
+                _databaseCommandTypeForUpdateText = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForUpdateText));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Update)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForUpdateParameters
+        {
+            get
+            {
+                return _databaseCommandTypeForUpdateParameters;
+            }
+            set
+            {
+                _databaseCommandTypeForUpdateParameters = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForUpdateParameters));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Delete)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForDeleteText
+        {
+            get
+            {
+                return _databaseCommandTypeForDeleteText;
+            }
+            set
+            {
+                _databaseCommandTypeForDeleteText = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForDeleteText));
+            }
+        }
+
+        [System.ComponentModel.DefaultValueAttribute(CrossCutting.Data.Abstractions.DatabaseOperation.Delete)]
+        public CrossCutting.Data.Abstractions.DatabaseOperation DatabaseCommandTypeForDeleteParameters
+        {
+            get
+            {
+                return _databaseCommandTypeForDeleteParameters;
+            }
+            set
+            {
+                _databaseCommandTypeForDeleteParameters = value;
+                HandlePropertyChanged(nameof(DatabaseCommandTypeForDeleteParameters));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -564,6 +719,9 @@ namespace DataFramework.Pipelines.Builders
             _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _enableNullableContext = source.EnableNullableContext;
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
@@ -591,6 +749,15 @@ namespace DataFramework.Pipelines.Builders
             _addStoredProcedureName = source.AddStoredProcedureName;
             _updateStoredProcedureName = source.UpdateStoredProcedureName;
             _deleteStoredProcedureName = source.DeleteStoredProcedureName;
+            if (source.AddStoredProcedureStatements is not null) foreach (var item in source.AddStoredProcedureStatements.Select(x => x.ToBuilder())) _addStoredProcedureStatements.Add(item);
+            if (source.UpdateStoredProcedureStatements is not null) foreach (var item in source.UpdateStoredProcedureStatements.Select(x => x.ToBuilder())) _updateStoredProcedureStatements.Add(item);
+            if (source.DeleteStoredProcedureStatements is not null) foreach (var item in source.DeleteStoredProcedureStatements.Select(x => x.ToBuilder())) _deleteStoredProcedureStatements.Add(item);
+            _databaseCommandTypeForInsertText = source.DatabaseCommandTypeForInsertText;
+            _databaseCommandTypeForInsertParameters = source.DatabaseCommandTypeForInsertParameters;
+            _databaseCommandTypeForUpdateText = source.DatabaseCommandTypeForUpdateText;
+            _databaseCommandTypeForUpdateParameters = source.DatabaseCommandTypeForUpdateParameters;
+            _databaseCommandTypeForDeleteText = source.DatabaseCommandTypeForDeleteText;
+            _databaseCommandTypeForDeleteParameters = source.DatabaseCommandTypeForDeleteParameters;
         }
 
         public PipelineSettingsBuilder()
@@ -602,6 +769,9 @@ namespace DataFramework.Pipelines.Builders
             _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
             _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _defaultEntityNamespace = string.Empty;
             _defaultIdentityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
@@ -614,12 +784,18 @@ namespace DataFramework.Pipelines.Builders
             _addStoredProcedureName = @"Insert0"!;
             _updateStoredProcedureName = @"Update0"!;
             _deleteStoredProcedureName = @"Delete0"!;
+            _databaseCommandTypeForInsertText = CrossCutting.Data.Abstractions.DatabaseOperation.Insert;
+            _databaseCommandTypeForInsertParameters = CrossCutting.Data.Abstractions.DatabaseOperation.Insert;
+            _databaseCommandTypeForUpdateText = CrossCutting.Data.Abstractions.DatabaseOperation.Update;
+            _databaseCommandTypeForUpdateParameters = CrossCutting.Data.Abstractions.DatabaseOperation.Update;
+            _databaseCommandTypeForDeleteText = CrossCutting.Data.Abstractions.DatabaseOperation.Delete;
+            _databaseCommandTypeForDeleteParameters = CrossCutting.Data.Abstractions.DatabaseOperation.Delete;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
         }
 
         partial void SetDefaultValues();
@@ -712,6 +888,45 @@ namespace DataFramework.Pipelines.Builders
         {
             if (commandEntityProviderDeleteAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteAfterReadStatements));
             foreach (var item in commandEntityProviderDeleteAfterReadStatements) CommandEntityProviderDeleteAfterReadStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddAddStoredProcedureStatements(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> addStoredProcedureStatements)
+        {
+            if (addStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(addStoredProcedureStatements));
+            return AddAddStoredProcedureStatements(addStoredProcedureStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddAddStoredProcedureStatements(params DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder[] addStoredProcedureStatements)
+        {
+            if (addStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(addStoredProcedureStatements));
+            foreach (var item in addStoredProcedureStatements) AddStoredProcedureStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddUpdateStoredProcedureStatements(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> updateStoredProcedureStatements)
+        {
+            if (updateStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(updateStoredProcedureStatements));
+            return AddUpdateStoredProcedureStatements(updateStoredProcedureStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddUpdateStoredProcedureStatements(params DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder[] updateStoredProcedureStatements)
+        {
+            if (updateStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(updateStoredProcedureStatements));
+            foreach (var item in updateStoredProcedureStatements) UpdateStoredProcedureStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddDeleteStoredProcedureStatements(System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder> deleteStoredProcedureStatements)
+        {
+            if (deleteStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(deleteStoredProcedureStatements));
+            return AddDeleteStoredProcedureStatements(deleteStoredProcedureStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddDeleteStoredProcedureStatements(params DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder[] deleteStoredProcedureStatements)
+        {
+            if (deleteStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(deleteStoredProcedureStatements));
+            foreach (var item in deleteStoredProcedureStatements) DeleteStoredProcedureStatements.Add(item);
             return this;
         }
 
@@ -840,6 +1055,42 @@ namespace DataFramework.Pipelines.Builders
         {
             if (deleteStoredProcedureName is null) throw new System.ArgumentNullException(nameof(deleteStoredProcedureName));
             DeleteStoredProcedureName = deleteStoredProcedureName;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForInsertText(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText)
+        {
+            DatabaseCommandTypeForInsertText = databaseCommandTypeForInsertText;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForInsertParameters(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters)
+        {
+            DatabaseCommandTypeForInsertParameters = databaseCommandTypeForInsertParameters;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForUpdateText(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText)
+        {
+            DatabaseCommandTypeForUpdateText = databaseCommandTypeForUpdateText;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForUpdateParameters(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters)
+        {
+            DatabaseCommandTypeForUpdateParameters = databaseCommandTypeForUpdateParameters;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForDeleteText(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText)
+        {
+            DatabaseCommandTypeForDeleteText = databaseCommandTypeForDeleteText;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithDatabaseCommandTypeForDeleteParameters(CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
+        {
+            DatabaseCommandTypeForDeleteParameters = databaseCommandTypeForDeleteParameters;
             return this;
         }
 

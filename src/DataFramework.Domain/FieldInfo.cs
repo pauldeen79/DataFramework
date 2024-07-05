@@ -69,6 +69,17 @@ public partial class FieldInfo
         }
     }
 
+    public SqlFieldType GetTypedSqlFieldType(bool includeSpecificProperties = false)
+    {
+        var type = GetSqlFieldType(includeSpecificProperties);
+        if (!Enum.TryParse<SqlFieldType>(type, true, out var sqlFieldType))
+        {
+            throw new NotSupportedException($"Unsupported SqlFieldType: {type}");
+        }
+
+        return sqlFieldType;
+    }
+
     public string GetSqlFieldType(bool includeSpecificProperties = false)
     {
         if (DatabaseFieldType is not null && !string.IsNullOrEmpty(DatabaseFieldType))
@@ -120,9 +131,11 @@ public partial class FieldInfo
         {
             return "varchar";
         }
+
         var length = IsSqlStringMaxLength
             ? "max"
             : GetSqlStringLength(defaultLength).ToString(CultureInfo.InvariantCulture);
+
         return $"varchar({length})";
     }
 

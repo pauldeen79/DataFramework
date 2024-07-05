@@ -19,7 +19,7 @@ public class AddPropertiesComponent : IPipelineComponent<IdentityClassContext>
                     .Fill(field)
                     .WithHasSetter(!field.IsComputed && field.CanSet && context.Request.Settings.EntityClassType.HasPropertySetter())
                     .AddAttributes(GetEntityClassPropertyAttributes(field, context.Request.SourceModel.Name, context.Request.Settings))
-                    .AddGetterCodeStatements(context.Request.GetGetterCodeStatements(context.Request.SourceModel, field))));
+                    .AddGetterCodeStatements(context.Request.GetGetterCodeStatements(context.Request.SourceModel, field).Select(x => x.ToBuilder()))));
 
         return Task.FromResult(Result.Continue());
     }

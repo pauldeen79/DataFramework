@@ -5,4 +5,5 @@ global using ClassFramework.Domain.Builders;
 global using ClassFramework.Domain.Extensions;
 global using CrossCutting.Common;
 global using CrossCutting.Common.Extensions;
+global using DatabaseFramework.Domain.Domains;
 global using DataFramework.Domain.Extensions;

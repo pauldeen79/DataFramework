@@ -559,6 +559,81 @@ GO
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Code_For_DatabaseSchema_With_StoredProcedures()
+    {
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandEntityProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .WithUseStoredProcedures()
+            .Build();
+        var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var databaseObjects = result.Value!;
+        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MyEntity](
+	[MyField] INT NOT NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[DeleteMyEntity]
+	@MyField INT
+AS
+BEGIN
+    DELETE FROM [MyEntity] OUTPUT DELETED.[MyField] WHERE [MyField] = @MyFieldOriginal
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertMyEntity]
+	@MyField INT
+AS
+BEGIN
+    INSERT INTO [MyEntity]([MyField]) OUTPUT INSERTED.[MyField] VALUES(@MyField)
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateMyEntity]
+	@MyField INT
+AS
+BEGIN
+    UPDATE [MyEntity] SET [MyField] = @MyField OUTPUT INSERTED.[MyField] WHERE [MyField] = @MyFieldOriginal
+END
+GO
+");
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;

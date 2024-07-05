@@ -9,7 +9,7 @@ internal interface IPipelineSettings
     [Required(AllowEmptyStrings = true)] string DefaultIdentityNamespace { get; }
     [Required(AllowEmptyStrings = true)] string DefaultBuilderNamespace { get; }
     [DefaultValue(true)] bool AddComponentModelAttributes { get; }
-    [Required] IReadOnlyCollection<ICodeStatementsMapping> CodeStatementMappings { get; }
+    [Required][ValidateObject] IReadOnlyCollection<ICodeStatementsMapping> CodeStatementMappings { get; }
 
     // CommandEntityProvider settings
     Visibility CommandEntityProviderVisibility { get; }
@@ -17,12 +17,12 @@ internal interface IPipelineSettings
     [DefaultValue(true)] bool CommandProviderEnableAdd { get; }
     [DefaultValue(true)] bool CommandProviderEnableUpdate { get; }
     [DefaultValue(true)] bool CommandProviderEnableDelete { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderAddResultEntityStatements { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderAddAfterReadStatements { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements { get; }
-    [Required] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderAddResultEntityStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderAddAfterReadStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements { get; }
 
     // CommandProvider settings
     Visibility CommandProviderVisibility { get; }
@@ -30,7 +30,16 @@ internal interface IPipelineSettings
     bool UseAddStoredProcedure { get; }
     bool UseUpdateStoredProcedure { get; }
     bool UseDeleteStoredProcedure { get; }
-    [Required][DefaultValue("Insert{0}")] string AddStoredProcedureName { get; }
-    [Required][DefaultValue("Update{0}")] string UpdateStoredProcedureName { get; }
-    [Required][DefaultValue("Delete{0}")] string DeleteStoredProcedureName { get; }
+    [Required] string AddStoredProcedureName { get; }
+    [Required] string UpdateStoredProcedureName { get; }
+    [Required] string DeleteStoredProcedureName { get; }
+    [Required][ValidateObject] IReadOnlyCollection<SqlStatementBase> AddStoredProcedureStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<SqlStatementBase> UpdateStoredProcedureStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<SqlStatementBase> DeleteStoredProcedureStatements { get; }
+    [DefaultValue(DatabaseOperation.Insert)] DatabaseOperation DatabaseCommandTypeForInsertText { get; }
+    [DefaultValue(DatabaseOperation.Insert)] DatabaseOperation DatabaseCommandTypeForInsertParameters { get; }
+    [DefaultValue(DatabaseOperation.Update)] DatabaseOperation DatabaseCommandTypeForUpdateText { get; }
+    [DefaultValue(DatabaseOperation.Update)] DatabaseOperation DatabaseCommandTypeForUpdateParameters { get; }
+    [DefaultValue(DatabaseOperation.Delete)] DatabaseOperation DatabaseCommandTypeForDeleteText { get; }
+    [DefaultValue(DatabaseOperation.Delete)] DatabaseOperation DatabaseCommandTypeForDeleteParameters { get; }
 }

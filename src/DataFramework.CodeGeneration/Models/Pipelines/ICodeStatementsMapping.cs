@@ -4,5 +4,5 @@ internal interface ICodeStatementsMapping
 {
     [Required] IDataObjectInfo SourceDataObjectInfo { get; }
     [Required] IFieldInfo SourceFieldInfo { get; }
-    [Required] IReadOnlyCollection<CodeStatementBaseBuilder> CodeStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> CodeStatements { get; }
 }

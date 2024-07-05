@@ -88,6 +88,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private static string GetInsertCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseAddStoredProcedure
+            //TODO: Add support for named format strings here
             ? $"[{string.Format(context.Request.Settings.AddStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
             : context.Request.SourceModel.CreateDatabaseInsertCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
@@ -98,6 +99,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private static string GetUpdateCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseUpdateStoredProcedure
+            //TODO: Add support for named format strings here
             ? $"[{string.Format(context.Request.Settings.UpdateStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
             : context.Request.SourceModel.CreateDatabaseUpdateCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
@@ -108,6 +110,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private static string GetDeleteCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseDeleteStoredProcedure
+            //TODO: Add support for named format strings here
             ? $"[{string.Format(context.Request.Settings.DeleteStoredProcedureName, context.Request.SourceModel.GetDatabaseTableName())}]"
             : context.Request.SourceModel.CreateDatabaseDeleteCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 }
