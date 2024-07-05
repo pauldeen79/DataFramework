@@ -21,7 +21,7 @@ namespace DataFramework.Pipelines.Builders
 
         private DataFramework.Domain.Builders.FieldInfoBuilder _sourceFieldInfo;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _codeStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _codeStatements;
 
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
@@ -55,7 +55,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CodeStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CodeStatements
         {
             get
             {
@@ -71,15 +71,15 @@ namespace DataFramework.Pipelines.Builders
         public CodeStatementsMappingBuilder(DataFramework.Pipelines.CodeStatementsMapping source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _sourceDataObjectInfo = source.SourceDataObjectInfo.ToBuilder();
             _sourceFieldInfo = source.SourceFieldInfo.ToBuilder();
-            if (source.CodeStatements is not null) foreach (var item in source.CodeStatements) _codeStatements.Add(item);
+            if (source.CodeStatements is not null) foreach (var item in source.CodeStatements.Select(x => x.ToBuilder())) _codeStatements.Add(item);
         }
 
         public CodeStatementsMappingBuilder()
         {
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _sourceDataObjectInfo = new DataFramework.Domain.Builders.DataObjectInfoBuilder()!;
             _sourceFieldInfo = new DataFramework.Domain.Builders.FieldInfoBuilder()!;
             SetDefaultValues();
@@ -87,18 +87,18 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.CodeStatementsMapping Build()
         {
-            return new DataFramework.Pipelines.CodeStatementsMapping(SourceDataObjectInfo.Build(), SourceFieldInfo.Build(), CodeStatements);
+            return new DataFramework.Pipelines.CodeStatementsMapping(SourceDataObjectInfo.Build(), SourceFieldInfo.Build(), CodeStatements.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
 
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> codeStatements)
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> codeStatements)
         {
             if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
             return AddCodeStatements(codeStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.CodeStatementBase[] codeStatements)
+        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] codeStatements)
         {
             if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
             foreach (var item in codeStatements) CodeStatements.Add(item);
@@ -152,17 +152,17 @@ namespace DataFramework.Pipelines.Builders
 
         private bool _commandProviderEnableDelete;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderAddResultEntityStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderAddResultEntityStatements;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderAddAfterReadStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderAddAfterReadStatements;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderUpdateResultEntityStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderUpdateResultEntityStatements;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderUpdateAfterReadStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderUpdateAfterReadStatements;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderDeleteResultEntityStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderDeleteResultEntityStatements;
 
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> _commandEntityProviderDeleteAfterReadStatements;
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _commandEntityProviderDeleteAfterReadStatements;
 
         private ClassFramework.Domain.Domains.Visibility _commandProviderVisibility;
 
@@ -381,7 +381,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddResultEntityStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderAddResultEntityStatements
         {
             get
             {
@@ -396,7 +396,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderAddAfterReadStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderAddAfterReadStatements
         {
             get
             {
@@ -411,7 +411,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateResultEntityStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderUpdateResultEntityStatements
         {
             get
             {
@@ -426,7 +426,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderUpdateAfterReadStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderUpdateAfterReadStatements
         {
             get
             {
@@ -441,7 +441,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteResultEntityStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderDeleteResultEntityStatements
         {
             get
             {
@@ -456,7 +456,7 @@ namespace DataFramework.Pipelines.Builders
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase> CommandEntityProviderDeleteAfterReadStatements
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CommandEntityProviderDeleteAfterReadStatements
         {
             get
             {
@@ -536,7 +536,6 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Insert{0}")]
         public string AddStoredProcedureName
         {
             get
@@ -551,7 +550,6 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Update{0}")]
         public string UpdateStoredProcedureName
         {
             get
@@ -566,7 +564,6 @@ namespace DataFramework.Pipelines.Builders
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Delete{0}")]
         public string DeleteStoredProcedureName
         {
             get
@@ -713,12 +710,12 @@ namespace DataFramework.Pipelines.Builders
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
             _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
-            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
@@ -735,12 +732,12 @@ namespace DataFramework.Pipelines.Builders
             _commandProviderEnableAdd = source.CommandProviderEnableAdd;
             _commandProviderEnableUpdate = source.CommandProviderEnableUpdate;
             _commandProviderEnableDelete = source.CommandProviderEnableDelete;
-            if (source.CommandEntityProviderAddResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderAddResultEntityStatements) _commandEntityProviderAddResultEntityStatements.Add(item);
-            if (source.CommandEntityProviderAddAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderAddAfterReadStatements) _commandEntityProviderAddAfterReadStatements.Add(item);
-            if (source.CommandEntityProviderUpdateResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderUpdateResultEntityStatements) _commandEntityProviderUpdateResultEntityStatements.Add(item);
-            if (source.CommandEntityProviderUpdateAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderUpdateAfterReadStatements) _commandEntityProviderUpdateAfterReadStatements.Add(item);
-            if (source.CommandEntityProviderDeleteResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderDeleteResultEntityStatements) _commandEntityProviderDeleteResultEntityStatements.Add(item);
-            if (source.CommandEntityProviderDeleteAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderDeleteAfterReadStatements) _commandEntityProviderDeleteAfterReadStatements.Add(item);
+            if (source.CommandEntityProviderAddResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderAddResultEntityStatements.Select(x => x.ToBuilder())) _commandEntityProviderAddResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderAddAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderAddAfterReadStatements.Select(x => x.ToBuilder())) _commandEntityProviderAddAfterReadStatements.Add(item);
+            if (source.CommandEntityProviderUpdateResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderUpdateResultEntityStatements.Select(x => x.ToBuilder())) _commandEntityProviderUpdateResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderUpdateAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderUpdateAfterReadStatements.Select(x => x.ToBuilder())) _commandEntityProviderUpdateAfterReadStatements.Add(item);
+            if (source.CommandEntityProviderDeleteResultEntityStatements is not null) foreach (var item in source.CommandEntityProviderDeleteResultEntityStatements.Select(x => x.ToBuilder())) _commandEntityProviderDeleteResultEntityStatements.Add(item);
+            if (source.CommandEntityProviderDeleteAfterReadStatements is not null) foreach (var item in source.CommandEntityProviderDeleteAfterReadStatements.Select(x => x.ToBuilder())) _commandEntityProviderDeleteAfterReadStatements.Add(item);
             _commandProviderVisibility = source.CommandProviderVisibility;
             _commandProviderNamespace = source.CommandProviderNamespace;
             _useAddStoredProcedure = source.UseAddStoredProcedure;
@@ -763,12 +760,12 @@ namespace DataFramework.Pipelines.Builders
         public PipelineSettingsBuilder()
         {
             _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
-            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
-            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.CodeStatementBase>();
+            _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderUpdateAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderDeleteResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _commandEntityProviderDeleteAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
@@ -781,9 +778,9 @@ namespace DataFramework.Pipelines.Builders
             _commandProviderEnableUpdate = true;
             _commandProviderEnableDelete = true;
             _commandProviderNamespace = string.Empty;
-            _addStoredProcedureName = @"Insert0"!;
-            _updateStoredProcedureName = @"Update0"!;
-            _deleteStoredProcedureName = @"Delete0"!;
+            _addStoredProcedureName = string.Empty;
+            _updateStoredProcedureName = string.Empty;
+            _deleteStoredProcedureName = string.Empty;
             _databaseCommandTypeForInsertText = CrossCutting.Data.Abstractions.DatabaseOperation.Insert;
             _databaseCommandTypeForInsertParameters = CrossCutting.Data.Abstractions.DatabaseOperation.Insert;
             _databaseCommandTypeForUpdateText = CrossCutting.Data.Abstractions.DatabaseOperation.Update;
@@ -795,7 +792,7 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements, CommandEntityProviderAddAfterReadStatements, CommandEntityProviderUpdateResultEntityStatements, CommandEntityProviderUpdateAfterReadStatements, CommandEntityProviderDeleteResultEntityStatements, CommandEntityProviderDeleteAfterReadStatements, CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
         }
 
         partial void SetDefaultValues();
@@ -813,78 +810,78 @@ namespace DataFramework.Pipelines.Builders
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderAddResultEntityStatements)
         {
             if (commandEntityProviderAddResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddResultEntityStatements));
             return AddCommandEntityProviderAddResultEntityStatements(commandEntityProviderAddResultEntityStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderAddResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderAddResultEntityStatements)
         {
             if (commandEntityProviderAddResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddResultEntityStatements));
             foreach (var item in commandEntityProviderAddResultEntityStatements) CommandEntityProviderAddResultEntityStatements.Add(item);
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderAddAfterReadStatements)
         {
             if (commandEntityProviderAddAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddAfterReadStatements));
             return AddCommandEntityProviderAddAfterReadStatements(commandEntityProviderAddAfterReadStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderAddAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddAfterReadStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderAddAfterReadStatements)
         {
             if (commandEntityProviderAddAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderAddAfterReadStatements));
             foreach (var item in commandEntityProviderAddAfterReadStatements) CommandEntityProviderAddAfterReadStatements.Add(item);
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderUpdateResultEntityStatements)
         {
             if (commandEntityProviderUpdateResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateResultEntityStatements));
             return AddCommandEntityProviderUpdateResultEntityStatements(commandEntityProviderUpdateResultEntityStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderUpdateResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateResultEntityStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderUpdateResultEntityStatements)
         {
             if (commandEntityProviderUpdateResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateResultEntityStatements));
             foreach (var item in commandEntityProviderUpdateResultEntityStatements) CommandEntityProviderUpdateResultEntityStatements.Add(item);
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderUpdateAfterReadStatements)
         {
             if (commandEntityProviderUpdateAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateAfterReadStatements));
             return AddCommandEntityProviderUpdateAfterReadStatements(commandEntityProviderUpdateAfterReadStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderUpdateAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderUpdateAfterReadStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderUpdateAfterReadStatements)
         {
             if (commandEntityProviderUpdateAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderUpdateAfterReadStatements));
             foreach (var item in commandEntityProviderUpdateAfterReadStatements) CommandEntityProviderUpdateAfterReadStatements.Add(item);
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderDeleteResultEntityStatements)
         {
             if (commandEntityProviderDeleteResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteResultEntityStatements));
             return AddCommandEntityProviderDeleteResultEntityStatements(commandEntityProviderDeleteResultEntityStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderDeleteResultEntityStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteResultEntityStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderDeleteResultEntityStatements)
         {
             if (commandEntityProviderDeleteResultEntityStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteResultEntityStatements));
             foreach (var item in commandEntityProviderDeleteResultEntityStatements) CommandEntityProviderDeleteResultEntityStatements.Add(item);
             return this;
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderDeleteAfterReadStatements)
         {
             if (commandEntityProviderDeleteAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteAfterReadStatements));
             return AddCommandEntityProviderDeleteAfterReadStatements(commandEntityProviderDeleteAfterReadStatements.ToArray());
         }
 
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(params ClassFramework.Domain.CodeStatementBase[] commandEntityProviderDeleteAfterReadStatements)
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderDeleteAfterReadStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] commandEntityProviderDeleteAfterReadStatements)
         {
             if (commandEntityProviderDeleteAfterReadStatements is null) throw new System.ArgumentNullException(nameof(commandEntityProviderDeleteAfterReadStatements));
             foreach (var item in commandEntityProviderDeleteAfterReadStatements) CommandEntityProviderDeleteAfterReadStatements.Add(item);

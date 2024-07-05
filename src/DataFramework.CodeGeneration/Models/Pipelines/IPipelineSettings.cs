@@ -30,6 +30,7 @@ internal interface IPipelineSettings
     bool UseAddStoredProcedure { get; }
     bool UseUpdateStoredProcedure { get; }
     bool UseDeleteStoredProcedure { get; }
+    // Database settings
     [Required] string AddStoredProcedureName { get; }
     [Required] string UpdateStoredProcedureName { get; }
     [Required] string DeleteStoredProcedureName { get; }

@@ -195,21 +195,18 @@ namespace DataFramework.Pipelines
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Insert{0}")]
         public string AddStoredProcedureName
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Update{0}")]
         public string UpdateStoredProcedureName
         {
             get;
         }
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [System.ComponentModel.DefaultValueAttribute(@"Delete{0}")]
         public string DeleteStoredProcedureName
         {
             get;

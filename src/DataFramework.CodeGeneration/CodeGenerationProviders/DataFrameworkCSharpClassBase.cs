@@ -22,7 +22,7 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
     protected override bool GenerateMultipleFiles => false;
 
     protected async Task<TypeBase[]> GetPipelineModels()
-    => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);
+        => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);
 
     protected override bool SkipNamespaceOnTypenameMappings(string @namespace)
         => @namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines";
@@ -39,16 +39,28 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
             .Concat(typeof(CheckConstraint).Assembly.GetExportedTypes().Where(x => x.Namespace == "DatabaseFramework.Domain").Select(x => new TypenameMappingBuilder()
                 .WithSourceType(x)
                 .WithTargetType(x)
-                .AddMetadata
-                    (
-                        new MetadataBuilder().WithValue($"{x.FullName.GetNamespaceWithDefault()}.Builders").WithName(MetadataNames.CustomBuilderNamespace),
-                        new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
-                        new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
-                        new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
-                    )
+                .AddMetadata(CreateTypenameMappingMetadata(x))
+            ))
+            .Concat(typeof(TypeBase).Assembly.GetExportedTypes().Where(x => x.Namespace == "ClassFramework.Domain").Select(x => new TypenameMappingBuilder()
+                .WithSourceType(x)
+                .WithTargetType(x)
+                .AddMetadata(CreateTypenameMappingMetadata(x))
             ));
 
-    private IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string builderNamespace) =>
+    private static IEnumerable<MetadataBuilder> CreateTypenameMappingMetadata(Type entityType)
+        => CreateTypenameMappingMetadata($"{entityType.FullName.GetNamespaceWithDefault()}.Builders");
+
+    private static IEnumerable<MetadataBuilder> CreateTypenameMappingMetadata(string buildersNamespace)
+        =>
+        [
+            new MetadataBuilder().WithValue(buildersNamespace).WithName(MetadataNames.CustomBuilderNamespace),
+            new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
+            new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
+            new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
+        ];
+
+    private static IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string buildersNamespace)
+        =>
         [
             new TypenameMappingBuilder()
                 .WithSourceType(modelType)
@@ -56,12 +68,6 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
             new TypenameMappingBuilder()
                 .WithSourceTypeName($"{entityNamespace}.{modelType.GetEntityClassName()}")
                 .WithTargetTypeName($"{entityNamespace}.{modelType.GetEntityClassName()}")
-                .AddMetadata
-                (
-                    new MetadataBuilder().WithValue(builderNamespace).WithName(MetadataNames.CustomBuilderNamespace),
-                    new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
-                    new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
-                    new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
-                ),
+                .AddMetadata(CreateTypenameMappingMetadata(buildersNamespace)),
         ];
 }
