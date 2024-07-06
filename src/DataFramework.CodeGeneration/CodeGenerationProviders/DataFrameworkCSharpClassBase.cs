@@ -47,18 +47,6 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
                 .AddMetadata(CreateTypenameMappingMetadata(x))
             ));
 
-    private static IEnumerable<MetadataBuilder> CreateTypenameMappingMetadata(Type entityType)
-        => CreateTypenameMappingMetadata($"{entityType.FullName.GetNamespaceWithDefault()}.Builders");
-
-    private static IEnumerable<MetadataBuilder> CreateTypenameMappingMetadata(string buildersNamespace)
-        =>
-        [
-            new MetadataBuilder().WithValue(buildersNamespace).WithName(MetadataNames.CustomBuilderNamespace),
-            new MetadataBuilder().WithValue("{TypeName.ClassName}Builder").WithName(MetadataNames.CustomBuilderName),
-            new MetadataBuilder().WithValue("[Name][NullableSuffix].ToBuilder()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderSourceExpression),
-            new MetadataBuilder().WithValue("[Name][NullableSuffix].Build()[ForcedNullableSuffix]").WithName(MetadataNames.CustomBuilderMethodParameterExpression)
-        ];
-
     private static IEnumerable<TypenameMappingBuilder> CreateCustomTypenameMappings(Type modelType, string entityNamespace, string buildersNamespace)
         =>
         [
