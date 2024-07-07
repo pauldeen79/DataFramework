@@ -54,17 +54,8 @@ public class PipelineService : IPipelineService
     {
         context = context.IsNotNull(nameof(context));
         var result = await _databaseSchemaPipeline.Process(context, cancellationToken).ConfigureAwait(false);
-        return ProcessResult(result, context.Builders, () => context.Builders.Select(Build));
+        return ProcessResult(result, context.Builders, () => context.Builders.Select(x => x.Build()));
     }
-
-    //TODO: Review if IDatabaseObjectBuilder can have a Build method
-    private IDatabaseObject Build(IDatabaseObjectBuilder builder)
-        => builder switch
-        {
-            TableBuilder tableBuilder => tableBuilder.Build(),
-            StoredProcedureBuilder storedProcedureBuilder => storedProcedureBuilder.Build(),
-            _ => throw new NotSupportedException($"Unsupported database object builder type: {builder?.GetType().FullName}")
-        };
 
     private static Result<TResult> ProcessResult<TResult>(Result result, object responseBuilder, Func<TResult> dlg)
     {
