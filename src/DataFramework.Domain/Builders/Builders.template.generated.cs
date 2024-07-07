@@ -571,6 +571,8 @@ namespace DataFramework.Domain.Builders
 
         private object? _defaultValue;
 
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _getterCodeStatements;
+
         private System.Nullable<int> _stringMaxLength;
 
         private System.Nullable<bool> _isMaxLengthString;
@@ -805,6 +807,21 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> GetterCodeStatements
+        {
+            get
+            {
+                return _getterCodeStatements;
+            }
+            set
+            {
+                _getterCodeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(GetterCodeStatements));
+            }
+        }
+
         public System.Nullable<int> StringMaxLength
         {
             get
@@ -1016,6 +1033,7 @@ namespace DataFramework.Domain.Builders
         public FieldInfoBuilder(DataFramework.Domain.FieldInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
+            _getterCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _name = source.Name;
             _description = source.Description;
             _displayName = source.DisplayName;
@@ -1031,6 +1049,7 @@ namespace DataFramework.Domain.Builders
             _isRowVersion = source.IsRowVersion;
             _useForConcurrencyCheck = source.UseForConcurrencyCheck;
             _defaultValue = source.DefaultValue;
+            if (source.GetterCodeStatements is not null) foreach (var item in source.GetterCodeStatements.Select(x => x.ToBuilder())) _getterCodeStatements.Add(item);
             _stringMaxLength = source.StringMaxLength;
             _isMaxLengthString = source.IsMaxLengthString;
             _databaseStringCollation = source.DatabaseStringCollation;
@@ -1051,6 +1070,7 @@ namespace DataFramework.Domain.Builders
 
         public FieldInfoBuilder()
         {
+            _getterCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _name = string.Empty;
             _isVisible = true;
             _isPersistable = true;
@@ -1061,10 +1081,23 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.FieldInfo Build()
         {
-            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, StringMaxLength, IsMaxLengthString, DatabaseStringCollation, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsDatabaseIdentityField);
+            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, GetterCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), StringMaxLength, IsMaxLengthString, DatabaseStringCollation, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsDatabaseIdentityField);
         }
 
         partial void SetDefaultValues();
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder AddGetterCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> getterCodeStatements)
+        {
+            if (getterCodeStatements is null) throw new System.ArgumentNullException(nameof(getterCodeStatements));
+            return AddGetterCodeStatements(getterCodeStatements.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder AddGetterCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] getterCodeStatements)
+        {
+            if (getterCodeStatements is null) throw new System.ArgumentNullException(nameof(getterCodeStatements));
+            foreach (var item in getterCodeStatements) GetterCodeStatements.Add(item);
+            return this;
+        }
 
         public DataFramework.Domain.Builders.FieldInfoBuilder WithName(string name)
         {

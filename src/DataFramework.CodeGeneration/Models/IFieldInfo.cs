@@ -17,6 +17,7 @@ public interface IFieldInfo
     bool IsRowVersion { get; }
     bool UseForConcurrencyCheck { get; }
     object? DefaultValue { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> GetterCodeStatements { get; }
 
     int? StringMaxLength { get; }
     bool? IsMaxLengthString { get; }

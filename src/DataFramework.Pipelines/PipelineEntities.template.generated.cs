@@ -15,40 +15,6 @@ using System.Text;
 #nullable enable
 namespace DataFramework.Pipelines
 {
-    public partial class CodeStatementsMapping
-    {
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public DataFramework.Domain.DataObjectInfo SourceDataObjectInfo
-        {
-            get;
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public DataFramework.Domain.FieldInfo SourceFieldInfo
-        {
-            get;
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> CodeStatements
-        {
-            get;
-        }
-
-        public CodeStatementsMapping(DataFramework.Domain.DataObjectInfo sourceDataObjectInfo, DataFramework.Domain.FieldInfo sourceFieldInfo, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> codeStatements)
-        {
-            this.SourceDataObjectInfo = sourceDataObjectInfo;
-            this.SourceFieldInfo = sourceFieldInfo;
-            this.CodeStatements = codeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(codeStatements);
-            System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
-        }
-
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder ToBuilder()
-        {
-            return new DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder(this);
-        }
-    }
     public partial class PipelineSettings
     {
         public bool EnableNullableContext
@@ -86,13 +52,6 @@ namespace DataFramework.Pipelines
 
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool AddComponentModelAttributes
-        {
-            get;
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.Generic.IReadOnlyCollection<DataFramework.Pipelines.CodeStatementsMapping> CodeStatementMappings
         {
             get;
         }
@@ -269,7 +228,7 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, System.Collections.Generic.IEnumerable<DataFramework.Pipelines.CodeStatementsMapping> codeStatementMappings, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
         {
             this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -278,7 +237,6 @@ namespace DataFramework.Pipelines
             this.DefaultIdentityNamespace = defaultIdentityNamespace;
             this.DefaultBuilderNamespace = defaultBuilderNamespace;
             this.AddComponentModelAttributes = addComponentModelAttributes;
-            this.CodeStatementMappings = codeStatementMappings is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Pipelines.CodeStatementsMapping>(codeStatementMappings);
             this.CommandEntityProviderVisibility = commandEntityProviderVisibility;
             this.CommandEntityProviderNamespace = commandEntityProviderNamespace;
             this.CommandProviderEnableAdd = commandProviderEnableAdd;

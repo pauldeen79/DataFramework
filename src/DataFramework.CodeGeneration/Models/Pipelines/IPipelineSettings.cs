@@ -9,7 +9,6 @@ internal interface IPipelineSettings
     [Required(AllowEmptyStrings = true)] string DefaultIdentityNamespace { get; }
     [Required(AllowEmptyStrings = true)] string DefaultBuilderNamespace { get; }
     [DefaultValue(true)] bool AddComponentModelAttributes { get; }
-    [Required][ValidateObject] IReadOnlyCollection<ICodeStatementsMapping> CodeStatementMappings { get; }
 
     // CommandEntityProvider settings
     Visibility CommandEntityProviderVisibility { get; }

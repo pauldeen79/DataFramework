@@ -242,6 +242,13 @@ namespace DataFramework.Domain
             get;
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> GetterCodeStatements
+        {
+            get;
+        }
+
         public System.Nullable<int> StringMaxLength
         {
             get;
@@ -322,7 +329,7 @@ namespace DataFramework.Domain
             get;
         }
 
-        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Nullable<int> stringMaxLength, System.Nullable<bool> isMaxLengthString, string? databaseStringCollation, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isDatabaseIdentityField)
+        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> getterCodeStatements, System.Nullable<int> stringMaxLength, System.Nullable<bool> isMaxLengthString, string? databaseStringCollation, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isDatabaseIdentityField)
         {
             this.Name = name;
             this.Description = description;
@@ -339,6 +346,7 @@ namespace DataFramework.Domain
             this.IsRowVersion = isRowVersion;
             this.UseForConcurrencyCheck = useForConcurrencyCheck;
             this.DefaultValue = defaultValue;
+            this.GetterCodeStatements = getterCodeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(getterCodeStatements);
             this.StringMaxLength = stringMaxLength;
             this.IsMaxLengthString = isMaxLengthString;
             this.DatabaseStringCollation = databaseStringCollation;

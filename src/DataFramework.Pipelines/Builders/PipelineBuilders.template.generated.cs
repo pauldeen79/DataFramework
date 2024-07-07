@@ -15,115 +15,6 @@ using System.Text;
 #nullable enable
 namespace DataFramework.Pipelines.Builders
 {
-    public partial class CodeStatementsMappingBuilder : System.ComponentModel.INotifyPropertyChanged
-    {
-        private DataFramework.Domain.Builders.DataObjectInfoBuilder _sourceDataObjectInfo;
-
-        private DataFramework.Domain.Builders.FieldInfoBuilder _sourceFieldInfo;
-
-        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _codeStatements;
-
-        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public DataFramework.Domain.Builders.DataObjectInfoBuilder SourceDataObjectInfo
-        {
-            get
-            {
-                return _sourceDataObjectInfo;
-            }
-            set
-            {
-                _sourceDataObjectInfo = value ?? throw new System.ArgumentNullException(nameof(value));
-                HandlePropertyChanged(nameof(SourceDataObjectInfo));
-            }
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        public DataFramework.Domain.Builders.FieldInfoBuilder SourceFieldInfo
-        {
-            get
-            {
-                return _sourceFieldInfo;
-            }
-            set
-            {
-                _sourceFieldInfo = value ?? throw new System.ArgumentNullException(nameof(value));
-                HandlePropertyChanged(nameof(SourceFieldInfo));
-            }
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> CodeStatements
-        {
-            get
-            {
-                return _codeStatements;
-            }
-            set
-            {
-                _codeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
-                HandlePropertyChanged(nameof(CodeStatements));
-            }
-        }
-
-        public CodeStatementsMappingBuilder(DataFramework.Pipelines.CodeStatementsMapping source)
-        {
-            if (source is null) throw new System.ArgumentNullException(nameof(source));
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
-            _sourceDataObjectInfo = source.SourceDataObjectInfo.ToBuilder();
-            _sourceFieldInfo = source.SourceFieldInfo.ToBuilder();
-            if (source.CodeStatements is not null) foreach (var item in source.CodeStatements.Select(x => x.ToBuilder())) _codeStatements.Add(item);
-        }
-
-        public CodeStatementsMappingBuilder()
-        {
-            _codeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
-            _sourceDataObjectInfo = new DataFramework.Domain.Builders.DataObjectInfoBuilder()!;
-            _sourceFieldInfo = new DataFramework.Domain.Builders.FieldInfoBuilder()!;
-            SetDefaultValues();
-        }
-
-        public DataFramework.Pipelines.CodeStatementsMapping Build()
-        {
-            return new DataFramework.Pipelines.CodeStatementsMapping(SourceDataObjectInfo.Build(), SourceFieldInfo.Build(), CodeStatements.Select(x => x.Build()!).ToList().AsReadOnly());
-        }
-
-        partial void SetDefaultValues();
-
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> codeStatements)
-        {
-            if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
-            return AddCodeStatements(codeStatements.ToArray());
-        }
-
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder AddCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] codeStatements)
-        {
-            if (codeStatements is null) throw new System.ArgumentNullException(nameof(codeStatements));
-            foreach (var item in codeStatements) CodeStatements.Add(item);
-            return this;
-        }
-
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder WithSourceDataObjectInfo(DataFramework.Domain.Builders.DataObjectInfoBuilder sourceDataObjectInfo)
-        {
-            if (sourceDataObjectInfo is null) throw new System.ArgumentNullException(nameof(sourceDataObjectInfo));
-            SourceDataObjectInfo = sourceDataObjectInfo;
-            return this;
-        }
-
-        public DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder WithSourceFieldInfo(DataFramework.Domain.Builders.FieldInfoBuilder sourceFieldInfo)
-        {
-            if (sourceFieldInfo is null) throw new System.ArgumentNullException(nameof(sourceFieldInfo));
-            SourceFieldInfo = sourceFieldInfo;
-            return this;
-        }
-
-        protected void HandlePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-        }
-    }
     public partial class PipelineSettingsBuilder : System.ComponentModel.INotifyPropertyChanged
     {
         private bool _enableNullableContext;
@@ -139,8 +30,6 @@ namespace DataFramework.Pipelines.Builders
         private string _defaultBuilderNamespace;
 
         private bool _addComponentModelAttributes;
-
-        private System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> _codeStatementMappings;
 
         private ClassFramework.Domain.Domains.Visibility _commandEntityProviderVisibility;
 
@@ -292,21 +181,6 @@ namespace DataFramework.Pipelines.Builders
             {
                 _addComponentModelAttributes = value;
                 HandlePropertyChanged(nameof(AddComponentModelAttributes));
-            }
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute]
-        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
-        public System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> CodeStatementMappings
-        {
-            get
-            {
-                return _codeStatementMappings;
-            }
-            set
-            {
-                _codeStatementMappings = value ?? throw new System.ArgumentNullException(nameof(value));
-                HandlePropertyChanged(nameof(CodeStatementMappings));
             }
         }
 
@@ -709,7 +583,6 @@ namespace DataFramework.Pipelines.Builders
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
-            _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
             _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
@@ -726,7 +599,6 @@ namespace DataFramework.Pipelines.Builders
             _defaultIdentityNamespace = source.DefaultIdentityNamespace;
             _defaultBuilderNamespace = source.DefaultBuilderNamespace;
             _addComponentModelAttributes = source.AddComponentModelAttributes;
-            if (source.CodeStatementMappings is not null) foreach (var item in source.CodeStatementMappings.Select(x => x.ToBuilder())) _codeStatementMappings.Add(item);
             _commandEntityProviderVisibility = source.CommandEntityProviderVisibility;
             _commandEntityProviderNamespace = source.CommandEntityProviderNamespace;
             _commandProviderEnableAdd = source.CommandProviderEnableAdd;
@@ -759,7 +631,6 @@ namespace DataFramework.Pipelines.Builders
 
         public PipelineSettingsBuilder()
         {
-            _codeStatementMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder>();
             _commandEntityProviderAddResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _commandEntityProviderAddAfterReadStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _commandEntityProviderUpdateResultEntityStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
@@ -792,23 +663,10 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CodeStatementMappings.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
         }
 
         partial void SetDefaultValues();
-
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCodeStatementMappings(System.Collections.Generic.IEnumerable<DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder> codeStatementMappings)
-        {
-            if (codeStatementMappings is null) throw new System.ArgumentNullException(nameof(codeStatementMappings));
-            return AddCodeStatementMappings(codeStatementMappings.ToArray());
-        }
-
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCodeStatementMappings(params DataFramework.Pipelines.Builders.CodeStatementsMappingBuilder[] codeStatementMappings)
-        {
-            if (codeStatementMappings is null) throw new System.ArgumentNullException(nameof(codeStatementMappings));
-            foreach (var item in codeStatementMappings) CodeStatementMappings.Add(item);
-            return this;
-        }
 
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddCommandEntityProviderAddResultEntityStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> commandEntityProviderAddResultEntityStatements)
         {
