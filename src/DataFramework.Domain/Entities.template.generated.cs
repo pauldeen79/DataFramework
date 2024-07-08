@@ -131,7 +131,14 @@ namespace DataFramework.Domain
             get;
         }
 
-        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<DataFramework.Domain.EntityMapping> CustomEntityMappings
+        {
+            get;
+        }
+
+        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints, System.Collections.Generic.IEnumerable<DataFramework.Domain.EntityMapping> customEntityMappings)
         {
             this.Name = name;
             this.AssemblyName = assemblyName;
@@ -152,12 +159,39 @@ namespace DataFramework.Domain
             this.ForeignKeyConstraints = foreignKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.ForeignKeyConstraint>(foreignKeyConstraints);
             this.Indexes = indexes is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.Index>(indexes);
             this.CheckConstraints = checkConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.CheckConstraint>(checkConstraints);
+            this.CustomEntityMappings = customEntityMappings is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.EntityMapping>(customEntityMappings);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
         public DataFramework.Domain.Builders.DataObjectInfoBuilder ToBuilder()
         {
             return new DataFramework.Domain.Builders.DataObjectInfoBuilder(this);
+        }
+    }
+    public partial class EntityMapping
+    {
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public string PropertyName
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public object Mapping
+        {
+            get;
+        }
+
+        public EntityMapping(string propertyName, object mapping)
+        {
+            this.PropertyName = propertyName;
+            this.Mapping = mapping;
+            System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
+        }
+
+        public DataFramework.Domain.Builders.EntityMappingBuilder ToBuilder()
+        {
+            return new DataFramework.Domain.Builders.EntityMappingBuilder(this);
         }
     }
     public partial class FieldInfo

@@ -29,6 +29,11 @@ internal interface IPipelineSettings
     bool UseAddStoredProcedure { get; }
     bool UseUpdateStoredProcedure { get; }
     bool UseDeleteStoredProcedure { get; }
+
+    // EntityMapper settings
+    Visibility EntityMapperVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string EntityMapperNamespace { get; }
+
     // Database settings
     [Required] string AddStoredProcedureName { get; }
     [Required] string UpdateStoredProcedureName { get; }

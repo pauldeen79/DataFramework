@@ -55,6 +55,8 @@ namespace DataFramework.Domain.Builders
 
         private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder> _checkConstraints;
 
+        private System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder> _customEntityMappings;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
@@ -323,6 +325,21 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder> CustomEntityMappings
+        {
+            get
+            {
+                return _customEntityMappings;
+            }
+            set
+            {
+                _customEntityMappings = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(CustomEntityMappings));
+            }
+        }
+
         public DataObjectInfoBuilder(DataFramework.Domain.DataObjectInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -331,6 +348,7 @@ namespace DataFramework.Domain.Builders
             _foreignKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder>();
             _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
             _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
+            _customEntityMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder>();
             _name = source.Name;
             _assemblyName = source.AssemblyName;
             _typeName = source.TypeName;
@@ -350,6 +368,7 @@ namespace DataFramework.Domain.Builders
             if (source.ForeignKeyConstraints is not null) foreach (var item in source.ForeignKeyConstraints.Select(x => x.ToBuilder())) _foreignKeyConstraints.Add(item);
             if (source.Indexes is not null) foreach (var item in source.Indexes.Select(x => x.ToBuilder())) _indexes.Add(item);
             if (source.CheckConstraints is not null) foreach (var item in source.CheckConstraints.Select(x => x.ToBuilder())) _checkConstraints.Add(item);
+            if (source.CustomEntityMappings is not null) foreach (var item in source.CustomEntityMappings.Select(x => x.ToBuilder())) _customEntityMappings.Add(item);
         }
 
         public DataObjectInfoBuilder()
@@ -359,6 +378,7 @@ namespace DataFramework.Domain.Builders
             _foreignKeyConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder>();
             _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
             _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
+            _customEntityMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder>();
             _name = string.Empty;
             _isVisible = true;
             _isQueryable = true;
@@ -373,7 +393,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly());
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
@@ -440,6 +460,19 @@ namespace DataFramework.Domain.Builders
         {
             if (checkConstraints is null) throw new System.ArgumentNullException(nameof(checkConstraints));
             foreach (var item in checkConstraints) CheckConstraints.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddCustomEntityMappings(System.Collections.Generic.IEnumerable<DataFramework.Domain.Builders.EntityMappingBuilder> customEntityMappings)
+        {
+            if (customEntityMappings is null) throw new System.ArgumentNullException(nameof(customEntityMappings));
+            return AddCustomEntityMappings(customEntityMappings.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddCustomEntityMappings(params DataFramework.Domain.Builders.EntityMappingBuilder[] customEntityMappings)
+        {
+            if (customEntityMappings is null) throw new System.ArgumentNullException(nameof(customEntityMappings));
+            foreach (var item in customEntityMappings) CustomEntityMappings.Add(item);
             return this;
         }
 
@@ -531,6 +564,82 @@ namespace DataFramework.Domain.Builders
         {
             if (customDeleteDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customDeleteDatabaseCommandText));
             CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
+            return this;
+        }
+
+        protected void HandlePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+    public partial class EntityMappingBuilder : System.ComponentModel.INotifyPropertyChanged
+    {
+        private string _propertyName;
+
+        private object _mapping;
+
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public string PropertyName
+        {
+            get
+            {
+                return _propertyName;
+            }
+            set
+            {
+                _propertyName = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(PropertyName));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public object Mapping
+        {
+            get
+            {
+                return _mapping;
+            }
+            set
+            {
+                _mapping = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(Mapping));
+            }
+        }
+
+        public EntityMappingBuilder(DataFramework.Domain.EntityMapping source)
+        {
+            if (source is null) throw new System.ArgumentNullException(nameof(source));
+            _propertyName = source.PropertyName;
+            _mapping = source.Mapping;
+        }
+
+        public EntityMappingBuilder()
+        {
+            _propertyName = string.Empty;
+            _mapping = new System.Object();
+            SetDefaultValues();
+        }
+
+        public DataFramework.Domain.EntityMapping Build()
+        {
+            return new DataFramework.Domain.EntityMapping(PropertyName, Mapping);
+        }
+
+        partial void SetDefaultValues();
+
+        public DataFramework.Domain.Builders.EntityMappingBuilder WithPropertyName(string propertyName)
+        {
+            if (propertyName is null) throw new System.ArgumentNullException(nameof(propertyName));
+            PropertyName = propertyName;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.EntityMappingBuilder WithMapping(object mapping)
+        {
+            if (mapping is null) throw new System.ArgumentNullException(nameof(mapping));
+            Mapping = mapping;
             return this;
         }
 

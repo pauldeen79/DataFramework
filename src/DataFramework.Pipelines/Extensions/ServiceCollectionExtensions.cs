@@ -50,5 +50,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPipelineBuilder<DatabaseSchemaContext>, DatabaseSchema.PipelineBuilder>()
             .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddTableComponentBuilder>()
             .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddInsertUpdateDeleteStoredProceduresComponentBuilder>()
+            // EntityMapper pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityMapperContext>>().Build())
+            .AddScoped<IPipelineBuilder<EntityMapperContext>, EntityMapper.PipelineBuilder>()
+            .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.AddEntityMapperMembersComponentBuilder>()
+            .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetNameComponentBuilder>()
+            .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetPartialComponentBuilder>()
+            .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetVisibilityComponentBuilder>()
             ;
 }

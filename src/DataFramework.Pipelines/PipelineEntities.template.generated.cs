@@ -153,6 +153,17 @@ namespace DataFramework.Pipelines
             get;
         }
 
+        public ClassFramework.Domain.Domains.Visibility EntityMapperVisibility
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string EntityMapperNamespace
+        {
+            get;
+        }
+
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         public string AddStoredProcedureName
         {
@@ -228,7 +239,7 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, ClassFramework.Domain.Domains.Visibility entityMapperVisibility, string entityMapperNamespace, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters)
         {
             this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -253,6 +264,8 @@ namespace DataFramework.Pipelines
             this.UseAddStoredProcedure = useAddStoredProcedure;
             this.UseUpdateStoredProcedure = useUpdateStoredProcedure;
             this.UseDeleteStoredProcedure = useDeleteStoredProcedure;
+            this.EntityMapperVisibility = entityMapperVisibility;
+            this.EntityMapperNamespace = entityMapperNamespace;
             this.AddStoredProcedureName = addStoredProcedureName;
             this.UpdateStoredProcedureName = updateStoredProcedureName;
             this.DeleteStoredProcedureName = deleteStoredProcedureName;

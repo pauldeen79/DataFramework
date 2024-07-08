@@ -634,6 +634,57 @@ GO
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Code_For_EntityMapper_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when EntityMapperNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new EntityMapperContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var commandEntityProvider = result.Value!;
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.EntityMapperGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityEntityMapper : CrossCutting.Data.Abstractions.IDatabaseEntityMapper<MyNamespace.MyEntity>
+    {
+        public MyNamespace.MyEntity Map(System.Data.IDataReader reader)
+        {
+            return new MyNamespace.MyEntity
+            {
+                MyField1 = reader.GetInt32(""MyField1""),
+                MyField2 = reader.GetString(""MyField2"")
+            };
+        }
+    }
+}
+");
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;

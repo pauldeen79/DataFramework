@@ -23,4 +23,6 @@ public interface IDataObjectInfo
     [Required][ValidateObject] IReadOnlyCollection<ForeignKeyConstraint> ForeignKeyConstraints { get; }
     [Required][ValidateObject] IReadOnlyCollection<DatabaseFramework.Domain.Index> Indexes { get; }
     [Required][ValidateObject] IReadOnlyCollection<CheckConstraint> CheckConstraints { get; }
+
+    [Required][ValidateObject] IReadOnlyCollection<IEntityMapping> CustomEntityMappings { get; }
 }

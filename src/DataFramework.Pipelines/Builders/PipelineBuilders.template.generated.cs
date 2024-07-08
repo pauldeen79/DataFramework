@@ -63,6 +63,10 @@ namespace DataFramework.Pipelines.Builders
 
         private bool _useDeleteStoredProcedure;
 
+        private ClassFramework.Domain.Domains.Visibility _entityMapperVisibility;
+
+        private string _entityMapperNamespace;
+
         private string _addStoredProcedureName;
 
         private string _updateStoredProcedureName;
@@ -409,6 +413,33 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public ClassFramework.Domain.Domains.Visibility EntityMapperVisibility
+        {
+            get
+            {
+                return _entityMapperVisibility;
+            }
+            set
+            {
+                _entityMapperVisibility = value;
+                HandlePropertyChanged(nameof(EntityMapperVisibility));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string EntityMapperNamespace
+        {
+            get
+            {
+                return _entityMapperNamespace;
+            }
+            set
+            {
+                _entityMapperNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(EntityMapperNamespace));
+            }
+        }
+
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         public string AddStoredProcedureName
         {
@@ -615,6 +646,8 @@ namespace DataFramework.Pipelines.Builders
             _useAddStoredProcedure = source.UseAddStoredProcedure;
             _useUpdateStoredProcedure = source.UseUpdateStoredProcedure;
             _useDeleteStoredProcedure = source.UseDeleteStoredProcedure;
+            _entityMapperVisibility = source.EntityMapperVisibility;
+            _entityMapperNamespace = source.EntityMapperNamespace;
             _addStoredProcedureName = source.AddStoredProcedureName;
             _updateStoredProcedureName = source.UpdateStoredProcedureName;
             _deleteStoredProcedureName = source.DeleteStoredProcedureName;
@@ -649,6 +682,7 @@ namespace DataFramework.Pipelines.Builders
             _commandProviderEnableUpdate = true;
             _commandProviderEnableDelete = true;
             _commandProviderNamespace = string.Empty;
+            _entityMapperNamespace = string.Empty;
             _addStoredProcedureName = string.Empty;
             _updateStoredProcedureName = string.Empty;
             _deleteStoredProcedureName = string.Empty;
@@ -663,7 +697,7 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, EntityMapperVisibility, EntityMapperNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters);
         }
 
         partial void SetDefaultValues();
@@ -889,6 +923,19 @@ namespace DataFramework.Pipelines.Builders
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithUseDeleteStoredProcedure(bool useDeleteStoredProcedure = true)
         {
             UseDeleteStoredProcedure = useDeleteStoredProcedure;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityMapperVisibility(ClassFramework.Domain.Domains.Visibility entityMapperVisibility)
+        {
+            EntityMapperVisibility = entityMapperVisibility;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityMapperNamespace(string entityMapperNamespace)
+        {
+            if (entityMapperNamespace is null) throw new System.ArgumentNullException(nameof(entityMapperNamespace));
+            EntityMapperNamespace = entityMapperNamespace;
             return this;
         }
 
