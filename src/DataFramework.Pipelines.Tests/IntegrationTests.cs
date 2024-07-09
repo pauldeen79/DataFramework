@@ -519,6 +519,67 @@ namespace MyNamespace
     }
 
     [Fact]
+    public async Task Can_Create_Code_For_DatabaseEntityRetrieverProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .WithEnableNullableContext()
+            .Build();
+        var context = new DatabaseEntityRetrieverProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var commandProvider = result.Value!;
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DatabaseEntityRetrieverProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityDatabaseEntityRetrieverProvider : QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider
+    {
+        private readonly CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> _databaseEntityRetriever;
+
+        public MyEntityDatabaseEntityRetrieverProvider(CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> databaseEntityRetriever)
+        {
+            _databaseEntityRetriever = databaseEntityRetriever;
+        }
+
+        public bool TryCreate<TResult>(QueryFramework.Abstractions.IQuery query, out CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult> result)
+            where TResult : class
+        {
+            if (typeof(TResult) == typeof(MyNamespace.MyEntity)
+            {
+                result = (CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>)_databaseEntityRetriever;
+                return true;
+            }
+            result = default;
+            return false;
+        }
+    }
+}
+");
+    }
+
+    [Fact]
     public async Task Can_Create_Code_For_DatabaseSchema()
     {
         var sourceModel = new DataObjectInfoBuilder()

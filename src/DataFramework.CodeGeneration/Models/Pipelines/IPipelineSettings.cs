@@ -30,6 +30,10 @@ internal interface IPipelineSettings
     bool UseUpdateStoredProcedure { get; }
     bool UseDeleteStoredProcedure { get; }
 
+    // DatabaseEntityRetrieverProvider settings
+    Visibility DatabaseEntityRetrieverProviderVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string DatabaseEntityRetrieverProviderNamespace { get; }
+
     // EntityMapper settings
     Visibility EntityMapperVisibility { get; }
     [Required(AllowEmptyStrings = true)] string EntityMapperNamespace { get; }

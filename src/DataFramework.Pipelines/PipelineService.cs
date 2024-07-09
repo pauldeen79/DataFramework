@@ -5,6 +5,7 @@ public class PipelineService : IPipelineService
     private readonly IPipeline<ClassContext> _classPipeline;
     private readonly IPipeline<CommandEntityProviderContext> _commandEntityProviderPipeline;
     private readonly IPipeline<CommandProviderContext> _commandProviderPipeline;
+    private readonly IPipeline<DatabaseEntityRetrieverProviderContext> _databaseEntityRetrieverProviderPipeline;
     private readonly IPipeline<EntityMapperContext> _entityMapperPipeline;
     private readonly IPipeline<IdentityClassContext> _identityClassPipeline;
     private readonly IPipeline<DatabaseSchemaContext> _databaseSchemaPipeline;
@@ -13,6 +14,7 @@ public class PipelineService : IPipelineService
         IPipeline<ClassContext> classPipeline,
         IPipeline<CommandEntityProviderContext> commandEntityProviderPipeline,
         IPipeline<CommandProviderContext> commandProviderPipeline,
+        IPipeline<DatabaseEntityRetrieverProviderContext> databaseEntityRetrieverProviderPipeline,
         IPipeline<EntityMapperContext> entityMapperPipeline,
         IPipeline<IdentityClassContext> identityClassPipeline,
         IPipeline<DatabaseSchemaContext> databaseSchemaPipeline)
@@ -20,6 +22,7 @@ public class PipelineService : IPipelineService
         _classPipeline = classPipeline.IsNotNull(nameof(classPipeline));
         _commandEntityProviderPipeline = commandEntityProviderPipeline.IsNotNull(nameof(commandEntityProviderPipeline));
         _commandProviderPipeline = commandProviderPipeline.IsNotNull(nameof(commandProviderPipeline));
+        _databaseEntityRetrieverProviderPipeline = databaseEntityRetrieverProviderPipeline.IsNotNull(nameof(databaseEntityRetrieverProviderPipeline));
         _entityMapperPipeline = entityMapperPipeline.IsNotNull(nameof(entityMapperPipeline));
         _identityClassPipeline = identityClassPipeline.IsNotNull(nameof(identityClassPipeline));
         _databaseSchemaPipeline = databaseSchemaPipeline.IsNotNull(nameof(databaseSchemaPipeline));
@@ -43,6 +46,13 @@ public class PipelineService : IPipelineService
     {
         context = context.IsNotNull(nameof(context));
         var result = await _commandProviderPipeline.Process(context, cancellationToken).ConfigureAwait(false);
+        return ProcessResult(result, context.Builder, context.Builder.Build);
+    }
+
+    public async Task<Result<TypeBase>> Process(DatabaseEntityRetrieverProviderContext context, CancellationToken cancellationToken)
+    {
+        context = context.IsNotNull(nameof(context));
+        var result = await _databaseEntityRetrieverProviderPipeline.Process(context, cancellationToken).ConfigureAwait(false);
         return ProcessResult(result, context.Builder, context.Builder.Build);
     }
 

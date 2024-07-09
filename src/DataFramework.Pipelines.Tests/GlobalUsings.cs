@@ -26,6 +26,8 @@ global using DataFramework.Pipelines.Builders;
 global using DataFramework.Pipelines.Class;
 global using DataFramework.Pipelines.CommandEntityProvider;
 global using DataFramework.Pipelines.CommandProvider;
+global using DataFramework.Pipelines.DatabaseEntityRetrieverProvider;
+global using DataFramework.Pipelines.DatabaseEntityRetrieverProvider.Components.Abstractions;
 global using DataFramework.Pipelines.DatabaseSchema;
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.EntityMapper;

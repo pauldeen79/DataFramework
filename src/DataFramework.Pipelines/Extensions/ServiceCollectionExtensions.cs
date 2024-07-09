@@ -45,6 +45,14 @@ public static class ServiceCollectionExtensions
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetNameComponentBuilder>()
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetPartialComponentBuilder>()
             .AddScoped<ICommandProviderComponentBuilder, CommandProvider.Components.SetVisibilityComponentBuilder>()
+            // DatabaseEntityRetrieverProvider pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<DatabaseEntityRetrieverProviderContext>>().Build())
+            .AddScoped<IPipelineBuilder<DatabaseEntityRetrieverProviderContext>, DatabaseEntityRetrieverProvider.PipelineBuilder>()
+            .AddScoped<IDatabaseEntityRetrieverProviderComponentBuilder, DatabaseEntityRetrieverProvider.Components.AddDatabaseEntityRetrieverProviderMembersComponentBuilder>()
+            .AddScoped<IDatabaseEntityRetrieverProviderComponentBuilder, DatabaseEntityRetrieverProvider.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IDatabaseEntityRetrieverProviderComponentBuilder, DatabaseEntityRetrieverProvider.Components.SetNameComponentBuilder>()
+            .AddScoped<IDatabaseEntityRetrieverProviderComponentBuilder, DatabaseEntityRetrieverProvider.Components.SetPartialComponentBuilder>()
+            .AddScoped<IDatabaseEntityRetrieverProviderComponentBuilder, DatabaseEntityRetrieverProvider.Components.SetVisibilityComponentBuilder>()
             // DatabaseSchema pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<DatabaseSchemaContext>>().Build())
             .AddScoped<IPipelineBuilder<DatabaseSchemaContext>, DatabaseSchema.PipelineBuilder>()
