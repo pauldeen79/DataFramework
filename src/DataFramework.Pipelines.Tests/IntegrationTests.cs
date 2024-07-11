@@ -16,14 +16,14 @@ public sealed class IntegrationTests : IntegrationTestBase
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
-        var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
@@ -86,14 +86,14 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
-        var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
@@ -158,14 +158,14 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new IdentityClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
-        var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var identityClassPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<IdentityClassContext>>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await identityClassPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var entity = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
@@ -219,14 +219,14 @@ using System.Text;
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
-        var classFrameworkPipelineService = Scope.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+        var classPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var cls = result.Value!;
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
@@ -316,13 +316,13 @@ namespace MyNamespace.Builders
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new CommandEntityProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var commandEntityProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<CommandEntityProviderContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await commandEntityProviderPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var commandEntityProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -452,13 +452,13 @@ namespace MyNamespace
             .WithEnableNullableContext()
             .Build();
         var context = new CommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var commandProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<CommandProviderContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await commandProviderPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var commandProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -534,13 +534,13 @@ namespace MyNamespace
             .WithEnableNullableContext()
             .Build();
         var context = new DatabaseEntityRetrieverProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var databaseEntityRetrieverProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverProviderContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await databaseEntityRetrieverProviderPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var commandProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -593,13 +593,13 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var databaseSchemaPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await databaseSchemaPipeline.Process(context), context.Builders, () => context.Builders.Select(x => x.Build()));
         result.ThrowIfInvalid();
         var databaseObjects = result.Value!;
         await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -635,13 +635,13 @@ GO
             .WithUseStoredProcedures()
             .Build();
         var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var databaseSchemaPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await databaseSchemaPipeline.Process(context), context.Builders, () => context.Builders.Select(x => x.Build()));
         result.ThrowIfInvalid();
         var databaseObjects = result.Value!;
         await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -711,13 +711,13 @@ GO
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new EntityMapperContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var entityMapperPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<EntityMapperContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await entityMapperPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var commandEntityProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
@@ -763,13 +763,13 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new IdentityCommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
         var generationEnvironment = new StringBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var codeGenerationEngine = Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+        var identityCommandProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<IdentityCommandProviderContext>>();
 
         // Act
-        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        var result = PipelineService.ProcessResult(await identityCommandProviderPipeline.Process(context), context.Builder, context.Builder.Build);
         result.ThrowIfInvalid();
         var commandEntityProvider = result.Value!;
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);

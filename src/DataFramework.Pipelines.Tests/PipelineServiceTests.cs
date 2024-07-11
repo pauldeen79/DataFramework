@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.Tests;
 
-public class PipelineServiceTests : TestBase<PipelineService>
+public class PipelineServiceTests : TestBase
 {
     public class Process_ClassContext : PipelineServiceTests
     {
@@ -12,13 +12,12 @@ public class PipelineServiceTests : TestBase<PipelineService>
             // note that by doing nothing on the received builder in the builder context, the name will be empty, and this is a required field.
             // thus, we are creating an invalid result 8-)
             pipeline.Process(Arg.Any<ClassContext>(), Arg.Any<CancellationToken>()).Returns(x => Result.Success());
-            var sut = CreateSut();
             var sourceModel = CreateModel().Build();
             var settings = new PipelineSettingsBuilder().Build();
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = await sut.Process(context, CancellationToken.None);
+            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Invalid);
@@ -30,13 +29,12 @@ public class PipelineServiceTests : TestBase<PipelineService>
             // Arrange
             var pipeline = Fixture.Freeze<IPipeline<ClassContext>>();
             pipeline.Process(Arg.Any<ClassContext>(), Arg.Any<CancellationToken>()).Returns(x => Result.Error("Kaboom!"));
-            var sut = CreateSut();
             var sourceModel = CreateModel().Build();
             var settings = new PipelineSettingsBuilder().Build();
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = await sut.Process(context, CancellationToken.None);
+            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Error);
@@ -54,13 +52,12 @@ public class PipelineServiceTests : TestBase<PipelineService>
                 x.ArgAt<ClassContext>(0).Builder.WithName("MyClass").WithNamespace("MyNamespace");
                 return Result.Success("Kaboom!");
             });
-            var sut = CreateSut();
             var sourceModel = CreateModel().Build();
             var settings = new PipelineSettingsBuilder().Build();
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = await sut.Process(context, CancellationToken.None);
+            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Ok);
