@@ -2,7 +2,7 @@
 
 public class PipelineServiceTests : TestBase
 {
-    public class Process_ClassContext : PipelineServiceTests
+    public class ProcessResult : PipelineServiceTests
     {
         [Fact]
         public async Task Returns_Invalid_When_Pipeline_Returns_Builder_With_ValidationErrors()
