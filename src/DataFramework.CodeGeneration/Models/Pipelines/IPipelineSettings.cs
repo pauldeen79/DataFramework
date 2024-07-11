@@ -34,10 +34,6 @@ internal interface IPipelineSettings
     Visibility DatabaseEntityRetrieverProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string DatabaseEntityRetrieverProviderNamespace { get; }
 
-    // EntityMapper settings
-    Visibility EntityMapperVisibility { get; }
-    [Required(AllowEmptyStrings = true)] string EntityMapperNamespace { get; }
-
     // Database settings
     [Required] string AddStoredProcedureName { get; }
     [Required] string UpdateStoredProcedureName { get; }
@@ -51,4 +47,16 @@ internal interface IPipelineSettings
     [DefaultValue(DatabaseOperation.Update)] DatabaseOperation DatabaseCommandTypeForUpdateParameters { get; }
     [DefaultValue(DatabaseOperation.Delete)] DatabaseOperation DatabaseCommandTypeForDeleteText { get; }
     [DefaultValue(DatabaseOperation.Delete)] DatabaseOperation DatabaseCommandTypeForDeleteParameters { get; }
+
+    // EntityMapper settings
+    Visibility EntityMapperVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string EntityMapperNamespace { get; }
+
+    // EntityRetriever settings
+    Visibility EntityRetrieverVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string EntityRetrieverNamespace { get; }
+
+    // IdentityCommandProvider settings
+    Visibility IdentityCommandProviderVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string IdentityCommandProviderNamespace { get; }
 }

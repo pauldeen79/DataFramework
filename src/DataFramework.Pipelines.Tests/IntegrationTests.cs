@@ -746,6 +746,58 @@ namespace MyNamespace
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Code_For_IdentityCommandProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when IdentityCommandProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField())
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new IdentityCommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dataFrameworkPipelineService = Scope!.ServiceProvider.GetRequiredService<IPipelineService>();
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+        // Act
+        var result = await dataFrameworkPipelineService.Process(context, CancellationToken.None);
+        result.ThrowIfInvalid();
+        var commandEntityProvider = result.Value!;
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+
+        // Assert
+        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.IdentityCommandProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityIdentityCommandProvider : CrossCutting.Data.Core.CommandProviders.IdentityDatabaseCommandProviderBase<MyEntityIdentity>
+    {
+        public MyEntityIdentityCommandProvider() : base(new MyEntityEntityRetriever())
+        {
+        }
+
+        protected override System.Collections.Generic.IEnumerable<CrossCutting.Data.Core.IdentityDatabaseCommandProviderField> GetFields(MyEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
+        {
+            yield return new IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
+        }
+    }
+}
+");
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;

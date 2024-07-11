@@ -8,5 +8,6 @@ public interface IPipelineService
     Task<Result<TypeBase>> Process(DatabaseEntityRetrieverProviderContext context, CancellationToken cancellationToken);
     Task<Result<TypeBase>> Process(EntityMapperContext context, CancellationToken cancellationToken);
     Task<Result<TypeBase>> Process(IdentityClassContext context, CancellationToken cancellationToken);
+    Task<Result<TypeBase>> Process(IdentityCommandProviderContext context, CancellationToken cancellationToken);
     Task<Result<IEnumerable<IDatabaseObject>>> Process(DatabaseSchemaContext context, CancellationToken cancellationToken);
 }

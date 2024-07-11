@@ -2,8 +2,8 @@
 
 public class PipelineBuilder : PipelineBuilder<IdentityClassContext>
 {
-    public PipelineBuilder(IEnumerable<IIdentityClassComponentBuilder> entityComponentBuilders)
+    public PipelineBuilder(IEnumerable<IIdentityClassComponentBuilder> identityComponentBuilders)
     {
-        AddComponents(entityComponentBuilders);
+        AddComponents(identityComponentBuilders);
     }
 }

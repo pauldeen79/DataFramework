@@ -8,6 +8,7 @@ public class PipelineService : IPipelineService
     private readonly IPipeline<DatabaseEntityRetrieverProviderContext> _databaseEntityRetrieverProviderPipeline;
     private readonly IPipeline<EntityMapperContext> _entityMapperPipeline;
     private readonly IPipeline<IdentityClassContext> _identityClassPipeline;
+    private readonly IPipeline<IdentityCommandProviderContext> _identityCommandProviderPipeline;
     private readonly IPipeline<DatabaseSchemaContext> _databaseSchemaPipeline;
 
     public PipelineService(
@@ -17,6 +18,7 @@ public class PipelineService : IPipelineService
         IPipeline<DatabaseEntityRetrieverProviderContext> databaseEntityRetrieverProviderPipeline,
         IPipeline<EntityMapperContext> entityMapperPipeline,
         IPipeline<IdentityClassContext> identityClassPipeline,
+        IPipeline<IdentityCommandProviderContext> identityCommandProviderPipeline,
         IPipeline<DatabaseSchemaContext> databaseSchemaPipeline)
     {
         _classPipeline = classPipeline.IsNotNull(nameof(classPipeline));
@@ -25,6 +27,7 @@ public class PipelineService : IPipelineService
         _databaseEntityRetrieverProviderPipeline = databaseEntityRetrieverProviderPipeline.IsNotNull(nameof(databaseEntityRetrieverProviderPipeline));
         _entityMapperPipeline = entityMapperPipeline.IsNotNull(nameof(entityMapperPipeline));
         _identityClassPipeline = identityClassPipeline.IsNotNull(nameof(identityClassPipeline));
+        _identityCommandProviderPipeline = identityCommandProviderPipeline.IsNotNull(nameof(identityCommandProviderPipeline));
         _databaseSchemaPipeline = databaseSchemaPipeline.IsNotNull(nameof(databaseSchemaPipeline));
     }
 
@@ -67,6 +70,13 @@ public class PipelineService : IPipelineService
     {
         context = context.IsNotNull(nameof(context));
         var result = await _identityClassPipeline.Process(context, cancellationToken).ConfigureAwait(false);
+        return ProcessResult(result, context.Builder, context.Builder.Build);
+    }
+
+    public async Task<Result<TypeBase>> Process(IdentityCommandProviderContext context, CancellationToken cancellationToken)
+    {
+        context = context.IsNotNull(nameof(context));
+        var result = await _identityCommandProviderPipeline.Process(context, cancellationToken).ConfigureAwait(false);
         return ProcessResult(result, context.Builder, context.Builder.Build);
     }
 

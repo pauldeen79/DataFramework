@@ -20,15 +20,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IClassComponentBuilder, Class.Components.SetPartialComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetRecordComponentBuilder>()
             .AddScoped<IClassComponentBuilder, Class.Components.SetVisibilityComponentBuilder>()
-            // Identitylass pipeline
-            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<IdentityClassContext>>().Build())
-            .AddScoped<IPipelineBuilder<IdentityClassContext>, IdentityClass.PipelineBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddGeneratorAttributeComponentBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddPropertiesComponentBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetNameComponentBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetPartialComponentBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetRecordComponentBuilder>()
-            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetVisibilityComponentBuilder>()
             // CommandEntityProvider pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<CommandEntityProviderContext>>().Build())
             .AddScoped<IPipelineBuilder<CommandEntityProviderContext>, CommandEntityProvider.PipelineBuilder>()
@@ -66,5 +57,22 @@ public static class ServiceCollectionExtensions
             .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetNameComponentBuilder>()
             .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetPartialComponentBuilder>()
             .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.SetVisibilityComponentBuilder>()
+            // IdentityClass pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<IdentityClassContext>>().Build())
+            .AddScoped<IPipelineBuilder<IdentityClassContext>, IdentityClass.PipelineBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.AddPropertiesComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetNameComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetPartialComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetRecordComponentBuilder>()
+            .AddScoped<IIdentityClassComponentBuilder, IdentityClass.Components.SetVisibilityComponentBuilder>()
+            // IdentityCommandProvider pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<IdentityCommandProviderContext>>().Build())
+            .AddScoped<IPipelineBuilder<IdentityCommandProviderContext>, IdentityCommandProvider.PipelineBuilder>()
+            .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.AddIdentityCommandProviderMembersComponentBuilder>()
+            .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetNameComponentBuilder>()
+            .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetPartialComponentBuilder>()
+            .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetVisibilityComponentBuilder>()
             ;
 }

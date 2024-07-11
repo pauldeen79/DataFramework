@@ -50,6 +50,11 @@ public static class DataObjectInfoExtensions
             ? $"{instance.Name}Identity"
             : $"{entityIdentityNamespace}.{instance.Name}Identity";
 
+    public static string GetEntityRetrieverFullName(this DataObjectInfo instance, string entityRetrieverNamespace)
+        => string.IsNullOrEmpty(entityRetrieverNamespace)
+            ? $"{instance.Name}EntityRetriever"
+            : $"{entityRetrieverNamespace}.{instance.Name}EntityRetriever";
+
     public static string GetDatabaseTableName(this DataObjectInfo instance)
         => instance.DatabaseTableName.WhenNullOrEmpty(instance.Name);
 
