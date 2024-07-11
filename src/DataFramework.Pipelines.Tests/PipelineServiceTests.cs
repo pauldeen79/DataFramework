@@ -50,7 +50,7 @@ public class PipelineServiceTests : TestBase
             pipeline.Process(Arg.Any<ClassContext>(), Arg.Any<CancellationToken>()).Returns(x =>
             {
                 x.ArgAt<ClassContext>(0).Builder.WithName("MyClass").WithNamespace("MyNamespace");
-                return Result.Success("Kaboom!");
+                return Result.Success();
             });
             var sourceModel = CreateModel().Build();
             var settings = new PipelineSettingsBuilder().Build();
