@@ -1,4 +1,6 @@
-﻿namespace DataFramework.Pipelines.Tests;
+﻿using DatabaseFramework.Domain.Abstractions;
+
+namespace DataFramework.Pipelines.Tests;
 
 public abstract class IntegrationTestBase : TestBase
 {
@@ -26,6 +28,17 @@ public abstract class IntegrationTestBase : TestBase
     protected IPipeline<ClassContext> GetClassPipeline() => Scope!.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
 
     protected ICodeGenerationEngine GetCodeGenerationEngine() => Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
+
+    protected async Task<string> GenerateCode(ICodeGenerationProvider provider)
+    {
+        var generationEnvironment = new StringBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = GetCodeGenerationEngine();
+
+        await codeGenerationEngine.Generate(provider, generationEnvironment, codeGenerationSettings).ConfigureAwait(false);
+
+        return generationEnvironment.Builder.ToString().ReplaceLineEndings();
+    }
 }
 
 public abstract class IntegrationTestBase<T> : IntegrationTestBase

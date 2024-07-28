@@ -18,9 +18,6 @@ public sealed class IntegrationTests : IntegrationTestBase
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var classFrameworkPipelineService = GetClassFrameworkPipelineService();
         var classPipeline = GetClassPipeline();
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
 
         // Act
         var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
@@ -32,10 +29,10 @@ public sealed class IntegrationTests : IntegrationTestBase
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -86,9 +83,6 @@ namespace MyNamespace
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var classFrameworkPipelineService = GetClassFrameworkPipelineService();
         var classPipeline = GetClassPipeline();
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
 
         // Act
         var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
@@ -102,10 +96,10 @@ namespace MyNamespace
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -156,9 +150,6 @@ namespace MyNamespace
         var context = new IdentityClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var classFrameworkPipelineService = GetClassFrameworkPipelineService();
         var identityClassPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<IdentityClassContext>>();
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
 
         // Act
         var result = (await identityClassPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
@@ -170,10 +161,10 @@ namespace MyNamespace
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -215,9 +206,6 @@ using System.Text;
         var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var classFrameworkPipelineService = GetClassFrameworkPipelineService();
         var classPipeline = GetClassPipeline();
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
 
         // Act
         var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
@@ -232,10 +220,10 @@ using System.Text;
         var entity = result.GetValueOrThrow();
         var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(builderContext);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -307,18 +295,15 @@ namespace MyNamespace.Builders
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new CommandEntityProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var commandEntityProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<CommandEntityProviderContext>>();
 
         // Act
         var result = (await commandEntityProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -442,18 +427,15 @@ namespace MyNamespace
             .WithEnableNullableContext()
             .Build();
         var context = new CommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var commandProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<CommandProviderContext>>();
 
         // Act
         var result = (await commandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -523,18 +505,15 @@ namespace MyNamespace
             .WithEnableNullableContext()
             .Build();
         var context = new DatabaseEntityRetrieverProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var databaseEntityRetrieverProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverProviderContext>>();
 
         // Act
         var result = (await databaseEntityRetrieverProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -581,18 +560,15 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
         var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings);
+        var code =  await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
         // Assert
-        generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
+        code.Should().Be(@"SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -622,18 +598,15 @@ GO
             .WithUseStoredProcedures()
             .Build();
         var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
         var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
         // Assert
-        generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
+        code.Should().Be(@"SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -697,18 +670,15 @@ GO
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new EntityMapperContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var entityMapperPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<EntityMapperContext>>();
 
         // Act
         var result = (await entityMapperPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -748,18 +718,15 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new IdentityCommandProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var identityCommandProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<IdentityCommandProviderContext>>();
 
         // Act
         var result = (await identityCommandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -798,18 +765,15 @@ namespace MyNamespace
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new PagedEntityRetrieverSettingsContext(sourceModel, settings, CultureInfo.InvariantCulture);
-        var generationEnvironment = new StringBuilderEnvironment();
-        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
-        var codeGenerationEngine = GetCodeGenerationEngine();
         var pagedEntityRetrieverSettingsPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<PagedEntityRetrieverSettingsContext>>();
 
         // Act
         var result = (await pagedEntityRetrieverSettingsPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var pagedEntityRetrieverSettings = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(pagedEntityRetrieverSettings), generationEnvironment, codeGenerationSettings);
+        var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
 
         // Assert
-        generationEnvironment.Builder.ToString().Should().Be(@"using System;
+        code.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
