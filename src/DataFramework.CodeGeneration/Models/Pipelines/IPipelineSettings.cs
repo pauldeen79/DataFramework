@@ -63,4 +63,10 @@ internal interface IPipelineSettings
     // PagedEntityRetrieverSettings settings
     Visibility PagedEntityRetrieverSettingsVisibility { get; }
     [Required(AllowEmptyStrings = true)] string PagedEntityRetrieverSettingsNamespace { get; }
+
+    // Query settings
+    Visibility QueryVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string QueryNamespace { get; }
+    int? QueryMaxLimit { get; }
+    bool CreateQueryAsRecord { get; }
 }

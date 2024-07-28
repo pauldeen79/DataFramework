@@ -283,7 +283,28 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, ClassFramework.Domain.Domains.Visibility databaseEntityRetrieverProviderVisibility, string databaseEntityRetrieverProviderNamespace, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters, ClassFramework.Domain.Domains.Visibility entityMapperVisibility, string entityMapperNamespace, ClassFramework.Domain.Domains.Visibility entityRetrieverVisibility, string entityRetrieverNamespace, ClassFramework.Domain.Domains.Visibility identityCommandProviderVisibility, string identityCommandProviderNamespace, ClassFramework.Domain.Domains.Visibility pagedEntityRetrieverSettingsVisibility, string pagedEntityRetrieverSettingsNamespace)
+        public ClassFramework.Domain.Domains.Visibility QueryVisibility
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string QueryNamespace
+        {
+            get;
+        }
+
+        public System.Nullable<int> QueryMaxLimit
+        {
+            get;
+        }
+
+        public bool CreateQueryAsRecord
+        {
+            get;
+        }
+
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, ClassFramework.Domain.Domains.Visibility databaseEntityRetrieverProviderVisibility, string databaseEntityRetrieverProviderNamespace, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters, ClassFramework.Domain.Domains.Visibility entityMapperVisibility, string entityMapperNamespace, ClassFramework.Domain.Domains.Visibility entityRetrieverVisibility, string entityRetrieverNamespace, ClassFramework.Domain.Domains.Visibility identityCommandProviderVisibility, string identityCommandProviderNamespace, ClassFramework.Domain.Domains.Visibility pagedEntityRetrieverSettingsVisibility, string pagedEntityRetrieverSettingsNamespace, ClassFramework.Domain.Domains.Visibility queryVisibility, string queryNamespace, System.Nullable<int> queryMaxLimit, bool createQueryAsRecord)
         {
             this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -330,6 +351,10 @@ namespace DataFramework.Pipelines
             this.IdentityCommandProviderNamespace = identityCommandProviderNamespace;
             this.PagedEntityRetrieverSettingsVisibility = pagedEntityRetrieverSettingsVisibility;
             this.PagedEntityRetrieverSettingsNamespace = pagedEntityRetrieverSettingsNamespace;
+            this.QueryVisibility = queryVisibility;
+            this.QueryNamespace = queryNamespace;
+            this.QueryMaxLimit = queryMaxLimit;
+            this.CreateQueryAsRecord = createQueryAsRecord;
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

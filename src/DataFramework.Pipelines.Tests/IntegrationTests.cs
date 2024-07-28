@@ -831,6 +831,95 @@ namespace MyNamespace
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Code_For_Query_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when PagedEntityRetrieverSettingsNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new QueryContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var queryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryContext>>();
+
+        // Act
+        var result = (await queryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var pagedEntityRetrieverSettings = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityQuery : QueryFramework.Core.Query, System.ComponentModel.DataAnnotations.IValidatableObject
+    {
+        private static readonly string[] ValidFieldNames = new[] { ""MyField1"", ""MyField2"" };
+
+        private const int MaxLimit = int.MaxValue;
+
+        public MyEntityQuery() : this(null, null, new ExpressionFramework.Domain.Evaluatables.ComposedEvaluatable(Enumerable.Empty<ExpressionFramework.Domain.Evaluatables.ComposableEvaluatable>()), Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>())
+        {
+        }
+
+        public MyEntityQuery(System.Nullable<int> limit, System.Nullable<int> offset, ExpressionFramework.Domain.Evaluatables.ComposedEvaluatable filter, System.Collections.Generic.IEnumerable<QueryFramework.Abstractions.IQuerySortOrder> orderByFields) : base(limit, offset, filter, orderByFields)
+        {
+        }
+
+        public MyEntityQuery(QueryFramework.Abstractions.IQuery query) : this(query.Limit, query.Offset, query.Filter, query.OrderByFields
+        {
+        }
+
+        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
+        {
+            if (Limit.HasValue && Limit.Value > MaxLimit)
+            {
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Limit exceeds the maximum of "" + MaxLimit, new[] { nameof(Limit), nameof(Limit) });
+            }
+            foreach (var condition in Filter.Conditions)
+            {
+                if (!IsValidExpression(condition.LeftExpression))
+                {
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid left expression in conditions: "" + condition.LeftExpression, new[] { nameof(Filter), nameof(Filter) });
+                }
+                if (!IsValidExpression(condition.RightExpression))
+                {
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid right expression in conditions: "" + condition.RightExpression, new[] { nameof(Filter), nameof(Filter) });
+                }
+            }
+            foreach (var querySortOrder in OrderByFields)
+            {
+                if (!IsValidExpression(querySortOrder.FieldNameExpression))
+                {
+                    yield return new System.ComponentModel.DataAnnotations.ValidationResult(""Invalid expression in order by fields: "" + querySortOrder.FieldNameExpression, new[] { nameof(OrderByFields), nameof(OrderByFields) });
+                }
+            }
+        }
+
+        private bool IsValidExpression(ExpressionFramework.Domain.Expression expression)
+        {
+            if (expression is ExpressionFramework.Domain.Expressions.FieldExpression fieldExpression)
+            {
+                return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, ""StringComparison.OrdinalIgnoreCase""));
+            }
+            return true;
+        }
+    }
+}
+");
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;
