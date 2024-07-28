@@ -73,5 +73,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetNameComponentBuilder>()
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetPartialComponentBuilder>()
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetVisibilityComponentBuilder>()
+            // PagedEntityRetrieverSettings pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<PagedEntityRetrieverSettingsContext>>().Build())
+            .AddScoped<IPipelineBuilder<PagedEntityRetrieverSettingsContext>, PagedEntityRetrieverSettings.PipelineBuilder>()
+            .AddScoped<IPagedEntityRetrieverSettingsComponentBuilder, PagedEntityRetrieverSettings.Components.AddPagedEntityRetrieverSettingsMembersComponentBuilder>()
+            .AddScoped<IPagedEntityRetrieverSettingsComponentBuilder, PagedEntityRetrieverSettings.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IPagedEntityRetrieverSettingsComponentBuilder, PagedEntityRetrieverSettings.Components.SetNameComponentBuilder>()
+            .AddScoped<IPagedEntityRetrieverSettingsComponentBuilder, PagedEntityRetrieverSettings.Components.SetPartialComponentBuilder>()
+            .AddScoped<IPagedEntityRetrieverSettingsComponentBuilder, PagedEntityRetrieverSettings.Components.SetVisibilityComponentBuilder>()
             ;
 }

@@ -57,6 +57,12 @@ namespace DataFramework.Domain.Builders
 
         private System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder> _customEntityMappings;
 
+        private string? _defaultOrderByFields;
+
+        private string? _defaultWhereClause;
+
+        private System.Nullable<int> _overridePageSize;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
@@ -340,6 +346,45 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        public string? DefaultOrderByFields
+        {
+            get
+            {
+                return _defaultOrderByFields;
+            }
+            set
+            {
+                _defaultOrderByFields = value;
+                HandlePropertyChanged(nameof(DefaultOrderByFields));
+            }
+        }
+
+        public string? DefaultWhereClause
+        {
+            get
+            {
+                return _defaultWhereClause;
+            }
+            set
+            {
+                _defaultWhereClause = value;
+                HandlePropertyChanged(nameof(DefaultWhereClause));
+            }
+        }
+
+        public System.Nullable<int> OverridePageSize
+        {
+            get
+            {
+                return _overridePageSize;
+            }
+            set
+            {
+                _overridePageSize = value;
+                HandlePropertyChanged(nameof(OverridePageSize));
+            }
+        }
+
         public DataObjectInfoBuilder(DataFramework.Domain.DataObjectInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -369,6 +414,9 @@ namespace DataFramework.Domain.Builders
             if (source.Indexes is not null) foreach (var item in source.Indexes.Select(x => x.ToBuilder())) _indexes.Add(item);
             if (source.CheckConstraints is not null) foreach (var item in source.CheckConstraints.Select(x => x.ToBuilder())) _checkConstraints.Add(item);
             if (source.CustomEntityMappings is not null) foreach (var item in source.CustomEntityMappings.Select(x => x.ToBuilder())) _customEntityMappings.Add(item);
+            _defaultOrderByFields = source.DefaultOrderByFields;
+            _defaultWhereClause = source.DefaultWhereClause;
+            _overridePageSize = source.OverridePageSize;
         }
 
         public DataObjectInfoBuilder()
@@ -393,7 +441,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly());
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly(), DefaultOrderByFields, DefaultWhereClause, OverridePageSize);
         }
 
         partial void SetDefaultValues();
@@ -564,6 +612,24 @@ namespace DataFramework.Domain.Builders
         {
             if (customDeleteDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customDeleteDatabaseCommandText));
             CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithDefaultOrderByFields(string? defaultOrderByFields)
+        {
+            DefaultOrderByFields = defaultOrderByFields;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithDefaultWhereClause(string? defaultWhereClause)
+        {
+            DefaultWhereClause = defaultWhereClause;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithOverridePageSize(System.Nullable<int> overridePageSize)
+        {
+            OverridePageSize = overridePageSize;
             return this;
         }
 

@@ -59,4 +59,8 @@ internal interface IPipelineSettings
     // IdentityCommandProvider settings
     Visibility IdentityCommandProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string IdentityCommandProviderNamespace { get; }
+
+    // PagedEntityRetrieverSettings settings
+    Visibility PagedEntityRetrieverSettingsVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string PagedEntityRetrieverSettingsNamespace { get; }
 }

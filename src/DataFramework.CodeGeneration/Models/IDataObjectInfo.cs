@@ -25,4 +25,7 @@ public interface IDataObjectInfo
     [Required][ValidateObject] IReadOnlyCollection<CheckConstraint> CheckConstraints { get; }
 
     [Required][ValidateObject] IReadOnlyCollection<IEntityMapping> CustomEntityMappings { get; }
+    string? DefaultOrderByFields { get; }
+    string? DefaultWhereClause { get; }
+    int? OverridePageSize { get; }
 }
