@@ -32,6 +32,7 @@ global using DataFramework.Pipelines.EntityMapper;
 global using DataFramework.Pipelines.Extensions;
 global using DataFramework.Pipelines.IdentityClass;
 global using DataFramework.Pipelines.IdentityCommandProvider;
+global using DataFramework.Pipelines.PagedEntityRetrieverSettings;
 global using FluentAssertions;
 global using Microsoft.Extensions.DependencyInjection;
 global using NSubstitute;

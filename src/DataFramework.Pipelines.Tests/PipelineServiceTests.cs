@@ -17,7 +17,7 @@ public class PipelineServiceTests : TestBase
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
+            var result = (await pipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Invalid);
@@ -34,7 +34,7 @@ public class PipelineServiceTests : TestBase
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
+            var result = (await pipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Error);
@@ -57,7 +57,7 @@ public class PipelineServiceTests : TestBase
             var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
 
             // Act
-            var result = PipelineService.ProcessResult(await pipeline.Process(context), context.Builder, context.Builder.Build);
+            var result = (await pipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Ok);

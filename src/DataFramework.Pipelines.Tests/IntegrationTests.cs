@@ -1,6 +1,4 @@
-﻿using DataFramework.Pipelines.PagedEntityRetrieverSettings;
-
-namespace DataFramework.Pipelines.Tests;
+﻿namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -25,9 +23,8 @@ public sealed class IntegrationTests : IntegrationTestBase
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var entity = result.Value!;
+        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
             .WithAddPublicParameterlessConstructor(false)
@@ -35,8 +32,7 @@ public sealed class IntegrationTests : IntegrationTestBase
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -95,9 +91,8 @@ namespace MyNamespace
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var entity = result.Value!;
+        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(false)
             .WithAddPublicParameterlessConstructor(true) // note that you might want to omit this in case you don't have custom default values
@@ -107,8 +102,7 @@ namespace MyNamespace
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -167,9 +161,8 @@ namespace MyNamespace
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = PipelineService.ProcessResult(await identityClassPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var entity = result.Value!;
+        var result = (await identityClassPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
             .WithAddPublicParameterlessConstructor(false)
@@ -177,8 +170,7 @@ namespace MyNamespace
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -228,9 +220,8 @@ using System.Text;
         var codeGenerationEngine = Scope.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 
         // Act
-        var result = PipelineService.ProcessResult(await classPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var cls = result.Value!;
+        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var cls = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor()
             .WithAddSetters(false)
@@ -238,12 +229,10 @@ using System.Text;
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        result.ThrowIfInvalid();
-        var entity = result.Value!;
+        var entity = result.GetValueOrThrow();
         var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
         result = await classFrameworkPipelineService.Process(builderContext, CancellationToken.None);
-        result.ThrowIfInvalid();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.Value!), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -324,9 +313,8 @@ namespace MyNamespace.Builders
         var commandEntityProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<CommandEntityProviderContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await commandEntityProviderPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var commandEntityProvider = result.Value!;
+        var result = (await commandEntityProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var commandEntityProvider = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -460,9 +448,8 @@ namespace MyNamespace
         var commandProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<CommandProviderContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await commandProviderPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var commandProvider = result.Value!;
+        var result = (await commandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var commandProvider = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -542,9 +529,8 @@ namespace MyNamespace
         var databaseEntityRetrieverProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverProviderContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await databaseEntityRetrieverProviderPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var commandProvider = result.Value!;
+        var result = (await databaseEntityRetrieverProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var commandProvider = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -601,9 +587,8 @@ namespace MyNamespace
         var databaseSchemaPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await databaseSchemaPipeline.Process(context), context.Builders, () => context.Builders.Select(x => x.Build()));
-        result.ThrowIfInvalid();
-        var databaseObjects = result.Value!;
+        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var databaseObjects = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -643,9 +628,8 @@ GO
         var databaseSchemaPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await databaseSchemaPipeline.Process(context), context.Builders, () => context.Builders.Select(x => x.Build()));
-        result.ThrowIfInvalid();
-        var databaseObjects = result.Value!;
+        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var databaseObjects = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -719,9 +703,8 @@ GO
         var entityMapperPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<EntityMapperContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await entityMapperPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var commandEntityProvider = result.Value!;
+        var result = (await entityMapperPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var commandEntityProvider = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -771,9 +754,8 @@ namespace MyNamespace
         var identityCommandProviderPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<IdentityCommandProviderContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await identityCommandProviderPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var commandEntityProvider = result.Value!;
+        var result = (await identityCommandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var commandEntityProvider = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
@@ -822,9 +804,8 @@ namespace MyNamespace
         var pagedEntityRetrieverSettingsPipeline = Scope.ServiceProvider.GetRequiredService<IPipeline<PagedEntityRetrieverSettingsContext>>();
 
         // Act
-        var result = PipelineService.ProcessResult(await pagedEntityRetrieverSettingsPipeline.Process(context), context.Builder, context.Builder.Build);
-        result.ThrowIfInvalid();
-        var pagedEntityRetrieverSettings = result.Value!;
+        var result = (await pagedEntityRetrieverSettingsPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var pagedEntityRetrieverSettings = result.GetValueOrThrow();
         await codeGenerationEngine.Generate(new TestCodeGenerationProvider(pagedEntityRetrieverSettings), generationEnvironment, codeGenerationSettings, CancellationToken.None);
 
         // Assert
