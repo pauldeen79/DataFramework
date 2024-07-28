@@ -31,8 +31,8 @@ public sealed class IntegrationTests : IntegrationTestBase
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        result = await classFrameworkPipelineService.Process(entityContext);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -101,8 +101,8 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        result = await classFrameworkPipelineService.Process(entityContext);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -169,8 +169,8 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        result = await classFrameworkPipelineService.Process(entityContext);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -228,11 +228,11 @@ using System.Text;
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext, CancellationToken.None);
+        result = await classFrameworkPipelineService.Process(entityContext);
         var entity = result.GetValueOrThrow();
         var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(builderContext, CancellationToken.None);
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        result = await classFrameworkPipelineService.Process(builderContext);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(result.GetValueOrThrow()), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -315,7 +315,7 @@ namespace MyNamespace.Builders
         // Act
         var result = (await commandEntityProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -450,7 +450,7 @@ namespace MyNamespace
         // Act
         var result = (await commandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -531,7 +531,7 @@ namespace MyNamespace
         // Act
         var result = (await databaseEntityRetrieverProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandProvider), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -589,7 +589,7 @@ namespace MyNamespace
         // Act
         var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
@@ -630,7 +630,7 @@ GO
         // Act
         var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestDatabaseSchemaGenerationProvider(databaseObjects), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().ReplaceLineEndings().Should().Be(@"SET ANSI_NULLS ON
@@ -705,7 +705,7 @@ GO
         // Act
         var result = (await entityMapperPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -756,7 +756,7 @@ namespace MyNamespace
         // Act
         var result = (await identityCommandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(commandEntityProvider), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
@@ -806,7 +806,7 @@ namespace MyNamespace
         // Act
         var result = (await pagedEntityRetrieverSettingsPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
         var pagedEntityRetrieverSettings = result.GetValueOrThrow();
-        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(pagedEntityRetrieverSettings), generationEnvironment, codeGenerationSettings, CancellationToken.None);
+        await codeGenerationEngine.Generate(new TestCodeGenerationProvider(pagedEntityRetrieverSettings), generationEnvironment, codeGenerationSettings);
 
         // Assert
         generationEnvironment.Builder.ToString().Should().Be(@"using System;
