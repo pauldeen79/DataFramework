@@ -20,6 +20,12 @@ public abstract class IntegrationTestBase : TestBase
             .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
         Scope = Provider.CreateScope();
     }
+
+    protected ClassFramework.Pipelines.Abstractions.IPipelineService GetClassFrameworkPipelineService() => Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
+
+    protected IPipeline<ClassContext> GetClassPipeline() => Scope!.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
+
+    protected ICodeGenerationEngine GetCodeGenerationEngine() => Scope!.ServiceProvider.GetRequiredService<ICodeGenerationEngine>();
 }
 
 public abstract class IntegrationTestBase<T> : IntegrationTestBase
