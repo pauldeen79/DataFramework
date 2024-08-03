@@ -160,7 +160,7 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
             .AddParameter("offset", typeof(int?))
             .AddParameter("filter", typeof(ComposedEvaluatable))
             .AddParameter("orderByFields", typeof(IEnumerable<IQuerySortOrder>))
-            .WithChainCall("base(limit, offset, filter, orderByFields)"); //TODO: Add ChainCallToBaseUsingParameters method to ClassFramework's ConstructorBuilder class
+            .ChainCallToBaseUsingParameters();
 
         yield return new ConstructorBuilder()
             .AddParameter("query", typeof(IQuery))
