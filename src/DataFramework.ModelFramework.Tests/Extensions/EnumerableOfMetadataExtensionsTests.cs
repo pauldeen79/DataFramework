@@ -348,7 +348,7 @@ public class EnumerableOfMetadataExtensionsTests
         var actual = sut.GetStringValues("Name");
 
         // Assert
-        actual.Should().BeEquivalentTo(new[] { "Value1", "Value2", "3" });
+        actual.Should().BeEquivalentTo(["Value1", "Value2", "3"]);
     }
 
     [Fact]
@@ -366,7 +366,7 @@ public class EnumerableOfMetadataExtensionsTests
         var actual = sut.GetValues<string>("Name");
 
         // Assert
-        actual.Should().BeEquivalentTo(new[] { "Value1", "Value2" });
+        actual.Should().BeEquivalentTo(["Value1", "Value2"]);
     }
 
     [Fact]

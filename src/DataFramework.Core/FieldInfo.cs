@@ -6,7 +6,7 @@ public partial record FieldInfo : IValidatableObject
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            yield return new ValidationResult("Name cannot be null or whitespace", new[] { nameof(Name) });
+            yield return new ValidationResult("Name cannot be null or whitespace", [nameof(Name)]);
         }
     }
 

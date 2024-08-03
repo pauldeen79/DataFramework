@@ -21,7 +21,7 @@ public static partial class DataObjectInfoExtensions
         => instance.Metadata
             .Where(md => md.Name == Repositories.Interfaces)
             .Select(md => md.Value.ToStringWithNullCheck().FixGenericParameter(instance.GetEntityFullName()))
-            .Union(new[] { $"{instance.GetRepositoriesInterfaceNamespace()}.I{instance.Name}Repository" });
+            .Union([$"{instance.GetRepositoriesInterfaceNamespace()}.I{instance.Name}Repository"]);
 
     private static IEnumerable<ClassMethodBuilder> GetRepositoryClassMethods(IDataObjectInfo instance)
         => instance.Metadata.GetValues<IClassMethod>(Repositories.Method).Select(x => new ClassMethodBuilder(x));

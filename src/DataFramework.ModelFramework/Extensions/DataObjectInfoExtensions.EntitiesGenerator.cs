@@ -88,7 +88,7 @@ public static partial class DataObjectInfoExtensions
                     .WithHasSetter(entityClassType.HasPropertySetter())
                     .AddAttributes(entityClassType.IsImmutable()
                         ? Enumerable.Empty<AttributeBuilder>()
-                        : new[] { new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true) })
+                        : [new AttributeBuilder().AddNameAndParameter("System.ComponentModel.ReadOnly", true)])
                     .AddGetterLiteralCodeStatements(GetGetterCodeStatementsForOriginal(field, entityClassType).ToArray())
                     .AddSetterLiteralCodeStatements(GetSetterCodeStatementsForOriginal(field, entityClassType).ToArray())));
 
