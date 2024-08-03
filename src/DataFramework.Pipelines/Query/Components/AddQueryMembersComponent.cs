@@ -44,13 +44,13 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
             .WithType(typeof(string[]))
             .WithStatic()
             .WithReadOnly()
-            .WithDefaultValue(new Literal("new[] { " + string.Join(", ", GetQueryClassValidFieldNames(context).Select(s => $"\"{s}\"")) + " }", null));
+            .WithDefaultValue(new StringLiteral("new[] { " + string.Join(", ", GetQueryClassValidFieldNames(context).Select(s => $"\"{s}\"")) + " }"));
 
         yield return new FieldBuilder()
             .WithName("MaxLimit")
             .WithType(typeof(int))
             .WithConstant()
-            .WithDefaultValue(new Literal(GetQueryMaxLimit(context), null));
+            .WithDefaultValue(new StringLiteral(GetQueryMaxLimit(context)));
     }
 
     private static IEnumerable<string> GetQueryClassValidFieldNames(PipelineContext<QueryContext> context)
@@ -165,5 +165,15 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
         yield return new ConstructorBuilder()
             .AddParameter("query", typeof(IQuery))
             .WithChainCall("this(query.Limit, query.Offset, query.Filter, query.OrderByFields");
+    }
+
+    private sealed class StringLiteral : IStringLiteral
+    {
+        public string Value { get; }
+
+        public StringLiteral(string value)
+        {
+            Value = value.IsNotNull("value");
+        }
     }
 }
