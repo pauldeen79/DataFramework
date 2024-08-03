@@ -2,26 +2,12 @@
 
 public class AddQueryMembersComponentBuilder : IQueryComponentBuilder
 {
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddQueryMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
     public IPipelineComponent<QueryContext> Build()
-        => new AddQueryMembersComponent(_csharpExpressionDumper);
+        => new AddQueryMembersComponent();
 }
 
 public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
 {
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddQueryMembersComponent(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
     public Task<Result> Process(PipelineContext<QueryContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
@@ -60,14 +46,10 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
             yield return s;
         }
 
-        //foreach (var md in context.Request.SourceModel.Metadata.Where(x => x.Name == Queries.ValidFieldName))
-        //{
-        //    var value = md.Value.ToStringWithNullCheck();
-        //    if (!string.IsNullOrEmpty(value))
-        //    {
-        //        yield return value;
-        //    }
-        //}
+        foreach (var s in context.Request.SourceModel.AdditionalQueryFields)
+        {
+            yield return s;
+        }
     }
 
     private static string GetQueryMaxLimit(PipelineContext<QueryContext> context)
@@ -112,22 +94,14 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
                 @"}"
             );
 
-        var fieldNameStatements = new List<CodeStatementBaseBuilder>();
-        //var fieldNameStatements = context.Request.SourceModel.Metadata.GetValues<CodeStatementBase>(Queries.ValidFieldNameStatement)
-        //    .Select(x => x.ToBuilder())
-        //    .ToList();
-
-        if (!fieldNameStatements.Any())
+        var fieldNameStatements = context.Request.SourceModel.QueryFieldNameStatements.Select(x => x.ToBuilder()).ToList();
+        if (fieldNameStatements.Count == 0)
         {
             fieldNameStatements.Add(new StringCodeStatementBuilder().WithStatement($"    return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, \"{nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}\"));"));
         }
 
-        var expressionStatements = new List<CodeStatementBaseBuilder>();
-        //var expressionStatements = context.Request.SourceModel.Metadata.GetValues<ICodeStatement>(Queries.ValidExpressionStatement)
-        //    .Select(x => x.ToBuilder())
-        //    .ToList();
-
-        if (!expressionStatements.Any())
+        var expressionStatements = context.Request.SourceModel.QueryExpressionStatements.Select(x => x.ToBuilder()).ToList();
+        if (expressionStatements.Count == 0)
         {
             expressionStatements.Add(new StringCodeStatementBuilder().WithStatement("return true;"));
         }

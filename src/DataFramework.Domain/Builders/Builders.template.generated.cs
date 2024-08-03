@@ -63,6 +63,12 @@ namespace DataFramework.Domain.Builders
 
         private System.Nullable<int> _overridePageSize;
 
+        private System.Collections.ObjectModel.ObservableCollection<string> _additionalQueryFields;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryFieldNameStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryExpressionStatements;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
@@ -385,6 +391,50 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<string> AdditionalQueryFields
+        {
+            get
+            {
+                return _additionalQueryFields;
+            }
+            set
+            {
+                _additionalQueryFields = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(AdditionalQueryFields));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> QueryFieldNameStatements
+        {
+            get
+            {
+                return _queryFieldNameStatements;
+            }
+            set
+            {
+                _queryFieldNameStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldNameStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> QueryExpressionStatements
+        {
+            get
+            {
+                return _queryExpressionStatements;
+            }
+            set
+            {
+                _queryExpressionStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryExpressionStatements));
+            }
+        }
+
         public DataObjectInfoBuilder(DataFramework.Domain.DataObjectInfo source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -394,6 +444,9 @@ namespace DataFramework.Domain.Builders
             _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
             _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
             _customEntityMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder>();
+            _additionalQueryFields = new System.Collections.ObjectModel.ObservableCollection<string>();
+            _queryFieldNameStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryExpressionStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _name = source.Name;
             _assemblyName = source.AssemblyName;
             _typeName = source.TypeName;
@@ -417,6 +470,9 @@ namespace DataFramework.Domain.Builders
             _defaultOrderByFields = source.DefaultOrderByFields;
             _defaultWhereClause = source.DefaultWhereClause;
             _overridePageSize = source.OverridePageSize;
+            if (source.AdditionalQueryFields is not null) foreach (var item in source.AdditionalQueryFields) _additionalQueryFields.Add(item);
+            if (source.QueryFieldNameStatements is not null) foreach (var item in source.QueryFieldNameStatements.Select(x => x.ToBuilder())) _queryFieldNameStatements.Add(item);
+            if (source.QueryExpressionStatements is not null) foreach (var item in source.QueryExpressionStatements.Select(x => x.ToBuilder())) _queryExpressionStatements.Add(item);
         }
 
         public DataObjectInfoBuilder()
@@ -427,6 +483,9 @@ namespace DataFramework.Domain.Builders
             _indexes = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.IndexBuilder>();
             _checkConstraints = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.CheckConstraintBuilder>();
             _customEntityMappings = new System.Collections.ObjectModel.ObservableCollection<DataFramework.Domain.Builders.EntityMappingBuilder>();
+            _additionalQueryFields = new System.Collections.ObjectModel.ObservableCollection<string>();
+            _queryFieldNameStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryExpressionStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _name = string.Empty;
             _isVisible = true;
             _isQueryable = true;
@@ -441,7 +500,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly(), DefaultOrderByFields, DefaultWhereClause, OverridePageSize);
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly(), DefaultOrderByFields, DefaultWhereClause, OverridePageSize, AdditionalQueryFields, QueryFieldNameStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryExpressionStatements.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
@@ -521,6 +580,45 @@ namespace DataFramework.Domain.Builders
         {
             if (customEntityMappings is null) throw new System.ArgumentNullException(nameof(customEntityMappings));
             foreach (var item in customEntityMappings) CustomEntityMappings.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddAdditionalQueryFields(System.Collections.Generic.IEnumerable<string> additionalQueryFields)
+        {
+            if (additionalQueryFields is null) throw new System.ArgumentNullException(nameof(additionalQueryFields));
+            return AddAdditionalQueryFields(additionalQueryFields.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddAdditionalQueryFields(params string[] additionalQueryFields)
+        {
+            if (additionalQueryFields is null) throw new System.ArgumentNullException(nameof(additionalQueryFields));
+            foreach (var item in additionalQueryFields) AdditionalQueryFields.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddQueryFieldNameStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> queryFieldNameStatements)
+        {
+            if (queryFieldNameStatements is null) throw new System.ArgumentNullException(nameof(queryFieldNameStatements));
+            return AddQueryFieldNameStatements(queryFieldNameStatements.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddQueryFieldNameStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] queryFieldNameStatements)
+        {
+            if (queryFieldNameStatements is null) throw new System.ArgumentNullException(nameof(queryFieldNameStatements));
+            foreach (var item in queryFieldNameStatements) QueryFieldNameStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddQueryExpressionStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> queryExpressionStatements)
+        {
+            if (queryExpressionStatements is null) throw new System.ArgumentNullException(nameof(queryExpressionStatements));
+            return AddQueryExpressionStatements(queryExpressionStatements.ToArray());
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder AddQueryExpressionStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] queryExpressionStatements)
+        {
+            if (queryExpressionStatements is null) throw new System.ArgumentNullException(nameof(queryExpressionStatements));
+            foreach (var item in queryExpressionStatements) QueryExpressionStatements.Add(item);
             return this;
         }
 

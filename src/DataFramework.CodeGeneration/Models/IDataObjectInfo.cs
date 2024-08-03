@@ -28,4 +28,7 @@ public interface IDataObjectInfo
     string? DefaultOrderByFields { get; }
     string? DefaultWhereClause { get; }
     int? OverridePageSize { get; }
+    [Required] IReadOnlyCollection<string> AdditionalQueryFields { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldNameStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryExpressionStatements { get; }
 }

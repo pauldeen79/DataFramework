@@ -153,7 +153,27 @@ namespace DataFramework.Domain
             get;
         }
 
-        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints, System.Collections.Generic.IEnumerable<DataFramework.Domain.EntityMapping> customEntityMappings, string? defaultOrderByFields, string? defaultWhereClause, System.Nullable<int> overridePageSize)
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<string> AdditionalQueryFields
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> QueryFieldNameStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> QueryExpressionStatements
+        {
+            get;
+        }
+
+        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints, System.Collections.Generic.IEnumerable<DataFramework.Domain.EntityMapping> customEntityMappings, string? defaultOrderByFields, string? defaultWhereClause, System.Nullable<int> overridePageSize, System.Collections.Generic.IEnumerable<string> additionalQueryFields, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldNameStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryExpressionStatements)
         {
             this.Name = name;
             this.AssemblyName = assemblyName;
@@ -178,6 +198,9 @@ namespace DataFramework.Domain
             this.DefaultOrderByFields = defaultOrderByFields;
             this.DefaultWhereClause = defaultWhereClause;
             this.OverridePageSize = overridePageSize;
+            this.AdditionalQueryFields = additionalQueryFields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<System.String>(additionalQueryFields);
+            this.QueryFieldNameStatements = queryFieldNameStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldNameStatements);
+            this.QueryExpressionStatements = queryExpressionStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryExpressionStatements);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
