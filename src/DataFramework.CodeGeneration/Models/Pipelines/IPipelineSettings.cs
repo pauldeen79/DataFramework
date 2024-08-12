@@ -69,4 +69,14 @@ internal interface IPipelineSettings
     [Required(AllowEmptyStrings = true)] string QueryNamespace { get; }
     int? QueryMaxLimit { get; }
     bool CreateQueryAsRecord { get; }
+
+    // QueryFieldInfo settings
+    Visibility QueryFieldInfoVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string QueryFieldInfoNamespace { get; }
+    [Required][ValidateObject] IReadOnlyCollection<Field> QueryFieldInfoFields { get; }
+
+    [Required][ValidateObject] IReadOnlyCollection<Parameter> QueryFieldInfoConstructorParameters { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoConstructorCodeStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoGetAllFieldsCodeStatements { get; }
+    [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoGetDatabaseFieldNameCodeStatements { get; }
 }

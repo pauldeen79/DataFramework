@@ -304,7 +304,53 @@ namespace DataFramework.Pipelines
             get;
         }
 
-        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, ClassFramework.Domain.Domains.Visibility databaseEntityRetrieverProviderVisibility, string databaseEntityRetrieverProviderNamespace, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters, ClassFramework.Domain.Domains.Visibility entityMapperVisibility, string entityMapperNamespace, ClassFramework.Domain.Domains.Visibility entityRetrieverVisibility, string entityRetrieverNamespace, ClassFramework.Domain.Domains.Visibility identityCommandProviderVisibility, string identityCommandProviderNamespace, ClassFramework.Domain.Domains.Visibility pagedEntityRetrieverSettingsVisibility, string pagedEntityRetrieverSettingsNamespace, ClassFramework.Domain.Domains.Visibility queryVisibility, string queryNamespace, System.Nullable<int> queryMaxLimit, bool createQueryAsRecord)
+        public ClassFramework.Domain.Domains.Visibility QueryFieldInfoVisibility
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string QueryFieldInfoNamespace
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.Field> QueryFieldInfoFields
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.Parameter> QueryFieldInfoConstructorParameters
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> QueryFieldInfoConstructorCodeStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> QueryFieldInfoGetAllFieldsCodeStatements
+        {
+            get;
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.Generic.IReadOnlyCollection<ClassFramework.Domain.CodeStatementBase> QueryFieldInfoGetDatabaseFieldNameCodeStatements
+        {
+            get;
+        }
+
+        public PipelineSettings(bool enableNullableContext, DataFramework.Pipelines.Domains.ConcurrencyCheckBehavior concurrencyCheckBehavior, DataFramework.Pipelines.Domains.EntityClassType entityClassType, string defaultEntityNamespace, string defaultIdentityNamespace, string defaultBuilderNamespace, bool addComponentModelAttributes, ClassFramework.Domain.Domains.Visibility commandEntityProviderVisibility, string commandEntityProviderNamespace, bool commandProviderEnableAdd, bool commandProviderEnableUpdate, bool commandProviderEnableDelete, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderAddAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderUpdateAfterReadStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteResultEntityStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> commandEntityProviderDeleteAfterReadStatements, ClassFramework.Domain.Domains.Visibility commandProviderVisibility, string commandProviderNamespace, bool useAddStoredProcedure, bool useUpdateStoredProcedure, bool useDeleteStoredProcedure, ClassFramework.Domain.Domains.Visibility databaseEntityRetrieverProviderVisibility, string databaseEntityRetrieverProviderNamespace, string addStoredProcedureName, string updateStoredProcedureName, string deleteStoredProcedureName, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> addStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> updateStoredProcedureStatements, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.SqlStatementBase> deleteStoredProcedureStatements, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForInsertParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForUpdateParameters, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteText, CrossCutting.Data.Abstractions.DatabaseOperation databaseCommandTypeForDeleteParameters, ClassFramework.Domain.Domains.Visibility entityMapperVisibility, string entityMapperNamespace, ClassFramework.Domain.Domains.Visibility entityRetrieverVisibility, string entityRetrieverNamespace, ClassFramework.Domain.Domains.Visibility identityCommandProviderVisibility, string identityCommandProviderNamespace, ClassFramework.Domain.Domains.Visibility pagedEntityRetrieverSettingsVisibility, string pagedEntityRetrieverSettingsNamespace, ClassFramework.Domain.Domains.Visibility queryVisibility, string queryNamespace, System.Nullable<int> queryMaxLimit, bool createQueryAsRecord, ClassFramework.Domain.Domains.Visibility queryFieldInfoVisibility, string queryFieldInfoNamespace, System.Collections.Generic.IEnumerable<ClassFramework.Domain.Field> queryFieldInfoFields, System.Collections.Generic.IEnumerable<ClassFramework.Domain.Parameter> queryFieldInfoConstructorParameters, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldInfoConstructorCodeStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldInfoGetAllFieldsCodeStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldInfoGetDatabaseFieldNameCodeStatements)
         {
             this.EnableNullableContext = enableNullableContext;
             this.ConcurrencyCheckBehavior = concurrencyCheckBehavior;
@@ -355,6 +401,13 @@ namespace DataFramework.Pipelines
             this.QueryNamespace = queryNamespace;
             this.QueryMaxLimit = queryMaxLimit;
             this.CreateQueryAsRecord = createQueryAsRecord;
+            this.QueryFieldInfoVisibility = queryFieldInfoVisibility;
+            this.QueryFieldInfoNamespace = queryFieldInfoNamespace;
+            this.QueryFieldInfoFields = queryFieldInfoFields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.Field>(queryFieldInfoFields);
+            this.QueryFieldInfoConstructorParameters = queryFieldInfoConstructorParameters is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.Parameter>(queryFieldInfoConstructorParameters);
+            this.QueryFieldInfoConstructorCodeStatements = queryFieldInfoConstructorCodeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldInfoConstructorCodeStatements);
+            this.QueryFieldInfoGetAllFieldsCodeStatements = queryFieldInfoGetAllFieldsCodeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldInfoGetAllFieldsCodeStatements);
+            this.QueryFieldInfoGetDatabaseFieldNameCodeStatements = queryFieldInfoGetDatabaseFieldNameCodeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldInfoGetDatabaseFieldNameCodeStatements);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 

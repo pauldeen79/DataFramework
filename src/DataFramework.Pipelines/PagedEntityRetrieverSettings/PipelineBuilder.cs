@@ -2,8 +2,8 @@
 
 public class PipelineBuilder : PipelineBuilder<PagedEntityRetrieverSettingsContext>
 {
-    public PipelineBuilder(IEnumerable<IPagedEntityRetrieverSettingsComponentBuilder> PagedEntityRetrieverSettingsComponentBuilders)
+    public PipelineBuilder(IEnumerable<IPagedEntityRetrieverSettingsComponentBuilder> pagedEntityRetrieverSettingsComponentBuilders)
     {
-        AddComponents(PagedEntityRetrieverSettingsComponentBuilders);
+        AddComponents(pagedEntityRetrieverSettingsComponentBuilders);
     }
 }

@@ -2,8 +2,8 @@
 
 public class PipelineBuilder : PipelineBuilder<QueryContext>
 {
-    public PipelineBuilder(IEnumerable<IQueryComponentBuilder> QueryComponentBuilders)
+    public PipelineBuilder(IEnumerable<IQueryComponentBuilder> queryComponentBuilders)
     {
-        AddComponents(QueryComponentBuilders);
+        AddComponents(queryComponentBuilders);
     }
 }

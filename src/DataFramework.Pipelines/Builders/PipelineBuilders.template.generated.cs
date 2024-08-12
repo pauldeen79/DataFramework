@@ -115,6 +115,20 @@ namespace DataFramework.Pipelines.Builders
 
         private bool _createQueryAsRecord;
 
+        private ClassFramework.Domain.Domains.Visibility _queryFieldInfoVisibility;
+
+        private string _queryFieldInfoNamespace;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.FieldBuilder> _queryFieldInfoFields;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.ParameterBuilder> _queryFieldInfoConstructorParameters;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryFieldInfoConstructorCodeStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryFieldInfoGetAllFieldsCodeStatements;
+
+        private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryFieldInfoGetDatabaseFieldNameCodeStatements;
+
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public bool EnableNullableContext
@@ -796,6 +810,108 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public ClassFramework.Domain.Domains.Visibility QueryFieldInfoVisibility
+        {
+            get
+            {
+                return _queryFieldInfoVisibility;
+            }
+            set
+            {
+                _queryFieldInfoVisibility = value;
+                HandlePropertyChanged(nameof(QueryFieldInfoVisibility));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string QueryFieldInfoNamespace
+        {
+            get
+            {
+                return _queryFieldInfoNamespace;
+            }
+            set
+            {
+                _queryFieldInfoNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoNamespace));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.FieldBuilder> QueryFieldInfoFields
+        {
+            get
+            {
+                return _queryFieldInfoFields;
+            }
+            set
+            {
+                _queryFieldInfoFields = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoFields));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.ParameterBuilder> QueryFieldInfoConstructorParameters
+        {
+            get
+            {
+                return _queryFieldInfoConstructorParameters;
+            }
+            set
+            {
+                _queryFieldInfoConstructorParameters = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoConstructorParameters));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> QueryFieldInfoConstructorCodeStatements
+        {
+            get
+            {
+                return _queryFieldInfoConstructorCodeStatements;
+            }
+            set
+            {
+                _queryFieldInfoConstructorCodeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoConstructorCodeStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> QueryFieldInfoGetAllFieldsCodeStatements
+        {
+            get
+            {
+                return _queryFieldInfoGetAllFieldsCodeStatements;
+            }
+            set
+            {
+                _queryFieldInfoGetAllFieldsCodeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoGetAllFieldsCodeStatements));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute]
+        [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
+        public System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> QueryFieldInfoGetDatabaseFieldNameCodeStatements
+        {
+            get
+            {
+                return _queryFieldInfoGetDatabaseFieldNameCodeStatements;
+            }
+            set
+            {
+                _queryFieldInfoGetDatabaseFieldNameCodeStatements = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoGetDatabaseFieldNameCodeStatements));
+            }
+        }
+
         public PipelineSettingsBuilder(DataFramework.Pipelines.PipelineSettings source)
         {
             if (source is null) throw new System.ArgumentNullException(nameof(source));
@@ -808,6 +924,11 @@ namespace DataFramework.Pipelines.Builders
             _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _queryFieldInfoFields = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.FieldBuilder>();
+            _queryFieldInfoConstructorParameters = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.ParameterBuilder>();
+            _queryFieldInfoConstructorCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryFieldInfoGetAllFieldsCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryFieldInfoGetDatabaseFieldNameCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _enableNullableContext = source.EnableNullableContext;
             _concurrencyCheckBehavior = source.ConcurrencyCheckBehavior;
             _entityClassType = source.EntityClassType;
@@ -857,6 +978,13 @@ namespace DataFramework.Pipelines.Builders
             _queryNamespace = source.QueryNamespace;
             _queryMaxLimit = source.QueryMaxLimit;
             _createQueryAsRecord = source.CreateQueryAsRecord;
+            _queryFieldInfoVisibility = source.QueryFieldInfoVisibility;
+            _queryFieldInfoNamespace = source.QueryFieldInfoNamespace;
+            if (source.QueryFieldInfoFields is not null) foreach (var item in source.QueryFieldInfoFields.Select(x => x.ToBuilder())) _queryFieldInfoFields.Add(item);
+            if (source.QueryFieldInfoConstructorParameters is not null) foreach (var item in source.QueryFieldInfoConstructorParameters.Select(x => x.ToBuilder())) _queryFieldInfoConstructorParameters.Add(item);
+            if (source.QueryFieldInfoConstructorCodeStatements is not null) foreach (var item in source.QueryFieldInfoConstructorCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoConstructorCodeStatements.Add(item);
+            if (source.QueryFieldInfoGetAllFieldsCodeStatements is not null) foreach (var item in source.QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoGetAllFieldsCodeStatements.Add(item);
+            if (source.QueryFieldInfoGetDatabaseFieldNameCodeStatements is not null) foreach (var item in source.QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoGetDatabaseFieldNameCodeStatements.Add(item);
         }
 
         public PipelineSettingsBuilder()
@@ -870,6 +998,11 @@ namespace DataFramework.Pipelines.Builders
             _addStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _updateStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
             _deleteStoredProcedureStatements = new System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.SqlStatementBaseBuilder>();
+            _queryFieldInfoFields = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.FieldBuilder>();
+            _queryFieldInfoConstructorParameters = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.ParameterBuilder>();
+            _queryFieldInfoConstructorCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryFieldInfoGetAllFieldsCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
+            _queryFieldInfoGetDatabaseFieldNameCodeStatements = new System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder>();
             _defaultEntityNamespace = string.Empty;
             _defaultIdentityNamespace = string.Empty;
             _defaultBuilderNamespace = string.Empty;
@@ -894,12 +1027,13 @@ namespace DataFramework.Pipelines.Builders
             _identityCommandProviderNamespace = string.Empty;
             _pagedEntityRetrieverSettingsNamespace = string.Empty;
             _queryNamespace = string.Empty;
+            _queryFieldInfoNamespace = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, EntityRetrieverVisibility, EntityRetrieverNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, PagedEntityRetrieverSettingsVisibility, PagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, EntityRetrieverVisibility, EntityRetrieverNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, PagedEntityRetrieverSettingsVisibility, PagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord, QueryFieldInfoVisibility, QueryFieldInfoNamespace, QueryFieldInfoFields.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorParameters.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
@@ -1018,6 +1152,71 @@ namespace DataFramework.Pipelines.Builders
         {
             if (deleteStoredProcedureStatements is null) throw new System.ArgumentNullException(nameof(deleteStoredProcedureStatements));
             foreach (var item in deleteStoredProcedureStatements) DeleteStoredProcedureStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoFields(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.FieldBuilder> queryFieldInfoFields)
+        {
+            if (queryFieldInfoFields is null) throw new System.ArgumentNullException(nameof(queryFieldInfoFields));
+            return AddQueryFieldInfoFields(queryFieldInfoFields.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoFields(params ClassFramework.Domain.Builders.FieldBuilder[] queryFieldInfoFields)
+        {
+            if (queryFieldInfoFields is null) throw new System.ArgumentNullException(nameof(queryFieldInfoFields));
+            foreach (var item in queryFieldInfoFields) QueryFieldInfoFields.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoConstructorParameters(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.ParameterBuilder> queryFieldInfoConstructorParameters)
+        {
+            if (queryFieldInfoConstructorParameters is null) throw new System.ArgumentNullException(nameof(queryFieldInfoConstructorParameters));
+            return AddQueryFieldInfoConstructorParameters(queryFieldInfoConstructorParameters.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoConstructorParameters(params ClassFramework.Domain.Builders.ParameterBuilder[] queryFieldInfoConstructorParameters)
+        {
+            if (queryFieldInfoConstructorParameters is null) throw new System.ArgumentNullException(nameof(queryFieldInfoConstructorParameters));
+            foreach (var item in queryFieldInfoConstructorParameters) QueryFieldInfoConstructorParameters.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoConstructorCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> queryFieldInfoConstructorCodeStatements)
+        {
+            if (queryFieldInfoConstructorCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoConstructorCodeStatements));
+            return AddQueryFieldInfoConstructorCodeStatements(queryFieldInfoConstructorCodeStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoConstructorCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] queryFieldInfoConstructorCodeStatements)
+        {
+            if (queryFieldInfoConstructorCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoConstructorCodeStatements));
+            foreach (var item in queryFieldInfoConstructorCodeStatements) QueryFieldInfoConstructorCodeStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoGetAllFieldsCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> queryFieldInfoGetAllFieldsCodeStatements)
+        {
+            if (queryFieldInfoGetAllFieldsCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoGetAllFieldsCodeStatements));
+            return AddQueryFieldInfoGetAllFieldsCodeStatements(queryFieldInfoGetAllFieldsCodeStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoGetAllFieldsCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] queryFieldInfoGetAllFieldsCodeStatements)
+        {
+            if (queryFieldInfoGetAllFieldsCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoGetAllFieldsCodeStatements));
+            foreach (var item in queryFieldInfoGetAllFieldsCodeStatements) QueryFieldInfoGetAllFieldsCodeStatements.Add(item);
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoGetDatabaseFieldNameCodeStatements(System.Collections.Generic.IEnumerable<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> queryFieldInfoGetDatabaseFieldNameCodeStatements)
+        {
+            if (queryFieldInfoGetDatabaseFieldNameCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoGetDatabaseFieldNameCodeStatements));
+            return AddQueryFieldInfoGetDatabaseFieldNameCodeStatements(queryFieldInfoGetDatabaseFieldNameCodeStatements.ToArray());
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder AddQueryFieldInfoGetDatabaseFieldNameCodeStatements(params ClassFramework.Domain.Builders.CodeStatementBaseBuilder[] queryFieldInfoGetDatabaseFieldNameCodeStatements)
+        {
+            if (queryFieldInfoGetDatabaseFieldNameCodeStatements is null) throw new System.ArgumentNullException(nameof(queryFieldInfoGetDatabaseFieldNameCodeStatements));
+            foreach (var item in queryFieldInfoGetDatabaseFieldNameCodeStatements) QueryFieldInfoGetDatabaseFieldNameCodeStatements.Add(item);
             return this;
         }
 
@@ -1272,6 +1471,19 @@ namespace DataFramework.Pipelines.Builders
         public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithCreateQueryAsRecord(bool createQueryAsRecord = true)
         {
             CreateQueryAsRecord = createQueryAsRecord;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithQueryFieldInfoVisibility(ClassFramework.Domain.Domains.Visibility queryFieldInfoVisibility)
+        {
+            QueryFieldInfoVisibility = queryFieldInfoVisibility;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithQueryFieldInfoNamespace(string queryFieldInfoNamespace)
+        {
+            if (queryFieldInfoNamespace is null) throw new System.ArgumentNullException(nameof(queryFieldInfoNamespace));
+            QueryFieldInfoNamespace = queryFieldInfoNamespace;
             return this;
         }
 

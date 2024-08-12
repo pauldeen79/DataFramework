@@ -494,7 +494,7 @@ namespace MyNamespace
     {
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
-            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandProviderNamespace is empty on the settings
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseEntityRetrieverProviderNamespace is empty on the settings
             .WithName("MyEntity")
             .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
@@ -550,7 +550,7 @@ namespace MyNamespace
     public async Task Can_Create_Code_For_DatabaseSchema()
     {
         var sourceModel = new DataObjectInfoBuilder()
-            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandEntityProviderNamespace is empty on the settings
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseSchemaNamespace is empty on the settings
             .WithName("MyEntity")
             .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
@@ -587,7 +587,7 @@ GO
     public async Task Can_Create_Code_For_DatabaseSchema_With_StoredProcedures()
     {
         var sourceModel = new DataObjectInfoBuilder()
-            .WithTypeName("MyNamespace.MyEntity") // this will be used when CommandEntityProviderNamespace is empty on the settings
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseSchemaNamespace is empty on the settings
             .WithName("MyEntity")
             .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
             .Build();
@@ -836,7 +836,7 @@ namespace MyNamespace
     {
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
-            .WithTypeName("MyNamespace.MyEntity") // this will be used when PagedEntityRetrieverSettingsNamespace is empty on the settings
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when QueryNamespace is empty on the settings
             .WithName("MyEntity")
             .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
             .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
@@ -914,6 +914,55 @@ namespace MyNamespace
                 return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, ""StringComparison.OrdinalIgnoreCase""));
             }
             return true;
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_QueryFieldInfo_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when QueryFieldInfoNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new QueryFieldInfoContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var queryFieldInfoPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryFieldInfoContext>>();
+
+        // Act
+        var result = (await queryFieldInfoPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var queryFieldInfo = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfo));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryFieldInfoGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityQuery : QueryFramework.SqlServer.Abstractions.IQueryFieldInfo
+    {
+        public System.Collections.Generic.IEnumerable<string> GetAllFields()
+        {
+            yield return @""MyField1"";
+            yield return @""MyField2"";
+        }
+
+        public string GetDatabaseFieldName(string queryFieldName)
+        {
+            return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
