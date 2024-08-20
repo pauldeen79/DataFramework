@@ -851,8 +851,8 @@ namespace MyNamespace
 
         // Act
         var result = (await queryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
-        var pagedEntityRetrieverSettings = result.GetValueOrThrow();
-        var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
+        var query = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(query));
 
         // Assert
         code.Should().Be(@"using System;
@@ -963,6 +963,49 @@ namespace MyNamespace
         public string GetDatabaseFieldName(string queryFieldName)
         {
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_Repository_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when RepositoryNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithDefaultIdentityNamespace("MyNamespace") //needed to use Identity entities
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new RepositoryContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var repositoryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryContext>>();
+
+        // Act
+        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var repository = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(repository));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityQuery : CrossCutting.Data.Core.Repository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>
+    {
+        public MyEntityQuery(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
+        {
         }
     }
 }

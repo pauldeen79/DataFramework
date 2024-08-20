@@ -74,9 +74,13 @@ internal interface IPipelineSettings
     Visibility QueryFieldInfoVisibility { get; }
     [Required(AllowEmptyStrings = true)] string QueryFieldInfoNamespace { get; }
     [Required][ValidateObject] IReadOnlyCollection<Field> QueryFieldInfoFields { get; }
-
     [Required][ValidateObject] IReadOnlyCollection<Parameter> QueryFieldInfoConstructorParameters { get; }
     [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoConstructorCodeStatements { get; }
     [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoGetAllFieldsCodeStatements { get; }
     [Required][ValidateObject] IReadOnlyCollection<CodeStatementBase> QueryFieldInfoGetDatabaseFieldNameCodeStatements { get; }
+
+    // Repository settings
+    Visibility RepositoryVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string RepositoryNamespace { get; }
+    [Required(AllowEmptyStrings = true)] string RepositoryInterfaceNamespace { get; }
 }

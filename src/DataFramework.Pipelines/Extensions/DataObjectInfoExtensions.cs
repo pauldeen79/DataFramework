@@ -55,6 +55,16 @@ public static class DataObjectInfoExtensions
             ? $"{instance.Name}EntityRetriever"
             : $"{entityRetrieverNamespace}.{instance.Name}EntityRetriever";
 
+    public static string DefaultRepositoryFullName(this DataObjectInfo instance, string repositoryNamespace)
+        => string.IsNullOrEmpty(repositoryNamespace)
+            ? $"{instance.Name}Repository"
+            : $"{repositoryNamespace}.{instance.Name}Repository";
+
+    public static string DefaultRepositoryInterfaceFullName(this DataObjectInfo instance, string repositoryInterfaceNamespace)
+        => string.IsNullOrEmpty(repositoryInterfaceNamespace)
+            ? $"I{instance.Name}Repository"
+            : $"{repositoryInterfaceNamespace}.I{instance.Name}Repository";
+
     public static string GetDatabaseTableName(this DataObjectInfo instance)
         => instance.DatabaseTableName.WhenNullOrEmpty(instance.Name);
 

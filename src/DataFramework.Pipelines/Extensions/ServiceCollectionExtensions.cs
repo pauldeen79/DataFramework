@@ -97,5 +97,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetNameComponentBuilder>()
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetPartialComponentBuilder>()
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetVisibilityComponentBuilder>()
+            // Repository pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<RepositoryContext>>().Build())
+            .AddScoped<IPipelineBuilder<RepositoryContext>, Repository.PipelineBuilder>()
+            .AddScoped<IRepositoryComponentBuilder, Repository.Components.AddRepositoryMembersComponentBuilder>()
+            .AddScoped<IRepositoryComponentBuilder, Repository.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetNameComponentBuilder>()
+            .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetPartialComponentBuilder>()
+            .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetVisibilityComponentBuilder>()
             ;
 }
