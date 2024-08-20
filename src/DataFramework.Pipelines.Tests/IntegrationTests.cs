@@ -952,7 +952,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryFieldInfoGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityQuery : QueryFramework.SqlServer.Abstractions.IQueryFieldInfo
+    public partial class MyEntityQueryFieldInfo : QueryFramework.SqlServer.Abstractions.IQueryFieldInfo
     {
         public System.Collections.Generic.IEnumerable<string> GetAllFields()
         {
@@ -970,7 +970,7 @@ namespace MyNamespace
     }
 
     [Fact]
-    public async Task Can_Create_Code_For_Repository_Class()
+    public async Task Can_Create_Code_For_Repository_Class_Without_Interface()
     {
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
@@ -1002,9 +1002,53 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityQuery : CrossCutting.Data.Core.Repository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>
+    public partial class MyEntityRepository : CrossCutting.Data.Core.Repository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>
     {
-        public MyEntityQuery(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
+        public MyEntityRepository(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
+        {
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_Repository_Class_With_Interface()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when RepositoryNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithDefaultIdentityNamespace("MyNamespace") //needed to use Identity entities
+            .WithRepositoryInterfaceNamespace("MyNamespace.Contracts") // needed to use repository interface
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new RepositoryContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var repositoryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryContext>>();
+
+        // Act
+        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var repository = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(repository));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityRepository : CrossCutting.Data.Core.Repository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>, MyNamespace.Contracts.IMyEntityRepository
+    {
+        public MyEntityRepository(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
         }
     }

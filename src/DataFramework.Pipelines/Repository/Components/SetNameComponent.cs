@@ -13,7 +13,7 @@ public class SetNameComponent : IPipelineComponent<RepositoryContext>
         context = context.IsNotNull(nameof(context));
 
         context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}Query")
+            .WithName($"{context.Request.SourceModel.Name}Repository")
             .WithNamespace(context.Request.Settings.RepositoryNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
 
         return Task.FromResult(Result.Continue());
