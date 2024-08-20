@@ -1,4 +1,8 @@
-﻿namespace DataFramework.Pipelines.Tests;
+﻿using ClassFramework.Domain.Extensions;
+using ClassFramework.Pipelines.Interface;
+using CrossCutting.Data.Abstractions;
+
+namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -1033,12 +1037,27 @@ namespace MyNamespace
         var repositoryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryContext>>();
 
         // Act
-        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.BuildTyped);
         var repository = result.GetValueOrThrow();
-        var code = await GenerateCode(new TestCodeGenerationProvider(repository));
+        var code1 = await GenerateCode(new TestCodeGenerationProvider(repository));
+
+        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
+            .WithAddFullConstructor()
+            .WithAddSetters(false)
+            .WithCopyAttributes()
+            .WithAllowGenerationWithoutProperties() // important because our repository does not have any properties :)
+            .WithNameFormatString("I{Name}") // important to get the interface name with 'I' prefix
+            .Build();
+        var interfaceContext = new InterfaceContext(repository, classFrameworkSettings, CultureInfo.InvariantCulture);
+        var interfacePipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<InterfaceContext>>();
+        // Important to add the base interface, which cannot be performed automatically because we're using a base class
+        Func<TypeBase> resultValueDelegate = () => interfaceContext.Builder.AddInterfaces(typeof(IRepository<,>).ReplaceGenericTypeName(repository.BaseClass.GetProcessedGenericArguments().Split(','))).Build();
+        var interfaceResult = (await interfacePipeline.Process(interfaceContext)).ProcessResult(interfaceContext.Builder, resultValueDelegate);
+        var repositoryInterface = interfaceResult.GetValueOrThrow();
+        var code2 = await GenerateCode(new TestCodeGenerationProvider(repositoryInterface));
 
         // Assert
-        code.Should().Be(@"using System;
+        code1.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1051,6 +1070,19 @@ namespace MyNamespace
         public MyEntityRepository(CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity> commandProcessor, CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity> entityRetriever, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity> identitySelectCommandProvider, CrossCutting.Data.Abstractions.IPagedDatabaseCommandProvider pagedEntitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider entitySelectCommandProvider, CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity> entityCommandProvider) : base(commandProcessor, entityRetriever, identitySelectCommandProvider, pagedEntitySelectCommandProvider, entitySelectCommandProvider, entityCommandProvider)
         {
         }
+    }
+}
+");
+        code2.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
+    public partial interface IMyEntityRepository : CrossCutting.Data.Abstractions.IRepository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>
+    {
     }
 }
 ");
