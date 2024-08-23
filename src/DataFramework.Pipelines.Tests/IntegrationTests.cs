@@ -1041,18 +1041,9 @@ namespace MyNamespace
         var repository = result.GetValueOrThrow();
         var code1 = await GenerateCode(new TestCodeGenerationProvider(repository));
 
-        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
-            .WithAddFullConstructor()
-            .WithAddSetters(false)
-            .WithCopyAttributes()
-            .WithAllowGenerationWithoutProperties() // important because our repository does not have any properties :)
-            .WithNameFormatString("I{Name}") // important to get the interface name with 'I' prefix
-            .Build();
-        var interfaceContext = new InterfaceContext(repository, classFrameworkSettings, CultureInfo.InvariantCulture);
-        var interfacePipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<InterfaceContext>>();
-        // Important to add the base interface, which cannot be performed automatically because we're using a base class
-        Func<TypeBase> resultValueDelegate = () => interfaceContext.Builder.AddInterfaces(typeof(IRepository<,>).ReplaceGenericTypeName(repository.BaseClass.GetProcessedGenericArguments().Split(','))).Build();
-        var interfaceResult = (await interfacePipeline.Process(interfaceContext)).ProcessResult(interfaceContext.Builder, resultValueDelegate);
+        var interfaceContext = new RepositoryInterfaceContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var interfacePipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryInterfaceContext>>();
+        var interfaceResult = (await interfacePipeline.Process(interfaceContext)).ProcessResult(interfaceContext.Builder, interfaceContext.Builder.BuildTyped);
         var repositoryInterface = interfaceResult.GetValueOrThrow();
         var code2 = await GenerateCode(new TestCodeGenerationProvider(repositoryInterface));
 
@@ -1078,9 +1069,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MyNamespace
+namespace MyNamespace.Contracts
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryInterfaceGenerator"", @""1.0.0.0"")]
     public partial interface IMyEntityRepository : CrossCutting.Data.Abstractions.IRepository<MyNamespace.MyEntity,MyNamespace.MyEntityIdentity>
     {
     }

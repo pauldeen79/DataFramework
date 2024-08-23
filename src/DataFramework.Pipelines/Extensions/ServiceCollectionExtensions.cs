@@ -105,5 +105,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetNameComponentBuilder>()
             .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetPartialComponentBuilder>()
             .AddScoped<IRepositoryComponentBuilder, Repository.Components.SetVisibilityComponentBuilder>()
+            // RepositoryInterface pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<RepositoryInterfaceContext>>().Build())
+            .AddScoped<IPipelineBuilder<RepositoryInterfaceContext>, RepositoryInterface.PipelineBuilder>()
+            .AddScoped<IRepositoryInterfaceComponentBuilder, RepositoryInterface.Components.AddRepositoryInterfaceMembersComponentBuilder>()
+            .AddScoped<IRepositoryInterfaceComponentBuilder, RepositoryInterface.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IRepositoryInterfaceComponentBuilder, RepositoryInterface.Components.SetNameComponentBuilder>()
+            .AddScoped<IRepositoryInterfaceComponentBuilder, RepositoryInterface.Components.SetPartialComponentBuilder>()
+            .AddScoped<IRepositoryInterfaceComponentBuilder, RepositoryInterface.Components.SetVisibilityComponentBuilder>()
             ;
 }
