@@ -27,9 +27,9 @@ public class AddRepositoryMembersComponent : IPipelineComponent<RepositoryContex
 
     private static IEnumerable<string> GetRepositoryClassInterfaces(PipelineContext<RepositoryContext> context)
     {
-        if (!string.IsNullOrEmpty(context.Request.Settings.RepositoryInterfaceNamespace))
+        if (context.Request.Settings.UseRepositoryInterface)
         {
-            yield return context.Request.SourceModel.DefaultRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace);
+            yield return context.Request.SourceModel.DefaultRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
         }
     }
 

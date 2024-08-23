@@ -1029,8 +1029,9 @@ namespace MyNamespace
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.Poco) //default
             .WithDefaultEntityNamespace("MyNamespace")
-            .WithDefaultIdentityNamespace("MyNamespace") //needed to use Identity entities
-            .WithRepositoryInterfaceNamespace("MyNamespace.Contracts") // needed to use repository interface
+            .WithDefaultIdentityNamespace("MyNamespace")
+            .WithRepositoryInterfaceNamespace("MyNamespace.Contracts")
+            .WithUseRepositoryInterface() // needed to use repository interface
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new RepositoryContext(sourceModel, settings, CultureInfo.InvariantCulture);

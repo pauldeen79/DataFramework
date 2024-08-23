@@ -82,6 +82,7 @@ internal interface IPipelineSettings
     // Repository settings
     Visibility RepositoryVisibility { get; }
     Visibility RepositoryInterfaceVisibility { get; }
+    bool UseRepositoryInterface { get; }
     [Required(AllowEmptyStrings = true)] string RepositoryNamespace { get; }
     [Required(AllowEmptyStrings = true)] string RepositoryInterfaceNamespace { get; }
 }
