@@ -48,7 +48,14 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPipelineBuilder<DatabaseSchemaContext>, DatabaseSchema.PipelineBuilder>()
             .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddTableComponentBuilder>()
             .AddScoped<IDatabaseSchemaComponentBuilder, DatabaseSchema.Components.AddInsertUpdateDeleteStoredProceduresComponentBuilder>()
-            // EntityMapper pipeline
+            // Dependency Injection pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<DependencyInjectionContext>>().Build())
+            .AddScoped<IPipelineBuilder<DependencyInjectionContext>, DependencyInjection.PipelineBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.AddDependencyInjectionMembersComponentBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetNameComponentBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetPartialComponentBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetVisibilityComponentBuilder>()            // EntityMapper pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityMapperContext>>().Build())
             .AddScoped<IPipelineBuilder<EntityMapperContext>, EntityMapper.PipelineBuilder>()
             .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.AddEntityMapperMembersComponentBuilder>()

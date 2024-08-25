@@ -85,4 +85,9 @@ internal interface IPipelineSettings
     bool UseRepositoryInterface { get; }
     [Required(AllowEmptyStrings = true)] string RepositoryNamespace { get; }
     [Required(AllowEmptyStrings = true)] string RepositoryInterfaceNamespace { get; }
+
+    // Dependency injection settings
+    Visibility DependencyInjectionVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string DependencyInjectionNamespace { get; }
+    [Required(AllowEmptyStrings = false)][DefaultValue("AddRepositories")] string DependencyInjectionMethodName { get; }
 }
