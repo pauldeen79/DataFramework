@@ -102,7 +102,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private string GetInsertCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseAddStoredProcedure
-            ? $"[{_formattableStringParser.Parse(context.Request.Settings.AddStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.AddStoredProcedureName, context.Request.FormatProvider, context).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseInsertCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
     private static string GetUpdateCommandType(PipelineContext<CommandProviderContext> context)
@@ -112,7 +112,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private string GetUpdateCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseUpdateStoredProcedure
-            ? $"[{_formattableStringParser.Parse(context.Request.Settings.UpdateStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.UpdateStoredProcedureName, context.Request.FormatProvider, context).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseUpdateCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 
     private static string GetDeleteCommandType(PipelineContext<CommandProviderContext> context)
@@ -122,6 +122,6 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
 
     private string GetDeleteCommand(PipelineContext<CommandProviderContext> context)
         => context.Request.Settings.UseDeleteStoredProcedure
-            ? $"[{_formattableStringParser.Parse(context.Request.Settings.DeleteStoredProcedureName, context.Request.FormatProvider, context.Request.SourceModel).GetValueOrThrow()}]"
+            ? $"[{_formattableStringParser.Parse(context.Request.Settings.DeleteStoredProcedureName, context.Request.FormatProvider, context).GetValueOrThrow()}]"
             : context.Request.SourceModel.CreateDatabaseDeleteCommandText(context.Request.Settings.ConcurrencyCheckBehavior);
 }

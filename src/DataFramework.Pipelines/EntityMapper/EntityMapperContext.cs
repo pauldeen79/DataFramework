@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.EntityMapper;
 
-public class EntityMapperContext : ContextBase<DataObjectInfo>
+public class EntityMapperContext : ContextBase
 {
     public EntityMapperContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

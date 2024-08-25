@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.CommandProvider;
 
-public class CommandProviderContext : ContextBase<DataObjectInfo>
+public class CommandProviderContext : ContextBase
 {
     public CommandProviderContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

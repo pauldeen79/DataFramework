@@ -89,5 +89,6 @@ internal interface IPipelineSettings
     // Dependency injection settings
     Visibility DependencyInjectionVisibility { get; }
     [Required(AllowEmptyStrings = true)] string DependencyInjectionNamespace { get; }
-    [Required(AllowEmptyStrings = false)][DefaultValue("AddRepositories")] string DependencyInjectionMethodName { get; }
+    [Required(AllowEmptyStrings = false)][DefaultValue("ServiceCollectionExtensions")] string DependencyInjectionClassName { get; }
+    [Required(AllowEmptyStrings = false)][DefaultValue("Add{{EntityName}}Dependencies")] string DependencyInjectionMethodName { get; }
 }

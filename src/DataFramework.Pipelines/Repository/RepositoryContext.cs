@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.Repository;
 
-public class RepositoryContext : ContextBase<DataObjectInfo>
+public class RepositoryContext : ContextBase
 {
     public RepositoryContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

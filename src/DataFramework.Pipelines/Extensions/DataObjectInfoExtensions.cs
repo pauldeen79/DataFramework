@@ -188,7 +188,7 @@ public static class DataObjectInfoExtensions
     }
 
     public static IEnumerable<StoredProcedureBuilder> GetStoredProcedures(
-        this DataObjectInfo instance,
+        this ContextBase instance,
         PipelineSettings settings,
         IFormatProvider formatProvider,
         IFormattableStringParser formattableStringParser)
@@ -210,7 +210,7 @@ public static class DataObjectInfoExtensions
     }
 
     private static StoredProcedureBuilder GetStoredProcedure(
-        DataObjectInfo instance,
+        ContextBase instance,
         string procedureName,
         DatabaseOperation operation,
         PipelineSettings settings,
@@ -218,8 +218,8 @@ public static class DataObjectInfoExtensions
         IFormatProvider formatProvider)
         => new StoredProcedureBuilder()
             .WithName(formattableStringParser.Parse(procedureName, formatProvider, instance).GetValueOrThrow())
-            .AddParameters(GetStoredProcedureParameters(instance, operation, settings))
-            .AddStatements(GetStoredProcedureStatements(instance, operation, settings));
+            .AddParameters(GetStoredProcedureParameters(instance.SourceModel, operation, settings))
+            .AddStatements(GetStoredProcedureStatements(instance.SourceModel, operation, settings));
 
     private static IEnumerable<StoredProcedureParameterBuilder> GetStoredProcedureParameters(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
     {

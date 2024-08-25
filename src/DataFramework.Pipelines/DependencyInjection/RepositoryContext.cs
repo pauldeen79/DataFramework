@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.DependencyInjection;
 
-public class DependencyInjectionContext : ContextBase<DataObjectInfo>
+public class DependencyInjectionContext : ContextBase
 {
     public DependencyInjectionContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

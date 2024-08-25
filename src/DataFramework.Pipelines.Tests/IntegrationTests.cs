@@ -658,6 +658,34 @@ GO
 ");
     }
 
+
+    [Fact]
+    public async Task Can_Create_Code_For_DependencyInjection_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DependencyInjectionNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new DependencyInjectionContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var dependencyInjectionPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DependencyInjectionContext>>();
+
+        // Act
+        var result = (await dependencyInjectionPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var depdendencyInjection = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(depdendencyInjection));
+
+        // Assert
+        code.Should().Be(@"?");
+    }
+
     [Fact]
     public async Task Can_Create_Code_For_EntityMapper_Class()
     {

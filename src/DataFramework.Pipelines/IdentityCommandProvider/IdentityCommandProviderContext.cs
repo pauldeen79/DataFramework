@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.IdentityCommandProvider;
 
-public class IdentityCommandProviderContext : ContextBase<DataObjectInfo>
+public class IdentityCommandProviderContext : ContextBase
 {
     public IdentityCommandProviderContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

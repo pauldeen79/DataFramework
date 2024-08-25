@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.DatabaseSchema;
 
-public class DatabaseSchemaContext : ContextBase<DataObjectInfo>
+public class DatabaseSchemaContext : ContextBase
 {
     public DatabaseSchemaContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

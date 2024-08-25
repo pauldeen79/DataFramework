@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.Class;
 
-public class ClassContext : ContextBase<DataObjectInfo>
+public class ClassContext : ContextBase
 {
     public ClassContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.DatabaseEntityRetrieverProvider;
 
-public class DatabaseEntityRetrieverProviderContext : ContextBase<DataObjectInfo>
+public class DatabaseEntityRetrieverProviderContext : ContextBase
 {
     public DatabaseEntityRetrieverProviderContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

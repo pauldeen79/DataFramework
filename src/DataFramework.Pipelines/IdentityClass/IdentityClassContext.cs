@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.IdentityClass;
 
-public class IdentityClassContext : ContextBase<DataObjectInfo>
+public class IdentityClassContext : ContextBase
 {
     public IdentityClassContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

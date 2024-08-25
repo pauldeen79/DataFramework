@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.PagedEntityRetrieverSettings;
 
-public class PagedEntityRetrieverSettingsContext : ContextBase<DataObjectInfo>
+public class PagedEntityRetrieverSettingsContext : ContextBase
 {
     public PagedEntityRetrieverSettingsContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)

@@ -26,7 +26,7 @@ public class AddInsertUpdateDeleteStoredProceduresComponent : IPipelineComponent
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builders.AddRange(context.Request.SourceModel.GetStoredProcedures(context.Request.Settings, context.Request.FormatProvider, _formattableStringParser));
+        context.Request.Builders.AddRange(context.Request.GetStoredProcedures(context.Request.Settings, context.Request.FormatProvider, _formattableStringParser));
 
         return Task.FromResult(Result.Continue());
     }

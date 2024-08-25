@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.Query;
 
-public class QueryContext : ContextBase<DataObjectInfo>
+public class QueryContext : ContextBase
 {
     public QueryContext(DataObjectInfo sourceModel, PipelineSettings settings, IFormatProvider formatProvider)
         : base(sourceModel, settings, formatProvider)
