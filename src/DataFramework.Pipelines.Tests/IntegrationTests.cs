@@ -1,9 +1,4 @@
-﻿using ClassFramework.Domain.Builders;
-using ClassFramework.Domain.Builders.Types;
-using CrossCutting.Data.Core;
-using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider;
-
-namespace DataFramework.Pipelines.Tests;
+﻿namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -42,6 +37,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
@@ -52,12 +48,12 @@ namespace MyNamespace
             get;
         }
 
-        public int MyFieldOriginal
+        public int? MyFieldOriginal
         {
             get;
         }
 
-        public MyEntity(int myField, int myFieldOriginal)
+        public MyEntity(int myField, int? myFieldOriginal)
         {
             this.MyField = myField;
             this.MyFieldOriginal = myFieldOriginal;
@@ -69,6 +65,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -109,6 +106,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
@@ -121,7 +119,7 @@ namespace MyNamespace
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public int MyFieldOriginal
+        public int? MyFieldOriginal
         {
             get;
             set;
@@ -130,10 +128,11 @@ namespace MyNamespace
         public MyEntity()
         {
             MyField = default(System.Int32);
-            MyFieldOriginal = default(System.Int32);
+            MyFieldOriginal = default(System.Int32?);
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -149,7 +148,7 @@ namespace MyNamespace
             .Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.ImmutableClass) //default
-            .WithDefaultEntityNamespace("MyNamespace")
+            .WithDefaultIdentityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
             .Build();
         var context = new IdentityClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
@@ -174,6 +173,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
+namespace MyNamespace
+{
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.IdentityClassGenerator"", @""1.0.0.0"")]
     public partial class MyEntityIdentity
     {
@@ -187,11 +189,13 @@ using System.Text;
             this.Id = id;
         }
 
-        public Builders.MyEntityIdentityBuilder ToBuilder()
+        public MyNamespace.Builders.MyEntityIdentityBuilder ToBuilder()
         {
-            return new Builders.MyEntityIdentityBuilder(this);
+            return new MyNamespace.Builders.MyEntityIdentityBuilder(this);
         }
     }
+}
+#nullable disable
 ");
     }
 
@@ -233,6 +237,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace.Builders
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
@@ -244,7 +249,7 @@ namespace MyNamespace.Builders
             set;
         }
 
-        public int MyFieldOriginal
+        public int? MyFieldOriginal
         {
             get;
             set;
@@ -275,13 +280,14 @@ namespace MyNamespace.Builders
             return this;
         }
 
-        public MyNamespace.Builders.MyEntityBuilder WithMyFieldOriginal(int myFieldOriginal)
+        public MyNamespace.Builders.MyEntityBuilder WithMyFieldOriginal(int? myFieldOriginal)
         {
             MyFieldOriginal = myFieldOriginal;
             return this;
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -313,12 +319,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandEntityProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>
     {
-        public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, MyNamespace.MyEntity> CreateResultEntity
+        public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, MyNamespace.MyEntity>? CreateResultEntity
         {
             get
             {
@@ -339,7 +346,7 @@ namespace MyNamespace
             }
         }
 
-        public CrossCutting.Data.Abstractions.AfterReadHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, MyNamespace.MyEntity> AfterRead
+        public CrossCutting.Data.Abstractions.AfterReadHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, MyNamespace.MyEntity>? AfterRead
         {
             get
             {
@@ -360,7 +367,7 @@ namespace MyNamespace
             }
         }
 
-        public CrossCutting.Data.Abstractions.CreateBuilderHandler<MyNamespace.MyEntity, MyNamespace.MyEntity> CreateBuilder
+        public CrossCutting.Data.Abstractions.CreateBuilderHandler<MyNamespace.MyEntity, MyNamespace.MyEntity>? CreateBuilder
         {
             get
             {
@@ -368,7 +375,7 @@ namespace MyNamespace
             }
         }
 
-        public CrossCutting.Data.Abstractions.CreateEntityHandler<MyNamespace.MyEntity, MyNamespace.MyEntity> CreateEntity
+        public CrossCutting.Data.Abstractions.CreateEntityHandler<MyNamespace.MyEntity, MyNamespace.MyEntity>? CreateEntity
         {
             get
             {
@@ -413,6 +420,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -445,6 +453,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandProviderGenerator"", @""1.0.0.0"")]
@@ -491,6 +500,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -523,6 +533,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DatabaseEntityRetrieverProviderGenerator"", @""1.0.0.0"")]
@@ -548,6 +559,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -688,6 +700,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DependencyInjectionGenerator"", @""1.0.0.0"")]
@@ -710,6 +723,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -742,6 +756,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.EntityMapperGenerator"", @""1.0.0.0"")]
@@ -757,6 +772,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -790,6 +806,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.IdentityCommandProviderGenerator"", @""1.0.0.0"")]
@@ -805,6 +822,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -837,6 +855,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.PagedEntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
@@ -887,6 +906,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -919,12 +939,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityDatabaseEntityRetrieverSettingsProvider : CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider
     {
-        bool IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings settings)
+        bool IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings? settings)
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
             {
@@ -935,7 +956,7 @@ namespace MyNamespace
             return false;
         }
 
-        bool IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings settings)
+        bool IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings? settings)
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
             {
@@ -947,6 +968,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -979,6 +1001,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryGenerator"", @""1.0.0.0"")]
@@ -1036,6 +1059,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -1068,6 +1092,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryFieldInfoGenerator"", @""1.0.0.0"")]
@@ -1079,12 +1104,13 @@ namespace MyNamespace
             yield return @""MyField2"";
         }
 
-        public string GetDatabaseFieldName(string queryFieldName)
+        public string? GetDatabaseFieldName(string queryFieldName)
         {
             return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -1118,6 +1144,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
@@ -1128,6 +1155,7 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
     }
 
@@ -1169,6 +1197,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryGenerator"", @""1.0.0.0"")]
@@ -1179,12 +1208,14 @@ namespace MyNamespace
         }
     }
 }
+#nullable disable
 ");
         code2.Should().Be(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#nullable enable
 namespace MyNamespace.Contracts
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.RepositoryInterfaceGenerator"", @""1.0.0.0"")]
@@ -1192,6 +1223,7 @@ namespace MyNamespace.Contracts
     {
     }
 }
+#nullable disable
 ");
     }
 
@@ -1261,6 +1293,7 @@ namespace MyNamespace.Contracts
             => new CsharpClassGeneratorSettingsBuilder()
                 .WithCultureInfo(CultureInfo.InvariantCulture)
                 .WithEncoding(Encoding)
+                .WithEnableNullableContext()
                 .WithGenerateMultipleFiles(_generateMultipleFiles)
                 .Build();
 
