@@ -60,9 +60,13 @@ internal interface IPipelineSettings
     Visibility IdentityCommandProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string IdentityCommandProviderNamespace { get; }
 
+    // EntityRetrieverSettings settings
+    Visibility DatabaseEntityRetrieverSettingsVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string DatabaseEntityRetrieverSettingsNamespace { get; }
+
     // PagedEntityRetrieverSettings settings
-    Visibility PagedEntityRetrieverSettingsVisibility { get; }
-    [Required(AllowEmptyStrings = true)] string PagedEntityRetrieverSettingsNamespace { get; }
+    Visibility DatabasePagedEntityRetrieverSettingsVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string DatabasePagedEntityRetrieverSettingsNamespace { get; }
 
     // Query settings
     Visibility QueryVisibility { get; }

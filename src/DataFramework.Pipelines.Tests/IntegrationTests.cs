@@ -658,7 +658,6 @@ GO
 ");
     }
 
-
     [Fact]
     public async Task Can_Create_Code_For_DependencyInjection_Class()
     {
@@ -683,7 +682,34 @@ GO
         var code = await GenerateCode(new TestCodeGenerationProvider(depdendencyInjection));
 
         // Assert
-        code.Should().Be(@"?");
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DependencyInjectionGenerator"", @""1.0.0.0"")]
+    public partial class ServiceCollectionExtensions
+    {
+        public static void AddMyEntityDependencies(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
+        {
+            return serviceCollection.AddQueryFrameworkSqlServer(x =>
+            {
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>>, CrossCutting.Data.Sql.DatabaseEntityRetriever<MyNamespace.MyEntity>>>();
+                x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseCommandProcessor<MyNamespace.MyEntity>();
+                x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandEntityProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityCommandProvider>();
+                x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfo>();
+                x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabasePagedEntityRetrieverSettingsProvider>();
+            });
+        }
+    }
+}
+");
     }
 
     [Fact]
@@ -786,7 +812,7 @@ namespace MyNamespace
     {
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
-            .WithTypeName("MyNamespace.MyEntity") // this will be used when PagedEntityRetrieverSettingsNamespace is empty on the settings
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabasePagedEntityRetrieverSettingsNamespace is empty on the settings
             .WithName("MyEntity")
             .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
             .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
@@ -813,7 +839,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.PagedEntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityPagedEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
+    public partial class MyEntityDatabasePagedEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
     {
         public string TableName
         {

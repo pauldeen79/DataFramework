@@ -13,8 +13,8 @@ public class SetNameComponent : IPipelineComponent<PagedEntityRetrieverSettingsC
         context = context.IsNotNull(nameof(context));
 
         context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}PagedEntityRetrieverSettings")
-            .WithNamespace(context.Request.Settings.PagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+            .WithName($"{context.Request.SourceModel.Name}DatabasePagedEntityRetrieverSettings")
+            .WithNamespace(context.Request.Settings.DatabasePagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
 
         return Task.FromResult(Result.Continue());
     }

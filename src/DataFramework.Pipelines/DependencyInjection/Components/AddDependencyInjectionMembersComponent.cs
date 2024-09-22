@@ -49,7 +49,8 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
         var commandIdentityProviderFullName = $"{context.Request.Settings.CommandProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}CommandProvider";
         var queryFieldInfoProviderFullName = $"{context.Request.Settings.QueryFieldInfoNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}QueryFieldInfo";
         var databaseEntityRetrieverProviderFullName = $"{context.Request.Settings.DatabaseEntityRetrieverProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabaseEntityRetrieverProvider";
-        var pagedDatabaseEntityRetrieverSettingsProviderFullName = $"{context.Request.Settings.PagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabaseEntityRetrieverProvider";
+        var databaseEntityRetrieverSettingsProviderFullName = $"{context.Request.Settings.DatabaseEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabaseEntityRetrieverSettingsProvider";
+        var pagedDatabaseEntityRetrieverSettingsProviderFullName = $"{context.Request.Settings.DatabasePagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabasePagedEntityRetrieverSettingsProvider";
 
         context.Request.Builder
             .AddMethods(new MethodBuilder()
@@ -68,8 +69,7 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
                     $"    x.AddSingleton<{typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(identityFullName)}, {commandIdentityProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IQueryFieldInfoProvider)}, {queryFieldInfoProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverProvider).FullName}, {databaseEntityRetrieverProviderFullName}>();",
-                    //TODO implement this
-                    //$"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverSettingsProvider).FullName}, CatalogDatabaseEntityRetrieverSettingsProvider>();",
+                    $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverSettingsProvider).FullName}, {databaseEntityRetrieverSettingsProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IPagedDatabaseEntityRetrieverSettingsProvider).FullName}, {pagedDatabaseEntityRetrieverSettingsProviderFullName}>();",
                     "});"
                 )

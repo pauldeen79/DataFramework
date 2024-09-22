@@ -12,7 +12,7 @@ public class SetVisibilityComponent : IPipelineComponent<PagedEntityRetrieverSet
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder.WithVisibility(context.Request.Settings.PagedEntityRetrieverSettingsVisibility);
+        context.Request.Builder.WithVisibility(context.Request.Settings.DatabasePagedEntityRetrieverSettingsVisibility);
 
         return Task.FromResult(Result.Continue());
     }
