@@ -48,7 +48,7 @@ namespace MyNamespace
             get;
         }
 
-        public int? MyFieldOriginal
+        public System.Nullable<int> MyFieldOriginal
         {
             get;
         }
@@ -119,7 +119,7 @@ namespace MyNamespace
         }
 
         [System.ComponentModel.ReadOnly(true)]
-        public int? MyFieldOriginal
+        public System.Nullable<int> MyFieldOriginal
         {
             get;
             set;
@@ -249,7 +249,7 @@ namespace MyNamespace.Builders
             set;
         }
 
-        public int? MyFieldOriginal
+        public System.Nullable<int> MyFieldOriginal
         {
             get;
             set;
@@ -263,7 +263,6 @@ namespace MyNamespace.Builders
 
         public MyEntityBuilder()
         {
-            MyField = default(System.Int32);
             SetDefaultValues();
         }
 
@@ -280,7 +279,7 @@ namespace MyNamespace.Builders
             return this;
         }
 
-        public MyNamespace.Builders.MyEntityBuilder WithMyFieldOriginal(int? myFieldOriginal)
+        public MyNamespace.Builders.MyEntityBuilder WithMyFieldOriginal(System.Nullable<int> myFieldOriginal)
         {
             MyFieldOriginal = myFieldOriginal;
             return this;

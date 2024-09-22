@@ -824,6 +824,8 @@ namespace DataFramework.Domain.Builders
 
         private bool _isNullable;
 
+        private bool _isValueType;
+
         private bool _isVisible;
 
         private bool _isPersistable;
@@ -943,6 +945,19 @@ namespace DataFramework.Domain.Builders
             {
                 _isNullable = value;
                 HandlePropertyChanged(nameof(IsNullable));
+            }
+        }
+
+        public bool IsValueType
+        {
+            get
+            {
+                return _isValueType;
+            }
+            set
+            {
+                _isValueType = value;
+                HandlePropertyChanged(nameof(IsValueType));
             }
         }
 
@@ -1312,6 +1327,7 @@ namespace DataFramework.Domain.Builders
             _displayName = source.DisplayName;
             _typeName = source.TypeName;
             _isNullable = source.IsNullable;
+            _isValueType = source.IsValueType;
             _isVisible = source.IsVisible;
             _isPersistable = source.IsPersistable;
             _canGet = source.CanGet;
@@ -1354,7 +1370,7 @@ namespace DataFramework.Domain.Builders
 
         public DataFramework.Domain.FieldInfo Build()
         {
-            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, GetterCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), StringMaxLength, IsMaxLengthString, DatabaseStringCollation, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsDatabaseIdentityField);
+            return new DataFramework.Domain.FieldInfo(Name, Description, DisplayName, TypeName, IsNullable, IsValueType, IsVisible, IsPersistable, CanGet, CanSet, IsReadOnly, IsIdentityField, IsComputed, IsRowVersion, UseForConcurrencyCheck, DefaultValue, GetterCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), StringMaxLength, IsMaxLengthString, DatabaseStringCollation, DatabaseNumericPrecision, DatabaseNumericScale, SkipFieldOnFind, DatabaseFieldName, DatabaseFieldType, DatabaseReaderMethodName, DatabaseCheckConstraintExpression, OverrideUseOnInsert, OverrideUseOnUpdate, OverrideUseOnDelete, OverrideUseOnSelect, IsRequiredInDatabase, IsDatabaseIdentityField);
         }
 
         partial void SetDefaultValues();
@@ -1400,6 +1416,12 @@ namespace DataFramework.Domain.Builders
         public DataFramework.Domain.Builders.FieldInfoBuilder WithIsNullable(bool isNullable = true)
         {
             IsNullable = isNullable;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.FieldInfoBuilder WithIsValueType(bool isValueType = true)
+        {
+            IsValueType = isValueType;
             return this;
         }
 

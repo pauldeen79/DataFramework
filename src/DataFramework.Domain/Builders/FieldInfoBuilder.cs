@@ -2,6 +2,6 @@
 
 public partial class FieldInfoBuilder
 {
-    public FieldInfoBuilder WithType(Type type)
-        => WithTypeName(type.IsNotNull(nameof(type)).AssemblyQualifiedName);
+    public FieldInfoBuilder WithType(Type type) //TODO: Detect nullability automatically
+        => WithTypeName(type.IsNotNull(nameof(type)).AssemblyQualifiedName).WithIsValueType(type.IsValueType);
 }

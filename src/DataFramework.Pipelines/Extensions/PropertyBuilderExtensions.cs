@@ -6,6 +6,7 @@ internal static class PropertyBuilderExtensions
         => instance
             .WithTypeName(field.PropertyTypeName.FixTypeName())
             .WithIsNullable(field.IsNullable)
+            .WithIsValueType(field.IsValueType)
             .WithVisibility(field.IsVisible.ToVisibility())
             .WithGetterVisibility(SubVisibility.InheritFromParent)
             .WithSetterVisibility(SubVisibility.InheritFromParent);

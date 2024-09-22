@@ -7,6 +7,7 @@ public interface IFieldInfo
     string? DisplayName { get; }
     string? TypeName { get; }
     bool IsNullable { get; }
+    bool IsValueType { get; }
     [DefaultValue(true)] bool IsVisible { get; }
     [DefaultValue(true)] bool IsPersistable { get; }
     [DefaultValue(true)] bool CanGet { get; }

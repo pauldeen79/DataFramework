@@ -728,7 +728,7 @@ public class FieldInfoTests
         public void Returns_Correct_Result_For_Nullable_Decimal_With_Specific_Details()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithIsNullable().WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
 
             // Act
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
@@ -741,7 +741,7 @@ public class FieldInfoTests
         public void Returns_Correct_Result_For_Nullable_Decimal_Without_Specific_Details()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(decimal?)).WithIsNullable().WithDatabaseNumericPrecision(4).WithDatabaseNumericScale(2).Build();
 
             // Act
             var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
@@ -767,7 +767,7 @@ public class FieldInfoTests
         public void Returns_Correct_Result_For_Optional_Enum()
         {
             // Arrange
-            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(MyEnumeration?)).Build();
+            var sut = new FieldInfoBuilder().WithName("Name").WithType(typeof(MyEnumeration?)).WithIsNullable().Build();
 
             // Act
             var actual = sut.GetSqlFieldType();

@@ -263,6 +263,11 @@ namespace DataFramework.Domain
             get;
         }
 
+        public bool IsValueType
+        {
+            get;
+        }
+
         [System.ComponentModel.DefaultValueAttribute(true)]
         public bool IsVisible
         {
@@ -404,13 +409,14 @@ namespace DataFramework.Domain
             get;
         }
 
-        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> getterCodeStatements, System.Nullable<int> stringMaxLength, System.Nullable<bool> isMaxLengthString, string? databaseStringCollation, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isDatabaseIdentityField)
+        public FieldInfo(string name, string? description, string? displayName, string? typeName, bool isNullable, bool isValueType, bool isVisible, bool isPersistable, bool canGet, bool canSet, bool isReadOnly, bool isIdentityField, bool isComputed, bool isRowVersion, bool useForConcurrencyCheck, object? defaultValue, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> getterCodeStatements, System.Nullable<int> stringMaxLength, System.Nullable<bool> isMaxLengthString, string? databaseStringCollation, System.Nullable<byte> databaseNumericPrecision, System.Nullable<byte> databaseNumericScale, bool skipFieldOnFind, string? databaseFieldName, string? databaseFieldType, string? databaseReaderMethodName, string? databaseCheckConstraintExpression, System.Nullable<bool> overrideUseOnInsert, System.Nullable<bool> overrideUseOnUpdate, System.Nullable<bool> overrideUseOnDelete, System.Nullable<bool> overrideUseOnSelect, System.Nullable<bool> isRequiredInDatabase, bool isDatabaseIdentityField)
         {
             this.Name = name;
             this.Description = description;
             this.DisplayName = displayName;
             this.TypeName = typeName;
             this.IsNullable = isNullable;
+            this.IsValueType = isValueType;
             this.IsVisible = isVisible;
             this.IsPersistable = isPersistable;
             this.CanGet = canGet;
