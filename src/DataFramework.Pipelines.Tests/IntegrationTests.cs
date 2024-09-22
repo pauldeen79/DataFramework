@@ -1,4 +1,6 @@
-﻿namespace DataFramework.Pipelines.Tests;
+﻿using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider;
+
+namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -804,7 +806,7 @@ namespace MyNamespace
     }
 
     [Fact]
-    public async Task Can_Create_Code_For_PagedEntityRetrieverSettings_Class()
+    public async Task Can_Create_Code_For_EntityRetrieverSettings_Class()
     {
         // Arrange
         var sourceModel = new DataObjectInfoBuilder()
@@ -879,6 +881,66 @@ namespace MyNamespace
             {
                 return -1;
             }
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_EntityRetrieverSettingsProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseEntityRetrieverSettingsProviderSettingsNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new DatabaseEntityRetrieverSettingsProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var entityRetrieverSettingsProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverSettingsProviderContext>>();
+
+        // Act
+        var result = (await entityRetrieverSettingsProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var pagedEntityRetrieverSettings = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityDatabaseEntityRetrieverSettingsProvider : CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider
+    {
+        bool IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings settings)
+        {
+            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
+            {
+                settings = new MyEntityPagedEntityRetrieverSettings();
+                return true;
+            }
+            settings = default;
+            return false;
+        }
+
+        bool IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings settings)
+        {
+            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
+            {
+                settings = new MyEntityPagedEntityRetrieverSettings();
+                return true;
+            }
+            settings = default;
+            return false;
         }
     }
 }
