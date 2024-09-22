@@ -46,13 +46,15 @@ global using DataFramework.Pipelines.DependencyInjection.Components.Abstractions
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.EntityMapper;
 global using DataFramework.Pipelines.EntityMapper.Components.Abstractions;
+global using DataFramework.Pipelines.EntityRetrieverSettings;
+global using DataFramework.Pipelines.EntityRetrieverSettings.Components.Abstractions;
 global using DataFramework.Pipelines.Extensions;
 global using DataFramework.Pipelines.IdentityClass;
 global using DataFramework.Pipelines.IdentityClass.Components.Abstractions;
 global using DataFramework.Pipelines.IdentityCommandProvider;
 global using DataFramework.Pipelines.IdentityCommandProvider.Components.Abstractions;
 global using DataFramework.Pipelines.PagedEntityRetrieverSettings;
-global using DataFramework.Pipelines.PagedEntityRetrieverSettingss.Components.Abstractions;
+global using DataFramework.Pipelines.PagedEntityRetrieverSettings.Components.Abstractions;
 global using DataFramework.Pipelines.PlaceholderProcessors;
 global using DataFramework.Pipelines.Query;
 global using DataFramework.Pipelines.Query.Components.Abstractions;

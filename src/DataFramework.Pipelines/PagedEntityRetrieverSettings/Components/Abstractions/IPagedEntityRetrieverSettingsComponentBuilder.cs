@@ -1,4 +1,4 @@
-﻿namespace DataFramework.Pipelines.PagedEntityRetrieverSettingss.Components.Abstractions;
+﻿namespace DataFramework.Pipelines.PagedEntityRetrieverSettings.Components.Abstractions;
 
 public interface IPagedEntityRetrieverSettingsComponentBuilder : IBuilder<IPipelineComponent<PagedEntityRetrieverSettingsContext>>
 {
