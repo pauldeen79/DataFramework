@@ -13,10 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.14.2" />
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.2" />
-    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.5" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.5" />
+    <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.15.0" />
+    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.3" />
+    <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.8" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.8" />
   </ItemGroup>
 
   <ItemGroup>
