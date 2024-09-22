@@ -9,15 +9,15 @@ public static class MethodBuilderExtensions
         DatabaseOperation operation,
         string commandType,
         string commentText)
-    => instance.Chain(builder =>
-    {
-        if (enabled)
+        => instance.Chain(builder =>
         {
-            instance.AddStringCodeStatements
-            (
-                $"    case {typeof(DatabaseOperation).FullName}.{operation}:",
-                $"        return new {commandType}(\"{commentText}\", source, {typeof(DatabaseOperation).FullName}.{operation}, {operation.GetMethodNamePrefix()}Parameters);"
-            );
-        }
-    });
+            if (enabled)
+            {
+                instance.AddStringCodeStatements
+                (
+                    $"    case {typeof(DatabaseOperation).FullName}.{operation}:",
+                    $"        return new {commandType}(\"{commentText}\", source, {typeof(DatabaseOperation).FullName}.{operation}, {operation.GetMethodNamePrefix()}Parameters);"
+                );
+            }
+        });
 }

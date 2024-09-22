@@ -109,7 +109,7 @@ public partial class FieldInfo
         }
 
         var type = Type.GetType(typeName);
-        if (type != null && TypeMappings.SqlTypeNameMappings.TryGetValue(type, out var sqlType))
+        if (type is not null && TypeMappings.SqlTypeNameMappings.TryGetValue(type, out var sqlType))
         {
             return sqlType;
         }

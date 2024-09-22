@@ -55,7 +55,7 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
     private static string GetQueryMaxLimit(PipelineContext<QueryContext> context)
     {
         var maxLimit = context.Request.Settings.QueryMaxLimit;
-        return maxLimit == null
+        return maxLimit is null
             ? "int.MaxValue"
             : maxLimit.Value.ToString(context.Request.FormatProvider.ToCultureInfo());
     }

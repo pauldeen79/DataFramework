@@ -15,7 +15,7 @@ public static class StringExtensions
         }
 
         var type = Type.GetType(instance);
-        return type != null && TypeMappings.ReaderMethodNames.ContainsKey(type);
+        return type is not null && TypeMappings.ReaderMethodNames.ContainsKey(type);
     }
 
     internal static string GetSqlReaderMethodName(this string instance, bool isNullable)
@@ -33,7 +33,7 @@ public static class StringExtensions
         }
 
         var type = Type.GetType(instance);
-        if (type == null)
+        if (type is null)
         {
             return "GetValue";
         }

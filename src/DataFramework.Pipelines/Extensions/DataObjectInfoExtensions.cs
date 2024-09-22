@@ -82,21 +82,21 @@ public static class DataObjectInfoExtensions
         => instance.DatabaseSchemaName.WhenNullOrEmpty("dbo");
 
     public static IEnumerable<TableFieldBuilder> GetTableFields(this DataObjectInfo instance)
-    => instance
-        .Fields
-        .Where(fi => fi.IsPersistable && fi.PropertyTypeName.IsSupportedByMap())
-        .Select(fi =>
-            new TableFieldBuilder()
-                .WithName(fi.GetDatabaseFieldName())
-                .WithType(fi.GetTypedSqlFieldType())
-                .WithIsRequired(fi.IsSqlRequired || fi.IsRequired)
-                .WithIsIdentity(fi.IsDatabaseIdentityField)
-                .WithNumericPrecision(fi.DatabaseNumericPrecision)
-                .WithNumericScale(fi.DatabaseNumericScale)
-                .WithStringLength(fi.GetSqlStringLength(FieldInfo.DefaultStringLength))
-                .WithStringCollation(fi.DatabaseStringCollation ?? string.Empty)
-                .WithIsStringMaxLength(fi.IsSqlStringMaxLength)
-                .AddCheckConstraints(CreateCheckConstraintExpressions(fi.DatabaseCheckConstraintExpression, fi, instance)));
+        => instance
+            .Fields
+            .Where(fi => fi.IsPersistable && fi.PropertyTypeName.IsSupportedByMap())
+            .Select(fi =>
+                new TableFieldBuilder()
+                    .WithName(fi.GetDatabaseFieldName())
+                    .WithType(fi.GetTypedSqlFieldType())
+                    .WithIsRequired(fi.IsSqlRequired || fi.IsRequired)
+                    .WithIsIdentity(fi.IsDatabaseIdentityField)
+                    .WithNumericPrecision(fi.DatabaseNumericPrecision)
+                    .WithNumericScale(fi.DatabaseNumericScale)
+                    .WithStringLength(fi.GetSqlStringLength(FieldInfo.DefaultStringLength))
+                    .WithStringCollation(fi.DatabaseStringCollation ?? string.Empty)
+                    .WithIsStringMaxLength(fi.IsSqlStringMaxLength)
+                    .AddCheckConstraints(CreateCheckConstraintExpressions(fi.DatabaseCheckConstraintExpression, fi, instance)));
 
     private static IEnumerable<CheckConstraintBuilder> CreateCheckConstraintExpressions(
         string? stringValue,
@@ -119,7 +119,7 @@ public static class DataObjectInfoExtensions
     public static IEnumerable<DefaultValueConstraintBuilder> GetTableDefaultValueConstraints(this DataObjectInfo instance)
         => instance
             .Fields
-            .Where(fi => fi.DefaultValue != null)
+            .Where(fi => fi.DefaultValue is not null)
             .Select
                 (fi => new DefaultValueConstraintBuilder()
                     .WithFieldName(fi.GetDatabaseFieldName())
@@ -232,38 +232,22 @@ public static class DataObjectInfoExtensions
             .AddStatements(GetStoredProcedureStatements(instance.SourceModel, operation, settings));
 
     private static IEnumerable<StoredProcedureParameterBuilder> GetStoredProcedureParameters(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
-    {
-        var derrivedOperation = GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings);
-
-        switch (derrivedOperation)
+        => GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings) switch
         {
-            case DatabaseOperation.Insert:
-                return instance.Fields.Where(x => x.UseOnInsert).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
-            case DatabaseOperation.Update:
-                return instance.Fields.Where(x => x.UseOnUpdate).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
-            case DatabaseOperation.Delete:
-                return instance.Fields.Where(x => x.UseOnDelete).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true)));
-            default:
-                throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}");
-        }
-    }
+            DatabaseOperation.Insert => instance.Fields.Where(x => x.UseOnInsert).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
+            DatabaseOperation.Update => instance.Fields.Where(x => x.UseOnUpdate).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
+            DatabaseOperation.Delete => instance.Fields.Where(x => x.UseOnDelete).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
+            _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}"),
+        };
 
     private static IEnumerable<SqlStatementBaseBuilder> GetStoredProcedureStatements(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
-    {
-        var derrivedOperation = GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings);
-
-        switch (derrivedOperation)
+        => GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings) switch
         {
-            case DatabaseOperation.Insert:
-                return CreateStoredProcedureStatements(settings.AddStoredProcedureStatements, () => instance.CreateDatabaseInsertCommandText(settings.ConcurrencyCheckBehavior));
-            case DatabaseOperation.Update:
-                return CreateStoredProcedureStatements(settings.UpdateStoredProcedureStatements, () => instance.CreateDatabaseUpdateCommandText(settings.ConcurrencyCheckBehavior));
-            case DatabaseOperation.Delete:
-                return CreateStoredProcedureStatements(settings.DeleteStoredProcedureStatements, () => instance.CreateDatabaseDeleteCommandText(settings.ConcurrencyCheckBehavior));
-            default:
-                throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}");
-        }
-    }
+            DatabaseOperation.Insert => CreateStoredProcedureStatements(settings.AddStoredProcedureStatements, () => instance.CreateDatabaseInsertCommandText(settings.ConcurrencyCheckBehavior)),
+            DatabaseOperation.Update => CreateStoredProcedureStatements(settings.UpdateStoredProcedureStatements, () => instance.CreateDatabaseUpdateCommandText(settings.ConcurrencyCheckBehavior)),
+            DatabaseOperation.Delete => CreateStoredProcedureStatements(settings.DeleteStoredProcedureStatements, () => instance.CreateDatabaseDeleteCommandText(settings.ConcurrencyCheckBehavior)),
+            _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}"),
+        };
 
     private static IEnumerable<SqlStatementBaseBuilder> CreateStoredProcedureStatements(IEnumerable<SqlStatementBase> statements, Func<string> defaultStatementDelegate)
     {
