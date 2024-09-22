@@ -1255,14 +1255,15 @@ namespace MyNamespace.Contracts
             var pipeline = Scope!.ServiceProvider.GetRequiredService(typeof(IPipeline<>).MakeGenericType(contextType));
             var builder = (TypeBaseBuilder)contextType.GetProperty("Builder")!.GetValue(context)!;
             var task = (Task<Result>)pipeline.GetType().GetMethod(nameof(IPipeline<ContextBase>.Process))!.Invoke(pipeline, [context, CancellationToken.None])!;
-            var result = (await task).ProcessResult(builder, builder.Build);
+            var result = (await task.ConfigureAwait(true)).ProcessResult(builder, builder.Build);
             var classInstance = result.GetValueOrThrow();
             (await codeGenerationEngine.Generate(new TestCodeGenerationProvider(classInstance, true), generationEnvironment, codeGenerationSettings)).ThrowIfInvalid();
         }
 
         var content = generationEnvironment.Builder.Build();
         var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
-        //(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
+        allContents.Should().NotBeEmpty();
+        ///(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
     }
 
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
