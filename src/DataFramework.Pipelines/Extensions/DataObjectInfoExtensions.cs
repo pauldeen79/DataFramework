@@ -50,10 +50,20 @@ public static class DataObjectInfoExtensions
             ? $"{instance.Name}Identity"
             : $"{entityIdentityNamespace}.{instance.Name}Identity";
 
+    public static string GetQueryFullName(this DataObjectInfo instance, string queryNamespace)
+        => string.IsNullOrEmpty(queryNamespace)
+            ? $"{instance.Name}Query"
+            : $"{queryNamespace}.{instance.Name}Query";
+
     public static string GetEntityRetrieverFullName(this DataObjectInfo instance, string entityRetrieverNamespace)
         => string.IsNullOrEmpty(entityRetrieverNamespace)
             ? $"{instance.Name}EntityRetriever"
             : $"{entityRetrieverNamespace}.{instance.Name}EntityRetriever";
+
+    public static string GetEntityRetrieverSettingsFullName(this DataObjectInfo instance, string entityRetrieverSettingsNamespace)
+        => string.IsNullOrEmpty(entityRetrieverSettingsNamespace)
+            ? $"{instance.Name}PagedEntityRetrieverSettings"
+            : $"{entityRetrieverSettingsNamespace}.{instance.Name}PagedEntityRetrieverSettings";
 
     public static string DefaultRepositoryFullName(this DataObjectInfo instance, string repositoryNamespace)
         => string.IsNullOrEmpty(repositoryNamespace)

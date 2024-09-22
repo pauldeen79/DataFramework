@@ -39,6 +39,8 @@ global using DataFramework.Pipelines.CommandProvider;
 global using DataFramework.Pipelines.CommandProvider.Components.Abstractions;
 global using DataFramework.Pipelines.DatabaseEntityRetrieverProvider;
 global using DataFramework.Pipelines.DatabaseEntityRetrieverProvider.Components.Abstractions;
+global using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider;
+global using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider.Components.Abstractions;
 global using DataFramework.Pipelines.DatabaseSchema;
 global using DataFramework.Pipelines.DatabaseSchema.Components.Abstractions;
 global using DataFramework.Pipelines.DependencyInjection;

@@ -34,6 +34,10 @@ internal interface IPipelineSettings
     Visibility DatabaseEntityRetrieverProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string DatabaseEntityRetrieverProviderNamespace { get; }
 
+    // DatabaseEntityRetrieverSettingsProvider settings
+    Visibility DatabaseEntityRetrieverSettingsProviderVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string DatabaseEntityRetrieverSettingsProviderNamespace { get; }
+
     // Database settings
     [Required] string AddStoredProcedureName { get; }
     [Required] string UpdateStoredProcedureName { get; }

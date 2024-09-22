@@ -699,7 +699,7 @@ namespace MyNamespace
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityCommandProvider>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfo>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
-                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabasePagedEntityRetrieverSettingsProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabasePagedEntityRetrieverSettingsProvider>();
             });
         }
