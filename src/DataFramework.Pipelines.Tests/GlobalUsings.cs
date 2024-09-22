@@ -30,6 +30,7 @@ global using DataFramework.Pipelines.DatabaseSchema;
 global using DataFramework.Pipelines.DependencyInjection;
 global using DataFramework.Pipelines.Domains;
 global using DataFramework.Pipelines.EntityMapper;
+global using DataFramework.Pipelines.EntityRetrieverSettings;
 global using DataFramework.Pipelines.Extensions;
 global using DataFramework.Pipelines.IdentityClass;
 global using DataFramework.Pipelines.IdentityCommandProvider;

@@ -1,8 +1,4 @@
-﻿using ClassFramework.Domain.Extensions;
-using ClassFramework.Pipelines.Interface;
-using CrossCutting.Data.Abstractions;
-
-namespace DataFramework.Pipelines.Tests;
+﻿namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -801,6 +797,80 @@ namespace MyNamespace
         protected override System.Collections.Generic.IEnumerable<CrossCutting.Data.Core.IdentityDatabaseCommandProviderField> GetFields(MyEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
         {
             yield return new IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
+        }
+    }
+}
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_EntityRetrieverSettings_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseEntityRetrieverSettingsNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new EntityRetrieverSettingsContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var EntityRetrieverSettingsPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<EntityRetrieverSettingsContext>>();
+
+        // Act
+        var result = (await EntityRetrieverSettingsPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var EntityRetrieverSettings = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(EntityRetrieverSettings));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.EntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityDatabaseEntityRetrieverSettings : CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings
+    {
+        public string TableName
+        {
+            get
+            {
+                return MyEntity;
+            }
+        }
+
+        public string Fields
+        {
+            get
+            {
+                return new[]
+                {
+                    @""MyField1"",
+                    @""MyField2"",
+                };
+            }
+        }
+
+        public string DefaultOrderBy
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string DefaultWhere
+        {
+            get
+            {
+                return null;
+            }
         }
     }
 }

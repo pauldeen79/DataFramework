@@ -80,6 +80,14 @@ public static class ServiceCollectionExtensions
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetNameComponentBuilder>()
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetPartialComponentBuilder>()
             .AddScoped<IIdentityCommandProviderComponentBuilder, IdentityCommandProvider.Components.SetVisibilityComponentBuilder>()
+            // EntityRetrieverSettings pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityRetrieverSettingsContext>>().Build())
+            .AddScoped<IPipelineBuilder<EntityRetrieverSettingsContext>, EntityRetrieverSettings.PipelineBuilder>()
+            .AddScoped<IEntityRetrieverSettingsComponentBuilder, EntityRetrieverSettings.Components.AddEntityRetrieverSettingsMembersComponentBuilder>()
+            .AddScoped<IEntityRetrieverSettingsComponentBuilder, EntityRetrieverSettings.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IEntityRetrieverSettingsComponentBuilder, EntityRetrieverSettings.Components.SetNameComponentBuilder>()
+            .AddScoped<IEntityRetrieverSettingsComponentBuilder, EntityRetrieverSettings.Components.SetPartialComponentBuilder>()
+            .AddScoped<IEntityRetrieverSettingsComponentBuilder, EntityRetrieverSettings.Components.SetVisibilityComponentBuilder>()
             // PagedEntityRetrieverSettings pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<PagedEntityRetrieverSettingsContext>>().Build())
             .AddScoped<IPipelineBuilder<PagedEntityRetrieverSettingsContext>, PagedEntityRetrieverSettings.PipelineBuilder>()
