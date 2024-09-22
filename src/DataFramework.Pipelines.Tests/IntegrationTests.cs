@@ -1,4 +1,7 @@
-﻿using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider;
+﻿using ClassFramework.Domain.Builders;
+using ClassFramework.Domain.Builders.Types;
+using CrossCutting.Data.Core;
+using DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider;
 
 namespace DataFramework.Pipelines.Tests;
 
@@ -332,7 +335,7 @@ namespace MyNamespace
                          default:
                              throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
                     }
-                }
+                };
             }
         }
 
@@ -353,7 +356,7 @@ namespace MyNamespace
                          default:
                              throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
                     }
-                }
+                };
             }
         }
 
@@ -380,8 +383,8 @@ namespace MyNamespace
 
         private MyNamespace.MyEntity AddAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.MyField = reader.GetInt32(@""MyField"");
-            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            resultEntity.MyField = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
+            resultEntity.MyFieldOriginal = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
             return resultEntity;
         }
 
@@ -392,8 +395,8 @@ namespace MyNamespace
 
         private MyNamespace.MyEntity UpdateAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.MyField = reader.GetInt32(@""MyField"");
-            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            resultEntity.MyField = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
+            resultEntity.MyFieldOriginal = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
             return resultEntity;
         }
 
@@ -404,8 +407,8 @@ namespace MyNamespace
 
         private MyNamespace.MyEntity DeleteAfterRead(MyNamespace.MyEntity resultEntity, System.Data.IDataReader reader)
         {
-            resultEntity.MyField = reader.GetInt32(@""MyField"");
-            resultEntity.MyFieldOriginal = reader.GetInt32(@""MyField"");
+            resultEntity.MyField = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
+            resultEntity.MyFieldOriginal = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, @""MyField"");
             return resultEntity;
         }
     }
@@ -532,10 +535,10 @@ namespace MyNamespace
             _databaseEntityRetriever = databaseEntityRetriever;
         }
 
-        public bool TryCreate<TResult>(QueryFramework.Abstractions.IQuery query, out CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult> result)
+        public bool TryCreate<TResult>(QueryFramework.Abstractions.IQuery query, out CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult>? result)
             where TResult : class
         {
-            if (typeof(TResult) == typeof(MyNamespace.MyEntity)
+            if (typeof(TResult) == typeof(MyNamespace.MyEntity))
             {
                 result = (CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>)_databaseEntityRetriever;
                 return true;
@@ -1192,11 +1195,59 @@ namespace MyNamespace.Contracts
 ");
     }
 
+    [Fact]
+    public async Task Can_Create_Everything()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when RepositoryNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithDefaultIdentityNamespace("MyNamespace")
+            .WithRepositoryInterfaceNamespace("MyNamespace.Contracts")
+            .WithUseRepositoryInterface() // needed to use repository interface
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var generationEnvironment = new MultipleStringContentBuilderEnvironment();
+        var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
+        var codeGenerationEngine = GetCodeGenerationEngine();
+
+        // Act
+        foreach (var contextType in typeof(ContextBase).Assembly.GetExportedTypes().Where(x => x.BaseType == typeof(ContextBase) && !x.IsAbstract && x.GetProperty("Builder") is not null))
+        {
+            var context = Activator.CreateInstance(contextType, sourceModel, settings, CultureInfo.InvariantCulture);
+            var pipeline = Scope!.ServiceProvider.GetRequiredService(typeof(IPipeline<>).MakeGenericType(contextType));
+            var builder = (TypeBaseBuilder)contextType.GetProperty("Builder")!.GetValue(context)!;
+            var task = (Task<Result>)pipeline.GetType().GetMethod(nameof(IPipeline<ContextBase>.Process))!.Invoke(pipeline, [context, CancellationToken.None])!;
+            var result = (await task).ProcessResult(builder, builder.Build);
+            var classInstance = result.GetValueOrThrow();
+            (await codeGenerationEngine.Generate(new TestCodeGenerationProvider(classInstance, true), generationEnvironment, codeGenerationSettings)).ThrowIfInvalid();
+        }
+
+        var content = generationEnvironment.Builder.Build();
+        var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
+        //(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
+    }
+
     private sealed class TestCodeGenerationProvider : CsharpClassGeneratorCodeGenerationProviderBase
     {
         private readonly TypeBase _model;
+        private readonly bool _generateMultipleFiles;
 
-        public TestCodeGenerationProvider(TypeBase model) => _model = model;
+        public TestCodeGenerationProvider(TypeBase model) : this(model, false)
+        {
+        }
+
+        public TestCodeGenerationProvider(TypeBase model, bool generateMultipleFiles)
+        {
+            _model = model;
+            _generateMultipleFiles = generateMultipleFiles;
+        }
 
         public override string Path => string.Empty;
 
@@ -1210,6 +1261,7 @@ namespace MyNamespace.Contracts
             => new CsharpClassGeneratorSettingsBuilder()
                 .WithCultureInfo(CultureInfo.InvariantCulture)
                 .WithEncoding(Encoding)
+                .WithGenerateMultipleFiles(_generateMultipleFiles)
                 .Build();
 
         public override Task<IEnumerable<TypeBase>> GetModel()

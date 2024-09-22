@@ -35,7 +35,7 @@ public abstract class IntegrationTestBase : TestBase
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
         var codeGenerationEngine = GetCodeGenerationEngine();
 
-        await codeGenerationEngine.Generate(provider, generationEnvironment, codeGenerationSettings).ConfigureAwait(false);
+        (await codeGenerationEngine.Generate(provider, generationEnvironment, codeGenerationSettings).ConfigureAwait(false)).ThrowIfInvalid();
 
         return generationEnvironment.Builder.ToString().ReplaceLineEndings();
     }

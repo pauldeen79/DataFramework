@@ -61,7 +61,7 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
                 "         default:",
                 $"             throw new {typeof(ArgumentOutOfRangeException).FullName}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
                 "    }",
-                "}"
+                "};"
             );
 
         yield return new PropertyBuilder()
@@ -84,7 +84,7 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
                 "         default:",
                 $"             throw new {typeof(ArgumentOutOfRangeException).FullName}(\"operation\", string.Format(\"Unsupported operation: {{0}}\", operation));",
                 "    }",
-                "}"
+                "};"
             );
 
         yield return new PropertyBuilder()
@@ -179,6 +179,6 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
 
     private string CreateAfterReadStatement(FieldInfo field, DataObjectInfo instance, bool isImmutable, string suffix)
         => isImmutable
-            ? $"resultEntity = resultEntity.Set{field.CreatePropertyName(instance)}{suffix}(reader.{field.SqlReaderMethodName}({_csharpExpressionDumper.Dump(field.GetDatabaseFieldName())}));"
-            : $"resultEntity.{field.CreatePropertyName(instance)}{suffix} = reader.{field.SqlReaderMethodName}({_csharpExpressionDumper.Dump(field.GetDatabaseFieldName())});";
+            ? $"resultEntity = resultEntity.Set{field.CreatePropertyName(instance)}{suffix}{typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}{field.SqlReaderMethodName}(reader, {_csharpExpressionDumper.Dump(field.GetDatabaseFieldName())}));"
+            : $"resultEntity.{field.CreatePropertyName(instance)}{suffix} = {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, {_csharpExpressionDumper.Dump(field.GetDatabaseFieldName())});";
 }

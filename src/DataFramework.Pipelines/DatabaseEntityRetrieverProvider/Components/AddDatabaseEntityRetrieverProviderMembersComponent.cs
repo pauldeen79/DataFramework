@@ -47,7 +47,7 @@ public class AddDatabaseEntityRetrieverProviderMembersComponent : IPipelineCompo
             )
             .AddStringCodeStatements
             (
-                $"if (typeof(TResult) == typeof({instance.GetEntityFullName(entityNamespace)})",
+                $"if (typeof(TResult) == typeof({instance.GetEntityFullName(entityNamespace)}))",
                 "{",
                 $"    result = ({typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName(instance.GetEntityFullName(entityNamespace))})_databaseEntityRetriever;",
                 "    return true;",
