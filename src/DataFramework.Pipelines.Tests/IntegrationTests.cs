@@ -703,7 +703,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DependencyInjectionGenerator"", @""1.0.0.0"")]
-    public partial class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
         public static void AddMyEntityDependencies(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
         {
@@ -1004,7 +1004,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityQuery : QueryFramework.Core.Query, System.ComponentModel.DataAnnotations.IValidatableObject
+    public partial record MyEntityQuery : QueryFramework.Core.Query, System.ComponentModel.DataAnnotations.IValidatableObject
     {
         private static readonly string[] ValidFieldNames = new[] { ""MyField1"", ""MyField2"" };
 
@@ -1018,7 +1018,7 @@ namespace MyNamespace
         {
         }
 
-        public MyEntityQuery(QueryFramework.Abstractions.IQuery query) : this(query.Limit, query.Offset, query.Filter, query.OrderByFields
+        public MyEntityQuery(QueryFramework.Abstractions.IQuery query) : this(query.Limit, query.Offset, query.Filter, query.OrderByFields)
         {
         }
 

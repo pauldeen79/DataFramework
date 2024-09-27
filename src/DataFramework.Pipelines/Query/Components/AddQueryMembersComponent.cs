@@ -138,7 +138,7 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
 
         yield return new ConstructorBuilder()
             .AddParameter("query", typeof(IQuery))
-            .WithChainCall("this(query.Limit, query.Offset, query.Filter, query.OrderByFields");
+            .WithChainCall("this(query.Limit, query.Offset, query.Filter, query.OrderByFields)");
     }
 
     private sealed class StringLiteral : IStringLiteral

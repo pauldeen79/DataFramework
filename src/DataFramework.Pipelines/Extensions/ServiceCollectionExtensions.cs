@@ -63,7 +63,9 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.AddGeneratorAttributeComponentBuilder>()
             .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetNameComponentBuilder>()
             .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetPartialComponentBuilder>()
-            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetVisibilityComponentBuilder>()            // EntityMapper pipeline
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetStaticComponentBuilder>()
+            .AddScoped<IDependencyInjectionComponentBuilder, DependencyInjection.Components.SetVisibilityComponentBuilder>()
+            // EntityMapper pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<EntityMapperContext>>().Build())
             .AddScoped<IPipelineBuilder<EntityMapperContext>, EntityMapper.PipelineBuilder>()
             .AddScoped<IEntityMapperComponentBuilder, EntityMapper.Components.AddEntityMapperMembersComponentBuilder>()
@@ -103,6 +105,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IQueryComponentBuilder, Query.Components.AddGeneratorAttributeComponentBuilder>()
             .AddScoped<IQueryComponentBuilder, Query.Components.SetNameComponentBuilder>()
             .AddScoped<IQueryComponentBuilder, Query.Components.SetPartialComponentBuilder>()
+            .AddScoped<IQueryComponentBuilder, Query.Components.SetRecordComponentBuilder>()
             .AddScoped<IQueryComponentBuilder, Query.Components.SetVisibilityComponentBuilder>()
             // QueryFieldInfo pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<QueryFieldInfoContext>>().Build())

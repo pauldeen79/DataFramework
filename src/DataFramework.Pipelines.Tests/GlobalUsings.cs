@@ -6,6 +6,7 @@ global using AutoFixture.Kernel;
 global using ClassFramework.Domain;
 global using ClassFramework.Domain.Builders;
 global using ClassFramework.Domain.Builders.Extensions;
+global using ClassFramework.Domain.Builders.Types;
 global using ClassFramework.Pipelines.Extensions;
 global using ClassFramework.TemplateFramework;
 global using ClassFramework.TemplateFramework.Builders;
