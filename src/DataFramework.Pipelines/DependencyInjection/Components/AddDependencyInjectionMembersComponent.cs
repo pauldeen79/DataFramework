@@ -49,7 +49,7 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
         var commandIdentityProviderFullName = $"{context.Request.Settings.CommandProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}CommandProvider";
         var queryFieldInfoProviderFullName = $"{context.Request.Settings.QueryFieldInfoNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}QueryFieldInfo";
         var databaseEntityRetrieverProviderFullName = $"{context.Request.Settings.DatabaseEntityRetrieverProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabaseEntityRetrieverProvider";
-        var pagedDatabaseEntityRetrieverSettingsProviderFullName = $"{context.Request.Settings.DatabasePagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabasePagedEntityRetrieverSettingsProvider";
+        var pagedDatabaseEntityRetrieverSettingsProviderFullName = $"{context.Request.Settings.DatabasePagedEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{context.Request.SourceModel.Name}DatabaseEntityRetrieverSettingsProvider";
 
         context.Request.Builder
             .AddMethods(new MethodBuilder()
@@ -59,10 +59,10 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
                 .WithExtensionMethod()
                 .AddParameter("serviceCollection", typeof(IServiceCollection))
                 .AddStringCodeStatements(
-                    $"return serviceCollection.{nameof(QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions.AddQueryFrameworkSqlServer)}(x =>",
+                    $"return {typeof(QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions).FullName}.{nameof(QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions.AddQueryFrameworkSqlServer)}(serviceCollection, x =>",
                     "{",
-                    $"    x.AddSingleton<{typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}>, {typeof(DatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}>>();",
-                    $"    x.AddScoped<{typeof(IDatabaseCommandProcessor<>).ReplaceGenericTypeName(entityFullName)}, {typeof(DatabaseCommandProcessor<,>).ReplaceGenericTypeName(typeArgs)}();",
+                    $"    x.AddSingleton<{typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}, {typeof(DatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}>();",
+                    $"    x.AddScoped<{typeof(IDatabaseCommandProcessor<>).ReplaceGenericTypeName(entityFullName)}, {typeof(DatabaseCommandProcessor<,>).ReplaceGenericTypeName(typeArgs)}>();",
                     $"    x.AddScoped<{typeof(IDatabaseCommandEntityProvider<,>).ReplaceGenericTypeName(entityCommandProviderTypeArgs)}, {commandEntityProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(entityFullName)}, {commandProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(identityFullName)}, {commandIdentityProviderFullName}>();",

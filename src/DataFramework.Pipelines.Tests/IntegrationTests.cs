@@ -707,17 +707,17 @@ namespace MyNamespace
     {
         public static void AddMyEntityDependencies(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
         {
-            return serviceCollection.AddQueryFrameworkSqlServer(x =>
+            return QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions.AddQueryFrameworkSqlServer(serviceCollection, x =>
             {
-                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>>, CrossCutting.Data.Sql.DatabaseEntityRetriever<MyNamespace.MyEntity>>>();
-                x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseCommandProcessor<MyNamespace.MyEntity>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseEntityRetriever<MyNamespace.MyEntity>>();
+                x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseCommandProcessor<MyNamespace.MyEntity>>();
                 x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandEntityProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityCommandProvider>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfo>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
-                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabasePagedEntityRetrieverSettingsProvider>();
-                x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabasePagedEntityRetrieverSettingsProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
             });
         }
     }
