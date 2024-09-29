@@ -74,6 +74,10 @@ internal interface IPipelineSettings
     int? QueryMaxLimit { get; }
     bool CreateQueryAsRecord { get; }
 
+    // QueryBuilder settings
+    Visibility QueryBuilderVisibility { get; }
+    [Required(AllowEmptyStrings = true)] string QueryBuilderNamespace { get; }
+
     // QueryFieldInfo settings
     Visibility QueryFieldInfoVisibility { get; }
     [Required(AllowEmptyStrings = true)] string QueryFieldInfoNamespace { get; }

@@ -1,4 +1,6 @@
-﻿namespace DataFramework.Pipelines.Query.Components;
+﻿using QueryFramework.Abstractions.Builders;
+
+namespace DataFramework.Pipelines.Query.Components;
 
 public class AddQueryMembersComponentBuilder : IQueryComponentBuilder
 {
@@ -65,7 +67,6 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
         var validationResultType = typeof(ValidationResult).FullName;
         yield return new MethodBuilder()
             .WithName(nameof(IValidatableObject.Validate))
-            .WithVisibility(Visibility.Public)
             .WithReturnType(typeof(IEnumerable<ValidationResult>))
             .AddParameter("validationContext", typeof(ValidationContext))
             .AddStringCodeStatements
@@ -94,10 +95,16 @@ public class AddQueryMembersComponent : IPipelineComponent<QueryContext>
                 @"}"
             );
 
+        yield return new MethodBuilder()
+            .WithName(nameof(IQuery.ToBuilder))
+            .WithOverride()
+            .WithReturnType(typeof(IQueryBuilder))
+            .AddStringCodeStatements($"return new {context.Request.SourceModel.GetQueryBuilderFullName(context.Request.Settings.QueryBuilderNamespace)}(this);");
+
         var fieldNameStatements = context.Request.SourceModel.QueryFieldNameStatements.Select(x => x.ToBuilder()).ToList();
         if (fieldNameStatements.Count == 0)
         {
-            fieldNameStatements.Add(new StringCodeStatementBuilder().WithStatement($"    return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, \"{nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}\"));"));
+            fieldNameStatements.Add(new StringCodeStatementBuilder().WithStatement($"    return ValidFieldNames.Any(s => s.Equals({typeof(QueryFramework.Abstractions.Extensions.ExpressionExtensions).FullName}.GetFieldName(fieldExpression), {nameof(StringComparison)}.{nameof(StringComparison.OrdinalIgnoreCase)}));"));
         }
 
         var expressionStatements = context.Request.SourceModel.QueryExpressionStatements.Select(x => x.ToBuilder()).ToList();

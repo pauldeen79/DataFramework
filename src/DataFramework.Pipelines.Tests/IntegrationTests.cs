@@ -1048,11 +1048,16 @@ namespace MyNamespace
             }
         }
 
+        public override QueryFramework.Abstractions.Builders.IQueryBuilder ToBuilder()
+        {
+            return new MyEntityQueryBuilder(this);
+        }
+
         private bool IsValidExpression(ExpressionFramework.Domain.Expression expression)
         {
             if (expression is ExpressionFramework.Domain.Expressions.FieldExpression fieldExpression)
             {
-                return ValidFieldNames.Any(s => s.Equals(fieldExpression.FieldName, ""StringComparison.OrdinalIgnoreCase""));
+                return ValidFieldNames.Any(s => s.Equals(QueryFramework.Abstractions.Extensions.ExpressionExtensions.GetFieldName(fieldExpression), StringComparison.OrdinalIgnoreCase));
             }
             return true;
         }

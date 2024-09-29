@@ -55,6 +55,11 @@ public static class DataObjectInfoExtensions
             ? $"{instance.Name}Query"
             : $"{queryNamespace}.{instance.Name}Query";
 
+    public static string GetQueryBuilderFullName(this DataObjectInfo instance, string queryBuilderNamespace)
+        => string.IsNullOrEmpty(queryBuilderNamespace)
+            ? $"{instance.Name}QueryBuilder"
+            : $"{queryBuilderNamespace}.{instance.Name}QueryBuilder";
+
     public static string GetEntityRetrieverFullName(this DataObjectInfo instance, string entityRetrieverNamespace)
         => string.IsNullOrEmpty(entityRetrieverNamespace)
             ? $"{instance.Name}EntityRetriever"
