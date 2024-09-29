@@ -62,8 +62,8 @@ public static class DataObjectInfoExtensions
 
     public static string GetEntityRetrieverSettingsFullName(this DataObjectInfo instance, string entityRetrieverSettingsNamespace)
         => string.IsNullOrEmpty(entityRetrieverSettingsNamespace)
-            ? $"{instance.Name}PagedEntityRetrieverSettings"
-            : $"{entityRetrieverSettingsNamespace}.{instance.Name}PagedEntityRetrieverSettings";
+            ? $"{instance.Name}DatabasePagedEntityRetrieverSettings"
+            : $"{entityRetrieverSettingsNamespace}.{instance.Name}DatabasePagedEntityRetrieverSettings";
 
     public static string DefaultRepositoryFullName(this DataObjectInfo instance, string repositoryNamespace)
         => string.IsNullOrEmpty(repositoryNamespace)

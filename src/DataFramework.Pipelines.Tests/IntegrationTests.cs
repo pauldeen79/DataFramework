@@ -944,22 +944,22 @@ namespace MyNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityDatabaseEntityRetrieverSettingsProvider : CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider
     {
-        bool IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings? settings)
+        bool CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings? settings)
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
             {
-                settings = new MyEntityPagedEntityRetrieverSettings();
+                settings = new MyEntityDatabasePagedEntityRetrieverSettings();
                 return true;
             }
             settings = default;
             return false;
         }
 
-        bool IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings? settings)
+        bool CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings? settings)
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
             {
-                settings = new MyEntityPagedEntityRetrieverSettings();
+                settings = new MyEntityDatabasePagedEntityRetrieverSettings();
                 return true;
             }
             settings = default;
