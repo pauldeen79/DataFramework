@@ -43,7 +43,9 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
     {
         yield return new PropertyBuilder()
             .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateResultEntity)}")
-            .WithTypeName($"{typeof(CreateResultEntityHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}, {typeof(DatabaseOperation).FullName}, {instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>")
+            .WithTypeName(settings.EntityClassType.IsImmutable()
+                ? $"{typeof(CreateResultEntityHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}, {instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>"
+                : $"{typeof(CreateResultEntityHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>")
             .WithIsNullable()
             .WithHasSetter(false)
             .AddGetterStringCodeStatements
@@ -66,7 +68,9 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
 
         yield return new PropertyBuilder()
             .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.AfterRead)}")
-            .WithTypeName($"{typeof(AfterReadHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}, {typeof(DatabaseOperation).FullName}, {typeof(IDataReader).FullName}, {instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>")
+            .WithTypeName(settings.EntityClassType.IsImmutable()
+                ? $"{typeof(AfterReadHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}, {instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>"
+                : $"{typeof(AfterReadHandler<>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}>")
             .WithIsNullable()
             .WithHasSetter(false)
             .AddGetterStringCodeStatements

@@ -324,7 +324,7 @@ namespace MyNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandEntityProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityCommandEntityProvider : CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>
     {
-        public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, MyNamespace.MyEntity>? CreateResultEntity
+        public CrossCutting.Data.Abstractions.CreateResultEntityHandler<MyNamespace.MyEntity>? CreateResultEntity
         {
             get
             {
@@ -345,7 +345,7 @@ namespace MyNamespace
             }
         }
 
-        public CrossCutting.Data.Abstractions.AfterReadHandler<MyNamespace.MyEntity, CrossCutting.Data.Abstractions.DatabaseOperation, System.Data.IDataReader, MyNamespace.MyEntity>? AfterRead
+        public CrossCutting.Data.Abstractions.AfterReadHandler<MyNamespace.MyEntity>? AfterRead
         {
             get
             {
@@ -456,7 +456,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandProviderGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>
+    public partial class MyEntityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntity>
     {
         public CrossCutting.Data.Abstractions.IDatabaseCommand Create(MyNamespace.MyEntity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
         {
@@ -811,7 +811,7 @@ namespace MyNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.IdentityCommandProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityIdentityCommandProvider : CrossCutting.Data.Core.CommandProviders.IdentityDatabaseCommandProviderBase<MyEntityIdentity>
     {
-        public MyEntityIdentityCommandProvider() : base(new MyEntityEntityRetriever())
+        public MyEntityIdentityCommandProvider(System.Collections.Generic.IEnumerable<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider> settingsProviders) : base(settingsProviders)
         {
         }
 

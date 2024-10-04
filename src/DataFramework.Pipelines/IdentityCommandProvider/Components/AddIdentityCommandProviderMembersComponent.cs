@@ -28,7 +28,7 @@ public class AddIdentityCommandProviderMembersComponent : IPipelineComponent<Ide
 
         context.Request.Builder
             .WithBaseClass(typeof(IdentityDatabaseCommandProviderBase<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace)))
-            .AddConstructors(new ConstructorBuilder().WithChainCall($"base(new {context.Request.SourceModel.GetEntityRetrieverFullName(context.Request.Settings.EntityRetrieverNamespace)}())"))
+            .AddConstructors(new ConstructorBuilder().AddParameter("settingsProviders", typeof(IEnumerable<IPagedDatabaseEntityRetrieverSettingsProvider>)).ChainCallToBaseUsingParameters())
             .AddMethods(new MethodBuilder()
                 .WithName("GetFields")
                 .WithProtected()

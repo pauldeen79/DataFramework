@@ -27,7 +27,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
         context = context.IsNotNull(nameof(context));
 
         context.Request.Builder
-            .AddInterfaces(typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace)))
+            .AddInterfaces(typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultIdentityNamespace)))
             .AddMethods(GetCommandProviderClassMethods(context));
         
         return Task.FromResult(Result.Continue());
