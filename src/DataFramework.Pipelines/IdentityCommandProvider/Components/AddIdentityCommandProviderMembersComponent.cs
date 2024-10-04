@@ -35,9 +35,7 @@ public class AddIdentityCommandProviderMembersComponent : IPipelineComponent<Ide
                 .WithOverride()
                 .WithVisibility(Visibility.Private)
                 .WithReturnType(typeof(IEnumerable<IdentityDatabaseCommandProviderField>))
-                .AddParameter("source", context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace))
-                .AddParameter("operation", typeof(DatabaseOperation))
-                .AddStringCodeStatements(context.Request.SourceModel.GetIdentityFields().Select(x => $"yield return new {nameof(IdentityDatabaseCommandProviderField)}({_csharpExpressionDumper.Dump(x.CreatePropertyName(context.Request.SourceModel))}, {_csharpExpressionDumper.Dump(x.GetDatabaseFieldName())});")));
+                .AddStringCodeStatements(context.Request.SourceModel.GetIdentityFields().Select(x => $"yield return new {typeof(IdentityDatabaseCommandProviderField).FullName}({_csharpExpressionDumper.Dump(x.CreatePropertyName(context.Request.SourceModel))}, {_csharpExpressionDumper.Dump(x.GetDatabaseFieldName())});")));
 
         return Task.FromResult(Result.Continue());
     }    

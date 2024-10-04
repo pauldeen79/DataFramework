@@ -815,9 +815,9 @@ namespace MyNamespace
         {
         }
 
-        protected override System.Collections.Generic.IEnumerable<CrossCutting.Data.Core.IdentityDatabaseCommandProviderField> GetFields(MyEntityIdentity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
+        protected override System.Collections.Generic.IEnumerable<CrossCutting.Data.Core.IdentityDatabaseCommandProviderField> GetFields()
         {
-            yield return new IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
+            yield return new CrossCutting.Data.Core.IdentityDatabaseCommandProviderField(@""Id"", @""Id"");
         }
     }
 }
