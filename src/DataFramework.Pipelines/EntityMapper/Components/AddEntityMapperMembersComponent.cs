@@ -58,8 +58,8 @@ public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperCo
                 : string.Empty;
 
             yield return entityClassType.IsImmutable()
-                ? $"    {field.item.Name.ToPascalCase(cultureInfo)}: reader.{field.item.SqlReaderMethodName}(\"{field.item.GetDatabaseFieldName()}\"){comma}"
-                : $"    {field.item.Name} = reader.{field.item.SqlReaderMethodName}(\"{field.item.GetDatabaseFieldName()}\"){comma}";
+                ? $"    {field.item.Name.ToPascalCase(cultureInfo)}: {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.item.SqlReaderMethodName}(reader, \"{field.item.GetDatabaseFieldName()}\"){comma}"
+                : $"    {field.item.Name} = {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.item.SqlReaderMethodName}(reader, \"{field.item.GetDatabaseFieldName()}\"){comma}";
         }
 
         foreach (var keyValuePair in instance.CustomEntityMappings.Select((item, index) => new { item, index }))

@@ -765,8 +765,8 @@ namespace MyNamespace
         {
             return new MyNamespace.MyEntity
             {
-                MyField1 = reader.GetInt32(""MyField1""),
-                MyField2 = reader.GetString(""MyField2"")
+                MyField1 = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetInt32(reader, ""MyField1""),
+                MyField2 = CrossCutting.Data.Sql.Extensions.DataReaderExtensions.GetString(reader, ""MyField2"")
             };
         }
     }
