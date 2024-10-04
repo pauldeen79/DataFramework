@@ -550,7 +550,7 @@ namespace MyNamespace
         {
             if (typeof(TResult) == typeof(MyNamespace.MyEntity))
             {
-                result = (CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<MyNamespace.MyEntity>)_databaseEntityRetriever;
+                result = (CrossCutting.Data.Abstractions.IDatabaseEntityRetriever<TResult>)_databaseEntityRetriever;
                 return true;
             }
             result = default;

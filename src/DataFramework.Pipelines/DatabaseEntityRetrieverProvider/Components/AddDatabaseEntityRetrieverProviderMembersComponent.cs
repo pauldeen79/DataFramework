@@ -49,7 +49,7 @@ public class AddDatabaseEntityRetrieverProviderMembersComponent : IPipelineCompo
             (
                 $"if (typeof(TResult) == typeof({instance.GetEntityFullName(entityNamespace)}))",
                 "{",
-                $"    result = ({typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName(instance.GetEntityFullName(entityNamespace))})_databaseEntityRetriever;",
+                $"    result = ({typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName("TResult")})_databaseEntityRetriever;",
                 "    return true;",
                 "}",
                 "result = default;",
