@@ -1238,8 +1238,12 @@ namespace MyNamespace.Contracts
         var sourceModel = new DataObjectInfoBuilder()
             .WithTypeName("MyNamespace.MyEntity") // this will be used when RepositoryNamespace is empty on the settings
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
-            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .AddFields
+            (
+                new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField(),
+                new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)),
+                new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string))
+            )
             .Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.Poco) //default
