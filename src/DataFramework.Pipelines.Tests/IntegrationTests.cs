@@ -1268,6 +1268,7 @@ namespace MyNamespace.Contracts
         var content = generationEnvironment.Builder.Build();
         var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
         allContents.Should().NotBeEmpty();
+        //TODO: Add QueryFieldInfoProvider and QueryBuilder
         ///(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
     }
 
