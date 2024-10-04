@@ -354,11 +354,11 @@ namespace MyNamespace
                     switch (operation)
                     {
                         case CrossCutting.Data.Abstractions.DatabaseOperation.Insert:
-                            return AddAfterRead(entity);
+                            return AddAfterRead(entity, reader);
                         case CrossCutting.Data.Abstractions.DatabaseOperation.Update:
-                            return UpdateAfterRead(entity);
+                            return UpdateAfterRead(entity, reader);
                         case CrossCutting.Data.Abstractions.DatabaseOperation.Delete:
-                            return DeleteAfterRead(entity);
+                            return DeleteAfterRead(entity, reader);
                          default:
                              throw new System.ArgumentOutOfRangeException(""operation"", string.Format(""Unsupported operation: {0}"", operation));
                     }

@@ -13,10 +13,10 @@ internal static class PropertyBuilderExtensions
 
     internal static PropertyBuilder AddEntityCommandProviderMethod(
         this PropertyBuilder instance,
-        DataObjectInfo dataObjectInfo,
         bool enabled,
         DatabaseOperation operation,
-        string methodSuffix)
+        string methodSuffix,
+        string arguments)
         => instance.Chain(() =>
         {
             if (enabled)
@@ -24,7 +24,7 @@ internal static class PropertyBuilderExtensions
                 instance.AddGetterStringCodeStatements
                 (
                     $"        case {typeof(DatabaseOperation).FullName}.{operation}:",
-                    $"            return {operation.GetMethodNamePrefix()}{methodSuffix}(entity);"
+                    $"            return {operation.GetMethodNamePrefix()}{methodSuffix}({arguments});"
                 );
             }
         });

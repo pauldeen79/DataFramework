@@ -55,9 +55,9 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
                 "    switch (operation)",
                 "    {"
             )
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableAdd, DatabaseOperation.Insert, "ResultEntity")
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableUpdate, DatabaseOperation.Update, "ResultEntity")
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableDelete, DatabaseOperation.Delete, "ResultEntity")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableAdd, DatabaseOperation.Insert, "ResultEntity", "entity")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableUpdate, DatabaseOperation.Update, "ResultEntity", "entity")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableDelete, DatabaseOperation.Delete, "ResultEntity", "entity")
             .AddGetterStringCodeStatements
             (
                 "         default:",
@@ -80,9 +80,9 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
                 "    switch (operation)",
                 "    {"
             )
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableAdd, DatabaseOperation.Insert, "AfterRead")
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableUpdate, DatabaseOperation.Update, "AfterRead")
-            .AddEntityCommandProviderMethod(instance, settings.CommandProviderEnableDelete, DatabaseOperation.Delete, "AfterRead")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableAdd, DatabaseOperation.Insert, "AfterRead", "entity, reader")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableUpdate, DatabaseOperation.Update, "AfterRead", "entity, reader")
+            .AddEntityCommandProviderMethod(settings.CommandProviderEnableDelete, DatabaseOperation.Delete, "AfterRead", "entity, reader")
             .AddGetterStringCodeStatements
             (
                 "         default:",
