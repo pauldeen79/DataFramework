@@ -39,7 +39,7 @@ public class AddPagedEntityRetrieverSettingsMembersComponent : IPipelineComponen
             .WithName(nameof(IPagedDatabaseEntityRetrieverSettings.TableName))
             .WithType(typeof(string))
             .WithHasSetter(false)
-            .AddGetterStringCodeStatements($"return {context.Request.SourceModel.GetDatabaseTableName()};");
+            .AddGetterStringCodeStatements($"return {_csharpExpressionDumper.Dump(context.Request.SourceModel.GetDatabaseTableName())};");
 
         yield return new PropertyBuilder()
             .WithName(nameof(IPagedDatabaseEntityRetrieverSettings.Fields))
@@ -48,7 +48,7 @@ public class AddPagedEntityRetrieverSettingsMembersComponent : IPipelineComponen
             .AddGetterStringCodeStatements(string.Concat
             (
                 "return ",
-                string.Join(", ", _csharpExpressionDumper.Dump(context.Request.SourceModel.Fields.Where(x => x.UseOnSelect).Select(x => x.GetDatabaseFieldName())).Replace(Environment.NewLine, Environment.NewLine + "                ")),
+                _csharpExpressionDumper.Dump(string.Join(", ", context.Request.SourceModel.Fields.Where(x => x.UseOnSelect).Select(x => x.GetDatabaseFieldName())).Replace(Environment.NewLine, Environment.NewLine + "                ")),
                 ";"
             ));
 
@@ -56,13 +56,13 @@ public class AddPagedEntityRetrieverSettingsMembersComponent : IPipelineComponen
             .WithName(nameof(IPagedDatabaseEntityRetrieverSettings.DefaultOrderBy))
             .WithType(typeof(string))
             .WithHasSetter(false)
-            .AddGetterStringCodeStatements($"return {_csharpExpressionDumper.Dump(context.Request.SourceModel.DefaultOrderByFields)};");
+            .AddGetterStringCodeStatements($"return {_csharpExpressionDumper.Dump(context.Request.SourceModel.DefaultOrderByFields).Transform(x => x == "null" ? "string.Empty" : x)};");
 
         yield return new PropertyBuilder()
             .WithName(nameof(IPagedDatabaseEntityRetrieverSettings.DefaultWhere))
             .WithType(typeof(string))
             .WithHasSetter(false)
-            .AddGetterStringCodeStatements($"return {_csharpExpressionDumper.Dump(context.Request.SourceModel.DefaultWhereClause)};");
+            .AddGetterStringCodeStatements($"return {_csharpExpressionDumper.Dump(context.Request.SourceModel.DefaultWhereClause).Transform(x => x == "null" ? "string.Empty" : x)};");
 
         yield return new PropertyBuilder()
             .WithName(nameof(IPagedDatabaseEntityRetrieverSettings.OverridePageSize))

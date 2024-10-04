@@ -864,7 +864,7 @@ namespace MyNamespace
         {
             get
             {
-                return MyEntity;
+                return @""MyEntity"";
             }
         }
 
@@ -872,11 +872,7 @@ namespace MyNamespace
         {
             get
             {
-                return new[]
-                {
-                    @""MyField1"",
-                    @""MyField2"",
-                };
+                return @""MyField1, MyField2"";
             }
         }
 
@@ -884,7 +880,7 @@ namespace MyNamespace
         {
             get
             {
-                return null;
+                return string.Empty;
             }
         }
 
@@ -892,7 +888,7 @@ namespace MyNamespace
         {
             get
             {
-                return null;
+                return string.Empty;
             }
         }
 
