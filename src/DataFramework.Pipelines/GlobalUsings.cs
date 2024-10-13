@@ -58,6 +58,8 @@ global using DataFramework.Pipelines.PagedEntityRetrieverSettings.Components.Abs
 global using DataFramework.Pipelines.PlaceholderProcessors;
 global using DataFramework.Pipelines.Query;
 global using DataFramework.Pipelines.Query.Components.Abstractions;
+global using DataFramework.Pipelines.QueryBuilder;
+global using DataFramework.Pipelines.QueryBuilder.Components.Abstractions;
 global using DataFramework.Pipelines.QueryFieldInfo;
 global using DataFramework.Pipelines.QueryFieldInfo.Components.Abstractions;
 global using DataFramework.Pipelines.Repository;
@@ -69,4 +71,5 @@ global using ExpressionFramework.Domain.Evaluatables;
 global using ExpressionFramework.Domain.Expressions;
 global using Microsoft.Extensions.DependencyInjection;
 global using QueryFramework.Abstractions;
+global using QueryFramework.Abstractions.Builders;
 global using QueryFramework.SqlServer.Abstractions;

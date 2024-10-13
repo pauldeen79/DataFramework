@@ -516,7 +516,6 @@ namespace MyNamespace
             .WithEntityClassType(EntityClassType.Poco) //default
             .WithDefaultEntityNamespace("MyNamespace")
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
-            .WithEnableNullableContext()
             .Build();
         var context = new DatabaseEntityRetrieverProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var databaseEntityRetrieverProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverProviderContext>>();
@@ -1064,6 +1063,65 @@ namespace MyNamespace
     }
 
     [Fact]
+    public async Task Can_Create_Code_For_QueryBuilder_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when QueryBuilderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .WithEnableNullableContext()
+            .Build();
+        var context = new QueryBuilderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var queryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryBuilderContext>>();
+
+        // Act
+        var result = (await queryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var queryBuilder = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(queryBuilder));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+#nullable enable
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryBuilderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityQueryBuilder : QueryFramework.Core.Builders.QueryBuilder
+    {
+        public MyEntityQueryBuilder() : base()
+        {
+        }
+
+        public MyEntityQueryBuilder(QueryFramework.Abstractions.IQuery source) : base(source)
+        {
+        }
+
+        public override QueryFramework.Abstractions.IQuery Build()
+        {
+            return BuildTyped();
+        }
+
+        public MyEntityQuery BuildTyped()
+        {
+            return new MyEntityQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
+        }
+    }
+}
+#nullable disable
+");
+    }
+
+    [Fact]
     public async Task Can_Create_Code_For_QueryFieldInfo_Class()
     {
         // Arrange
@@ -1248,6 +1306,7 @@ namespace MyNamespace.Contracts
             .WithRepositoryInterfaceNamespace("MyNamespace.Contracts")
             .WithUseRepositoryInterface() // needed to use repository interface
             .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .WithEnableNullableContext()
             .Build();
         var generationEnvironment = new MultipleStringContentBuilderEnvironment();
         var codeGenerationSettings = new CodeGenerationSettings(string.Empty, "GeneratedCode.cs", true);
@@ -1268,7 +1327,7 @@ namespace MyNamespace.Contracts
         var content = generationEnvironment.Builder.Build();
         var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
         allContents.Should().NotBeEmpty();
-        //TODO: Add QueryFieldInfoProvider and QueryBuilder
+        //TODO: Add QueryFieldInfoProvider
         ///(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
     }
 
