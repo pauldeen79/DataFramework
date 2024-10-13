@@ -21,7 +21,7 @@ namespace PDC.Net.Core.Queries
             return BuildTyped();
         }
 
-        public IQuery BuildTyped()
+        public ExtraFieldQuery BuildTyped()
         {
             return new ExtraFieldQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
         }
