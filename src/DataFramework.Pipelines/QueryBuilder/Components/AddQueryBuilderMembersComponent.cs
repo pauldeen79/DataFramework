@@ -13,9 +13,6 @@ public class AddQueryBuilderMembersComponent : IPipelineComponent<QueryBuilderCo
         context = context.IsNotNull(nameof(context));
 
         var queryFullName = context.Request.SourceModel.GetQueryFullName(context.Request.Settings.QueryBuilderNamespace);
-        var nullableSuffix = context.Request.Settings.EnableNullableContext
-            ? "?"
-            : string.Empty;
 
         context.Request.Builder
             .AddConstructors(
@@ -24,7 +21,7 @@ public class AddQueryBuilderMembersComponent : IPipelineComponent<QueryBuilderCo
             )
             .AddMethods(
                 new MethodBuilder().WithName(nameof(IQueryBuilder.Build)).WithOverride().WithReturnType(typeof(IQuery)).AddStringCodeStatements("return BuildTyped();"),
-                new MethodBuilder().WithName("BuildTyped").WithReturnTypeName(queryFullName).AddStringCodeStatements($"return new {queryFullName}(Limit, Offset, Filter{nullableSuffix}.BuildTyped(), OrderByFields{nullableSuffix}.Select(x => x.Build()));")
+                new MethodBuilder().WithName("BuildTyped").WithReturnTypeName(queryFullName).AddStringCodeStatements($"return new {queryFullName}(Limit, Offset, Filter?.BuildTyped() ?? new {typeof(ComposedEvaluatableBuilder).FullName}().BuildTyped(), OrderByFields?.Select(x => x.Build()) ?? {typeof(Enumerable).FullName}.Empty<{typeof(IQuerySortOrder).FullName}>());")
             )
             .WithBaseClass(typeof(QueryFramework.Core.Builders.QueryBuilder));
 

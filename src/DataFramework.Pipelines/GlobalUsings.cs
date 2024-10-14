@@ -69,6 +69,7 @@ global using DataFramework.Pipelines.Repository.Components.Abstractions;
 global using DataFramework.Pipelines.RepositoryInterface;
 global using DataFramework.Pipelines.RepositoryInterface.Components.Abstractions;
 global using ExpressionFramework.Domain;
+global using ExpressionFramework.Domain.Builders.Evaluatables;
 global using ExpressionFramework.Domain.Evaluatables;
 global using ExpressionFramework.Domain.Expressions;
 global using Microsoft.Extensions.DependencyInjection;

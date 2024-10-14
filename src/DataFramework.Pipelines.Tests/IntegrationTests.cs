@@ -370,7 +370,7 @@ namespace MyNamespace
         {
             get
             {
-                return entity;
+                return entity => entity;
             }
         }
 
@@ -378,7 +378,7 @@ namespace MyNamespace
         {
             get
             {
-                return builder => builder.Build();
+                return builder => builder;
             }
         }
 
@@ -1113,7 +1113,7 @@ namespace MyNamespace
 
         public MyEntityQuery BuildTyped()
         {
-            return new MyEntityQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
+            return new MyEntityQuery(Limit, Offset, Filter?.BuildTyped() ?? new ExpressionFramework.Domain.Builders.Evaluatables.ComposedEvaluatableBuilder().BuildTyped(), OrderByFields?.Select(x => x.Build()) ?? System.Linq.Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>());
         }
     }
 }

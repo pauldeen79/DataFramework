@@ -98,14 +98,16 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
             .WithHasSetter(false)
             .AddGetterStringCodeStatements(settings.EntityClassType.IsImmutable()
                 ? $"return entity => new {instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}(entity);"
-                : "return entity;");
+                : "return entity => entity;");
 
         yield return new PropertyBuilder()
             .WithName($"{nameof(IDatabaseCommandEntityProvider<object, string>.CreateEntity)}")
             .WithTypeName($"{typeof(CreateEntityHandler<,>).WithoutGenerics()}<{instance.GetEntityBuilderFullName(settings.DefaultEntityNamespace, settings.DefaultBuilderNamespace, settings.EntityClassType.IsImmutable())}, {instance.GetEntityFullName(settings.DefaultEntityNamespace)}>")
             .WithIsNullable()
             .WithHasSetter(false)
-            .AddGetterStringCodeStatements("return builder => builder.Build();");
+            .AddGetterStringCodeStatements(settings.EntityClassType.IsImmutable()
+                ? "return builder => builder.Build();"
+                : "return builder => builder;");
     }
 
     private IEnumerable<MethodBuilder> GetEntityCommandProviderClassMethods(DataObjectInfo instance, PipelineSettings settings)
