@@ -59,6 +59,7 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
                 .WithStatic()
                 .WithExtensionMethod()
                 .AddParameter("serviceCollection", typeof(IServiceCollection))
+                .WithReturnType(typeof(IServiceCollection))
                 .AddStringCodeStatements(
                     $"return {typeof(QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions).FullName}.{nameof(QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions.AddQueryFrameworkSqlServer)}(serviceCollection, x =>",
                     "{",

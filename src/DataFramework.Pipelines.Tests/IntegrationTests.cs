@@ -704,7 +704,7 @@ namespace MyNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.DependencyInjectionGenerator"", @""1.0.0.0"")]
     public static partial class ServiceCollectionExtensions
     {
-        public static void AddMyEntityDependencies(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddMyEntityDependencies(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
         {
             return QueryFramework.SqlServer.Extensions.ServiceCollectionExtensions.AddQueryFrameworkSqlServer(serviceCollection, x =>
             {
