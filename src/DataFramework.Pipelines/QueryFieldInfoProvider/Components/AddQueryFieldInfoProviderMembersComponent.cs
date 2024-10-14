@@ -14,11 +14,15 @@ public class AddQueryFieldInfoMembersComponent : IPipelineComponent<QueryFieldIn
 
         var queryFullName = context.Request.SourceModel.GetQueryFullName(context.Request.Settings.QueryNamespace);
         var queryFieldInfoFullName = context.Request.SourceModel.GetQueryFieldInfoFullName(context.Request.Settings.QueryFieldInfoNamespace);
-
+        //IQuery query, out IQueryFieldInfo? result
         context.Request.Builder
             .AddInterfaces(typeof(IQueryFieldInfoProvider))
             .AddMethods(new MethodBuilder()
                 .WithName(nameof(IQueryFieldInfoProvider.TryCreate))
+                .AddParameters(
+                    new ParameterBuilder().WithName("query").WithType(typeof(IQuery)),
+                    new ParameterBuilder().WithName("result").WithType(typeof(IQueryFieldInfo)).WithIsNullable().WithIsOut()
+                )
                 .WithReturnType(typeof(bool))
                 .AddStringCodeStatements(
                     $"if (query is {queryFullName})",

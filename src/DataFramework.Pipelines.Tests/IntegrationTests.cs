@@ -1207,7 +1207,7 @@ namespace MyNamespace
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryFieldInfoProviderGenerator"", @""1.0.0.0"")]
     public partial class MyEntityQueryFieldInfoProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider
     {
-        public bool TryCreate()
+        public bool TryCreate(QueryFramework.Abstractions.IQuery query, out QueryFramework.SqlServer.Abstractions.IQueryFieldInfo? result)
         {
             if (query is MyEntityQuery)
             {
