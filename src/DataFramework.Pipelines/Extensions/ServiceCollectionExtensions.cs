@@ -123,6 +123,14 @@ public static class ServiceCollectionExtensions
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetNameComponentBuilder>()
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetPartialComponentBuilder>()
             .AddScoped<IQueryFieldInfoComponentBuilder, QueryFieldInfo.Components.SetVisibilityComponentBuilder>()
+            // QueryFieldInfoProvider pipeline
+            .AddScoped(services => services.GetRequiredService<IPipelineBuilder<QueryFieldInfoProviderContext>>().Build())
+            .AddScoped<IPipelineBuilder<QueryFieldInfoProviderContext>, QueryFieldInfoProvider.PipelineBuilder>()
+            .AddScoped<IQueryFieldInfoProviderComponentBuilder, QueryFieldInfoProvider.Components.AddQueryFieldInfoProviderMembersComponentBuilder>()
+            .AddScoped<IQueryFieldInfoProviderComponentBuilder, QueryFieldInfoProvider.Components.AddGeneratorAttributeComponentBuilder>()
+            .AddScoped<IQueryFieldInfoProviderComponentBuilder, QueryFieldInfoProvider.Components.SetNameComponentBuilder>()
+            .AddScoped<IQueryFieldInfoProviderComponentBuilder, QueryFieldInfoProvider.Components.SetPartialComponentBuilder>()
+            .AddScoped<IQueryFieldInfoProviderComponentBuilder, QueryFieldInfoProvider.Components.SetVisibilityComponentBuilder>()
             // Repository pipeline
             .AddScoped(services => services.GetRequiredService<IPipelineBuilder<RepositoryContext>>().Build())
             .AddScoped<IPipelineBuilder<RepositoryContext>, Repository.PipelineBuilder>()

@@ -137,6 +137,10 @@ namespace DataFramework.Pipelines.Builders
 
         private System.Collections.ObjectModel.ObservableCollection<ClassFramework.Domain.Builders.CodeStatementBaseBuilder> _queryFieldInfoGetDatabaseFieldNameCodeStatements;
 
+        private ClassFramework.Domain.Domains.Visibility _queryFieldInfoProviderVisibility;
+
+        private string _queryFieldInfoProviderNamespace;
+
         private ClassFramework.Domain.Domains.Visibility _repositoryVisibility;
 
         private ClassFramework.Domain.Domains.Visibility _repositoryInterfaceVisibility;
@@ -992,6 +996,33 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
+        public ClassFramework.Domain.Domains.Visibility QueryFieldInfoProviderVisibility
+        {
+            get
+            {
+                return _queryFieldInfoProviderVisibility;
+            }
+            set
+            {
+                _queryFieldInfoProviderVisibility = value;
+                HandlePropertyChanged(nameof(QueryFieldInfoProviderVisibility));
+            }
+        }
+
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string QueryFieldInfoProviderNamespace
+        {
+            get
+            {
+                return _queryFieldInfoProviderNamespace;
+            }
+            set
+            {
+                _queryFieldInfoProviderNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(QueryFieldInfoProviderNamespace));
+            }
+        }
+
         public ClassFramework.Domain.Domains.Visibility RepositoryVisibility
         {
             get
@@ -1193,6 +1224,8 @@ namespace DataFramework.Pipelines.Builders
             if (source.QueryFieldInfoConstructorCodeStatements is not null) foreach (var item in source.QueryFieldInfoConstructorCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoConstructorCodeStatements.Add(item);
             if (source.QueryFieldInfoGetAllFieldsCodeStatements is not null) foreach (var item in source.QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoGetAllFieldsCodeStatements.Add(item);
             if (source.QueryFieldInfoGetDatabaseFieldNameCodeStatements is not null) foreach (var item in source.QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.ToBuilder())) _queryFieldInfoGetDatabaseFieldNameCodeStatements.Add(item);
+            _queryFieldInfoProviderVisibility = source.QueryFieldInfoProviderVisibility;
+            _queryFieldInfoProviderNamespace = source.QueryFieldInfoProviderNamespace;
             _repositoryVisibility = source.RepositoryVisibility;
             _repositoryInterfaceVisibility = source.RepositoryInterfaceVisibility;
             _useRepositoryInterface = source.UseRepositoryInterface;
@@ -1247,6 +1280,7 @@ namespace DataFramework.Pipelines.Builders
             _queryNamespace = string.Empty;
             _queryBuilderNamespace = string.Empty;
             _queryFieldInfoNamespace = string.Empty;
+            _queryFieldInfoProviderNamespace = string.Empty;
             _repositoryNamespace = string.Empty;
             _repositoryInterfaceNamespace = string.Empty;
             _dependencyInjectionNamespace = string.Empty;
@@ -1257,7 +1291,7 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, DatabaseEntityRetrieverSettingsProviderVisibility, DatabaseEntityRetrieverSettingsProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, EntityRetrieverVisibility, EntityRetrieverNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, DatabasePagedEntityRetrieverSettingsVisibility, DatabasePagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord, QueryBuilderVisibility, QueryBuilderNamespace, QueryFieldInfoVisibility, QueryFieldInfoNamespace, QueryFieldInfoFields.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorParameters.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), RepositoryVisibility, RepositoryInterfaceVisibility, UseRepositoryInterface, RepositoryNamespace, RepositoryInterfaceNamespace, DependencyInjectionVisibility, DependencyInjectionNamespace, DependencyInjectionClassName, DependencyInjectionMethodName);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, DatabaseEntityRetrieverSettingsProviderVisibility, DatabaseEntityRetrieverSettingsProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, EntityRetrieverVisibility, EntityRetrieverNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, DatabasePagedEntityRetrieverSettingsVisibility, DatabasePagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord, QueryBuilderVisibility, QueryBuilderNamespace, QueryFieldInfoVisibility, QueryFieldInfoNamespace, QueryFieldInfoFields.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorParameters.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoProviderVisibility, QueryFieldInfoProviderNamespace, RepositoryVisibility, RepositoryInterfaceVisibility, UseRepositoryInterface, RepositoryNamespace, RepositoryInterfaceNamespace, DependencyInjectionVisibility, DependencyInjectionNamespace, DependencyInjectionClassName, DependencyInjectionMethodName);
         }
 
         partial void SetDefaultValues();
@@ -1734,6 +1768,19 @@ namespace DataFramework.Pipelines.Builders
         {
             if (queryFieldInfoNamespace is null) throw new System.ArgumentNullException(nameof(queryFieldInfoNamespace));
             QueryFieldInfoNamespace = queryFieldInfoNamespace;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithQueryFieldInfoProviderVisibility(ClassFramework.Domain.Domains.Visibility queryFieldInfoProviderVisibility)
+        {
+            QueryFieldInfoProviderVisibility = queryFieldInfoProviderVisibility;
+            return this;
+        }
+
+        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithQueryFieldInfoProviderNamespace(string queryFieldInfoProviderNamespace)
+        {
+            if (queryFieldInfoProviderNamespace is null) throw new System.ArgumentNullException(nameof(queryFieldInfoProviderNamespace));
+            QueryFieldInfoProviderNamespace = queryFieldInfoProviderNamespace;
             return this;
         }
 

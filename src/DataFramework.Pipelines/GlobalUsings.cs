@@ -62,6 +62,8 @@ global using DataFramework.Pipelines.QueryBuilder;
 global using DataFramework.Pipelines.QueryBuilder.Components.Abstractions;
 global using DataFramework.Pipelines.QueryFieldInfo;
 global using DataFramework.Pipelines.QueryFieldInfo.Components.Abstractions;
+global using DataFramework.Pipelines.QueryFieldInfoProvider;
+global using DataFramework.Pipelines.QueryFieldInfoProvider.Components.Abstractions;
 global using DataFramework.Pipelines.Repository;
 global using DataFramework.Pipelines.Repository.Components.Abstractions;
 global using DataFramework.Pipelines.RepositoryInterface;

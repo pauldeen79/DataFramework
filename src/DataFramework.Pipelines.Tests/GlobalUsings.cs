@@ -40,6 +40,7 @@ global using DataFramework.Pipelines.PagedEntityRetrieverSettings;
 global using DataFramework.Pipelines.Query;
 global using DataFramework.Pipelines.QueryBuilder;
 global using DataFramework.Pipelines.QueryFieldInfo;
+global using DataFramework.Pipelines.QueryFieldInfoProvider;
 global using DataFramework.Pipelines.Repository;
 global using DataFramework.Pipelines.RepositoryInterface;
 global using FluentAssertions;

@@ -1173,6 +1173,57 @@ namespace MyNamespace
     }
 
     [Fact]
+    public async Task Can_Create_Code_For_QueryFieldInfoProvider_Class()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when QueryFieldInfoProviderNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)))
+            .AddFields(new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new QueryFieldInfoProviderContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var queryFieldInfoProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryFieldInfoProviderContext>>();
+
+        // Act
+        var result = (await queryFieldInfoProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var queryFieldInfoProvider = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfoProvider));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+#nullable enable
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.QueryFieldInfoProviderGenerator"", @""1.0.0.0"")]
+    public partial class MyEntityQueryFieldInfoProvider : QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider
+    {
+        public bool TryCreate()
+        {
+            if (query is MyEntityQuery)
+            {
+                result = new MyEntityQueryFieldInfo();
+                return true;
+            }
+            result = default;
+            return false;
+        }
+    }
+}
+#nullable disable
+");
+    }
+
+    [Fact]
     public async Task Can_Create_Code_For_Repository_Class_Without_Interface()
     {
         // Arrange
@@ -1327,7 +1378,6 @@ namespace MyNamespace.Contracts
         var content = generationEnvironment.Builder.Build();
         var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
         allContents.Should().NotBeEmpty();
-        //TODO: Add QueryFieldInfoProvider
         ///(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
     }
 
