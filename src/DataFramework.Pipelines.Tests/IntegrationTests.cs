@@ -712,8 +712,8 @@ namespace MyNamespace
                 x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseCommandProcessor<MyNamespace.MyEntity>>();
                 x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandEntityProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandProvider>();
-                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityCommandProvider>();
-                x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfo>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityIdentityCommandProvider>();
+                x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfoProvider>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
