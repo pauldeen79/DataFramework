@@ -8,7 +8,7 @@ namespace PDC.Net.Core.Queries
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
     public class ExtraFieldQueryBuilder : QueryBuilder
     {
-        public ExtraFieldQueryBuilder()
+        public ExtraFieldQueryBuilder() : base()
         {
         }
 
@@ -21,7 +21,7 @@ namespace PDC.Net.Core.Queries
             return BuildTyped();
         }
 
-        public IQuery BuildTyped()
+        public ExtraFieldQuery BuildTyped()
         {
             return new ExtraFieldQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
         }

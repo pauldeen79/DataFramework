@@ -82,7 +82,7 @@ namespace DataFramework.ModelFramework.Poc.QueryFieldInfoProviders
         {
             // default: return GetAllFields().FirstOrDefault(x => x.Equals(queryFieldName, StringComparison.OrdinalIgnoreCase));
             var extraField = _extraFields.FirstOrDefault(x => x.Name == queryFieldName);
-            if (extraField != null)
+            if (extraField is not null)
             {
                 return string.Format("ExtraField{0}", extraField.FieldNumber);
             }
