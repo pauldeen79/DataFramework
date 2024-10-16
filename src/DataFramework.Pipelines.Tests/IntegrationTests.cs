@@ -456,7 +456,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.CommandProviderGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntity>
+    public partial class MyEntityCommandProvider : CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity>
     {
         public CrossCutting.Data.Abstractions.IDatabaseCommand Create(MyNamespace.MyEntity source, CrossCutting.Data.Abstractions.DatabaseOperation operation)
         {
@@ -712,7 +712,7 @@ namespace MyNamespace
                 x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandProcessor<MyNamespace.MyEntity>, CrossCutting.Data.Sql.DatabaseCommandProcessor<MyNamespace.MyEntity>>();
                 x.AddScoped<CrossCutting.Data.Abstractions.IDatabaseCommandEntityProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandEntityProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntity>, MyNamespace.MyEntityCommandProvider>();
-                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyEntityIdentity>, MyNamespace.MyEntityIdentityCommandProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseCommandProvider<MyNamespace.MyEntityIdentity>, MyNamespace.MyEntityIdentityCommandProvider>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IQueryFieldInfoProvider, MyNamespace.MyEntityQueryFieldInfoProvider>();
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
@@ -808,7 +808,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.IdentityCommandProviderGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityIdentityCommandProvider : CrossCutting.Data.Core.CommandProviders.IdentityDatabaseCommandProviderBase<MyEntityIdentity>
+    public partial class MyEntityIdentityCommandProvider : CrossCutting.Data.Core.CommandProviders.IdentityDatabaseCommandProviderBase<MyNamespace.MyEntityIdentity>
     {
         public MyEntityIdentityCommandProvider(System.Collections.Generic.IEnumerable<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider> settingsProviders) : base(settingsProviders)
         {
@@ -941,9 +941,9 @@ namespace MyNamespace
     {
         bool CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettings? settings)
         {
-            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
+            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyNamespace.MyEntityIdentity) || typeof(TSource) == typeof(MyNamespace.MyEntityQuery))
             {
-                settings = new MyEntityDatabasePagedEntityRetrieverSettings();
+                settings = new MyNamespace.MyEntityDatabasePagedEntityRetrieverSettings();
                 return true;
             }
             settings = default;
@@ -952,9 +952,9 @@ namespace MyNamespace
 
         bool CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider.TryGet<TSource>(out CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings? settings)
         {
-            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyEntityIdentity) || typeof(TSource) == typeof(MyEntityQuery))
+            if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyNamespace.MyEntityIdentity) || typeof(TSource) == typeof(MyNamespace.MyEntityQuery))
             {
-                settings = new MyEntityDatabasePagedEntityRetrieverSettings();
+                settings = new MyNamespace.MyEntityDatabasePagedEntityRetrieverSettings();
                 return true;
             }
             settings = default;
@@ -1045,7 +1045,7 @@ namespace MyNamespace
 
         public override QueryFramework.Abstractions.Builders.IQueryBuilder ToBuilder()
         {
-            return new MyEntityQueryBuilder(this);
+            return new MyNamespace.MyEntityQueryBuilder(this);
         }
 
         private bool IsValidExpression(ExpressionFramework.Domain.Expression expression)
@@ -1111,9 +1111,9 @@ namespace MyNamespace
             return BuildTyped();
         }
 
-        public MyEntityQuery BuildTyped()
+        public MyNamespace.MyEntityQuery BuildTyped()
         {
-            return new MyEntityQuery(Limit, Offset, Filter?.BuildTyped() ?? new ExpressionFramework.Domain.Builders.Evaluatables.ComposedEvaluatableBuilder().BuildTyped(), OrderByFields?.Select(x => x.Build()) ?? System.Linq.Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>());
+            return new MyNamespace.MyEntityQuery(Limit, Offset, Filter?.BuildTyped() ?? new ExpressionFramework.Domain.Builders.Evaluatables.ComposedEvaluatableBuilder().BuildTyped(), OrderByFields?.Select(x => x.Build()) ?? System.Linq.Enumerable.Empty<QueryFramework.Abstractions.IQuerySortOrder>());
         }
     }
 }
@@ -1209,9 +1209,9 @@ namespace MyNamespace
     {
         public bool TryCreate(QueryFramework.Abstractions.IQuery query, out QueryFramework.SqlServer.Abstractions.IQueryFieldInfo? result)
         {
-            if (query is MyEntityQuery)
+            if (query is MyNamespace.MyEntityQuery)
             {
-                result = new MyEntityQueryFieldInfo();
+                result = new MyNamespace.MyEntityQueryFieldInfo();
                 return true;
             }
             result = default;
