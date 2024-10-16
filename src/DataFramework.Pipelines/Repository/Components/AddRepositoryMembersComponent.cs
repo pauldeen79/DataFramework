@@ -29,7 +29,7 @@ public class AddRepositoryMembersComponent : IPipelineComponent<RepositoryContex
     {
         if (context.Request.Settings.UseRepositoryInterface)
         {
-            yield return context.Request.SourceModel.DefaultRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+            yield return context.Request.SourceModel.GetRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
         }
     }
 
