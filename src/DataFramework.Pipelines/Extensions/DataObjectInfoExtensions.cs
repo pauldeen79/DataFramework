@@ -68,9 +68,6 @@ public static class DataObjectInfoExtensions
     public static string GetIdentityCommandProviderFullName(this DataObjectInfo instance, string identityCommandProviderNamespace)
         => $"{identityCommandProviderNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}IdentityCommandProvider";
 
-    public static string GetEntityRetrieverFullName(this DataObjectInfo instance, string entityRetrieverNamespace)
-        => $"{entityRetrieverNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}EntityRetriever";
-
     public static string GetRepositoryFullName(this DataObjectInfo instance, string repositoryNamespace)
         => $"{repositoryNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}Repository";
 
