@@ -136,6 +136,66 @@ namespace MyNamespace
 ");
     }
 
+
+    [Fact]
+    public async Task Can_Create_Code_For_Poco_Class_Entity_Without_ConcurrencyChecks_Using_ClassFramework_EntityPipeline()
+    {
+        // Arrange
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithName("MyEntity")
+            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
+            .Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.NoFields) //default
+            .Build();
+        var context = new ClassContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var classFrameworkPipelineService = GetClassFrameworkPipelineService();
+        var classPipeline = GetClassPipeline();
+
+        // Act
+        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var entity = result.GetValueOrThrow();
+        var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
+            .WithAddFullConstructor(false)
+            .WithAddPublicParameterlessConstructor(true) // note that you might want to omit this in case you don't have custom default values
+            .WithAddSetters()
+            .WithToBuilderFormatString(string.Empty) // no builder necessary
+            .WithCopyAttributes()
+            .Build();
+        var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
+        result = await classFrameworkPipelineService.Process(entityContext);
+        var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
+
+        // Assert
+        code.Should().Be(@"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+#nullable enable
+namespace MyNamespace
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.ClassGenerator"", @""1.0.0.0"")]
+    public partial class MyEntity
+    {
+        public int MyField
+        {
+            get;
+            set;
+        }
+
+        public MyEntity()
+        {
+            MyField = default(System.Int32);
+        }
+    }
+}
+#nullable disable
+");
+    }
+
     [Fact]
     public async Task Can_Create_Code_For_Immutable_IdentityClass_Entity_With_ConcurrencyChecks_Using_ClassFramework_EntityPipeline()
     {
