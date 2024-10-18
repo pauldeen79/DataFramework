@@ -567,8 +567,12 @@ namespace MyNamespace
         var sourceModel = new DataObjectInfoBuilder()
             .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseSchemaNamespace is empty on the settings
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
-            .Build();
+            .AddFields
+            (
+                new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsDatabaseIdentityField(),
+                new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)),
+                new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string))
+            ).Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.Poco) //default
             .WithDefaultEntityNamespace("MyNamespace")
@@ -590,7 +594,9 @@ GO
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[MyEntity](
-	[MyField] INT NOT NULL
+	[Id] INT IDENTITY(1, 1) NOT NULL,
+	[MyField1] INT NOT NULL,
+	[MyField2] VARCHAR(32) NOT NULL
 ) ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF
@@ -604,8 +610,12 @@ GO
         var sourceModel = new DataObjectInfoBuilder()
             .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseSchemaNamespace is empty on the settings
             .WithName("MyEntity")
-            .AddFields(new FieldInfoBuilder().WithName("MyField").WithType(typeof(int)))
-            .Build();
+            .AddFields
+            (
+                new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsDatabaseIdentityField(),
+                new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)),
+                new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string))
+            ).Build();
         var settings = new PipelineSettingsBuilder()
             .WithEntityClassType(EntityClassType.Poco) //default
             .WithDefaultEntityNamespace("MyNamespace")
@@ -628,7 +638,9 @@ GO
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[MyEntity](
-	[MyField] INT NOT NULL
+	[Id] INT IDENTITY(1, 1) NOT NULL,
+	[MyField1] INT NOT NULL,
+	[MyField2] VARCHAR(32) NOT NULL
 ) ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF
@@ -638,10 +650,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[DeleteMyEntity]
-	@MyField INT
+	@MyField1 INT,
+	@MyField2 VARCHAR(32)
 AS
 BEGIN
-    DELETE FROM [MyEntity] OUTPUT DELETED.[MyField] WHERE [MyField] = @MyFieldOriginal
+    DELETE FROM [MyEntity] OUTPUT DELETED.[Id], DELETED.[MyField1], DELETED.[MyField2] WHERE [Id] = @IdOriginal AND [MyField1] = @MyField1Original AND [MyField2] = @MyField2Original
 END
 GO
 SET ANSI_NULLS ON
@@ -649,10 +662,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[InsertMyEntity]
-	@MyField INT
+	@MyField1 INT,
+	@MyField2 VARCHAR(32)
 AS
 BEGIN
-    INSERT INTO [MyEntity]([MyField]) OUTPUT INSERTED.[MyField] VALUES(@MyField)
+    INSERT INTO [MyEntity]([MyField1], [MyField2]) OUTPUT INSERTED.[Id], INSERTED.[MyField1], INSERTED.[MyField2] VALUES(@MyField1, @MyField2)
 END
 GO
 SET ANSI_NULLS ON
@@ -660,11 +674,57 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[UpdateMyEntity]
-	@MyField INT
+	@MyField1 INT,
+	@MyField2 VARCHAR(32)
 AS
 BEGIN
-    UPDATE [MyEntity] SET [MyField] = @MyField OUTPUT INSERTED.[MyField] WHERE [MyField] = @MyFieldOriginal
+    UPDATE [MyEntity] SET [MyField1] = @MyField1, [MyField2] = @MyField2 OUTPUT INSERTED.[Id], INSERTED.[MyField1], INSERTED.[MyField2] WHERE [Id] = @IdOriginal AND [MyField1] = @MyField1Original AND [MyField2] = @MyField2Original
 END
+GO
+");
+    }
+
+    [Fact]
+    public async Task Can_Create_Code_For_DatabaseSchema_With_Default_Values()
+    {
+        var sourceModel = new DataObjectInfoBuilder()
+            .WithTypeName("MyNamespace.MyEntity") // this will be used when DatabaseSchemaNamespace is empty on the settings
+            .WithName("MyEntity")
+            .AddFields
+            (
+                new FieldInfoBuilder().WithName("Id").WithType(typeof(int)).WithIsIdentityField().WithIsDatabaseIdentityField(),
+                new FieldInfoBuilder().WithName("MyField1").WithType(typeof(int)),
+                new FieldInfoBuilder().WithName("MyField2").WithType(typeof(string)).WithDefaultValue("default value")
+            ).Build();
+        var settings = new PipelineSettingsBuilder()
+            .WithEntityClassType(EntityClassType.Poco) //default
+            .WithDefaultEntityNamespace("MyNamespace")
+            .WithConcurrencyCheckBehavior(ConcurrencyCheckBehavior.AllFields)
+            .Build();
+        var context = new DatabaseSchemaContext(sourceModel, settings, CultureInfo.InvariantCulture);
+        var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
+
+        // Act
+        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var databaseObjects = result.GetValueOrThrow();
+        var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
+
+        // Assert
+        code.Should().Be(@"SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MyEntity](
+	[Id] INT IDENTITY(1, 1) NOT NULL,
+	[MyField1] INT NOT NULL,
+	[MyField2] VARCHAR(32) NOT NULL
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [MyEntity] ADD CONSTRAINT [DF_MyField2] DEFAULT ('default value') FOR [MyField2]
 GO
 ");
     }

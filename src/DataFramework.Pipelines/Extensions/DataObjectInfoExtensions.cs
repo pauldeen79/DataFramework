@@ -245,9 +245,9 @@ public static class DataObjectInfoExtensions
     private static IEnumerable<StoredProcedureParameterBuilder> GetStoredProcedureParameters(DataObjectInfo instance, DatabaseOperation operation, PipelineSettings settings)
         => GetCommandTypeMetadataNameForCommandType(operation, CommandTypePart.Parameters, settings) switch
         {
-            DatabaseOperation.Insert => instance.Fields.Where(x => x.UseOnInsert).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
-            DatabaseOperation.Update => instance.Fields.Where(x => x.UseOnUpdate).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
-            DatabaseOperation.Delete => instance.Fields.Where(x => x.UseOnDelete).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(true))),
+            DatabaseOperation.Insert => instance.Fields.Where(x => x.UseOnInsert).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(false)).WithIsStringMaxLength(x.IsMaxLengthString).WithNumericPrecision(x.DatabaseNumericPrecision).WithNumericScale(x.DatabaseNumericScale).WithStringCollation(x.DatabaseStringCollation ?? string.Empty).WithStringLength(x.StringMaxLength)),
+            DatabaseOperation.Update => instance.Fields.Where(x => x.UseOnUpdate).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(false)).WithIsStringMaxLength(x.IsMaxLengthString).WithNumericPrecision(x.DatabaseNumericPrecision).WithNumericScale(x.DatabaseNumericScale).WithStringCollation(x.DatabaseStringCollation ?? string.Empty).WithStringLength(x.StringMaxLength)),
+            DatabaseOperation.Delete => instance.Fields.Where(x => x.UseOnDelete).Select(x => new StoredProcedureParameterBuilder().WithName(x.Name).WithType(x.GetTypedSqlFieldType(false)).WithIsStringMaxLength(x.IsMaxLengthString).WithNumericPrecision(x.DatabaseNumericPrecision).WithNumericScale(x.DatabaseNumericScale).WithStringCollation(x.DatabaseStringCollation ?? string.Empty).WithStringLength(x.StringMaxLength)),
             _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Unsupported command type: {operation}"),
         };
 
