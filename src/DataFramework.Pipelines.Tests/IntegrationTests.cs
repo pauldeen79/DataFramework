@@ -857,7 +857,7 @@ using System.Text;
 namespace MyNamespace
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@""DataFramework.Pipelines.PagedEntityRetrieverSettingsGenerator"", @""1.0.0.0"")]
-    public partial class MyEntityDatabasePagedEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
+    public partial class MyEntityDatabaseEntityRetrieverSettings : CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettings
     {
         public string TableName
         {
@@ -943,7 +943,7 @@ namespace MyNamespace
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyNamespace.MyEntityIdentity) || typeof(TSource) == typeof(MyNamespace.MyEntityQuery))
             {
-                settings = new MyNamespace.MyEntityDatabasePagedEntityRetrieverSettings();
+                settings = new MyNamespace.MyEntityDatabaseEntityRetrieverSettings();
                 return true;
             }
             settings = default;
@@ -954,7 +954,7 @@ namespace MyNamespace
         {
             if (typeof(TSource) == typeof(MyNamespace.MyEntity) || typeof(TSource) == typeof(MyNamespace.MyEntityIdentity) || typeof(TSource) == typeof(MyNamespace.MyEntityQuery))
             {
-                settings = new MyNamespace.MyEntityDatabasePagedEntityRetrieverSettings();
+                settings = new MyNamespace.MyEntityDatabaseEntityRetrieverSettings();
                 return true;
             }
             settings = default;

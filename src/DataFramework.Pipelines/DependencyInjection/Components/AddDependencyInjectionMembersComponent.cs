@@ -71,6 +71,8 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverProvider).FullName}, {databaseEntityRetrieverProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverSettingsProvider).FullName}, {pagedDatabaseEntityRetrieverSettingsProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IPagedDatabaseEntityRetrieverSettingsProvider).FullName}, {pagedDatabaseEntityRetrieverSettingsProviderFullName}>();",
+                    //TODO: Add IDatabaseEntityMapper, like x.AddSingleton<IDatabaseEntityMapper<Catalog>, CatalogEntityMapper>();
+                    //TODO: Add repository, like x.AddScoped<ICatalogRepository, CatalogRepository>();
                     "});"
                 )
             );

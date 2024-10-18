@@ -56,10 +56,6 @@ internal interface IPipelineSettings
     Visibility EntityMapperVisibility { get; }
     [Required(AllowEmptyStrings = true)] string EntityMapperNamespace { get; }
 
-    // EntityRetriever settings
-    Visibility EntityRetrieverVisibility { get; }
-    [Required(AllowEmptyStrings = true)] string EntityRetrieverNamespace { get; }
-
     // IdentityCommandProvider settings
     Visibility IdentityCommandProviderVisibility { get; }
     [Required(AllowEmptyStrings = true)] string IdentityCommandProviderNamespace { get; }

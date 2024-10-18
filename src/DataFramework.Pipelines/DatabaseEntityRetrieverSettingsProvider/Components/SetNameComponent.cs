@@ -12,9 +12,7 @@ public class SetNameComponent : IPipelineComponent<DatabaseEntityRetrieverSettin
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}DatabaseEntityRetrieverSettingsProvider")
-            .WithNamespace(context.Request.Settings.DatabaseEntityRetrieverSettingsProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+        context.Request.Builder.WithFullName(context.Request.SourceModel.GetPagedDatabaseEntityRetrieverSettingsProviderFullName(context.Request.Settings.DatabaseEntityRetrieverSettingsProviderNamespace));
 
         return Task.FromResult(Result.Continue());
     }

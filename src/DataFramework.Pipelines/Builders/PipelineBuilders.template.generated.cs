@@ -99,10 +99,6 @@ namespace DataFramework.Pipelines.Builders
 
         private string _entityMapperNamespace;
 
-        private ClassFramework.Domain.Domains.Visibility _entityRetrieverVisibility;
-
-        private string _entityRetrieverNamespace;
-
         private ClassFramework.Domain.Domains.Visibility _identityCommandProviderVisibility;
 
         private string _identityCommandProviderNamespace;
@@ -733,33 +729,6 @@ namespace DataFramework.Pipelines.Builders
             }
         }
 
-        public ClassFramework.Domain.Domains.Visibility EntityRetrieverVisibility
-        {
-            get
-            {
-                return _entityRetrieverVisibility;
-            }
-            set
-            {
-                _entityRetrieverVisibility = value;
-                HandlePropertyChanged(nameof(EntityRetrieverVisibility));
-            }
-        }
-
-        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
-        public string EntityRetrieverNamespace
-        {
-            get
-            {
-                return _entityRetrieverNamespace;
-            }
-            set
-            {
-                _entityRetrieverNamespace = value ?? throw new System.ArgumentNullException(nameof(value));
-                HandlePropertyChanged(nameof(EntityRetrieverNamespace));
-            }
-        }
-
         public ClassFramework.Domain.Domains.Visibility IdentityCommandProviderVisibility
         {
             get
@@ -1205,8 +1174,6 @@ namespace DataFramework.Pipelines.Builders
             _databaseCommandTypeForDeleteParameters = source.DatabaseCommandTypeForDeleteParameters;
             _entityMapperVisibility = source.EntityMapperVisibility;
             _entityMapperNamespace = source.EntityMapperNamespace;
-            _entityRetrieverVisibility = source.EntityRetrieverVisibility;
-            _entityRetrieverNamespace = source.EntityRetrieverNamespace;
             _identityCommandProviderVisibility = source.IdentityCommandProviderVisibility;
             _identityCommandProviderNamespace = source.IdentityCommandProviderNamespace;
             _databasePagedEntityRetrieverSettingsVisibility = source.DatabasePagedEntityRetrieverSettingsVisibility;
@@ -1274,7 +1241,6 @@ namespace DataFramework.Pipelines.Builders
             _databaseCommandTypeForDeleteText = CrossCutting.Data.Abstractions.DatabaseOperation.Delete;
             _databaseCommandTypeForDeleteParameters = CrossCutting.Data.Abstractions.DatabaseOperation.Delete;
             _entityMapperNamespace = string.Empty;
-            _entityRetrieverNamespace = string.Empty;
             _identityCommandProviderNamespace = string.Empty;
             _databasePagedEntityRetrieverSettingsNamespace = string.Empty;
             _queryNamespace = string.Empty;
@@ -1291,7 +1257,7 @@ namespace DataFramework.Pipelines.Builders
 
         public DataFramework.Pipelines.PipelineSettings Build()
         {
-            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, DatabaseEntityRetrieverSettingsProviderVisibility, DatabaseEntityRetrieverSettingsProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, EntityRetrieverVisibility, EntityRetrieverNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, DatabasePagedEntityRetrieverSettingsVisibility, DatabasePagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord, QueryBuilderVisibility, QueryBuilderNamespace, QueryFieldInfoVisibility, QueryFieldInfoNamespace, QueryFieldInfoFields.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorParameters.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoProviderVisibility, QueryFieldInfoProviderNamespace, RepositoryVisibility, RepositoryInterfaceVisibility, UseRepositoryInterface, RepositoryNamespace, RepositoryInterfaceNamespace, DependencyInjectionVisibility, DependencyInjectionNamespace, DependencyInjectionClassName, DependencyInjectionMethodName);
+            return new DataFramework.Pipelines.PipelineSettings(EnableNullableContext, ConcurrencyCheckBehavior, EntityClassType, DefaultEntityNamespace, DefaultIdentityNamespace, DefaultBuilderNamespace, AddComponentModelAttributes, CommandEntityProviderVisibility, CommandEntityProviderNamespace, CommandProviderEnableAdd, CommandProviderEnableUpdate, CommandProviderEnableDelete, CommandEntityProviderAddResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderAddAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderUpdateAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteResultEntityStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandEntityProviderDeleteAfterReadStatements.Select(x => x.Build()!).ToList().AsReadOnly(), CommandProviderVisibility, CommandProviderNamespace, UseAddStoredProcedure, UseUpdateStoredProcedure, UseDeleteStoredProcedure, DatabaseEntityRetrieverProviderVisibility, DatabaseEntityRetrieverProviderNamespace, DatabaseEntityRetrieverSettingsProviderVisibility, DatabaseEntityRetrieverSettingsProviderNamespace, AddStoredProcedureName, UpdateStoredProcedureName, DeleteStoredProcedureName, AddStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), UpdateStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DeleteStoredProcedureStatements.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseCommandTypeForInsertText, DatabaseCommandTypeForInsertParameters, DatabaseCommandTypeForUpdateText, DatabaseCommandTypeForUpdateParameters, DatabaseCommandTypeForDeleteText, DatabaseCommandTypeForDeleteParameters, EntityMapperVisibility, EntityMapperNamespace, IdentityCommandProviderVisibility, IdentityCommandProviderNamespace, DatabasePagedEntityRetrieverSettingsVisibility, DatabasePagedEntityRetrieverSettingsNamespace, QueryVisibility, QueryNamespace, QueryMaxLimit, CreateQueryAsRecord, QueryBuilderVisibility, QueryBuilderNamespace, QueryFieldInfoVisibility, QueryFieldInfoNamespace, QueryFieldInfoFields.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorParameters.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoConstructorCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetAllFieldsCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoGetDatabaseFieldNameCodeStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryFieldInfoProviderVisibility, QueryFieldInfoProviderNamespace, RepositoryVisibility, RepositoryInterfaceVisibility, UseRepositoryInterface, RepositoryNamespace, RepositoryInterfaceNamespace, DependencyInjectionVisibility, DependencyInjectionNamespace, DependencyInjectionClassName, DependencyInjectionMethodName);
         }
 
         partial void SetDefaultValues();
@@ -1678,19 +1644,6 @@ namespace DataFramework.Pipelines.Builders
         {
             if (entityMapperNamespace is null) throw new System.ArgumentNullException(nameof(entityMapperNamespace));
             EntityMapperNamespace = entityMapperNamespace;
-            return this;
-        }
-
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityRetrieverVisibility(ClassFramework.Domain.Domains.Visibility entityRetrieverVisibility)
-        {
-            EntityRetrieverVisibility = entityRetrieverVisibility;
-            return this;
-        }
-
-        public DataFramework.Pipelines.Builders.PipelineSettingsBuilder WithEntityRetrieverNamespace(string entityRetrieverNamespace)
-        {
-            if (entityRetrieverNamespace is null) throw new System.ArgumentNullException(nameof(entityRetrieverNamespace));
-            EntityRetrieverNamespace = entityRetrieverNamespace;
             return this;
         }
 

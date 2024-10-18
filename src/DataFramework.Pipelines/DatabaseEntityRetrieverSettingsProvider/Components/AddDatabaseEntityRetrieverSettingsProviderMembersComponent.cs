@@ -34,7 +34,7 @@ public class AddDatabaseEntityRetrieverSettingsProviderMembersComponent : IPipel
             .AddStringCodeStatements(
                $"if (typeof(TSource) == typeof({instance.GetEntityFullName(entityNamespace)}) || typeof(TSource) == typeof({instance.GetEntityIdentityFullName(identityNamespace)}) || typeof(TSource) == typeof({instance.GetQueryFullName(queryNamespace)}))",
                 "{",
-               $"    settings = new {instance.GetEntityRetrieverSettingsFullName(entityRetrieverSettingsNamespace)}();",
+               $"    settings = new {instance.GetPagedDatabaseEntityRetrieverSettingsFullName(entityRetrieverSettingsNamespace)}();",
                 "    return true;",
                 "}",
                $"settings = default;",
@@ -54,7 +54,7 @@ public class AddDatabaseEntityRetrieverSettingsProviderMembersComponent : IPipel
             .AddStringCodeStatements(
                $"if (typeof(TSource) == typeof({instance.GetEntityFullName(entityNamespace)}) || typeof(TSource) == typeof({instance.GetEntityIdentityFullName(identityNamespace)}) || typeof(TSource) == typeof({instance.GetQueryFullName(queryNamespace)}))",
                 "{",
-               $"    settings = new {instance.GetEntityRetrieverSettingsFullName(entityRetrieverSettingsNamespace)}();",
+               $"    settings = new {instance.GetPagedDatabaseEntityRetrieverSettingsFullName(entityRetrieverSettingsNamespace)}();",
                 "    return true;",
                 "}",
                $"settings = default;",

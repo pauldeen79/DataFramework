@@ -12,9 +12,7 @@ public class SetNameComponent : IPipelineComponent<RepositoryInterfaceContext>
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder
-            .WithName($"I{context.Request.SourceModel.Name}Repository")
-            .WithNamespace(context.Request.Settings.RepositoryInterfaceNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+        context.Request.Builder.WithFullName(context.Request.SourceModel.GetRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace));
 
         return Task.FromResult(Result.Continue());
     }

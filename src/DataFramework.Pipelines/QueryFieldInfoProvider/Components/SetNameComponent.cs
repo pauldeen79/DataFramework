@@ -12,9 +12,7 @@ public class SetNameComponent : IPipelineComponent<QueryFieldInfoProviderContext
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}QueryFieldInfoProvider")
-            .WithNamespace(context.Request.Settings.QueryFieldInfoProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+        context.Request.Builder.WithFullName(context.Request.SourceModel.GetQueryFieldInfoProviderFullName(context.Request.Settings.QueryFieldInfoProviderNamespace));
 
         return Task.FromResult(Result.Continue());
     }

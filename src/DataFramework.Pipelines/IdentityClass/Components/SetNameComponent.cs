@@ -12,9 +12,7 @@ public class SetNameComponent : IPipelineComponent<IdentityClassContext>
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}Identity")
-            .WithNamespace(context.Request.SourceModel.TypeName.GetNamespaceWithDefault(context.Request.Settings.DefaultIdentityNamespace));
+        context.Request.Builder.WithFullName(context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace));
 
         return Task.FromResult(Result.Continue());
     }

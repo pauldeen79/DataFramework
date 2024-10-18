@@ -44,6 +44,9 @@ public static class DataObjectInfoExtensions
     public static string GetEntityIdentityFullName(this DataObjectInfo instance, string entityIdentityNamespace)
         => $"{entityIdentityNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}Identity";
 
+    public static string GetEntityMapperFullName(this DataObjectInfo instance, string entityMapperNamespace)
+        => $"{entityMapperNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}EntityMapper";
+
     public static string GetQueryFullName(this DataObjectInfo instance, string queryNamespace)
         => $"{queryNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}Query";
 
@@ -68,9 +71,6 @@ public static class DataObjectInfoExtensions
     public static string GetEntityRetrieverFullName(this DataObjectInfo instance, string entityRetrieverNamespace)
         => $"{entityRetrieverNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}EntityRetriever";
 
-    public static string GetEntityRetrieverSettingsFullName(this DataObjectInfo instance, string entityRetrieverSettingsNamespace)
-        => $"{entityRetrieverSettingsNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}DatabasePagedEntityRetrieverSettings";
-
     public static string GetRepositoryFullName(this DataObjectInfo instance, string repositoryNamespace)
         => $"{repositoryNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}Repository";
 
@@ -79,6 +79,9 @@ public static class DataObjectInfoExtensions
 
     public static string GetDatabaseEntityRetrieverProviderFullName(this DataObjectInfo instance, string databaseEntityRetrieverProviderNamespace)
         => $"{databaseEntityRetrieverProviderNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}DatabaseEntityRetrieverProvider";
+
+    public static string GetPagedDatabaseEntityRetrieverSettingsFullName(this DataObjectInfo instance, string pagedDatabaseEntityRetrieverSettingsNamespace)
+        => $"{pagedDatabaseEntityRetrieverSettingsNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}DatabaseEntityRetrieverSettings";
 
     public static string GetPagedDatabaseEntityRetrieverSettingsProviderFullName(this DataObjectInfo instance, string pagedDatabaseEntityRetrieverSettingsProviderNamespace)
         => $"{pagedDatabaseEntityRetrieverSettingsProviderNamespace.WhenNullOrEmpty(() => instance.TypeName.GetNamespaceWithDefault()).GetNamespacePrefix()}{instance.Name}DatabaseEntityRetrieverSettingsProvider";

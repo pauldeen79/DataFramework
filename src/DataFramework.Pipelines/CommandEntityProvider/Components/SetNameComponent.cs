@@ -12,9 +12,7 @@ public class SetNameComponent : IPipelineComponent<CommandEntityProviderContext>
     {
         context = context.IsNotNull(nameof(context));
 
-        context.Request.Builder
-            .WithName($"{context.Request.SourceModel.Name}CommandEntityProvider")
-            .WithNamespace(context.Request.Settings.CommandEntityProviderNamespace.WhenNullOrEmpty(() => context.Request.SourceModel.TypeName.GetNamespaceWithDefault()));
+        context.Request.Builder.WithFullName(context.Request.SourceModel.GetCommandEntityProviderFullName(context.Request.Settings.CommandEntityProviderNamespace));
 
         return Task.FromResult(Result.Continue());
     }
