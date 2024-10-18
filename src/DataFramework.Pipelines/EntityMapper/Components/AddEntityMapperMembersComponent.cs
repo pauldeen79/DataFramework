@@ -50,27 +50,32 @@ public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperCo
             ? "("
             : "{";
 
-        var fields = instance.Fields.Where(x => x.UseOnSelect).ToArray();
-        foreach (var field in fields.Select((item, index) => new { item, index }))
+        var fields = instance.Fields.Where(x => x.UseOnSelect && !instance.CustomEntityMappings.Any(y => y.PropertyName == x.Name)).ToArray();
+        var totalLength = fields.Length + instance.CustomEntityMappings.Count;
+        var counter = 0;
+
+        foreach (var field in fields)
         {
-            var comma = field.index + 1 < fields.Length
+            counter++;
+            var comma = counter < totalLength
                 ? "," 
                 : string.Empty;
 
             yield return entityClassType.IsImmutable()
-                ? $"    {field.item.Name.ToPascalCase(cultureInfo)}: {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.item.SqlReaderMethodName}(reader, \"{field.item.GetDatabaseFieldName()}\"){comma}"
-                : $"    {field.item.Name} = {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.item.SqlReaderMethodName}(reader, \"{field.item.GetDatabaseFieldName()}\"){comma}";
+                ? $"    {field.Name.ToPascalCase(cultureInfo)}: {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, \"{field.GetDatabaseFieldName()}\"){comma}"
+                : $"    {field.Name} = {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, \"{field.GetDatabaseFieldName()}\"){comma}";
         }
 
-        foreach (var keyValuePair in instance.CustomEntityMappings.Select((item, index) => new { item, index }))
+        foreach (var keyValuePair in instance.CustomEntityMappings)
         {
-            var comma = keyValuePair.index + 1 < instance.CustomEntityMappings.Count
+            counter++;
+            var comma = counter < totalLength
                 ? ","
                 : string.Empty;
 
             yield return entityClassType.IsImmutable()
-                ? $"    {keyValuePair.item.PropertyName.ToPascalCase(cultureInfo)}: {_csharpExpressionDumper.Dump(keyValuePair.item.Mapping)}{comma}"
-                : $"    {keyValuePair.item.PropertyName} = {_csharpExpressionDumper.Dump(keyValuePair.item.Mapping)}{comma}";
+                ? $"    {keyValuePair.PropertyName.ToPascalCase(cultureInfo)}: {_csharpExpressionDumper.Dump(keyValuePair.Mapping)}{comma}"
+                : $"    {keyValuePair.PropertyName} = {_csharpExpressionDumper.Dump(keyValuePair.Mapping)}{comma}";
         }
 
         yield return entityClassType.IsImmutable()
