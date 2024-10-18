@@ -717,6 +717,8 @@ namespace MyNamespace
                 x.AddSingleton<QueryFramework.SqlServer.Abstractions.IDatabaseEntityRetrieverProvider, MyNamespace.MyEntityDatabaseEntityRetrieverProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
                 x.AddSingleton<CrossCutting.Data.Abstractions.IPagedDatabaseEntityRetrieverSettingsProvider, MyNamespace.MyEntityDatabaseEntityRetrieverSettingsProvider>();
+                x.AddSingleton<CrossCutting.Data.Abstractions.IDatabaseEntityMapper<MyNamespace.MyEntity>, MyNamespace.MyEntityEntityMapper>();
+                x.AddScoped<CrossCutting.Data.Abstractions.IRepository<MyNamespace.MyEntity>, MyNamespace.MyEntityRepository>();
             });
         }
     }

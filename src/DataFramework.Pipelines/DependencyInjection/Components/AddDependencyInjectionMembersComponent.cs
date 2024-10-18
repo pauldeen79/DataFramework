@@ -34,15 +34,13 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
 
         var entityFullName = context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace);
         var identityFullName = context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace);
+        var builderFullName = context.Request.Settings.EntityClassType.IsImmutable()
+            ? context.Request.SourceModel.GetEntityBuilderFullName(context.Request.Settings.DefaultEntityNamespace, context.Request.Settings.DefaultBuilderNamespace, context.Request.Settings.EntityClassType.IsImmutable())
+            : string.Empty;
 
-        string[] typeArgs =
-            !string.IsNullOrEmpty(context.Request.Settings.DefaultIdentityNamespace)
-            ? [context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace), context.Request.SourceModel.GetEntityIdentityFullName(context.Request.Settings.DefaultIdentityNamespace)]
-            : [context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace)];
-
-        string[] entityCommandProviderTypeArgs = context.Request.Settings.EntityClassType.IsImmutable()
-            ? [context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace), context.Request.SourceModel.GetEntityBuilderFullName(context.Request.Settings.DefaultEntityNamespace, context.Request.Settings.DefaultBuilderNamespace, context.Request.Settings.EntityClassType.IsImmutable())]
-            : [context.Request.SourceModel.GetEntityFullName(context.Request.Settings.DefaultEntityNamespace)];
+        string[] typeArgs = context.Request.Settings.EntityClassType.IsImmutable()
+            ? [entityFullName, builderFullName]
+            : [entityFullName];
 
         var commandEntityProviderFullName = context.Request.SourceModel.GetCommandEntityProviderFullName(context.Request.Settings.CommandEntityProviderNamespace);
         var commandProviderFullName = context.Request.SourceModel.GetCommandProviderFullName(context.Request.Settings.CommandProviderNamespace);
@@ -50,6 +48,11 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
         var queryFieldInfoProviderFullName = context.Request.SourceModel.GetQueryFieldInfoProviderFullName(context.Request.Settings.QueryFieldInfoProviderNamespace);
         var databaseEntityRetrieverProviderFullName = context.Request.SourceModel.GetDatabaseEntityRetrieverProviderFullName(context.Request.Settings.DatabaseEntityRetrieverProviderNamespace);
         var pagedDatabaseEntityRetrieverSettingsProviderFullName = context.Request.SourceModel.GetPagedDatabaseEntityRetrieverSettingsProviderFullName(context.Request.Settings.DatabasePagedEntityRetrieverSettingsNamespace);
+        var entityMapperFullName = context.Request.SourceModel.GetEntityMapperFullName(context.Request.Settings.EntityMapperNamespace);
+        var repositoryInterfaceFullName = context.Request.Settings.UseRepositoryInterface
+            ? context.Request.SourceModel.GetRepositoryInterfaceFullName(context.Request.Settings.RepositoryInterfaceNamespace)
+            : typeof(IRepository<,>).ReplaceGenericTypeName(typeArgs);
+        var repositoryFullName = context.Request.SourceModel.GetRepositoryFullName(context.Request.Settings.RepositoryNamespace);
 
         context.Request.Builder
             .AddMethods(new MethodBuilder()
@@ -64,15 +67,15 @@ public class AddDependencyInjectionMembersComponent : IPipelineComponent<Depende
                     "{",
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}, {typeof(DatabaseEntityRetriever<>).ReplaceGenericTypeName(entityFullName)}>();",
                     $"    x.AddScoped<{typeof(IDatabaseCommandProcessor<>).ReplaceGenericTypeName(entityFullName)}, {typeof(DatabaseCommandProcessor<,>).ReplaceGenericTypeName(typeArgs)}>();",
-                    $"    x.AddScoped<{typeof(IDatabaseCommandEntityProvider<,>).ReplaceGenericTypeName(entityCommandProviderTypeArgs)}, {commandEntityProviderFullName}>();",
+                    $"    x.AddScoped<{typeof(IDatabaseCommandEntityProvider<,>).ReplaceGenericTypeName(typeArgs)}, {commandEntityProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(entityFullName)}, {commandProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseCommandProvider<>).ReplaceGenericTypeName(identityFullName)}, {identityCommandProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IQueryFieldInfoProvider)}, {queryFieldInfoProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverProvider).FullName}, {databaseEntityRetrieverProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IDatabaseEntityRetrieverSettingsProvider).FullName}, {pagedDatabaseEntityRetrieverSettingsProviderFullName}>();",
                     $"    x.AddSingleton<{typeof(IPagedDatabaseEntityRetrieverSettingsProvider).FullName}, {pagedDatabaseEntityRetrieverSettingsProviderFullName}>();",
-                    //TODO: Add IDatabaseEntityMapper, like x.AddSingleton<IDatabaseEntityMapper<Catalog>, CatalogEntityMapper>();
-                    //TODO: Add repository, like x.AddScoped<ICatalogRepository, CatalogRepository>();
+                    $"    x.AddSingleton<{typeof(IDatabaseEntityMapper<>).ReplaceGenericTypeName(entityFullName)}, {entityMapperFullName}>();",
+                    $"    x.AddScoped<{repositoryInterfaceFullName}, {repositoryFullName}>();",
                     "});"
                 )
             );
