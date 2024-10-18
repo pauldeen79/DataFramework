@@ -8,7 +8,7 @@ namespace PDC.Net.Core.Queries
     [GeneratedCode(@"DataFramework.ModelFramework.Generators.Entities.QueryBuilderGenerator", @"1.0.0.0")]
     public class CatalogQueryBuilder : QueryBuilder
     {
-        public CatalogQueryBuilder()
+        public CatalogQueryBuilder() : base()
         {
         }
 
@@ -21,7 +21,7 @@ namespace PDC.Net.Core.Queries
             return BuildTyped();
         }
 
-        public IQuery BuildTyped()
+        public CatalogQuery BuildTyped()
         {
             return new CatalogQuery(Limit, Offset, Filter?.BuildTyped(), OrderByFields?.Select(x => x.Build()));
         }
