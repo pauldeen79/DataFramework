@@ -14,10 +14,13 @@ public interface IDataObjectInfo
 
     [Required(AllowEmptyStrings = true)] string DatabaseTableName { get; }
     [Required(AllowEmptyStrings = true)] string DatabaseSchemaName { get; }
+    //TODO: Review if we want to store the 'CatalogName', which is the database name
+    //[Required(AllowEmptyStrings = true)] string DatabaseCatalogName { get; }
     [Required(AllowEmptyStrings = true)] string DatabaseFileGroupName { get; }
     [Required(AllowEmptyStrings = true)] string CustomAddDatabaseCommandText { get; }
     [Required(AllowEmptyStrings = true)] string CustomUpdateDatabaseCommandText { get; }
     [Required(AllowEmptyStrings = true)] string CustomDeleteDatabaseCommandText { get; }
+    [Required(AllowEmptyStrings = true)] string ViewDefinition { get; }
 
     [Required][ValidateObject] IReadOnlyCollection<PrimaryKeyConstraint> PrimaryKeyConstraints { get; }
     [Required][ValidateObject] IReadOnlyCollection<ForeignKeyConstraint> ForeignKeyConstraints { get; }

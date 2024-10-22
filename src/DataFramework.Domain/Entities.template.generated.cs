@@ -103,6 +103,12 @@ namespace DataFramework.Domain
             get;
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string ViewDefinition
+        {
+            get;
+        }
+
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.Generic.IReadOnlyCollection<DatabaseFramework.Domain.PrimaryKeyConstraint> PrimaryKeyConstraints
@@ -173,7 +179,7 @@ namespace DataFramework.Domain
             get;
         }
 
-        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints, System.Collections.Generic.IEnumerable<DataFramework.Domain.EntityMapping> customEntityMappings, string? defaultOrderByFields, string? defaultWhereClause, System.Nullable<int> overridePageSize, System.Collections.Generic.IEnumerable<string> additionalQueryFields, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldNameStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryExpressionStatements)
+        public DataObjectInfo(string name, string? assemblyName, string? typeName, string? description, string? displayName, bool isVisible, bool isQueryable, bool isReadOnly, System.Collections.Generic.IEnumerable<DataFramework.Domain.FieldInfo> fields, string databaseTableName, string databaseSchemaName, string databaseFileGroupName, string customAddDatabaseCommandText, string customUpdateDatabaseCommandText, string customDeleteDatabaseCommandText, string viewDefinition, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.PrimaryKeyConstraint> primaryKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.ForeignKeyConstraint> foreignKeyConstraints, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.Index> indexes, System.Collections.Generic.IEnumerable<DatabaseFramework.Domain.CheckConstraint> checkConstraints, System.Collections.Generic.IEnumerable<DataFramework.Domain.EntityMapping> customEntityMappings, string? defaultOrderByFields, string? defaultWhereClause, System.Nullable<int> overridePageSize, System.Collections.Generic.IEnumerable<string> additionalQueryFields, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryFieldNameStatements, System.Collections.Generic.IEnumerable<ClassFramework.Domain.CodeStatementBase> queryExpressionStatements)
         {
             this.Name = name;
             this.AssemblyName = assemblyName;
@@ -190,6 +196,7 @@ namespace DataFramework.Domain
             this.CustomAddDatabaseCommandText = customAddDatabaseCommandText;
             this.CustomUpdateDatabaseCommandText = customUpdateDatabaseCommandText;
             this.CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
+            this.ViewDefinition = viewDefinition;
             this.PrimaryKeyConstraints = primaryKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.PrimaryKeyConstraint>(primaryKeyConstraints);
             this.ForeignKeyConstraints = foreignKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.ForeignKeyConstraint>(foreignKeyConstraints);
             this.Indexes = indexes is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.Index>(indexes);

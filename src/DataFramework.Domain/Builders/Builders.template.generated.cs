@@ -47,6 +47,8 @@ namespace DataFramework.Domain.Builders
 
         private string _customDeleteDatabaseCommandText;
 
+        private string _viewDefinition;
+
         private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder> _primaryKeyConstraints;
 
         private System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.ForeignKeyConstraintBuilder> _foreignKeyConstraints;
@@ -277,6 +279,20 @@ namespace DataFramework.Domain.Builders
             }
         }
 
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings = true)]
+        public string ViewDefinition
+        {
+            get
+            {
+                return _viewDefinition;
+            }
+            set
+            {
+                _viewDefinition = value ?? throw new System.ArgumentNullException(nameof(value));
+                HandlePropertyChanged(nameof(ViewDefinition));
+            }
+        }
+
         [System.ComponentModel.DataAnnotations.RequiredAttribute]
         [CrossCutting.Common.DataAnnotations.ValidateObjectAttribute]
         public System.Collections.ObjectModel.ObservableCollection<DatabaseFramework.Domain.Builders.PrimaryKeyConstraintBuilder> PrimaryKeyConstraints
@@ -462,6 +478,7 @@ namespace DataFramework.Domain.Builders
             _customAddDatabaseCommandText = source.CustomAddDatabaseCommandText;
             _customUpdateDatabaseCommandText = source.CustomUpdateDatabaseCommandText;
             _customDeleteDatabaseCommandText = source.CustomDeleteDatabaseCommandText;
+            _viewDefinition = source.ViewDefinition;
             if (source.PrimaryKeyConstraints is not null) foreach (var item in source.PrimaryKeyConstraints.Select(x => x.ToBuilder())) _primaryKeyConstraints.Add(item);
             if (source.ForeignKeyConstraints is not null) foreach (var item in source.ForeignKeyConstraints.Select(x => x.ToBuilder())) _foreignKeyConstraints.Add(item);
             if (source.Indexes is not null) foreach (var item in source.Indexes.Select(x => x.ToBuilder())) _indexes.Add(item);
@@ -495,12 +512,13 @@ namespace DataFramework.Domain.Builders
             _customAddDatabaseCommandText = string.Empty;
             _customUpdateDatabaseCommandText = string.Empty;
             _customDeleteDatabaseCommandText = string.Empty;
+            _viewDefinition = string.Empty;
             SetDefaultValues();
         }
 
         public DataFramework.Domain.DataObjectInfo Build()
         {
-            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly(), DefaultOrderByFields, DefaultWhereClause, OverridePageSize, AdditionalQueryFields, QueryFieldNameStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryExpressionStatements.Select(x => x.Build()!).ToList().AsReadOnly());
+            return new DataFramework.Domain.DataObjectInfo(Name, AssemblyName, TypeName, Description, DisplayName, IsVisible, IsQueryable, IsReadOnly, Fields.Select(x => x.Build()!).ToList().AsReadOnly(), DatabaseTableName, DatabaseSchemaName, DatabaseFileGroupName, CustomAddDatabaseCommandText, CustomUpdateDatabaseCommandText, CustomDeleteDatabaseCommandText, ViewDefinition, PrimaryKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), ForeignKeyConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), Indexes.Select(x => x.Build()!).ToList().AsReadOnly(), CheckConstraints.Select(x => x.Build()!).ToList().AsReadOnly(), CustomEntityMappings.Select(x => x.Build()!).ToList().AsReadOnly(), DefaultOrderByFields, DefaultWhereClause, OverridePageSize, AdditionalQueryFields, QueryFieldNameStatements.Select(x => x.Build()!).ToList().AsReadOnly(), QueryExpressionStatements.Select(x => x.Build()!).ToList().AsReadOnly());
         }
 
         partial void SetDefaultValues();
@@ -710,6 +728,13 @@ namespace DataFramework.Domain.Builders
         {
             if (customDeleteDatabaseCommandText is null) throw new System.ArgumentNullException(nameof(customDeleteDatabaseCommandText));
             CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
+            return this;
+        }
+
+        public DataFramework.Domain.Builders.DataObjectInfoBuilder WithViewDefinition(string viewDefinition)
+        {
+            if (viewDefinition is null) throw new System.ArgumentNullException(nameof(viewDefinition));
+            ViewDefinition = viewDefinition;
             return this;
         }
 
