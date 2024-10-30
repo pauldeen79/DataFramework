@@ -62,7 +62,7 @@ public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperCo
                 : string.Empty;
 
             yield return entityClassType.IsImmutable()
-                ? $"    {field.Name.ToPascalCase(cultureInfo)}: {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, \"{field.GetDatabaseFieldName()}\"){comma}"
+                ? $"    {field.Name.ToCamelCase(cultureInfo)}: {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, \"{field.GetDatabaseFieldName()}\"){comma}"
                 : $"    {field.Name} = {typeof(CrossCutting.Data.Sql.Extensions.DataReaderExtensions).FullName}.{field.SqlReaderMethodName}(reader, \"{field.GetDatabaseFieldName()}\"){comma}";
         }
 
@@ -74,7 +74,7 @@ public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperCo
                 : string.Empty;
 
             yield return entityClassType.IsImmutable()
-                ? $"    {keyValuePair.PropertyName.ToPascalCase(cultureInfo)}: {_csharpExpressionDumper.Dump(keyValuePair.Mapping)}{comma}"
+                ? $"    {keyValuePair.PropertyName.ToCamelCase(cultureInfo)}: {_csharpExpressionDumper.Dump(keyValuePair.Mapping)}{comma}"
                 : $"    {keyValuePair.PropertyName} = {_csharpExpressionDumper.Dump(keyValuePair.Mapping)}{comma}";
         }
 

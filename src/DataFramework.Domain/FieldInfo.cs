@@ -48,7 +48,7 @@ public partial class FieldInfo
         => OverrideUseOnSelect ?? IsPersistable && PropertyTypeName.IsSupportedByMap();
 
     public ParameterBuilder ToParameterBuilder(CultureInfo cultureInfo)
-        => new ParameterBuilder().WithName(Name.Sanitize().ToPascalCase(cultureInfo))
+        => new ParameterBuilder().WithName(Name.Sanitize().ToCamelCase(cultureInfo))
                                  .WithTypeName(PropertyTypeName.FixTypeName())
                                  .WithDefaultValue(DefaultValue)
                                  .WithIsNullable(IsNullable);
