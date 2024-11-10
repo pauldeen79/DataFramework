@@ -1,6 +1,4 @@
-﻿using DatabaseFramework.Domain.Abstractions;
-
-namespace DataFramework.Pipelines.Tests;
+﻿namespace DataFramework.Pipelines.Tests;
 
 public abstract class IntegrationTestBase : TestBase
 {

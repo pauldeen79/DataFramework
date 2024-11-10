@@ -1,6 +1,4 @@
-﻿using QueryFramework.Abstractions.Builders;
-
-namespace DataFramework.Pipelines.Query.Components;
+﻿namespace DataFramework.Pipelines.Query.Components;
 
 public class AddQueryMembersComponentBuilder : IQueryComponentBuilder
 {
