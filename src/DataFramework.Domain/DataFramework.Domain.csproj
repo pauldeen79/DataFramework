@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="DatabaseFramework.Domain" Version="0.1.10" />
-    <PackageReference Include="pauldeen79.ClassFramework.Domain" Version="0.15.4" />
+    <PackageReference Include="pauldeen79.ClassFramework.Domain" Version="0.16.1" />
     <PackageReference Include="pauldeen79.CrossCutting.Common" Version="3.13.0" />
   </ItemGroup>
 
