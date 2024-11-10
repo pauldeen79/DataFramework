@@ -20,6 +20,7 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
     protected override bool CopyAttributes => true;
     protected override bool CopyInterfaces => true;
     protected override bool GenerateMultipleFiles => false;
+    protected override bool EnableGlobalUsings => true;
 
     protected async Task<TypeBase[]> GetPipelineModels()
         => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);
