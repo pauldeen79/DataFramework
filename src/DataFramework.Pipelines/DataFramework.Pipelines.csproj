@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>12.0</LangVersion>
+    <LangVersion>13.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AnalysisLevel>latest-All</AnalysisLevel>
@@ -13,8 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.16.1" />
-    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.5" />
+    <PackageReference Include="pauldeen79.ClassFramework.Pipelines" Version="0.17.0" />
+    <PackageReference Include="pauldeen79.CrossCutting.Data.Sql" Version="6.0.6" />
     <PackageReference Include="pauldeen79.QueryFramework.Core" Version="0.13.10" />
     <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.10" />
   </ItemGroup>
