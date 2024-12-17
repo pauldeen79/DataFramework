@@ -24,6 +24,7 @@ global using CrossCutting.Data.Sql;
 global using CrossCutting.ProcessingPipeline;
 global using CrossCutting.Utilities.Parsers;
 global using CrossCutting.Utilities.Parsers.Contracts;
+global using CrossCutting.Utilities.Parsers.Extensions;
 global using CsharpExpressionDumper.Abstractions;
 global using DatabaseFramework.Domain;
 global using DatabaseFramework.Domain.Builders;

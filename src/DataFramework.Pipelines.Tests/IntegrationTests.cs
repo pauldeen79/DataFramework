@@ -136,7 +136,6 @@ namespace MyNamespace
 ");
     }
 
-
     [Fact]
     public async Task Can_Create_Code_For_Poco_Class_Entity_Without_ConcurrencyChecks_Using_ClassFramework_EntityPipeline()
     {
