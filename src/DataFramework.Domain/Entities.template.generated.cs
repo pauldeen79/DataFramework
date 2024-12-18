@@ -178,24 +178,24 @@ namespace DataFramework.Domain
             this.IsVisible = isVisible;
             this.IsQueryable = isQueryable;
             this.IsReadOnly = isReadOnly;
-            this.Fields = fields is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.FieldInfo>(fields);
+            this.Fields = fields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.FieldInfo>(fields);
             this.DatabaseTableName = databaseTableName;
             this.DatabaseSchemaName = databaseSchemaName;
             this.DatabaseFileGroupName = databaseFileGroupName;
             this.CustomAddDatabaseCommandText = customAddDatabaseCommandText;
             this.CustomUpdateDatabaseCommandText = customUpdateDatabaseCommandText;
             this.CustomDeleteDatabaseCommandText = customDeleteDatabaseCommandText;
-            this.PrimaryKeyConstraints = primaryKeyConstraints is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.PrimaryKeyConstraint>(primaryKeyConstraints);
-            this.ForeignKeyConstraints = foreignKeyConstraints is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.ForeignKeyConstraint>(foreignKeyConstraints);
-            this.Indexes = indexes is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.Index>(indexes);
-            this.CheckConstraints = checkConstraints is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.CheckConstraint>(checkConstraints);
-            this.CustomEntityMappings = customEntityMappings is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.EntityMapping>(customEntityMappings);
+            this.PrimaryKeyConstraints = primaryKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.PrimaryKeyConstraint>(primaryKeyConstraints);
+            this.ForeignKeyConstraints = foreignKeyConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.ForeignKeyConstraint>(foreignKeyConstraints);
+            this.Indexes = indexes is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.Index>(indexes);
+            this.CheckConstraints = checkConstraints is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DatabaseFramework.Domain.CheckConstraint>(checkConstraints);
+            this.CustomEntityMappings = customEntityMappings is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<DataFramework.Domain.EntityMapping>(customEntityMappings);
             this.DefaultOrderByFields = defaultOrderByFields;
             this.DefaultWhereClause = defaultWhereClause;
             this.OverridePageSize = overridePageSize;
-            this.AdditionalQueryFields = additionalQueryFields is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<System.String>(additionalQueryFields);
-            this.QueryFieldNameStatements = queryFieldNameStatements is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldNameStatements);
-            this.QueryExpressionStatements = queryExpressionStatements is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryExpressionStatements);
+            this.AdditionalQueryFields = additionalQueryFields is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<System.String>(additionalQueryFields);
+            this.QueryFieldNameStatements = queryFieldNameStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryFieldNameStatements);
+            this.QueryExpressionStatements = queryExpressionStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(queryExpressionStatements);
             System.ComponentModel.DataAnnotations.Validator.ValidateObject(this, new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null), true);
         }
 
@@ -422,7 +422,7 @@ namespace DataFramework.Domain
             this.IsRowVersion = isRowVersion;
             this.UseForConcurrencyCheck = useForConcurrencyCheck;
             this.DefaultValue = defaultValue;
-            this.GetterCodeStatements = getterCodeStatements is null ? null : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(getterCodeStatements);
+            this.GetterCodeStatements = getterCodeStatements is null ? null! : new CrossCutting.Common.ReadOnlyValueCollection<ClassFramework.Domain.CodeStatementBase>(getterCodeStatements);
             this.StringMaxLength = stringMaxLength;
             this.IsMaxLengthString = isMaxLengthString;
             this.DatabaseStringCollation = databaseStringCollation;
