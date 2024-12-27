@@ -1,12 +1,8 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
 [ExcludeFromCodeCoverage]
-public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelineCodeGenerationProviderBase
+public abstract class DataFrameworkCSharpClassBase(IPipelineService pipelineService) : CsharpClassGeneratorPipelineCodeGenerationProviderBase(pipelineService)
 {
-    protected DataFrameworkCSharpClassBase(IPipelineService pipelineService) : base(pipelineService)
-    {
-    }
-
     public override bool RecurseOnDeleteGeneratedFiles => false;
     public override string LastGeneratedFilesFilename => string.Empty;
     public override Encoding Encoding => Encoding.UTF8;
@@ -22,8 +18,8 @@ public abstract class DataFrameworkCSharpClassBase : CsharpClassGeneratorPipelin
     protected override bool GenerateMultipleFiles => false;
     protected override bool EnableGlobalUsings => true;
 
-    protected async Task<TypeBase[]> GetPipelineModels()
-        => await GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines").ConfigureAwait(false);
+    protected Task<Result<IEnumerable<TypeBase>>> GetPipelineModels()
+        => GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines");
 
     protected override bool SkipNamespaceOnTypenameMappings(string @namespace)
         => @namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines";

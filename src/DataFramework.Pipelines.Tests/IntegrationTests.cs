@@ -1583,8 +1583,8 @@ namespace MyNamespace.Contracts
                 .WithGenerateMultipleFiles(_generateMultipleFiles)
                 .Build();
 
-        public override Task<IEnumerable<TypeBase>> GetModel()
-            => Task.FromResult<IEnumerable<TypeBase>>([_model]);
+        public override Task<Result<IEnumerable<TypeBase>>> GetModel(CancellationToken cancellationToken)
+            => Task.FromResult(Result.Success<IEnumerable<TypeBase>>([_model]));
     }
 
     private sealed class TestDatabaseSchemaGenerationProvider : DatabaseSchemaGeneratorCodeGenerationProviderBase
@@ -1604,7 +1604,7 @@ namespace MyNamespace.Contracts
 
         public override Encoding Encoding => Encoding.UTF8;
 
-        public override Task<IEnumerable<IDatabaseObject>> GetModel() => Task.FromResult(_model);
+        public override Task<Result<IEnumerable<IDatabaseObject>>> GetModel(CancellationToken cancellationToken) => Task.FromResult(Result.Success(_model));
 
         public override DatabaseSchemaGeneratorSettings Settings => new DatabaseSchemaGeneratorSettingsBuilder()
             .WithCultureInfo(CultureInfo.InvariantCulture)

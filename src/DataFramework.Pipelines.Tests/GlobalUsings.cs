@@ -43,7 +43,7 @@ global using DataFramework.Pipelines.QueryFieldInfo;
 global using DataFramework.Pipelines.QueryFieldInfoProvider;
 global using DataFramework.Pipelines.Repository;
 global using DataFramework.Pipelines.RepositoryInterface;
-global using ExpressionFramework.Parser;
+global using ExpressionFramework.Parser.Extensions;
 global using FluentAssertions;
 global using Microsoft.Extensions.DependencyInjection;
 global using NSubstitute;

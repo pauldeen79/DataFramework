@@ -1,14 +1,10 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
 [ExcludeFromCodeCoverage]
-public class Entities : DataFrameworkCSharpClassBase
+public class Entities(IPipelineService pipelineService) : DataFrameworkCSharpClassBase(pipelineService)
 {
-    public Entities(IPipelineService pipelineService) : base(pipelineService)
-    {
-    }
-
     public override string Path => "DataFramework.Domain";
 
-    public override async Task<IEnumerable<TypeBase>> GetModel()
-        => await GetEntities(await GetCoreModels(), "DataFramework.Domain");
+    public override Task<Result<IEnumerable<TypeBase>>> GetModel(CancellationToken cancellationToken)
+        => GetEntities(GetCoreModels(), "DataFramework.Domain");
 }
