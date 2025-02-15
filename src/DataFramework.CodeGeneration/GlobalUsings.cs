@@ -20,7 +20,6 @@ global using CsharpExpressionDumper.Core.Extensions;
 global using DatabaseFramework.Domain;
 global using DataFramework.CodeGeneration.CodeGenerationProviders;
 global using DataFramework.CodeGeneration.Model.Domains;
-global using ExpressionFramework.Parser.Extensions;
 global using Microsoft.Extensions.DependencyInjection;
 global using TemplateFramework.Abstractions.CodeGeneration;
 global using TemplateFramework.Abstractions.Extensions;

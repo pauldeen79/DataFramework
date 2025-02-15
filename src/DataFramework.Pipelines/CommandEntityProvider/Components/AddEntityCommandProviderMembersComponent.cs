@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.CommandEntityProvider.Components;
 
-public class AddEntityCommandProviderMembersComponentBuilder : ICommandEntityProviderComponentBuilder
-{
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddEntityCommandProviderMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
-    public IPipelineComponent<CommandEntityProviderContext> Build()
-        => new AddEntityCommandProviderMembersComponent(_csharpExpressionDumper);
-}
-
 public class AddEntityCommandProviderMembersComponent : IPipelineComponent<CommandEntityProviderContext>
 {
     private const string ResultEntity = "resultEntity";
@@ -25,7 +12,7 @@ public class AddEntityCommandProviderMembersComponent : IPipelineComponent<Comma
         _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
     }
 
-    public Task<Result> Process(PipelineContext<CommandEntityProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<CommandEntityProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

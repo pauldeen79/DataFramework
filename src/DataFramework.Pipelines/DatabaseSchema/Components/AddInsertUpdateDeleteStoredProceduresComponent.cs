@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.DatabaseSchema.Components;
 
-public class AddInsertUpdateDeleteStoredProceduresComponentBuilder : IDatabaseSchemaComponentBuilder
-{
-    private readonly IFormattableStringParser _formattableStringParser;
-
-    public AddInsertUpdateDeleteStoredProceduresComponentBuilder(IFormattableStringParser formattableStringParser)
-    {
-        _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
-    }
-
-    public IPipelineComponent<DatabaseSchemaContext> Build()
-        => new AddInsertUpdateDeleteStoredProceduresComponent(_formattableStringParser);
-}
-
 public class AddInsertUpdateDeleteStoredProceduresComponent : IPipelineComponent<DatabaseSchemaContext>
 {
     private readonly IFormattableStringParser _formattableStringParser;
@@ -22,7 +9,7 @@ public class AddInsertUpdateDeleteStoredProceduresComponent : IPipelineComponent
         _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
     }
 
-    public Task<Result> Process(PipelineContext<DatabaseSchemaContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<DatabaseSchemaContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

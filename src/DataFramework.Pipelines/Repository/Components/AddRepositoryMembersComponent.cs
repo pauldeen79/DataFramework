@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.Repository.Components;
 
-public class AddRepositoryMembersComponentBuilder : IRepositoryComponentBuilder
-{
-    public IPipelineComponent<RepositoryContext> Build()
-        => new AddRepositoryMembersComponent();
-}
-
 public class AddRepositoryMembersComponent : IPipelineComponent<RepositoryContext>
 {
-    public Task<Result> Process(PipelineContext<RepositoryContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<RepositoryContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

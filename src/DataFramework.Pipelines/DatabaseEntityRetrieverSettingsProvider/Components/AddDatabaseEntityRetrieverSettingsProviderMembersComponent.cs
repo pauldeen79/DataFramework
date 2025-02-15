@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider.Components;
 
-public class AddDatabaseEntityRetrieverSettingsProviderMembersComponentBuilder : IDatabaseEntityRetrieverSettingsProviderComponentBuilder
-{
-    public IPipelineComponent<DatabaseEntityRetrieverSettingsProviderContext> Build()
-        => new AddDatabaseEntityRetrieverSettingsProviderMembersComponent();
-}
-
 public class AddDatabaseEntityRetrieverSettingsProviderMembersComponent : IPipelineComponent<DatabaseEntityRetrieverSettingsProviderContext>
 {
-    public Task<Result> Process(PipelineContext<DatabaseEntityRetrieverSettingsProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<DatabaseEntityRetrieverSettingsProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

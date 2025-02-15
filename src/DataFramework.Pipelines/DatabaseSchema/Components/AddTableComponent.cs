@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.DatabaseSchema.Components;
 
-public class AddTableComponentBuilder : IDatabaseSchemaComponentBuilder
-{
-    public IPipelineComponent<DatabaseSchemaContext> Build()
-        => new AddTableComponent();
-}
-
 public class AddTableComponent : IPipelineComponent<DatabaseSchemaContext>
 {
-    public Task<Result> Process(PipelineContext<DatabaseSchemaContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<DatabaseSchemaContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

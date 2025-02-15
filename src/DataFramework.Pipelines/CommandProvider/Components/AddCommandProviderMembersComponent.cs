@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.CommandProvider.Components;
 
-public class AddCommandProviderMembersComponentBuilder : ICommandProviderComponentBuilder
-{
-    private readonly IFormattableStringParser _formattableStringParser;
-
-    public AddCommandProviderMembersComponentBuilder(IFormattableStringParser formattableStringParser)
-    {
-        _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
-    }
-
-    public IPipelineComponent<CommandProviderContext> Build()
-        => new AddCommandProviderMembersComponent(_formattableStringParser);
-}
-
 public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProviderContext>
 {
     private readonly IFormattableStringParser _formattableStringParser;
@@ -22,7 +9,7 @@ public class AddCommandProviderMembersComponent : IPipelineComponent<CommandProv
         _formattableStringParser = formattableStringParser;
     }
 
-    public Task<Result> Process(PipelineContext<CommandProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<CommandProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.QueryFieldInfo.Components;
 
-public class AddQueryFieldInfoMembersComponentBuilder : IQueryFieldInfoComponentBuilder
-{
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddQueryFieldInfoMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
-    public IPipelineComponent<QueryFieldInfoContext> Build()
-        => new AddQueryFieldInfoMembersComponent(_csharpExpressionDumper);
-}
-
 public class AddQueryFieldInfoMembersComponent : IPipelineComponent<QueryFieldInfoContext>
 {
     private readonly ICsharpExpressionDumper _csharpExpressionDumper;
@@ -22,7 +9,7 @@ public class AddQueryFieldInfoMembersComponent : IPipelineComponent<QueryFieldIn
         _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
     }
 
-    public Task<Result> Process(PipelineContext<QueryFieldInfoContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<QueryFieldInfoContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

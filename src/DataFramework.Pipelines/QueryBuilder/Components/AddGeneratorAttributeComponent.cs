@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.QueryBuilder.Components;
 
-public class AddGeneratorAttributeComponentBuilder : IQueryBuilderComponentBuilder
-{
-    public IPipelineComponent<QueryBuilderContext> Build()
-        => new AddGeneratorAttributeComponent();
-}
-
 public class AddGeneratorAttributeComponent : IPipelineComponent<QueryBuilderContext>
 {
-    public Task<Result> Process(PipelineContext<QueryBuilderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<QueryBuilderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

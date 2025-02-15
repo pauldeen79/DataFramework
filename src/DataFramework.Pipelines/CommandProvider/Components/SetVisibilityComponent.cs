@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.CommandProvider.Components;
 
-public class SetVisibilityComponentBuilder : ICommandProviderComponentBuilder
-{
-    public IPipelineComponent<CommandProviderContext> Build()
-        => new SetVisibilityComponent();
-}
-
 public class SetVisibilityComponent : IPipelineComponent<CommandProviderContext>
 {
-    public Task<Result> Process(PipelineContext<CommandProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<CommandProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

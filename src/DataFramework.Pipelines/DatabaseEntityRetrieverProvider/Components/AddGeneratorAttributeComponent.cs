@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.DatabaseEntityRetrieverProvider.Components;
 
-public class AddGeneratorAttributeComponentBuilder : IDatabaseEntityRetrieverProviderComponentBuilder
-{
-    public IPipelineComponent<DatabaseEntityRetrieverProviderContext> Build()
-        => new AddGeneratorAttributeComponent();
-}
-
 public class AddGeneratorAttributeComponent : IPipelineComponent<DatabaseEntityRetrieverProviderContext>
 {
-    public Task<Result> Process(PipelineContext<DatabaseEntityRetrieverProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<DatabaseEntityRetrieverProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

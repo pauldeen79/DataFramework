@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.IdentityCommandProvider.Components;
 
-public class SetNameComponentBuilder : IIdentityCommandProviderComponentBuilder
-{
-    public IPipelineComponent<IdentityCommandProviderContext> Build()
-        => new SetNameComponent();
-}
-
 public class SetNameComponent : IPipelineComponent<IdentityCommandProviderContext>
 {
-    public Task<Result> Process(PipelineContext<IdentityCommandProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<IdentityCommandProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

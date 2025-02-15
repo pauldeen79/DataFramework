@@ -1,6 +1,6 @@
 ﻿namespace DataFramework.Pipelines.Tests.Class;
 
-public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<ClassContext>>
+public class PipelineBuilderTests : IntegrationTestBase<IPipeline<ClassContext>>
 {
     public class Process : PipelineBuilderTests
     {
@@ -15,11 +15,11 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<ClassCo
         public async Task Sets_Partial()
         {
             // Arrange
-            var sut = CreateSut().Build();
+            var sut = CreateSut();
             var context = CreateContext();
 
             // Act
-            var result = await sut.Process(context);
+            var result = await sut.ProcessAsync(context);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Ok);
@@ -30,11 +30,11 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<ClassCo
         public async Task Sets_Namespace_And_Name_According_To_Settings()
         {
             // Arrange
-            var sut = CreateSut().Build();
+            var sut = CreateSut();
             var context = CreateContext();
 
             // Act
-            var result = await sut.Process(context);
+            var result = await sut.ProcessAsync(context);
 
             // Assert
             result.Status.Should().Be(ResultStatus.Ok);
@@ -49,24 +49,24 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<ClassCo
         public async Task Creates_Observable_Entity_With_NamespaceMapping()
         {
             // Arrange
-            var model = CreateModel().Build();
+            var model = CreateModel();
             var settings = new PipelineSettingsBuilder().WithEntityClassType(EntityClassType.ObservablePoco).WithDefaultEntityNamespace("MyNamespace");
             var context = CreateContext(model, settings);
 
-            var sut = CreateSut().Build();
+            var sut = CreateSut();
 
             // Act
-            var result = await sut.Process(context);
+            var result = await sut.ProcessAsync(context);
             result.ThrowIfInvalid();
-            var cls = context.Builder.Build();
+            var cls = context.Builder;
             
             var svc = Scope!.ServiceProvider.GetRequiredService<ClassFramework.Pipelines.Abstractions.IPipelineService>();
             var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
                 .WithAddBackingFields()
                 .WithCreateAsObservable()
-                .Build();
-            var classFrameworkContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, context.FormatProvider);
-            result = await svc.Process(classFrameworkContext);
+                ;
+            var classFrameworkContext = new ClassFramework.Pipelines.Entity.EntityContext(cls.Build(), classFrameworkSettings, context.FormatProvider);
+            result = await svc.ProcessAsync(classFrameworkContext);
 
             // Assert
             result.IsSuccessful().Should().BeTrue();
@@ -76,7 +76,7 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipelineBuilder<ClassCo
             classFrameworkContext.Builder.Interfaces.Should().BeEquivalentTo("System.ComponentModel.INotifyPropertyChanged");
         }
         
-        private static ClassContext CreateContext(DataObjectInfo model, PipelineSettingsBuilder settings)
-            => new(model, settings.Build(), CultureInfo.InvariantCulture);
+        private static ClassContext CreateContext(DataObjectInfoBuilder model, PipelineSettingsBuilder settings)
+            => new(model.Build(), settings.Build(), CultureInfo.InvariantCulture);
     }
 }

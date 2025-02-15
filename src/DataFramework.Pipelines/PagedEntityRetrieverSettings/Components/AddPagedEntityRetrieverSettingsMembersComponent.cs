@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.PagedEntityRetrieverSettings.Components;
 
-public class AddPagedEntityRetrieverSettingsMembersComponentBuilder : IPagedEntityRetrieverSettingsComponentBuilder
-{
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddPagedEntityRetrieverSettingsMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
-    public IPipelineComponent<PagedEntityRetrieverSettingsContext> Build()
-        => new AddPagedEntityRetrieverSettingsMembersComponent(_csharpExpressionDumper);
-}
-
 public class AddPagedEntityRetrieverSettingsMembersComponent : IPipelineComponent<PagedEntityRetrieverSettingsContext>
 {
     private readonly ICsharpExpressionDumper _csharpExpressionDumper;
@@ -22,7 +9,7 @@ public class AddPagedEntityRetrieverSettingsMembersComponent : IPipelineComponen
         _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
     }
 
-    public Task<Result> Process(PipelineContext<PagedEntityRetrieverSettingsContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<PagedEntityRetrieverSettingsContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

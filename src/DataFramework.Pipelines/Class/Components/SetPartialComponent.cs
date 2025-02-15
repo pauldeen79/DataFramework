@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.Class.Components;
 
-public class SetPartialComponentBuilder : IClassComponentBuilder
-{
-    public IPipelineComponent<ClassContext> Build()
-        => new SetPartialComponent();
-}
-
 public class SetPartialComponent : IPipelineComponent<ClassContext>
 {
-    public Task<Result> Process(PipelineContext<ClassContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<ClassContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

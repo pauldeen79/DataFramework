@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.IdentityClass.Components;
 
-public class AddGeneratorAttributeComponentBuilder : IIdentityClassComponentBuilder
-{
-    public IPipelineComponent<IdentityClassContext> Build()
-        => new AddGeneratorAttributeComponent();
-}
-
 public class AddGeneratorAttributeComponent : IPipelineComponent<IdentityClassContext>
 {
-    public Task<Result> Process(PipelineContext<IdentityClassContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<IdentityClassContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

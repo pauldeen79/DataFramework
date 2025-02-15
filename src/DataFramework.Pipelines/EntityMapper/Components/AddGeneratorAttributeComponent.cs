@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.EntityMapper.Components;
 
-public class AddGeneratorAttributeComponentBuilder : IEntityMapperComponentBuilder
-{
-    public IPipelineComponent<EntityMapperContext> Build()
-        => new AddGeneratorAttributeComponent();
-}
-
 public class AddGeneratorAttributeComponent : IPipelineComponent<EntityMapperContext>
 {
-    public Task<Result> Process(PipelineContext<EntityMapperContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<EntityMapperContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

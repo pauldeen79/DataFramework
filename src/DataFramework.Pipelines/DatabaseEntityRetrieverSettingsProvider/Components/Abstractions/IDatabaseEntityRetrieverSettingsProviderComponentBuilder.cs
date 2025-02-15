@@ -1,5 +1,0 @@
-﻿namespace DataFramework.Pipelines.DatabaseEntityRetrieverSettingsProvider.Components.Abstractions;
-
-public interface IDatabaseEntityRetrieverSettingsProviderComponentBuilder : IBuilder<IPipelineComponent<DatabaseEntityRetrieverSettingsProviderContext>>
-{
-}

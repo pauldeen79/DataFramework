@@ -1,6 +1,7 @@
 ﻿using System.CodeDom.Compiler;
 using System.Linq;
 using QueryFramework.Abstractions;
+using QueryFramework.Core;
 using QueryFramework.Core.Builders;
 
 namespace PDC.Net.Core.Queries
@@ -16,7 +17,7 @@ namespace PDC.Net.Core.Queries
         {
         }
 
-        public override IQuery Build()
+        public override Query Build()
         {
             return BuildTyped();
         }

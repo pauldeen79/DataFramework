@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.IdentityCommandProvider.Components;
 
-public class AddIdentityCommandProviderMembersComponentBuilder : IIdentityCommandProviderComponentBuilder
-{
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddIdentityCommandProviderMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
-    public IPipelineComponent<IdentityCommandProviderContext> Build()
-        => new AddIdentityCommandProviderMembersComponent(_csharpExpressionDumper);
-}
-
 public class AddIdentityCommandProviderMembersComponent : IPipelineComponent<IdentityCommandProviderContext>
 {
     private readonly ICsharpExpressionDumper _csharpExpressionDumper;
@@ -22,7 +9,7 @@ public class AddIdentityCommandProviderMembersComponent : IPipelineComponent<Ide
         _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
     }
 
-    public Task<Result> Process(PipelineContext<IdentityCommandProviderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<IdentityCommandProviderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

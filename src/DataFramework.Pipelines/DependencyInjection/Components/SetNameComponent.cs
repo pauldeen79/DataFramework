@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.DependencyInjection.Components;
 
-public class SetNameComponentBuilder : IDependencyInjectionComponentBuilder
-{
-    private readonly IFormattableStringParser _formattableStringParser;
-
-    public SetNameComponentBuilder(IFormattableStringParser formattableStringParser)
-    {
-        _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
-    }
-
-    public IPipelineComponent<DependencyInjectionContext> Build()
-        => new SetNameComponent(_formattableStringParser);
-}
-
 public class SetNameComponent : IPipelineComponent<DependencyInjectionContext>
 {
     private readonly IFormattableStringParser _formattableStringParser;
@@ -22,7 +9,7 @@ public class SetNameComponent : IPipelineComponent<DependencyInjectionContext>
         _formattableStringParser = formattableStringParser.IsNotNull(nameof(formattableStringParser));
     }
 
-    public Task<Result> Process(PipelineContext<DependencyInjectionContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<DependencyInjectionContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.RepositoryInterface.Components;
 
-public class AddGeneratorAttributeComponentBuilder : IRepositoryInterfaceComponentBuilder
-{
-    public IPipelineComponent<RepositoryInterfaceContext> Build()
-        => new AddGeneratorAttributeComponent();
-}
-
 public class AddGeneratorAttributeComponent : IPipelineComponent<RepositoryInterfaceContext>
 {
-    public Task<Result> Process(PipelineContext<RepositoryInterfaceContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<RepositoryInterfaceContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

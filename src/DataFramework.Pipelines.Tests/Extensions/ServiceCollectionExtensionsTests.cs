@@ -21,22 +21,6 @@ public class ServiceCollectionExtensionsTests : TestBase
         }
 
         [Fact]
-        public void Can_Resolve_EntityPipelineBuilder()
-        {
-            // Arrange
-            var serviceCollection = new ServiceCollection()
-                .AddDataFrameworkPipelines();
-            using var provider = serviceCollection.BuildServiceProvider();
-            using var scope = provider.CreateScope();
-
-            // Act
-            var builder = scope.ServiceProvider.GetRequiredService<IPipelineBuilder<ClassContext>>();
-
-            // Assert
-            builder.Should().BeOfType<Pipelines.Class.PipelineBuilder>();
-        }
-
-        [Fact]
         public void Can_Resolve_EntityPipeline()
         {
             // Arrange

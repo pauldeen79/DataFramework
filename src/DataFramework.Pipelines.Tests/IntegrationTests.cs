@@ -20,7 +20,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         var classPipeline = GetClassPipeline();
 
         // Act
-        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await classPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
@@ -28,7 +28,7 @@ public sealed class IntegrationTests : IntegrationTestBase
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext);
+        result = await classFrameworkPipelineService.ProcessAsync(entityContext);
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
@@ -87,7 +87,7 @@ namespace MyNamespace
         var classPipeline = GetClassPipeline();
 
         // Act
-        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await classPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(false)
@@ -97,7 +97,7 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext);
+        result = await classFrameworkPipelineService.ProcessAsync(entityContext);
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
@@ -154,7 +154,7 @@ namespace MyNamespace
         var classPipeline = GetClassPipeline();
 
         // Act
-        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await classPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(false)
@@ -164,7 +164,7 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext);
+        result = await classFrameworkPipelineService.ProcessAsync(entityContext);
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
@@ -215,7 +215,7 @@ namespace MyNamespace
         var identityClassPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<IdentityClassContext>>();
 
         // Act
-        var result = (await identityClassPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await identityClassPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var entity = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor(true)
@@ -223,7 +223,7 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext);
+        result = await classFrameworkPipelineService.ProcessAsync(entityContext);
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
@@ -276,7 +276,7 @@ namespace MyNamespace
         var classPipeline = GetClassPipeline();
 
         // Act
-        var result = (await classPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await classPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var cls = result.GetValueOrThrow();
         var classFrameworkSettings = new ClassFramework.Pipelines.Builders.PipelineSettingsBuilder()
             .WithAddFullConstructor()
@@ -284,10 +284,10 @@ namespace MyNamespace
             .WithCopyAttributes()
             .Build();
         var entityContext = new ClassFramework.Pipelines.Entity.EntityContext(cls, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(entityContext);
+        result = await classFrameworkPipelineService.ProcessAsync(entityContext);
         var entity = result.GetValueOrThrow();
         var builderContext = new ClassFramework.Pipelines.Builder.BuilderContext(entity, classFrameworkSettings, CultureInfo.InvariantCulture);
-        result = await classFrameworkPipelineService.Process(builderContext);
+        result = await classFrameworkPipelineService.ProcessAsync(builderContext);
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
@@ -343,6 +343,11 @@ namespace MyNamespace.Builders
             MyFieldOriginal = myFieldOriginal;
             return this;
         }
+
+        public static implicit operator MyNamespace.MyEntity(MyEntityBuilder entity)
+        {
+            return entity.Build();
+        }
     }
 }
 #nullable disable
@@ -367,7 +372,7 @@ namespace MyNamespace.Builders
         var commandEntityProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<CommandEntityProviderContext>>();
 
         // Act
-        var result = (await commandEntityProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await commandEntityProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
@@ -501,7 +506,7 @@ namespace MyNamespace
         var commandProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<CommandProviderContext>>();
 
         // Act
-        var result = (await commandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await commandProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
@@ -580,7 +585,7 @@ namespace MyNamespace
         var databaseEntityRetrieverProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverProviderContext>>();
 
         // Act
-        var result = (await databaseEntityRetrieverProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await databaseEntityRetrieverProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
@@ -641,7 +646,7 @@ namespace MyNamespace
         var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var result = (await databaseSchemaPipeline.ProcessAsync(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
         var code =  await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
@@ -685,7 +690,7 @@ GO
         var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var result = (await databaseSchemaPipeline.ProcessAsync(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
         var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
@@ -764,7 +769,7 @@ GO
         var databaseSchemaPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseSchemaContext>>();
 
         // Act
-        var result = (await databaseSchemaPipeline.Process(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
+        var result = (await databaseSchemaPipeline.ProcessAsync(context)).ProcessResult(context.Builders, () => context.Builders.Select(x => x.Build()));
         var databaseObjects = result.GetValueOrThrow();
         var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
@@ -807,7 +812,7 @@ GO
         var dependencyInjectionPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DependencyInjectionContext>>();
 
         // Act
-        var result = (await dependencyInjectionPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await dependencyInjectionPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var depdendencyInjection = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(depdendencyInjection));
 
@@ -865,7 +870,7 @@ namespace MyNamespace
         var entityMapperPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<EntityMapperContext>>();
 
         // Act
-        var result = (await entityMapperPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await entityMapperPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
@@ -915,7 +920,7 @@ namespace MyNamespace
         var entityMapperPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<EntityMapperContext>>();
 
         // Act
-        var result = (await entityMapperPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await entityMapperPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
@@ -965,7 +970,7 @@ namespace MyNamespace
         var identityCommandProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<IdentityCommandProviderContext>>();
 
         // Act
-        var result = (await identityCommandProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await identityCommandProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var commandEntityProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
@@ -1014,7 +1019,7 @@ namespace MyNamespace
         var pagedEntityRetrieverSettingsPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<PagedEntityRetrieverSettingsContext>>();
 
         // Act
-        var result = (await pagedEntityRetrieverSettingsPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await pagedEntityRetrieverSettingsPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var pagedEntityRetrieverSettings = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
 
@@ -1094,7 +1099,7 @@ namespace MyNamespace
         var entityRetrieverSettingsProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<DatabaseEntityRetrieverSettingsProviderContext>>();
 
         // Act
-        var result = (await entityRetrieverSettingsProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await entityRetrieverSettingsProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var pagedEntityRetrieverSettings = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
 
@@ -1156,7 +1161,7 @@ namespace MyNamespace
         var queryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryContext>>();
 
         // Act
-        var result = (await queryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await queryPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var query = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(query));
 
@@ -1253,7 +1258,7 @@ namespace MyNamespace
         var queryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryBuilderContext>>();
 
         // Act
-        var result = (await queryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await queryPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var queryBuilder = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(queryBuilder));
 
@@ -1311,7 +1316,7 @@ namespace MyNamespace
         var queryFieldInfoPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryFieldInfoContext>>();
 
         // Act
-        var result = (await queryFieldInfoPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await queryFieldInfoPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var queryFieldInfo = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfo));
 
@@ -1362,7 +1367,7 @@ namespace MyNamespace
         var queryFieldInfoProviderPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<QueryFieldInfoProviderContext>>();
 
         // Act
-        var result = (await queryFieldInfoProviderPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await queryFieldInfoProviderPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var queryFieldInfoProvider = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfoProvider));
 
@@ -1414,7 +1419,7 @@ namespace MyNamespace
         var repositoryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryContext>>();
 
         // Act
-        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.Build);
+        var result = (await repositoryPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
         var repository = result.GetValueOrThrow();
         var code = await GenerateCode(new TestCodeGenerationProvider(repository));
 
@@ -1461,13 +1466,13 @@ namespace MyNamespace
         var repositoryPipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryContext>>();
 
         // Act
-        var result = (await repositoryPipeline.Process(context)).ProcessResult(context.Builder, context.Builder.BuildTyped);
+        var result = (await repositoryPipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.BuildTyped);
         var repository = result.GetValueOrThrow();
         var code1 = await GenerateCode(new TestCodeGenerationProvider(repository));
 
         var interfaceContext = new RepositoryInterfaceContext(sourceModel, settings, CultureInfo.InvariantCulture);
         var interfacePipeline = Scope!.ServiceProvider.GetRequiredService<IPipeline<RepositoryInterfaceContext>>();
-        var interfaceResult = (await interfacePipeline.Process(interfaceContext)).ProcessResult(interfaceContext.Builder, interfaceContext.Builder.BuildTyped);
+        var interfaceResult = (await interfacePipeline.ProcessAsync(interfaceContext)).ProcessResult(interfaceContext.Builder, interfaceContext.Builder.BuildTyped);
         var repositoryInterface = interfaceResult.GetValueOrThrow();
         var code2 = await GenerateCode(new TestCodeGenerationProvider(repositoryInterface));
 
@@ -1540,7 +1545,7 @@ namespace MyNamespace.Contracts
             var context = Activator.CreateInstance(contextType, sourceModel, settings, CultureInfo.InvariantCulture);
             var pipeline = Scope!.ServiceProvider.GetRequiredService(typeof(IPipeline<>).MakeGenericType(contextType));
             var builder = (TypeBaseBuilder)contextType.GetProperty("Builder")!.GetValue(context)!;
-            var task = (Task<Result>)pipeline.GetType().GetMethod(nameof(IPipeline<ContextBase>.Process))!.Invoke(pipeline, [context, CancellationToken.None])!;
+            var task = (Task<Result>)pipeline.GetType().GetMethod(nameof(IPipeline<ContextBase>.ProcessAsync))!.Invoke(pipeline, [context, CancellationToken.None])!;
             var result = (await task.ConfigureAwait(true)).ProcessResult(builder, builder.Build);
             var classInstance = result.GetValueOrThrow();
             (await codeGenerationEngine.Generate(new TestCodeGenerationProvider(classInstance, true), generationEnvironment, codeGenerationSettings)).ThrowIfInvalid();

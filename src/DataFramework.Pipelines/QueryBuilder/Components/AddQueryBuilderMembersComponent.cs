@@ -1,14 +1,8 @@
 ﻿namespace DataFramework.Pipelines.QueryBuilder.Components;
 
-public class AddQueryBuilderMembersComponentBuilder : IQueryBuilderComponentBuilder
-{
-    public IPipelineComponent<QueryBuilderContext> Build()
-        => new AddQueryBuilderMembersComponent();
-}
-
 public class AddQueryBuilderMembersComponent : IPipelineComponent<QueryBuilderContext>
 {
-    public Task<Result> Process(PipelineContext<QueryBuilderContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<QueryBuilderContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

@@ -1,18 +1,5 @@
 ﻿namespace DataFramework.Pipelines.EntityMapper.Components;
 
-public class AddEntityMapperMembersComponentBuilder : IEntityMapperComponentBuilder
-{
-    private readonly ICsharpExpressionDumper _csharpExpressionDumper;
-
-    public AddEntityMapperMembersComponentBuilder(ICsharpExpressionDumper csharpExpressionDumper)
-    {
-        _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
-    }
-
-    public IPipelineComponent<EntityMapperContext> Build()
-        => new AddEntityMapperMembersComponent(_csharpExpressionDumper);
-}
-
 public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperContext>
 {
     private readonly ICsharpExpressionDumper _csharpExpressionDumper;
@@ -22,7 +9,7 @@ public class AddEntityMapperMembersComponent : IPipelineComponent<EntityMapperCo
         _csharpExpressionDumper = csharpExpressionDumper.IsNotNull(nameof(csharpExpressionDumper));
     }
 
-    public Task<Result> Process(PipelineContext<EntityMapperContext> context, CancellationToken token)
+    public Task<Result> ProcessAsync(PipelineContext<EntityMapperContext> context, CancellationToken token)
     {
         context = context.IsNotNull(nameof(context));
 

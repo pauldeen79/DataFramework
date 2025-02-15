@@ -19,7 +19,6 @@ internal static class Program
             .AddCsharpExpressionDumper()
             .AddClassFrameworkTemplates()
             .AddClassFrameworkPipelines()
-            .AddExpressionParser()
             .AddScoped<IAssemblyInfoContextService, MyAssemblyInfoContextService>();
 
         var generators = typeof(Program).Assembly.GetExportedTypes()
