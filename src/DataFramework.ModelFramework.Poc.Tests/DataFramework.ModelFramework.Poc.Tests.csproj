@@ -16,7 +16,7 @@
     <PackageReference Include="FluentAssertions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.14" />
+    <PackageReference Include="pauldeen79.QueryFramework.SqlServer" Version="0.13.15" />
     <PackageReference Include="pauldeen79.System.Data.Stub" Version="3.0.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
