@@ -22,8 +22,8 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipeline<ClassContext>>
             var result = await sut.ProcessAsync(context);
 
             // Assert
-            result.Status.Should().Be(ResultStatus.Ok);
-            context.Builder.Partial.Should().BeTrue();
+            result.Status.ShouldBe(ResultStatus.Ok);
+            context.Builder.Partial.ShouldBeTrue();
         }
 
         [Fact]
@@ -37,9 +37,9 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipeline<ClassContext>>
             var result = await sut.ProcessAsync(context);
 
             // Assert
-            result.Status.Should().Be(ResultStatus.Ok);
-            context.Builder.Name.Should().Be("MyEntity");
-            context.Builder.Namespace.Should().Be("MyNamespace");
+            result.Status.ShouldBe(ResultStatus.Ok);
+            context.Builder.Name.ShouldBe("MyEntity");
+            context.Builder.Namespace.ShouldBe("MyNamespace");
         }
     }
 
@@ -69,11 +69,11 @@ public class PipelineBuilderTests : IntegrationTestBase<IPipeline<ClassContext>>
             result = await svc.ProcessAsync(classFrameworkContext);
 
             // Assert
-            result.IsSuccessful().Should().BeTrue();
+            result.IsSuccessful().ShouldBeTrue();
 
-            classFrameworkContext.Builder.Name.Should().Be("MyEntity");
-            classFrameworkContext.Builder.Namespace.Should().Be("MyNamespace");
-            classFrameworkContext.Builder.Interfaces.Should().BeEquivalentTo("System.ComponentModel.INotifyPropertyChanged");
+            classFrameworkContext.Builder.Name.ShouldBe("MyEntity");
+            classFrameworkContext.Builder.Namespace.ShouldBe("MyNamespace");
+            classFrameworkContext.Builder.Interfaces.ToArray().ShouldBeEquivalentTo(new[] { "System.ComponentModel.INotifyPropertyChanged" });
         }
         
         private static ClassContext CreateContext(DataObjectInfoBuilder model, PipelineSettingsBuilder settings)

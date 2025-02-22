@@ -1,4 +1,4 @@
-﻿namespace DataFramework.Domain.Tests.Extensions;
+namespace DataFramework.Domain.Tests.Extensions;
 
 public class StringExtensionsTests
 {
@@ -14,7 +14,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -27,7 +27,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -53,7 +53,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -79,7 +79,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -92,7 +92,7 @@ public class StringExtensionsTests
             var result = typeString.IsSupportedByMap();
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
     }
 
@@ -108,7 +108,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(false);
 
             // Assert
-            result.Should().Be("GetInt32");
+            result.ShouldBe("GetInt32");
         }
 
         [Fact]
@@ -121,7 +121,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(true);
 
             // Assert
-            result.Should().Be("GetNullableInt32");
+            result.ShouldBe("GetNullableInt32");
         }
 
         [Fact]
@@ -134,7 +134,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(false);
 
             // Assert
-            result.Should().Be("GetNullableInt32");
+            result.ShouldBe("GetNullableInt32");
         }
 
         [Fact]
@@ -147,7 +147,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(false);
 
             // Assert
-            result.Should().Be("GetValue");
+            result.ShouldBe("GetValue");
         }
 
         [Fact]
@@ -160,7 +160,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(false);
 
             // Assert
-            result.Should().Be("GetValue");
+            result.ShouldBe("GetValue");
         }
 
         [Fact]
@@ -173,7 +173,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(true);
 
             // Assert
-            result.Should().Be("GetNullableBoolean");
+            result.ShouldBe("GetNullableBoolean");
         }
 
         [Fact]
@@ -186,7 +186,7 @@ public class StringExtensionsTests
             var result = typeString.GetSqlReaderMethodName(false);
 
             // Assert
-            result.Should().Be("GetBoolean");
+            result.ShouldBe("GetBoolean");
         }
     }
 }

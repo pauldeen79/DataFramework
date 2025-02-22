@@ -1,4 +1,4 @@
-﻿namespace DataFramework.Pipelines.Tests;
+namespace DataFramework.Pipelines.Tests;
 
 public class PipelineServiceTests : TestBase
 {
@@ -20,7 +20,7 @@ public class PipelineServiceTests : TestBase
             var result = (await pipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
-            result.Status.Should().Be(ResultStatus.Invalid);
+            result.Status.ShouldBe(ResultStatus.Invalid);
         }
 
         [Fact]
@@ -37,9 +37,9 @@ public class PipelineServiceTests : TestBase
             var result = (await pipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
-            result.Status.Should().Be(ResultStatus.Error);
-            result.ErrorMessage.Should().Be("Kaboom!");
-            result.Value.Should().BeNull();
+            result.Status.ShouldBe(ResultStatus.Error);
+            result.ErrorMessage.ShouldBe("Kaboom!");
+            result.Value.ShouldBeNull();
         }
 
         [Fact]
@@ -60,10 +60,10 @@ public class PipelineServiceTests : TestBase
             var result = (await pipeline.ProcessAsync(context)).ProcessResult(context.Builder, context.Builder.Build);
 
             // Assert
-            result.Status.Should().Be(ResultStatus.Ok);
-            result.Value.Should().NotBeNull();
-            result.Value!.Name.Should().Be("MyClass");
-            result.Value!.Namespace.Should().Be("MyNamespace");
+            result.Status.ShouldBe(ResultStatus.Ok);
+            result.Value.ShouldNotBeNull();
+            result.Value!.Name.ShouldBe("MyClass");
+            result.Value!.Namespace.ShouldBe("MyNamespace");
         }
     }
 }

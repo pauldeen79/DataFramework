@@ -1,4 +1,4 @@
-﻿global using System.Globalization;
+global using System.Globalization;
 global using System.Text;
 global using AutoFixture;
 global using AutoFixture.AutoNSubstitute;
@@ -43,7 +43,7 @@ global using DataFramework.Pipelines.QueryFieldInfo;
 global using DataFramework.Pipelines.QueryFieldInfoProvider;
 global using DataFramework.Pipelines.Repository;
 global using DataFramework.Pipelines.RepositoryInterface;
-global using FluentAssertions;
+global using Shouldly;
 global using Microsoft.Extensions.DependencyInjection;
 global using NSubstitute;
 global using TemplateFramework.Abstractions.CodeGeneration;

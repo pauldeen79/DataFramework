@@ -1,4 +1,4 @@
-﻿namespace DataFramework.ModelFramework.Poc.Tests;
+namespace DataFramework.ModelFramework.Poc.Tests;
 
 public sealed partial class IntegrationTests
 {
@@ -16,8 +16,8 @@ public sealed partial class IntegrationTests
         var actual = QueryProcessor.FindMany<Catalog>(query);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -34,8 +34,8 @@ public sealed partial class IntegrationTests
         var actual = await QueryProcessor.FindManyAsync<Catalog>(query);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -52,9 +52,9 @@ public sealed partial class IntegrationTests
         var actual = QueryProcessor.FindMany<Catalog>(query);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
-        actual.First().ExtraField1.Should().Be("Value");
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
+        actual.First().ExtraField1.ShouldBe("Value");
     }
 
     [Fact]
@@ -71,8 +71,8 @@ public sealed partial class IntegrationTests
         var actual = QueryProcessor.FindMany<Catalog>(query);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public sealed partial class IntegrationTests
         var actual = QueryProcessor.FindMany<Catalog>(query);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 }

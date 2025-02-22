@@ -1,4 +1,4 @@
-﻿global using System;
+global using System;
 global using System.Data;
 global using System.Data.Stub;
 global using System.Data.Stub.Extensions;
@@ -10,7 +10,7 @@ global using CrossCutting.Data.Abstractions.Extensions;
 global using CrossCutting.Data.Core.Builders;
 global using DataFramework.ModelFramework.Poc.DependencyInjection;
 global using DataFramework.ModelFramework.Poc.Repositories;
-global using FluentAssertions;
+global using Shouldly;
 global using Microsoft.Extensions.DependencyInjection;
 global using PDC.Net.Core.Entities;
 global using PDC.Net.Core.Queries;

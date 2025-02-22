@@ -11,8 +11,8 @@ public class FieldInfoBuilderTests : TestBase<FieldInfoBuilder>
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.WithType(type: null!))
-               .Should().Throw<ArgumentNullException>().WithParameterName("type");
+            Action a = () => sut.WithType(type: null!);
+            a.ShouldThrow<ArgumentNullException>().ParamName.ShouldBe("type");
         }
 
         [Fact]
@@ -25,7 +25,7 @@ public class FieldInfoBuilderTests : TestBase<FieldInfoBuilder>
             sut.WithType(typeof(string));
 
             // Assert
-            sut.TypeName.Should().Be(typeof(string).AssemblyQualifiedName);
+            sut.TypeName.ShouldBe(typeof(string).AssemblyQualifiedName);
         }
     }
 }

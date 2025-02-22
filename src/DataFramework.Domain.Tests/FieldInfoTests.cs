@@ -4,7 +4,7 @@ public class FieldInfoTests
 {
     private static readonly string StringTypeName = typeof(string).AssemblyQualifiedName!;
 
-    protected FieldInfo CreateSut(
+    protected static FieldInfo CreateSut(
         string? typeName = null,
         bool isNullable = false,
         bool isIdentityField = false,
@@ -42,9 +42,9 @@ public class FieldInfoTests
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.CreatePropertyName(dataObjectInfo: null!))
-               .Should().Throw<ArgumentNullException>()
-               .WithParameterName("dataObjectInfo");
+            Action a = () => sut.CreatePropertyName(dataObjectInfo: null!);
+            a.ShouldThrow<ArgumentNullException>()
+             .ParamName.ShouldBe("dataObjectInfo");
         }
 
         [Fact]
@@ -58,7 +58,7 @@ public class FieldInfoTests
             var result = sut.CreatePropertyName(dataObjectInfo);
 
             // Assert
-            result.Should().Be("MyFieldProperty");
+            result.ShouldBe("MyFieldProperty");
         }
 
         [Fact]
@@ -72,7 +72,7 @@ public class FieldInfoTests
             var result = sut.CreatePropertyName(dataObjectInfo);
 
             // Assert
-            result.Should().Be("MyField");
+            result.ShouldBe("MyField");
         }
     }
 
@@ -88,7 +88,7 @@ public class FieldInfoTests
             var result = sut.PropertyTypeName;
 
             // Assert
-            result.Should().Be("System.Object");
+            result.ShouldBe("System.Object");
         }
 
         [Fact]
@@ -101,7 +101,7 @@ public class FieldInfoTests
             var result = sut.PropertyTypeName;
 
             // Assert
-            result.Should().Be("System.Object");
+            result.ShouldBe("System.Object");
         }
 
         [Fact]
@@ -114,7 +114,7 @@ public class FieldInfoTests
             var result = sut.PropertyTypeName;
 
             // Assert
-            result.Should().Be("Filled");
+            result.ShouldBe("Filled");
         }
     }
 
@@ -134,7 +134,7 @@ public class FieldInfoTests
             var result = sut.IsRequired;
 
             // Assert
-            result.Should().Be(expectedResult);
+            result.ShouldBe(expectedResult);
         }
     }
 
@@ -150,7 +150,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -163,7 +163,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -176,7 +176,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -189,7 +189,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -202,7 +202,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -215,7 +215,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -228,7 +228,7 @@ public class FieldInfoTests
             var result = sut.UseOnInsert;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
     }
 
@@ -244,7 +244,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -257,7 +257,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -270,7 +270,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -283,7 +283,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -296,7 +296,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -309,7 +309,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -322,7 +322,7 @@ public class FieldInfoTests
             var result = sut.UseOnUpdate;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
     }
 
@@ -338,7 +338,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -351,7 +351,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -364,7 +364,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -377,7 +377,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -390,7 +390,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -403,7 +403,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -416,7 +416,7 @@ public class FieldInfoTests
             var result = sut.UseOnDelete;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
     }
 
@@ -432,7 +432,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -445,7 +445,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -458,7 +458,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -471,7 +471,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -484,7 +484,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -497,7 +497,7 @@ public class FieldInfoTests
             var result = sut.UseOnSelect;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
     }
 
@@ -513,7 +513,7 @@ public class FieldInfoTests
             var parameterBuilder = sut.ToParameterBuilder(CultureInfo.InvariantCulture);
 
             // Assert
-            parameterBuilder.Name.Should().Be("myField");
+            parameterBuilder.Name.ShouldBe("myField");
         }
 
         [Fact]
@@ -526,7 +526,7 @@ public class FieldInfoTests
             var parameterBuilder = sut.ToParameterBuilder(CultureInfo.InvariantCulture);
 
             // Assert
-            parameterBuilder.TypeName.Should().Be("System.String");
+            parameterBuilder.TypeName.ShouldBe("System.String");
         }
 
         [Fact]
@@ -539,7 +539,7 @@ public class FieldInfoTests
             var parameterBuilder = sut.ToParameterBuilder(CultureInfo.InvariantCulture);
 
             // Assert
-            parameterBuilder.DefaultValue.Should().Be(sut.DefaultValue);
+            parameterBuilder.DefaultValue.ShouldBe(sut.DefaultValue);
         }
 
         [Fact]
@@ -552,7 +552,7 @@ public class FieldInfoTests
             var parameterBuilder = sut.ToParameterBuilder(CultureInfo.InvariantCulture);
 
             // Assert
-            parameterBuilder.IsNullable.Should().BeTrue();
+            parameterBuilder.IsNullable.ShouldBeTrue();
         }
     }
 
@@ -568,7 +568,7 @@ public class FieldInfoTests
             var result = sut.IsSqlRequired;
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Theory]
@@ -585,7 +585,7 @@ public class FieldInfoTests
             var result = sut.IsSqlRequired;
 
             // Assert
-            result.Should().Be(expectedResult);
+            result.ShouldBe(expectedResult);
         }
     }
 
@@ -601,7 +601,7 @@ public class FieldInfoTests
             var result = sut.SqlReaderMethodName;
 
             // Assert
-            result.Should().Be("GetMyStuff");
+            result.ShouldBe("GetMyStuff");
         }
         
         [Fact]
@@ -614,7 +614,7 @@ public class FieldInfoTests
             var result = sut.SqlReaderMethodName;
 
             // Assert
-            result.Should().Be("GetString");
+            result.ShouldBe("GetString");
         }
     }
 
@@ -630,7 +630,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("varbinary(18)");
+            actual.ShouldBe("varbinary(18)");
         }
 
         [Fact]
@@ -643,7 +643,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
 
             // Assert
-            actual.Should().Be("varbinary");
+            actual.ShouldBe("varbinary");
         }
 
         [Fact]
@@ -656,7 +656,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("varchar(32)");
+            actual.ShouldBe("varchar(32)");
         }
 
         [Fact]
@@ -669,7 +669,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("varchar(32)");
+            actual.ShouldBe("varchar(32)");
         }
 
         [Fact]
@@ -682,7 +682,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("varchar(16)");
+            actual.ShouldBe("varchar(16)");
         }
 
         [Fact]
@@ -695,7 +695,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
 
             // Assert
-            actual.Should().Be("varchar");
+            actual.ShouldBe("varchar");
         }
 
         [Fact]
@@ -708,7 +708,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("decimal(4,2)");
+            actual.ShouldBe("decimal(4,2)");
         }
 
         [Fact]
@@ -721,7 +721,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
 
             // Assert
-            actual.Should().Be("decimal");
+            actual.ShouldBe("decimal");
         }
 
         [Fact]
@@ -734,7 +734,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: true);
 
             // Assert
-            actual.Should().Be("decimal(4,2)");
+            actual.ShouldBe("decimal(4,2)");
         }
 
         [Fact]
@@ -747,7 +747,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType(includeSpecificProperties: false);
 
             // Assert
-            actual.Should().Be("decimal");
+            actual.ShouldBe("decimal");
         }
 
         [Fact]
@@ -760,7 +760,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().Be("int");
+            actual.ShouldBe("int");
         }
 
         [Fact]
@@ -773,7 +773,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().Be("int");
+            actual.ShouldBe("int");
         }
 
         [Fact]
@@ -786,7 +786,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().Be("bit");
+            actual.ShouldBe("bit");
         }
 
         [Fact]
@@ -799,7 +799,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().BeEmpty();
+            actual.ShouldBeEmpty();
         }
 
         [Fact]
@@ -812,7 +812,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().BeEmpty();
+            actual.ShouldBeEmpty();
         }
 
         [Fact]
@@ -826,7 +826,7 @@ public class FieldInfoTests
             var actual = sut.GetSqlFieldType();
 
             // Assert
-            actual.Should().BeEmpty();
+            actual.ShouldBeEmpty();
         }
     }
 }

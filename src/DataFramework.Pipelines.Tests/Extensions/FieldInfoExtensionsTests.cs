@@ -1,4 +1,4 @@
-﻿namespace DataFramework.Pipelines.Tests.Extensions;
+namespace DataFramework.Pipelines.Tests.Extensions;
 
 public class FieldInfoExtensionsTests
 {
@@ -14,7 +14,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.NoFields);
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -27,7 +27,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.AllFields);
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -40,7 +40,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.MarkedFields);
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
 
         [Fact]
@@ -53,7 +53,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.MarkedFields);
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.MarkedFields);
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -79,7 +79,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.MarkedFields);
 
             // Assert
-            result.Should().BeTrue();
+            result.ShouldBeTrue();
         }
 
         [Fact]
@@ -92,7 +92,7 @@ public class FieldInfoExtensionsTests
             var result = sut.IsUpdateConcurrencyCheckField(ConcurrencyCheckBehavior.MarkedFields);
 
             // Assert
-            result.Should().BeFalse();
+            result.ShouldBeFalse();
         }
     }
 }

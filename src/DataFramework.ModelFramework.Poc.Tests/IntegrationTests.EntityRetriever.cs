@@ -1,4 +1,4 @@
-﻿namespace DataFramework.ModelFramework.Poc.Tests;
+namespace DataFramework.ModelFramework.Poc.Tests;
 
 public sealed partial class IntegrationTests
 {
@@ -17,8 +17,8 @@ public sealed partial class IntegrationTests
             .Build());
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public sealed partial class IntegrationTests
             .Build());
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 }

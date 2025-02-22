@@ -15,7 +15,7 @@ public class DataObjectInfoBuilderTests
         var success = sut.TryValidate(validationResults);
 
         // Assert
-        success.Should().BeFalse();
-        validationResults.Should().HaveCount(2); //both the validation errors in DataObjectInfo and FieldInfo
+        success.ShouldBeFalse();
+        validationResults.Count.ShouldBe(2); //both the validation errors in DataObjectInfo and FieldInfo
     }
 }

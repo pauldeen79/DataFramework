@@ -8,16 +8,16 @@ public class ClassContextTests : TestBase
         public void Throws_On_Null_SourceModel()
         {
             // Act & Assert
-            this.Invoking(_ => new ClassContext(sourceModel: null!, new PipelineSettingsBuilder().Build(), CultureInfo.InvariantCulture))
-                .Should().Throw<ArgumentNullException>().WithParameterName("sourceModel");
+            Action a = () => _ = new ClassContext(sourceModel: null!, new PipelineSettingsBuilder().Build(), CultureInfo.InvariantCulture);
+            a.ShouldThrow<ArgumentNullException>().ParamName.ShouldBe("sourceModel");
         }
 
         [Fact]
         public void Throws_On_Null_Settings()
         {
             // Act & Assert
-            this.Invoking(_ => new ClassContext(sourceModel: CreateModel().Build(), settings: null!, CultureInfo.InvariantCulture))
-                .Should().Throw<ArgumentNullException>().WithParameterName("settings");
+            Action a = () => _ = new ClassContext(sourceModel: CreateModel().Build(), settings: null!, CultureInfo.InvariantCulture);
+            a.ShouldThrow<ArgumentNullException>().ParamName.ShouldBe("settings");
         }
     }
 }

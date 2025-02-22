@@ -1,4 +1,4 @@
-﻿namespace DataFramework.ModelFramework.Poc.Tests;
+namespace DataFramework.ModelFramework.Poc.Tests;
 
 public sealed partial class IntegrationTests
 {
@@ -12,8 +12,8 @@ public sealed partial class IntegrationTests
         var actual = Repository.Find(new CatalogIdentity(1));
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldNotBeNull();
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -26,8 +26,8 @@ public sealed partial class IntegrationTests
         var actual = await Repository.FindAsync(new CatalogIdentity(1));
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldNotBeNull();
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -40,8 +40,8 @@ public sealed partial class IntegrationTests
         var actual = Repository.FindAll();
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public sealed partial class IntegrationTests
         var actual = await Repository.FindAllAsync();
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -68,9 +68,9 @@ public sealed partial class IntegrationTests
         var actual = Repository.Add(new Catalog(0, "Test", DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, "0000-0000", "CDT", "CDR", null, 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.Id.Should().Be(1); // read from database in CatalogDatabaseCommandEntityProvider
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ShouldNotBeNull();
+        actual.Id.ShouldBe(1); // read from database in CatalogDatabaseCommandEntityProvider
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -83,9 +83,9 @@ public sealed partial class IntegrationTests
         var actual = await Repository.AddAsync(new Catalog(0, "Test", DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, "0000-0000", "CDT", "CDR", null, 1, 2, true, true, @"C:\", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.Id.Should().Be(1); // read from database in CatalogDatabaseCommandEntityProvider
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ShouldNotBeNull();
+        actual.Id.ShouldBe(1); // read from database in CatalogDatabaseCommandEntityProvider
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -103,10 +103,10 @@ public sealed partial class IntegrationTests
         var actual = Repository.Update(input);
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.Id.Should().Be(1); // read from database in CatalogDatabaseCommandEntityProvider
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
-        actual.ExtraField1.Should().Be("Value"); //read from database in CatalogDatabaseCommandEntityProvider
+        actual.ShouldNotBeNull();
+        actual.Id.ShouldBe(1); // read from database in CatalogDatabaseCommandEntityProvider
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ExtraField1.ShouldBe("Value"); //read from database in CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -124,10 +124,10 @@ public sealed partial class IntegrationTests
         var actual = await Repository.UpdateAsync(input);
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.Id.Should().Be(1); // read from database in CatalogDatabaseCommandEntityProvider
-        actual.IsExistingEntity.Should().BeTrue(); //set from CatalogDatabaseCommandEntityProvider
-        actual.ExtraField1.Should().Be("Value"); //read from database in CatalogDatabaseCommandEntityProvider
+        actual.ShouldNotBeNull();
+        actual.Id.ShouldBe(1); // read from database in CatalogDatabaseCommandEntityProvider
+        actual.IsExistingEntity.ShouldBeTrue(); //set from CatalogDatabaseCommandEntityProvider
+        actual.ExtraField1.ShouldBe("Value"); //read from database in CatalogDatabaseCommandEntityProvider
     }
 
     [Fact]
@@ -145,8 +145,8 @@ public sealed partial class IntegrationTests
         var actual = Repository.Delete(input);
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.ExtraField1.Should().Be("value"); //CatalogDatabaseCommandEntityProvider does not change value, this is a 'hard' delete
+        actual.ShouldNotBeNull();
+        actual.ExtraField1.ShouldBe("value"); //CatalogDatabaseCommandEntityProvider does not change value, this is a 'hard' delete
     }
 
     [Fact]
@@ -164,8 +164,8 @@ public sealed partial class IntegrationTests
         var actual = await Repository.DeleteAsync(input);
 
         // Assert
-        actual.Should().NotBeNull();
-        actual.ExtraField1.Should().Be("value"); //CatalogDatabaseCommandEntityProvider does not change value, this is a 'hard' delete
+        actual.ShouldNotBeNull();
+        actual.ExtraField1.ShouldBe("value"); //CatalogDatabaseCommandEntityProvider does not change value, this is a 'hard' delete
     }
 
     [Fact]
@@ -181,8 +181,8 @@ public sealed partial class IntegrationTests
         var actual = Repository.FindSomething();
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public sealed partial class IntegrationTests
         var actual = await Repository.FindSomethingAsync(CancellationToken.None);
 
         // Assert
-        actual.Should().ContainSingle();
-        actual.First().IsExistingEntity.Should().BeTrue(); //set from CatalogEntityMapper
+        actual.ShouldHaveSingleItem();
+        actual.First().IsExistingEntity.ShouldBeTrue(); //set from CatalogEntityMapper
     }
 }

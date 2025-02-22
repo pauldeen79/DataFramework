@@ -1,4 +1,4 @@
-﻿namespace DataFramework.Pipelines.Tests;
+namespace DataFramework.Pipelines.Tests;
 
 public sealed class IntegrationTests : IntegrationTestBase
 {
@@ -32,7 +32,7 @@ public sealed class IntegrationTests : IntegrationTestBase
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -101,7 +101,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -168,7 +168,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -227,7 +227,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -291,7 +291,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(result.GetValueOrThrow()));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -377,7 +377,7 @@ namespace MyNamespace.Builders
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -511,7 +511,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -590,7 +590,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(commandProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -651,7 +651,7 @@ namespace MyNamespace
         var code =  await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
         // Assert
-        code.Should().Be(@"SET ANSI_NULLS ON
+        code.ShouldBe(@"SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -695,7 +695,7 @@ GO
         var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
         // Assert
-        code.Should().Be(@"SET ANSI_NULLS ON
+        code.ShouldBe(@"SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -774,7 +774,7 @@ GO
         var code = await GenerateCode(new TestDatabaseSchemaGenerationProvider(databaseObjects));
 
         // Assert
-        code.Should().Be(@"SET ANSI_NULLS ON
+        code.ShouldBe(@"SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -817,7 +817,7 @@ GO
         var code = await GenerateCode(new TestCodeGenerationProvider(depdendencyInjection));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -875,7 +875,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -925,7 +925,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -975,7 +975,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(commandEntityProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1024,7 +1024,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1104,7 +1104,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(pagedEntityRetrieverSettings));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1166,7 +1166,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(query));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1263,7 +1263,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(queryBuilder));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1321,7 +1321,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfo));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1372,7 +1372,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(queryFieldInfoProvider));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1424,7 +1424,7 @@ namespace MyNamespace
         var code = await GenerateCode(new TestCodeGenerationProvider(repository));
 
         // Assert
-        code.Should().Be(@"using System;
+        code.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1477,7 +1477,7 @@ namespace MyNamespace
         var code2 = await GenerateCode(new TestCodeGenerationProvider(repositoryInterface));
 
         // Assert
-        code1.Should().Be(@"using System;
+        code1.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1495,7 +1495,7 @@ namespace MyNamespace
 }
 #nullable disable
 ");
-        code2.Should().Be(@"using System;
+        code2.ShouldBe(@"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1553,7 +1553,7 @@ namespace MyNamespace.Contracts
 
         var content = generationEnvironment.Builder.Build();
         var allContents = string.Join(Environment.NewLine, content.Contents.Select(x => x.Contents));
-        allContents.Should().NotBeEmpty();
+        allContents.ShouldNotBeEmpty();
         ///(await generationEnvironment.SaveContents(new TestCodeGenerationProvider(new ClassBuilder().WithName("DummyClass").Build(), true), @"D:\Git\DataFramework\src\DataFramework.Pipelines.Tests\POC", "GeneratedCode.cs", CancellationToken.None)).ThrowIfInvalid();
     }
 

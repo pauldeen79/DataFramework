@@ -14,10 +14,11 @@ public class ServiceCollectionExtensionsTests : TestBase
                 .AddDataFrameworkPipelines();
 
             // Act & Assert
-            serviceCollection.Invoking(x =>
+            Action a = () =>
             {
-                using var provder = x.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
-            }).Should().NotThrow();
+                using var provider = serviceCollection.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
+            };
+            a.ShouldNotThrow();
         }
 
         [Fact]
@@ -33,7 +34,7 @@ public class ServiceCollectionExtensionsTests : TestBase
             var builder = scope.ServiceProvider.GetRequiredService<IPipeline<ClassContext>>();
 
             // Assert
-            builder.Should().BeOfType<Pipeline<ClassContext>>();
+            builder.ShouldBeOfType<Pipeline<ClassContext>>();
         }
     }
 }
