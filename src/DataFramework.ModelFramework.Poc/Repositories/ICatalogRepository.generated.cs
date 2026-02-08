@@ -11,7 +11,7 @@ namespace DataFramework.ModelFramework.Poc.Repositories
     public partial interface ICatalogRepository : IRepository<Catalog, CatalogIdentity>
     {
         IReadOnlyCollection<Catalog> FindSomething();
-        Task<IReadOnlyCollection<Catalog>> FindSomethingAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Catalog>> FindSomethingAsync(CancellationToken token);
     }
 }
 

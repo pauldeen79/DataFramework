@@ -1,7 +1,7 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
 [ExcludeFromCodeCoverage]
-public abstract class DataFrameworkCSharpClassBase(IPipelineService pipelineService) : CsharpClassGeneratorPipelineCodeGenerationProviderBase(pipelineService)
+public abstract class DataFrameworkCSharpClassBase(ICommandService commandService) : CsharpClassGeneratorPipelineCodeGenerationProviderBase(commandService)
 {
     public override bool RecurseOnDeleteGeneratedFiles => false;
     public override string LastGeneratedFilesFilename => string.Empty;
@@ -18,13 +18,13 @@ public abstract class DataFrameworkCSharpClassBase(IPipelineService pipelineServ
     protected override bool GenerateMultipleFiles => false;
     protected override bool EnableGlobalUsings => true;
 
-    protected Task<Result<IEnumerable<TypeBase>>> GetPipelineModels()
-        => GetNonCoreModels($"{CodeGenerationRootNamespace}.Models.Pipelines");
+    protected Task<Result<IEnumerable<TypeBase>>> GetPipelineModelsAsync()
+        => GetNonCoreModelsAsync($"{CodeGenerationRootNamespace}.Models.Pipelines");
 
-    protected override bool SkipNamespaceOnTypenameMappings(string @namespace)
-        => @namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines";
+    protected override string[] GetAdditionalSkippedNamespacesOnTypenameMappings()
+        => [$"{CodeGenerationRootNamespace}.Models.Pipelines"];
 
-    protected override IEnumerable<TypenameMappingBuilder> CreateAdditionalTypenameMappings()
+    protected override IEnumerable<TypenameMappingBuilder> GetAdditionalTypenameMappings()
         => GetType().Assembly.GetTypes()
             .Where(x => x.IsInterface && x.Namespace == $"{CodeGenerationRootNamespace}.Models.Pipelines" && !GetCustomBuilderTypes().Contains(x.GetEntityClassName()))
             .SelectMany(x => CreateCustomTypenameMappings(x, "DataFramework.Pipelines", "DataFramework.Pipelines.Builders"))

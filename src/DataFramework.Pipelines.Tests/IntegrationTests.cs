@@ -1609,7 +1609,7 @@ namespace MyNamespace.Contracts
 
         public override Encoding Encoding => Encoding.UTF8;
 
-        public override Task<Result<IEnumerable<IDatabaseObject>>> GetModel(CancellationToken cancellationToken) => Task.FromResult(Result.Success(_model));
+        public override Task<Result<IEnumerable<IDatabaseObject>>> GetModel(CancellationToken token) => Task.FromResult(Result.Success(_model));
 
         public override DatabaseSchemaGeneratorSettings Settings => new DatabaseSchemaGeneratorSettingsBuilder()
             .WithCultureInfo(CultureInfo.InvariantCulture)

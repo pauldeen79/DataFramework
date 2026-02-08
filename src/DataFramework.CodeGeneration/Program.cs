@@ -11,7 +11,7 @@ internal static class Program
             ? Path.Combine(currentDirectory, @"src/")
             : Path.Combine(currentDirectory, @"../../../../");
         var services = new ServiceCollection()
-            .AddParsers()
+            .AddExpressionEvaluator()
             .AddTemplateFramework()
             .AddTemplateFrameworkChildTemplateProvider()
             .AddTemplateFrameworkCodeGeneration()
@@ -37,7 +37,7 @@ internal static class Program
         // Generate code
         await Task.WhenAll(generators
             .Select(x => (DataFrameworkCSharpClassBase)scope.ServiceProvider.GetRequiredService(x))
-            .Select(x => engine.Generate(x, new MultipleStringContentBuilderEnvironment(), new CodeGenerationSettings(basePath, Path.Combine(x.Path, $"{x.GetType().Name}.template.generated.cs")))));
+            .Select(x => engine.GenerateAsync(x, new MultipleStringContentBuilderEnvironment(), new CodeGenerationSettings(basePath, Path.Combine(x.Path, $"{x.GetType().Name}.template.generated.cs")))));
 
         // Log output to console
         if (!string.IsNullOrEmpty(basePath))

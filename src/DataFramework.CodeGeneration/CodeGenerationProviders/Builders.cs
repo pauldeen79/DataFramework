@@ -1,12 +1,12 @@
 ﻿namespace DataFramework.CodeGeneration.CodeGenerationProviders;
 
 [ExcludeFromCodeCoverage]
-public class Builders(IPipelineService pipelineService) : DataFrameworkCSharpClassBase(pipelineService)
+public class Builders(ICommandService commandService) : DataFrameworkCSharpClassBase(commandService)
 {
     public override string Path => "DataFramework.Domain/Builders";
 
-    public override Task<Result<IEnumerable<TypeBase>>> GetModel(CancellationToken cancellationToken)
-        => GetBuilders(GetCoreModels(), "DataFramework.Domain.Builders", "DataFramework.Domain");
+    public override Task<Result<IEnumerable<TypeBase>>> GetModelAsync(CancellationToken token)
+        => GetBuildersAsync(GetCoreModelsAsync(), "DataFramework.Domain.Builders", "DataFramework.Domain");
 
     protected override bool CreateAsObservable => true;
 }

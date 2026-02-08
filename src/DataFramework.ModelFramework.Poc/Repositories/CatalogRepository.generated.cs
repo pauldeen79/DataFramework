@@ -34,7 +34,7 @@ namespace DataFramework.ModelFramework.Poc.Repositories
             return QueryProcessor.FindMany<Catalog>(new CatalogQueryBuilder().Where(nameof(Catalog.Name)).IsEqualTo("Something").Build());
         }
 
-        public Task<IReadOnlyCollection<Catalog>> FindSomethingAsync(CancellationToken cancellationToken)
+        public Task<IReadOnlyCollection<Catalog>> FindSomethingAsync(CancellationToken token)
         {
             return QueryProcessor.FindManyAsync<Catalog>(new CatalogQueryBuilder().Where(nameof(Catalog.Name)).IsEqualTo("Something").Build());
         }
